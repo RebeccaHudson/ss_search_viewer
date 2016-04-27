@@ -1,0 +1,47 @@
+<h1> Header.. </h1>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+
+<form action="{% url 'ss_viewer:search' %}" method="post">
+{% csrf_token %}
+     <input type="textarea" name="requested_snpids" id="text_input" value="rs529689206, rs548905050, rs6966734" />
+     <!-- hardcoded values for testing purposes -->
+  <input type="submit" value="Search" />
+</form>
+
+
+<div id="scores_to_view">
+  {% if snpids  %}
+  <ul>
+    {% for snpid in snpids %}
+      <li> {{ snpid }}  </li> 
+    {% endfor %}
+  </ul>
+  <p>
+  </p> 
+  {% endif %}
+</div>
+
+
+
+
+
+
+
+<table>
+  <tr> <td> snpid </td>   <td> {{ object.snpid }} </td> </tr>
+  <tr> <td> motif </td>   <td> {{ object.motif }} </td> </tr>
+  <tr> <td> motif_len</td>   <td> {{ object.motif_len }} </td> </tr>
+  <tr> <td>log_lik_ref</td>   <td> {{ object.log_lik_ref }} </td> </tr>
+  <tr> <td>log_lik_snp  </td>   <td> {{object.log_lik_snp }} </td> </tr>
+  <tr> <td>log_lik_ratio</td>   <td> {{object.log_lik_ratio}} </td> </tr>
+  <tr> <td>log_enhance_odds</td>   <td> {{object.log_enhance_odds}} </td> </tr>
+  <tr> <td>log_reduce_odds</td>   <td> {{object.log_reduce_odds}} </td> </tr>
+  <tr> <td>ref_start</td>   <td> {{object.ref_start}} </td> </tr>
+  <tr> <td>snp_start</td>   <td> {{object.snp_start}} </td> </tr>
+  <tr> <td>ref_end</td>   <td> {{object.ref_end}} </td> </tr>
+  <tr> <td>snp_end</td>   <td> {{object.snp_end}} </td> </tr>
+  <tr> <td>ref_strand</td>   <td> {{object.ref_strand}} </td> </tr>
+  <tr> <td>snp_strand</td>   <td> {{object.snp_strand}} </td> </tr>
+</table>
+
