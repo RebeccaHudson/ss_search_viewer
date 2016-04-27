@@ -25,8 +25,7 @@ def one_snp_detail(request, snpid_numeric):
 #GET and POST   GET should return the form controls
 #POST should return the data onto the page, and ALSO render the controls?
 def get_scores_for_list(request):
-  d = "nothing happened" 
-  context_to_pass = { 'context' : d }
+  context_to_pass = { }
   if request.POST:
     raw_snpids = request.POST['requested_snpids']
     snpid_list = extract_snpids_from_textfield(raw_snpids)
