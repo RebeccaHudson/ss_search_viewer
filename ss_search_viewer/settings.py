@@ -28,6 +28,15 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+#I added this setting.
+API_HOST_INFO = {
+  'host_url': 'http://0.0.0.0',
+  'host_port' : '8005',
+  'api_root' : 'api_v0',
+}
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -37,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ss_viewer',
 ]
 
 MIDDLEWARE_CLASSES = [
