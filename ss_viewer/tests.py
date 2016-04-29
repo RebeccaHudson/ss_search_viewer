@@ -8,7 +8,7 @@ from django.core.urlresolvers import reverse
 """
 
 #Check that views load up and that we get status codes that make sense.
-
+#TODO inspect content/context information about what is going into these views.
 class OneScoresRowViewDetailTests(TestCase):
   def test_that_index_view_loads(self):
     response = self.client.get(reverse('ss_viewer:index'))
@@ -27,5 +27,11 @@ class OneScoresRowViewDetailTests(TestCase):
     response = self.client.post(reverse('ss_viewer:search'), headers=req_header,
                                json = requested_snpids )
     self.assertEqual(response.status_code, 200)
+
+
+  def test_that_scores_list_loads_get(self): 
+     response = self.client.get(reverse('ss_viewer:search'))
+     self.assertEqual(response.status_code, 200)
+
 
 
