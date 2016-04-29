@@ -14,7 +14,7 @@ def index(request):
 def one_snp_detail(request, snpid_numeric):
   #the requests library probably has a cleaner, happier way to do this.
   #hardurl = 'http://0.0.0.0:8002/api_v0/one-scores-snpid/rs571194783'
-  url = setup_api_url( 'one-snp-detail', "rs" + snpid_numeric)
+  url = setup_api_url( 'one-scores-snpid', "rs" + snpid_numeric)
   print("url = " + url) 
   r = requests.get(url)
   return HttpResponse(r.text)
