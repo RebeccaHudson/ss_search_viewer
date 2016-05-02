@@ -5,7 +5,7 @@
 <form action="{% url 'ss_viewer:search' %}" method="post">
 {% csrf_token %}
      <label for="requested-snpids"> Enter SNPids into the box:</label> 
-     <textarea name="requested_snpids" rows=15 cols=25 id="text_input"/>rs529689206, rs548905050, rs6966734</textarea>
+     <textarea name="requested_snpids" rows=15 cols=25 id="text_input"/>{%  if holdover_snpids %}{{holdover_snpids}}{%  else  %}rs529689206, rs548905050, rs6966734{% endif %}</textarea>
      <!-- hardcoded values for testing purposes -->
   <input type="submit" value="Search" />
 </form>
