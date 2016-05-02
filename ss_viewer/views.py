@@ -26,10 +26,10 @@ def one_snp_detail(request, snpid_numeric):
 #POST should return the data onto the page, and ALSO render the controls?
 def get_scores_for_list(request):
   context_to_pass = { }
-  if request.POST:
-    raw_snpids = request.POST['requested_snpids']
+  if request.method == 'POST':
+    raw_snpids = request.POST.get('requested_snpids')
     snpid_list = extract_snpids_from_textfield(raw_snpids)
-    api_url = setup_api_url('scores_row_list')
+    api_url = setup_api_url('search')
     req_headers = { 'content-type' : 'application/json' }
     api_response  = requests.post(api_url, 
                                 json=snpid_list, headers=req_headers)
