@@ -4,7 +4,8 @@
 
 <form action="{% url 'ss_viewer:search' %}" method="post">
 {% csrf_token %}
-     <input type="textarea" name="requested_snpids" id="text_input" value="rs529689206, rs548905050, rs6966734" />
+     <label for="requested-snpids"> Enter SNPids into the box:</label> 
+     <textarea name="requested_snpids" rows=15 cols=25 id="text_input"/>rs529689206, rs548905050, rs6966734</textarea>
      <!-- hardcoded values for testing purposes -->
   <input type="submit" value="Search" />
 </form>
