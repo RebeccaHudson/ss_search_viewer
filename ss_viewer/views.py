@@ -5,6 +5,8 @@ import requests
 import json
 import re
 
+from .forms import ScoresSearchForm
+
 #found at the URL: ss_viewer
 def index(request):
   return HttpResponse("This is a basic response")
@@ -43,3 +45,25 @@ def setup_api_url(api_function, snpid=None):
   url_args = '/'.join(url_arglist) 
   url = host_w_port + "/" + url_args  + "/"
   return url
+
+
+def xxx_get_scores_for_list(request):
+  print("This is working...")
+  context_to_pass = { }
+  if request.method == 'POST':
+    form = ScoresSearchForm(request.POST)
+    if form.is_valid():
+       raw_snpids = form.cleaned_data['raw_requested_snpids']
+       snpid_list = extract_snpids_from_textfield(raw_snpids)
+       api_url = setup_api_url('search')
+       req_headers = { 'content-type' : 'application/json' }
+       api_response  = requests.post(api_url, json=snpid_list, headers=req_headers)
+       context_to_pass['api_response'] = json.loads(api_response.text)
+       context_to_pass['holdover_snpids'] = ", ".join(snpid_list)
+       context_to_pass['form'] = form 
+       return render(request, 'ss_viewer/alt-searchpage.html', context_to_pass )
+  else:
+    form = ScoresSearchForm() 
+    context_to_pass['form'] = form 
+  return render(request, 'ss_viewer/alt-searchpage.html', context_to_pass )
+
