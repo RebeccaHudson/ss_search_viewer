@@ -1,0 +1,49 @@
+<h1> Header.. </h1>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+
+<form action="{% url 'ss_viewer:alt-search' %}" method="post">
+{% csrf_token %}
+  {{ form }}
+  <!-- does the form actually get filled with stuff? -->
+  <input type="submit" value="Search" />
+</form>
+
+
+<div id="scores_to_view">
+  {% if api_response  %}
+  <table> 
+    <tr> 
+        <td>snpid</td><td>motif</td><td>motif length</td>
+        <td>snp start</td><td>snp end</td><td>ref start</td><td>ref end</td>
+        <td>log lik ref</td> <td> log lik ratio </td>
+        <td>log enhance odds</td> <td>log reduce odds</td>
+        <td>log lik snp</td>  
+        <td> snp strand </td>  <td> ref strand </td>
+    </tr>
+    {% for onerow in api_response %}
+    <tr>    
+        <td>{{ onerow.snpid }}</td><td>{{ onerow.motif }}</td><td>{{ onerow.motif_len}}</td>
+        <td>{{ onerow.snp_start}} </td><td>{{ onerow.snp_end}}</td><td>{{ onerow.ref_start}}</td>
+        <td>{{ onerow.ref_end }} </td>
+         <td>{{ onerow.log_lik_ref }} </td><td> {{ onerow.log_lik_ratio}} </td>
+        <td>{{ onerow.log_enhance_odds}}</td><td>{{onerow.log_reduce_odds}} </td>
+        <td>{{ onerow.log_lik_snp}} </td>  
+        <td>{{ onerow.snp_strand }}</td>  <td>{{ onerow.ref_strand }}</td>
+    </tr>
+    {%  endfor %}
+  </table>
+  {% endif %}
+</div>
+
+<div id="scores_to_view">
+  {% if snpids  %}
+  <ul>
+    {% for snpid in snpids %}
+      <li> {{ snpid }}  </li> 
+    {% endfor %}
+  </ul>
+  <p>
+  </p> 
+  {% endif %}
+</div>
