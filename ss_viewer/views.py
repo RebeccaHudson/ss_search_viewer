@@ -60,7 +60,9 @@ def xxx_get_scores_for_list(request):
        api_response  = requests.post(api_url, json=snpid_list, headers=req_headers)
        context_to_pass['api_response'] = json.loads(api_response.text)
        context_to_pass['holdover_snpids'] = ", ".join(snpid_list)
-       context_to_pass['form'] = form 
+       context_to_pass['form'] = ScoresSearchForm(
+                                 {'raw_requested_snpids' : ", ".join(snpid_list) } )
+       
        return render(request, 'ss_viewer/alt-searchpage.html', context_to_pass )
   else:
     form = ScoresSearchForm() 
