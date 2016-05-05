@@ -51,4 +51,20 @@ class OneScoresRowViewDetailTests(TestCase):
      self.assertEqual(response.status_code, 200)
 
 
+  def test_that_scores_list_loads_post(self):
+    response = self.client.post(reverse('ss_viewer:search'),
+            { 'requested_snpids' :  '"rs376997626", "rs575624833", "rs189241347"]' })
+    #Since the snpids are parsed out with a regular expression, we don't have to 
+    #insist on a specific format..
+    self.assertEqual(response.context.flatten().has_key('api_response'), True)
+    api_response_data = response.context.flatten()['api_response']
+    self.assertEqual(len(api_response_data), 3) #asked for 3 rows of data
+    for data_row in api_response_data:
+      fields_in_data_row = data_row.keys()
+      self.check_for_expected_fields_in_scores_row(fields_in_data_row)
+    self.assertEqual(response.status_code, 200)
+
+  def test_that_scores_list_loads_get(self): 
+     response = self.client.get(reverse('ss_viewer:search'))
+     self.assertEqual(response.status_code, 200)
 
