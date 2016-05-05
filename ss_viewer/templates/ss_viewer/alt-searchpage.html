@@ -2,10 +2,11 @@
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 
-<form action="{% url 'ss_viewer:alt-search' %}" method="post">
+<form enctype="multipart/form-data" action="{% url 'ss_viewer:alt-search' %}" method="post" >
 {% csrf_token %}
-  {{ form }}
-  <!-- does the form actually get filled with stuff? -->
+  <table>
+    {{ form.as_table }}
+  </table>
   <input type="submit" value="Search" />
 </form>
 
