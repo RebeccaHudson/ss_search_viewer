@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
@@ -6,6 +7,8 @@ import json
 import re
 
 from .forms import ScoresSearchForm
+from django.core.files.uploadedfile import SimpleUploadedFile
+
 
 #found at the URL: ss_viewer
 def index(request):
@@ -46,26 +49,35 @@ def setup_api_url(api_function, snpid=None):
   url = host_w_port + "/" + url_args  + "/"
   return url
 
+def handle_uploaded_file(file_pointer):
+  if file_pointer is None:
+    print "no file pointer" 
+    return None
+  build_a_str = ""
+  for chunk in file_pointer.chunks():
+    build_a_str +=  chunk 
+    return build_a_str
 
 def xxx_get_scores_for_list(request):
-  print("This is working...")
+  searchpage_template = 'ss_viewer/alt-searchpage.html'
   context_to_pass = { }
   if request.method == 'POST':
-    form = ScoresSearchForm(request.POST)
+    form = ScoresSearchForm(request.POST, request.FILES)
     if form.is_valid():
-       raw_snpids = form.cleaned_data['raw_requested_snpids']
-       snpid_list = extract_snpids_from_textfield(raw_snpids)
-       api_url = setup_api_url('search')
-       req_headers = { 'content-type' : 'application/json' }
-       api_response  = requests.post(api_url, json=snpid_list, headers=req_headers)
-       context_to_pass['api_response'] = json.loads(api_response.text)
-       context_to_pass['holdover_snpids'] = ", ".join(snpid_list)
-       context_to_pass['form'] = ScoresSearchForm(
-                                 {'raw_requested_snpids' : ", ".join(snpid_list) } )
-       
-       return render(request, 'ss_viewer/alt-searchpage.html', context_to_pass )
+       file_stuff = handle_uploaded_file(request.FILES.get('file_of_snpids'))
+       snpid_list = extract_snpids_from_textfield(form.cleaned_data['raw_requested_snpids'])
+       api_response = requests.post( setup_api_url('search'), 
+             json=snpid_list, headers={ 'content-type' : 'application/json' })
+
+       context = { 'api_response'  :  json.loads(api_response.text), 
+                   'holdover_snpids': ", ".join(snpid_list),
+                   'form' : ScoresSearchForm({'raw_requested_snpids':", ".join(snpid_list)})
+                 }
+       return render(request, searchpage_template, context )
+    else: 
+        #the form failed validation, but show it anyway so the user can see error messages.
+        #Don't make a new form to render on failed validation, or the error messages will be lost.
+        return render(request, searchpage_template, {'form': form })
   else:
-    form = ScoresSearchForm() 
-    context_to_pass['form'] = form 
-  return render(request, 'ss_viewer/alt-searchpage.html', context_to_pass )
+    return render(request, searchpage_template, {'form':ScoresSearchForm() })
 
