@@ -22,6 +22,8 @@ class ScoresSearchForm(forms.Form):
      snpid_file = cleaned_data.get('file_of_snpids')
      snpid_textbox_contents = cleaned_data.get('raw_requested_snpids')
 
+     #form.errors contains any errors that have come up by this point.
+
      if (snpid_file and snpid_textbox_contents):
        raise forms.ValidationError(('Specify snpids in the textbox,'
                                    ' OR provide a file, not both.'),
