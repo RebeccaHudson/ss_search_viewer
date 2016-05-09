@@ -1,16 +1,12 @@
-<h1> Header.. </h1>
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<h1> specify snpids </h1>
 
-
-<form action="{% url 'ss_viewer:search' %}" method="post">
+<form enctype="multipart/form-data" action="{% url 'ss_viewer:search' %}" method="post" >
 {% csrf_token %}
-     <label for="requested-snpids"> Enter SNPids into the box:</label> 
-     <textarea name="requested_snpids" rows=15 cols=25 id="text_input"/>{%  if holdover_snpids %}{{holdover_snpids}}{%  else  %}rs529689206, rs548905050, rs6966734{% endif %}</textarea>
-     <!-- hardcoded values for testing purposes -->
+  <table>
+    {{ form.as_table }}
+  </table>
   <input type="submit" value="Search" />
 </form>
-
-
 
 
 <div id="scores_to_view">
@@ -39,10 +35,6 @@
   {% endif %}
 </div>
 
-
-
-
-
 <div id="scores_to_view">
   {% if snpids  %}
   <ul>
@@ -54,4 +46,3 @@
   </p> 
   {% endif %}
 </div>
-
