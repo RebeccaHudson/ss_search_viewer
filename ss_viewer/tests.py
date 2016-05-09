@@ -71,13 +71,15 @@ class OneScoresRowViewDetailTests(TestCase):
   #there should be different combinations of inputs that make it spit. 
   #test as many of those here as possbile.
   def test_that_scores_list_post_rejects_an_invalid_form(self):
+    #None of the form fields are filled out.
     response = self.client.post(reverse('ss_viewer:search'),
            { 'totally_invalid_field'  : 'har-dee-har-harr!' })
-
     self.assertEqual(response.context.flatten().has_key('status_message'), True)
     self.assertEqual(response.context.flatten()['status_message'],'Invalid search. Try agian.')
+    self.assertEqual(response.context['form'].is_valid(), False)
+    
 
-    pass
+
     #names of the fields in the form.
     #response = self.client.post(reverse('ss_viewer:search'),
     #        { 'requested_snpids' :  '"rs376997626", "rs575624833", "rs189241347"]' })
@@ -92,7 +94,10 @@ class OneScoresRowViewDetailTests(TestCase):
     self.assertEqual(response.context.flatten().has_key('api_response'), True)
     api_response_data = response.context.flatten()['api_response']
     self.assertEqual(api_response_data, None)
-    print("nomatch case for search api response data:\n" + str(response.context))
+
+    self.assertEqual(response.context.flatten().has_key('status_message'), True)
+    self.assertEqual(response.context.flatten()['status_message'],
+                                             'No matches for requested snpids' )
 
     self.assertEqual(response.status_code, 200) 
     #no content from API, but success from ss_viewer.
