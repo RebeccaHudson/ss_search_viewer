@@ -21,18 +21,18 @@ def one_snp_detail(request, snpid_numeric):
   r = requests.get(url)
   return HttpResponse(r.text)
 
-def get_scores_for_list(request):
-  context_to_pass = { }
-  if request.method == 'POST':
-    raw_snpids = request.POST.get('requested_snpids')
-    snpid_list = extract_snpids_from_textfield(raw_snpids)
-    api_url = setup_api_url('search')
-    req_headers = { 'content-type' : 'application/json' }
-    api_response  = requests.post(api_url, 
-                                json=snpid_list, headers=req_headers)
-    context_to_pass['api_response'] = json.loads(api_response.text)
-    context_to_pass['holdover_snpids'] = ", ".join(snpid_list)
-  return render(request, 'ss_viewer/searchpage.html', context_to_pass )
+#def get_scores_for_list(request):
+#  context_to_pass = { }
+#  if request.method == 'POST':
+#    raw_snpids = request.POST.get('requested_snpids')
+#    snpid_list = extract_snpids_from_textfield(raw_snpids)
+#    api_url = setup_api_url('search')
+#    req_headers = { 'content-type' : 'application/json' }
+#    api_response  = requests.post(api_url, 
+#                                json=snpid_list, headers=req_headers)
+#    context_to_pass['api_response'] = json.loads(api_response.text)
+#    context_to_pass['holdover_snpids'] = ", ".join(snpid_list)
+#  return render(request, 'ss_viewer/searchpage.html', context_to_pass )
 
 def extract_snpids_from_textfield(text):
   gex = re.compile('(rs[0-9]+)', re.MULTILINE)  
@@ -58,26 +58,43 @@ def handle_uploaded_file(file_pointer):
     build_a_str +=  chunk 
     return build_a_str
 
-def xxx_get_scores_for_list(request):
-  searchpage_template = 'ss_viewer/alt-searchpage.html'
-  context_to_pass = { }
+
+def get_scores_for_list(request):
+  searchpage_template = 'ss_viewer/searchpage.html'
   if request.method == 'POST':
     form = ScoresSearchForm(request.POST, request.FILES)
     if form.is_valid():
        file_stuff = handle_uploaded_file(request.FILES.get('file_of_snpids'))
        snpid_list = extract_snpids_from_textfield(form.cleaned_data['raw_requested_snpids'])
+       status_message = ""  #used to indicate to users status of their search results. 
        api_response = requests.post( setup_api_url('search'), 
              json=snpid_list, headers={ 'content-type' : 'application/json' })
+       print("status code for scores list response: " + str(api_response.status_code))
+       response_json = None 
+       if api_response.status_code == 204:
+         #don't look for text from the API.
+         status_message = "No matches for requested snpids" 
+       else:
+         count_of_requested_snpids = len(snpid_list)
+         #data_returned_from_api = json.loads(api_response.text)
+         status_message = "Retrieved data for {0} out of {1} requested snpids.".format(
+                  66666,  count_of_requested_snpids)
+         response_json = json.loads(api_response.text)
 
-       context = { 'api_response'  :  json.loads(api_response.text), 
+       context = { 'api_response'  :  response_json,
+                   'status_message':  status_message,
                    'holdover_snpids': ", ".join(snpid_list),
                    'form' : ScoresSearchForm({'raw_requested_snpids':", ".join(snpid_list)})
                  }
+
        return render(request, searchpage_template, context )
+
     else: 
         #the form failed validation, but show it anyway so the user can see error messages.
         #Don't make a new form to render on failed validation, or the error messages will be lost.
-        return render(request, searchpage_template, {'form': form })
+        return render(request, searchpage_template, {'form': form, 
+                                                 'status_message':'Invalid search. Try agian.'})
   else:
     return render(request, searchpage_template, {'form':ScoresSearchForm() })
+    #No status message when just loading the form.
 
