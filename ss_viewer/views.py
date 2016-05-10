@@ -50,33 +50,50 @@ def setup_api_url(api_function, snpid=None):
   return url
 
 def handle_uploaded_file(file_pointer):
-  if file_pointer is None:
-    print "no file pointer" 
-    return None
-  build_a_str = ""
-  for chunk in file_pointer.chunks():
-    build_a_str +=  chunk 
-    return build_a_str
+  #break if there is no file pointer and this is called.      
+  #if file_pointer is None:
+  #  print "no file pointer" 
+  #  return None
+  text_in_file = file_pointer.read() 
+
+  return clean_and_validate_snpid_text_input(text_in_file)
+
+def clean_and_validate_snpid_text_input(text_input):
+  snpids = extract_snpids_from_textfield(text_input)
+  deduped_snpids = list(set(snpids))  #don't allow any duplicate requests.
+  if len(deduped_snpids) == 0:  
+    raise forms.ValidationError("No snpids have been included")  
+  return deduped_snpids
 
 
 def get_scores_for_list(request):
   searchpage_template = 'ss_viewer/searchpage.html'
   if request.method == 'POST':
+
     form = ScoresSearchForm(request.POST, request.FILES)
+    status_message = ""  #used to indicate to users status of their search results. 
+
     if form.is_valid():
-       file_stuff = handle_uploaded_file(request.FILES.get('file_of_snpids'))
-       snpid_list = extract_snpids_from_textfield(form.cleaned_data['raw_requested_snpids'])
-       status_message = ""  #used to indicate to users status of their search results. 
+       snpid_list = None
+       try:
+         if form.cleaned_data['raw_requested_snpids']: #this is detected properly?
+           snpid_list = clean_and_validate_snpid_text_input(form.cleaned_data['raw_requested_snpids'])
+         else:
+           snpid_list = handle_uploaded_file(request.FILES.get('file_of_snpids'))
+       except forms.ValidationError:
+         status_message = "No properly formatted SNPids in the text."           
+         return render(request, searchpage_template, {'form': ScoresSearchForm(),
+                                                      'status_message': status_message })
+
        api_response = requests.post( setup_api_url('search'), 
              json=snpid_list, headers={ 'content-type' : 'application/json' })
-       print("status code for scores list response: " + str(api_response.status_code))
+
        response_json = None 
+
        if api_response.status_code == 204:
-         #don't look for text from the API.
          status_message = "No matches for requested snpids" 
        else:
          count_of_requested_snpids = len(snpid_list)
-         #data_returned_from_api = json.loads(api_response.text)
          status_message = "Retrieved data for {0} out of {1} requested snpids.".format(
                   66666,  count_of_requested_snpids)
          response_json = json.loads(api_response.text)
@@ -86,7 +103,6 @@ def get_scores_for_list(request):
                    'holdover_snpids': ", ".join(snpid_list),
                    'form' : ScoresSearchForm({'raw_requested_snpids':", ".join(snpid_list)})
                  }
-
        return render(request, searchpage_template, context )
 
     else: 
