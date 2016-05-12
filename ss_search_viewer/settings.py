@@ -129,3 +129,18 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+HARD_LIMITS = {
+  'MAX_NUMBER_OF_SNPIDS_ALLOWED_TO_REQUEST': 300,
+  'MAX_NUMBER_OF_BASES_IN_GENOMIC_LOCATION_REQUEST': 350 
+}
+
+
+QUERY_DEFAULTS = {
+  'DEFAULT_REGION_SIZE' : 25
+}
+
+
+
+
