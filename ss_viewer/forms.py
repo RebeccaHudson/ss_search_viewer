@@ -1,7 +1,7 @@
 from django import forms
 
 class ScoresSearchForm(forms.Form):
-   some_fake_snpids = "rs376201521  rs762269735   rs376019116"
+   some_fake_snpids = "rs559407913  rs557153083 rs9431596"
    text_to_explain_snpbox = "Enter snpids to lookup scores data for"
    raw_requested_snpids = forms.CharField(widget=forms.Textarea,
                                     max_length=100000,
