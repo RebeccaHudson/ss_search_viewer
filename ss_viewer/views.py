@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.conf import settings
 import requests
@@ -7,6 +8,7 @@ import json
 import re
 
 from .forms import ScoresSearchForm
+from .forms import SearchByGenomicLocationForm
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 
@@ -65,7 +67,9 @@ def clean_and_validate_snpid_text_input(text_input):
     raise forms.ValidationError("No snpids have been included")  
   return deduped_snpids
 
-
+#This responds to a request for the search page.
+#What I want: this should handle the POST for the search-by-snpids form
+#then return contorol to the main search page...
 def get_scores_for_list(request):
   searchpage_template = 'ss_viewer/searchpage.html'
   if request.method == 'POST':
@@ -113,4 +117,59 @@ def get_scores_for_list(request):
   else:
     return render(request, searchpage_template, {'form':ScoresSearchForm() })
     #No status message when just loading the form.
+
+
+
+
+
+
+
+#The above function 'get_scores_for_list' should actually be called
+#handle search by genomic location.. 
+#this should only handle POST
+def handle_search_by_genomic_location(request):
+  if request.method == 'GET':
+    return redirect(reverse('ss_viewer:multi-search'))
+
+  if request.method == 'POST': 
+    searchpage_template = 'ss_viewer/multi-searchpage.html'  
+    gl_search_form = SearchByGenomicLocationForm(request.POST)  #no files in here...
+   
+    status_message = ""
+    if gl_search_form.is_valid():
+      status_message = "This form appears to be valid."
+      print("cleaned data" + str(gl_search_form.cleaned_data) )
+
+      #TODO: what other context do we actually need here?
+      #return the original form because we want to have the old data carry over. 
+      return render(request, searchpage_template, {
+                                                   'gl_search_form': gl_search_form, 
+                                                   'status_message' : status_message})                                              
+    else:
+       status_message = "This form is apparently not valid."
+       return render(request, searchpage_template, { 
+                         'gl_search_form' : gl_search_form,
+                          'status_message': status_message } )
+
+
+
+
+#Def this is the actual multi-search page, this handles the GET.
+def show_multisearch_page(request):
+  searchpage_template = 'ss_viewer/multi-searchpage.html'  
+  status_message = "Enter genomic location info."
+  gl_search_form = SearchByGenomicLocationForm()
+  context = { 'gl_search_form' : gl_search_form, 
+              'status_message' : status_message }   
+  return render(request, searchpage_template, context)
+
+
+
+
+
+
+
+
+
+
 
