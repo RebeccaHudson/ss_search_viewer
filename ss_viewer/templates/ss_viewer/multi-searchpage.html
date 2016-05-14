@@ -36,6 +36,9 @@
         <td>{{ onerow.log_enhance_odds}}</td><td>{{onerow.log_reduce_odds}} </td>
         <td>{{ onerow.log_lik_snp}} </td>  
         <td>{{ onerow.snp_strand }}</td>  <td>{{ onerow.ref_strand }}</td>
+        <td>{{ onerow.pval_ref }} </td><td>{{ onerow.pval_snp }} </td>
+        <td>{{ onerow.pval_cond_ref }}</td> <td>{{ onerow.pval_cond_snp}}</td>
+        <td>{{ onerow.pval_diff }}</td><td>  {{ onerow.pval_rank}} </td>
     </tr>
     {%  endfor %}
   </table>
