@@ -58,7 +58,9 @@ class OneScoresRowViewDetailTests(TestCase):
             { 'raw_requested_snpids' :  '"rs376997626", "rs575624833", "rs189241347"]' })
     #this form submission should be valid...
     print(response.context.flatten())
-    self.assertEqual(response.context.flatten().has_key('api_response'), True)
+
+    self.assertTrue(response.context.flatten().has_key('api_response'))
+
     api_response_data = response.context.flatten()['api_response']
 
   #  self.assertEqual(len(api_response_data), 3) #asked for 3 rows of data
@@ -110,3 +112,30 @@ class OneScoresRowViewDetailTests(TestCase):
      response = self.client.get(reverse('ss_viewer:search'))
      self.assertEqual(response.status_code, 200)
      #not expecting a status message; there should be a form in the context though.
+
+
+
+
+
+
+
+  def test_gl_search_returns_some_data(self):
+    response = self.client.post(reverse('ss_viewer:gl-region-search'),
+                                { 'selected_chromosome'  : 'ch1', 
+                                  'gl_start_pos'         : 12214,
+                                  'gl_end_pos'           : 12314  })
+    self.assertTrue(response.context.flatten().has_key('api_response'))
+   # print("response " + str(response.context.flatten().keys()))
+   # print("status message" + response.context.flatten().get('status_message'))
+   # #check that some data is returned.
+   # print("Form errors: : " + str(response.context['gl_search_form'].errors))
+    self.assertEqual(response.status_code, 200) 
+    self.assertTrue(response.context['gl_search_form'].is_valid())
+   # test that the gl-search gets rejected when it's improperly specified.
+
+
+  #test that search page loads.
+
+
+
+
