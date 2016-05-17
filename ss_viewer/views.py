@@ -7,8 +7,11 @@ import requests
 import json
 import re
 
-from .forms import ScoresSearchForm
+from .forms import ScoresSearchForm   #remove once other dependencies are reworked.
+from .forms import SearchBySnpidForm  #replaces ScoresSearchForm
+
 from .forms import SearchByGenomicLocationForm
+
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 
@@ -23,23 +26,6 @@ def one_snp_detail(request, snpid_numeric):
   r = requests.get(url)
   return HttpResponse(r.text)
 
-#def get_scores_for_list(request):
-#  context_to_pass = { }
-#  if request.method == 'POST':
-#    raw_snpids = request.POST.get('requested_snpids')
-#    snpid_list = extract_snpids_from_textfield(raw_snpids)
-#    api_url = setup_api_url('search')
-#    req_headers = { 'content-type' : 'application/json' }
-#    api_response  = requests.post(api_url, 
-#                                json=snpid_list, headers=req_headers)
-#    context_to_pass['api_response'] = json.loads(api_response.text)
-#    context_to_pass['holdover_snpids'] = ", ".join(snpid_list)
-#  return render(request, 'ss_viewer/searchpage.html', context_to_pass )
-
-def extract_snpids_from_textfield(text):
-  gex = re.compile('(rs[0-9]+)', re.MULTILINE)  
-  list_of_snpids = gex.findall(text)
-  return list_of_snpids
 
 def setup_api_url(api_function, snpid=None):
   hostinfo = settings.API_HOST_INFO 
@@ -51,14 +37,12 @@ def setup_api_url(api_function, snpid=None):
   url = host_w_port + "/" + url_args  + "/"
   return url
 
-def handle_uploaded_file(file_pointer):
-  #break if there is no file pointer and this is called.      
-  #if file_pointer is None:
-  #  print "no file pointer" 
-  #  return None
-  text_in_file = file_pointer.read() 
 
-  return clean_and_validate_snpid_text_input(text_in_file)
+def extract_snpids_from_textfield(text):
+  gex = re.compile('(rs[0-9]+)', re.MULTILINE)  
+  list_of_snpids = gex.findall(text)
+  return list_of_snpids
+
 
 def clean_and_validate_snpid_text_input(text_input):
   snpids = extract_snpids_from_textfield(text_input)
@@ -70,57 +54,116 @@ def clean_and_validate_snpid_text_input(text_input):
 #This responds to a request for the search page.
 #What I want: this should handle the POST for the search-by-snpids form
 #then return contorol to the main search page...
-def get_scores_for_list(request):
-  searchpage_template = 'ss_viewer/searchpage.html'
+#def get_scores_for_list(request):
+#  searchpage_template = 'ss_viewer/searchpage.html'
+#  if request.method == 'POST':
+#
+#    form = ScoresSearchForm(request.POST, request.FILES)
+#    status_message = ""  #used to indicate to users status of their search results. 
+#
+#    if form.is_valid():
+#       snpid_list = None
+#       try:
+#         if form.cleaned_data['raw_requested_snpids']: #this is detected properly?
+#           snpid_list = clean_and_validate_snpid_text_input(form.cleaned_data['raw_requested_snpids'])
+#         else:
+#           snpid_list = handle_uploaded_file(request.FILES.get('file_of_snpids'))
+#       except forms.ValidationError:
+#         status_message = "No properly formatted SNPids in the text."           
+#         return render(request, searchpage_template, {'form': ScoresSearchForm(),
+#                                                      'status_message': status_message })
+#
+#       api_response = requests.post( setup_api_url('search'), 
+#             json=snpid_list, headers={ 'content-type' : 'application/json' })
+#
+#       response_json = None 
+#
+#       if api_response.status_code == 204:
+#         status_message = "No matches for requested snpids" 
+#       else:
+#         count_of_requested_snpids = len(snpid_list)
+#         status_message = "Retrieved data for {0} out of {1} requested snpids.".format(
+#                  66666,  count_of_requested_snpids)
+#         response_json = json.loads(api_response.text)
+#
+#       context = { 'api_response'  :  response_json,
+#                   'status_message':  status_message,
+#                   'holdover_snpids': ", ".join(snpid_list),
+#                   'form' : ScoresSearchForm({'raw_requested_snpids':", ".join(snpid_list)})
+#                 }
+#       return render(request, searchpage_template, context )
+#
+#    else: 
+#        #the form failed validation, but show it anyway so the user can see error messages.
+#        #Don't make a new form to render on failed validation, or the error messages will be lost.
+#        return render(request, searchpage_template, {'form': form, 
+#                                                 'status_message':'Invalid search. Try agian.'})
+#  else:
+#    return render(request, searchpage_template, {'form':ScoresSearchForm() })
+#    #No status message when just loading the form.
+#
+
+# Either by textarea or by file, snpid search form is not 
+# valid unless one of these is present 
+def get_snpid_list_from_form(request, form):
+  form_snpids = form.cleaned_data.get('raw_requested_snpids')
+  if form_snpids:
+    return clean_and_validate_snpid_text_input(form_snpids)
+  else:
+    file_pointer = request.FILES.get('file_of_snpids')
+    text_in_file = file_pointer.read()   # TODO: read in chunks rather than all at once. 
+    return clean_and_validate_snpid_text_input(text_in_file) 
+
+
+def setup_context_for_snpid_search_results(api_response, snpid_list):
+  status_message = ""; response_json = None
+
+  if api_response.status_code == 204:
+    status_message = "No matches for requested snpids" 
+  else:
+    count_of_requested_snpids = len(snpid_list)
+    status_message = "Retrieved data for {0} out of {1} requested snpids.".format(
+             66666,  count_of_requested_snpids)
+
+    response_json = json.loads(api_response.text)
+
+  context = { 'api_response'     :  response_json,
+              'status_message'    :  status_message,
+              'holdover_snpids'   :  ", ".join(snpid_list),
+              'snpid_search_form' :  SearchBySnpidForm({'raw_requested_snpids':", ".join(snpid_list)}),
+              'gl_search_form'    :  SearchByGenomicLocationForm()
+            }
+  return context
+
+
+def handle_search_by_snpid(request):
+  if request.method == 'GET':
+    return redirect(reverse('ss_viewer:multi-search'))
+
   if request.method == 'POST':
+    searchpage_template = 'ss_viewer/multi-searchpage.html'  
+    snpid_search_form = SearchBySnpidForm(request.POST, request.FILES)
+    status_message = ""    
+    if not snpid_search_form.is_valid():
+       return render(request, 
+                     searchpage_template, 
+                     {'form': form, 
+                      'status_message':'Invalid search. Try agian.'})
+    #if execution reaches this point, the form is valid.
+    snpid_list = None
+    try:
+      snpid_list = get_snpid_list_from_form(request, snpid_search_form)
+    except forms.ValidationError:
+      status_message = "No properly formatted SNPids in the text."           
+      return render(request, searchpage_template, {'form': SearchBySnpidForm(),
+                                                    'status_message': status_message })
 
-    form = ScoresSearchForm(request.POST, request.FILES)
-    status_message = ""  #used to indicate to users status of their search results. 
-
-    if form.is_valid():
-       snpid_list = None
-       try:
-         if form.cleaned_data['raw_requested_snpids']: #this is detected properly?
-           snpid_list = clean_and_validate_snpid_text_input(form.cleaned_data['raw_requested_snpids'])
-         else:
-           snpid_list = handle_uploaded_file(request.FILES.get('file_of_snpids'))
-       except forms.ValidationError:
-         status_message = "No properly formatted SNPids in the text."           
-         return render(request, searchpage_template, {'form': ScoresSearchForm(),
-                                                      'status_message': status_message })
-
-       api_response = requests.post( setup_api_url('search'), 
+    api_response = requests.post( setup_api_url('search'), 
              json=snpid_list, headers={ 'content-type' : 'application/json' })
 
-       response_json = None 
+    context = setup_context_for_snpid_search_results(api_response, snpid_list) 
 
-       if api_response.status_code == 204:
-         status_message = "No matches for requested snpids" 
-       else:
-         count_of_requested_snpids = len(snpid_list)
-         status_message = "Retrieved data for {0} out of {1} requested snpids.".format(
-                  66666,  count_of_requested_snpids)
-         response_json = json.loads(api_response.text)
-
-       context = { 'api_response'  :  response_json,
-                   'status_message':  status_message,
-                   'holdover_snpids': ", ".join(snpid_list),
-                   'form' : ScoresSearchForm({'raw_requested_snpids':", ".join(snpid_list)})
-                 }
-       return render(request, searchpage_template, context )
-
-    else: 
-        #the form failed validation, but show it anyway so the user can see error messages.
-        #Don't make a new form to render on failed validation, or the error messages will be lost.
-        return render(request, searchpage_template, {'form': form, 
-                                                 'status_message':'Invalid search. Try agian.'})
-  else:
-    return render(request, searchpage_template, {'form':ScoresSearchForm() })
-    #No status message when just loading the form.
-
-
-
-
+    return render(request, searchpage_template, context )
 
 
 
@@ -161,15 +204,18 @@ def handle_search_by_genomic_location(request):
       #return the original form because we want to have the old data carry over. 
       return render(request, searchpage_template, { 'api_response' : response_json,
                                                     'gl_search_form': new_form, 
+                                                    'snpid_search_form' : SearchBySnpidForm(),
                                                     'holdover_gl_region': specified_region,
                                                     'status_message' : status_message})                                              
        # Will I have to include the specified region into an argument to a new SearchForm
        # in order for the values to holdover?
     else:
        status_message = "This form is apparently not valid."
-       return render(request, searchpage_template, { 
-                         'gl_search_form' : gl_search_form,
-                          'status_message': status_message } )
+       return render(request, searchpage_template, 
+                        { 'gl_search_form'    : gl_search_form,
+                          'snpid_search_form' : SearchBySnpidForm(),
+                          'status_message'   : status_message     
+                        })
 
 
 
@@ -178,8 +224,10 @@ def show_multisearch_page(request):
   searchpage_template = 'ss_viewer/multi-searchpage.html'  
   status_message = "Enter genomic location info."
   gl_search_form = SearchByGenomicLocationForm()
-  context = { 'gl_search_form' : gl_search_form, 
-              'status_message' : status_message }   
+  snpid_search_form = SearchBySnpidForm()
+  context = { 'gl_search_form'    : gl_search_form, 
+              'snpid_search_form' : snpid_search_form,
+              'status_message'    : status_message }   
   return render(request, searchpage_template, context)
 
 
