@@ -107,7 +107,8 @@ class SearchByGenomicLocationForm(forms.Form):
 
     if end_pos is None:
       end_pos = start_pos + int(settings.QUERY_DEFAULTS['DEFAULT_REGION_SIZE'])
-    
+      cleaned_data['gl_end_pos'] = end_pos
+
     if start_pos > end_pos:
       raise forms.ValidationError(('Start position must be less than or equal'
                                     'to the end position.'),
