@@ -1,7 +1,6 @@
-<h1> specify genomic location</h1>
+<h1> specify genomic location OR snpid</h1>
 
 <div id="status_message"> {{ status_message }} </div>
-
 
 <form enctype="multipart/form-data" action="{% url 'ss_viewer:gl-region-search' %}" method="post" >
 {% csrf_token %}
@@ -9,6 +8,14 @@
     {{ gl_search_form.as_table }}
   </table>
   <input type="submit" value="Search by Genomic Location" />
+</form>
+
+<form enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-search' %}" method="post">
+{% csrf_token %}
+  <table>
+    {{ snpid_search_form.as_table }}
+  </table>
+  <input type="submit" value="Search by SNPid" />
 </form>
 
 <!-- consider making this part modular; DRYing it up some how... -->
