@@ -56,7 +56,7 @@ class SearchBySnpidForm(forms.Form):
    #This is where we specify relationships for 1-or-the-other form inputs.
    #A user can specify SNPids. EITHER with a file or with the textox.
    def clean(self):
-     cleaned_data = super(ScoresSearchForm, self).clean()
+     cleaned_data = super(SearchBySnpidForm, self).clean()
      print(str(cleaned_data))
      snpid_file = cleaned_data.get('file_of_snpids')
      snpid_textbox_contents = cleaned_data.get('raw_requested_snpids')
