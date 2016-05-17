@@ -137,20 +137,39 @@ def handle_search_by_genomic_location(request):
    
     status_message = ""
     if gl_search_form.is_valid():
-      status_message = "This form appears to be valid."
-      print("cleaned data" + str(gl_search_form.cleaned_data) )
+      #status_message = "This form appears to be valid."
 
+      print("cleaned data" + str(gl_search_form.cleaned_data) )
+      form_data = gl_search_form.cleaned_data
+      specified_region = { 'chromosome': form_data['selected_chromosome'],
+                           'start_pos' : form_data['gl_start_pos'], 
+                           'end_pos'   : form_data['gl_end_pos']   }
+ 
+      api_response = requests.post( setup_api_url('search-by-gl'), 
+             json=specified_region, headers={ 'content-type' : 'application/json' })
+      response_json = json.loads(api_response.text)
+
+      if len(response_json) == 0:
+        status_message = 'No matching rows from the API'
+      else:
+        status_message = 'Got ' + str(len(response_json)) + ' rows back from API.'
+     
+
+      status_message += str(specified_region) 
+      new_form = SearchByGenomicLocationForm(form_data)
       #TODO: what other context do we actually need here?
       #return the original form because we want to have the old data carry over. 
-      return render(request, searchpage_template, {
-                                                   'gl_search_form': gl_search_form, 
-                                                   'status_message' : status_message})                                              
+      return render(request, searchpage_template, { 'api_response' : response_json,
+                                                    'gl_search_form': new_form, 
+                                                    'holdover_gl_region': specified_region,
+                                                    'status_message' : status_message})                                              
+       # Will I have to include the specified region into an argument to a new SearchForm
+       # in order for the values to holdover?
     else:
        status_message = "This form is apparently not valid."
        return render(request, searchpage_template, { 
                          'gl_search_form' : gl_search_form,
                           'status_message': status_message } )
-
 
 
 
