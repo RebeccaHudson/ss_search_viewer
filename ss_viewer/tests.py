@@ -47,9 +47,6 @@ class OneScoresRowViewDetailTests(TestCase):
 #      self.check_for_expected_fields_in_scores_row(fields_in_data_row)
 #    self.assertEqual(response.status_code, 200)
 
-  def test_that_scores_list_loads_get(self): 
-     response = self.client.get(reverse('ss_viewer:search'))
-     self.assertEqual(response.status_code, 200)
 
   #we can only expect this test to pass if the requested snpids are actually in the database...
   #retain this code for testing when we actually expect matches to come out...
@@ -109,7 +106,7 @@ class OneScoresRowViewDetailTests(TestCase):
 
 
   def test_that_scores_list_loads_get(self): 
-     response = self.client.get(reverse('ss_viewer:search'))
+     response = self.client.get(reverse('ss_viewer:snpid-search'))
      self.assertEqual(response.status_code, 200)
      #not expecting a status message; there should be a form in the context though.
 
