@@ -158,7 +158,7 @@ def handle_search_by_snpid(request):
       return render(request, searchpage_template, {'form': SearchBySnpidForm(),
                                                     'status_message': status_message })
 
-    api_response = requests.post( setup_api_url('search'), 
+    api_response = requests.post( setup_api_url('snpid-search'), 
              json=snpid_list, headers={ 'content-type' : 'application/json' })
 
     context = setup_context_for_snpid_search_results(api_response, snpid_list) 
