@@ -35,6 +35,7 @@ class OneScoresRowViewDetailTests(TestCase):
     #print("context " + response.context)
     #api_response = response.context.flatten().get('api_response') 
     #print("The api told us this: " + str(api_response))
+    response_json = json.loads(response.content)
     print("response: " + str(response))
     self.assertEqual(len(response_json), 1)
     # This is an unused oddball function. Should probably remove this.
@@ -132,7 +133,7 @@ class OneScoresRowViewDetailTests(TestCase):
                                   'gl_start_pos'         : 12214,
                                   'gl_end_pos'           : 12314  })
     self.assertTrue(response.context.flatten().has_key('api_response'))
-    print("response " + str(response.context.get('api_response')[0]))
+    print("response " + str(response.context.get('api_response')))
     data_response = response.context.get('api_response')
     self.assertEqual(len(data_response), 1) #only one item at this position.
     self.check_for_expected_fields_in_scores_row(data_response[0])
