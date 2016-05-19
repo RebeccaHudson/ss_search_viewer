@@ -109,18 +109,18 @@ class OneScoresRowViewDetailTests(TestCase):
     #no content from API, but success from ss_viewer.
 
 
-
-
-
   def test_that_scores_list_loads_get(self): 
+     response = self.client.get(reverse('ss_viewer:snpid-search'), follow=True)
+       
+     self.assertTrue(response.context.has_key('gl_search_form'))
+     self.assertTrue(response.context.has_key('snpid_search_form'))
+     self.assertTrue(response.context.has_key('status_message'))
+     self.assertEqual(response.status_code, 200)   #302 redirection
+
+
+     # if follow is not true, we just get the redirection status code
      response = self.client.get(reverse('ss_viewer:snpid-search'))
-     self.assertEqual(response.status_code, 200)
-     #not expecting a status message; there should be a form in the context though.
-
-
-
-
-
+     self.assertEqual(response.status_code, 302)   #302 redirection
 
 
   def test_gl_search_returns_some_data(self):
