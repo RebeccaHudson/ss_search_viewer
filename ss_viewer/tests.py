@@ -78,11 +78,11 @@ class OneScoresRowViewDetailTests(TestCase):
   #test as many of those here as possbile.
   def test_that_scores_list_post_rejects_an_invalid_form(self):
     #None of the form fields are filled out.
-    response = self.client.post(reverse('ss_viewer:search'),
+    response = self.client.post(reverse('ss_viewer:snpid-search'),
            { 'totally_invalid_field'  : 'har-dee-har-harr!' })
     self.assertEqual(response.context.flatten().has_key('status_message'), True)
     self.assertEqual(response.context.flatten()['status_message'],'Invalid search. Try agian.')
-    self.assertEqual(response.context['form'].is_valid(), False)
+    self.assertEqual(response.context['snpid_search_form'].is_valid(), False)
     
 
 
@@ -93,7 +93,7 @@ class OneScoresRowViewDetailTests(TestCase):
 
 
   def test_that_scores_list_loads_post_for_no_matching_snpids(self):
-    response = self.client.post(reverse('ss_viewer:search'),
+    response = self.client.post(reverse('ss_viewer:snpid-search'),
            { 'raw_requested_snpids'  : 'rs111, rs1111111, rs11111111111111, rs1' })
            #banking on these being fake
 
