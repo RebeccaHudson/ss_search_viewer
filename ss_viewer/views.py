@@ -7,7 +7,6 @@ import requests
 import json
 import re
 
-from .forms import ScoresSearchForm   #remove once other dependencies are reworked.
 from .forms import SearchBySnpidForm  #replaces ScoresSearchForm
 
 from .forms import SearchByGenomicLocationForm
