@@ -147,7 +147,7 @@ def handle_search_by_snpid(request):
     if not snpid_search_form.is_valid():
        return render(request, 
                      searchpage_template, 
-                     {'form': form, 
+                     {'snpid_search_form': snpid_search_form, 
                       'status_message':'Invalid search. Try agian.'})
     #if execution reaches this point, the form is valid.
     snpid_list = None
