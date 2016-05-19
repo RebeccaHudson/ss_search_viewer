@@ -107,6 +107,7 @@ def clean_and_validate_snpid_text_input(text_input):
 # valid unless one of these is present 
 def get_snpid_list_from_form(request, form):
   form_snpids = form.cleaned_data.get('raw_requested_snpids')
+  #remove the data in there.
   if form_snpids:
     return clean_and_validate_snpid_text_input(form_snpids)
   else:
@@ -143,11 +144,13 @@ def handle_search_by_snpid(request):
   if request.method == 'POST':
     searchpage_template = 'ss_viewer/multi-searchpage.html'  
     snpid_search_form = SearchBySnpidForm(request.POST, request.FILES)
+    gl_search_form = SearchByGenomicLocationForm()
     status_message = ""    
     if not snpid_search_form.is_valid():
        return render(request, 
                      searchpage_template, 
                      {'snpid_search_form': snpid_search_form, 
+                      'gl_search_form' : gl_search_form,                
                       'status_message':'Invalid search. Try agian.'})
     #if execution reaches this point, the form is valid.
     snpid_list = None
@@ -155,8 +158,11 @@ def handle_search_by_snpid(request):
       snpid_list = get_snpid_list_from_form(request, snpid_search_form)
     except forms.ValidationError:
       status_message = "No properly formatted SNPids in the text."           
-      return render(request, searchpage_template, {'form': SearchBySnpidForm(),
-                                                    'status_message': status_message })
+      return render(request, 
+                    searchpage_template,
+                    {'snpid_search_form': SearchBySnpidForm(),
+                     'gl_search_form'   : SearchByGenomicLocationForm(),
+                     'status_message'   : status_message })
 
     api_response = requests.post( setup_api_url('snpid-search'), 
              json=snpid_list, headers={ 'content-type' : 'application/json' })
@@ -164,6 +170,9 @@ def handle_search_by_snpid(request):
     context = setup_context_for_snpid_search_results(api_response, snpid_list) 
 
     return render(request, searchpage_template, context )
+
+
+
 
 
 
