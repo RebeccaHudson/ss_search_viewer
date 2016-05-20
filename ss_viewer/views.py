@@ -50,57 +50,6 @@ def clean_and_validate_snpid_text_input(text_input):
     raise forms.ValidationError("No snpids have been included")  
   return deduped_snpids
 
-#This responds to a request for the search page.
-#What I want: this should handle the POST for the search-by-snpids form
-#then return contorol to the main search page...
-#def get_scores_for_list(request):
-#  searchpage_template = 'ss_viewer/searchpage.html'
-#  if request.method == 'POST':
-#
-#    form = ScoresSearchForm(request.POST, request.FILES)
-#    status_message = ""  #used to indicate to users status of their search results. 
-#
-#    if form.is_valid():
-#       snpid_list = None
-#       try:
-#         if form.cleaned_data['raw_requested_snpids']: #this is detected properly?
-#           snpid_list = clean_and_validate_snpid_text_input(form.cleaned_data['raw_requested_snpids'])
-#         else:
-#           snpid_list = handle_uploaded_file(request.FILES.get('file_of_snpids'))
-#       except forms.ValidationError:
-#         status_message = "No properly formatted SNPids in the text."           
-#         return render(request, searchpage_template, {'form': ScoresSearchForm(),
-#                                                      'status_message': status_message })
-#
-#       api_response = requests.post( setup_api_url('search'), 
-#             json=snpid_list, headers={ 'content-type' : 'application/json' })
-#
-#       response_json = None 
-#
-#       if api_response.status_code == 204:
-#         status_message = "No matches for requested snpids" 
-#       else:
-#         count_of_requested_snpids = len(snpid_list)
-#         status_message = "Retrieved data for {0} out of {1} requested snpids.".format(
-#                  66666,  count_of_requested_snpids)
-#         response_json = json.loads(api_response.text)
-#
-#       context = { 'api_response'  :  response_json,
-#                   'status_message':  status_message,
-#                   'holdover_snpids': ", ".join(snpid_list),
-#                   'form' : ScoresSearchForm({'raw_requested_snpids':", ".join(snpid_list)})
-#                 }
-#       return render(request, searchpage_template, context )
-#
-#    else: 
-#        #the form failed validation, but show it anyway so the user can see error messages.
-#        #Don't make a new form to render on failed validation, or the error messages will be lost.
-#        return render(request, searchpage_template, {'form': form, 
-#                                                 'status_message':'Invalid search. Try agian.'})
-#  else:
-#    return render(request, searchpage_template, {'form':ScoresSearchForm() })
-#    #No status message when just loading the form.
-#
 
 # Either by textarea or by file, snpid search form is not 
 # valid unless one of these is present 
@@ -183,6 +132,9 @@ def handle_search_by_genomic_location(request):
     return redirect(reverse('ss_viewer:multi-search'))
 
   if request.method == 'POST': 
+    print("here is the request: ")
+    print(dir(request._post))
+    print(str(request._post))
     searchpage_template = 'ss_viewer/multi-searchpage.html'  
     gl_search_form = SearchByGenomicLocationForm(request.POST)  #no files in here...
    
