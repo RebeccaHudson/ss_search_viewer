@@ -40,15 +40,15 @@ class OneScoresRowViewDetailTests(TestCase):
   #retain this code for testing when we actually expect matches to come out...
   def test_that_scores_list_loads_post(self):
     response = self.client.post(reverse('ss_viewer:snpid-search'),
-            { 'raw_requested_snpids' : 'rs371194064 rs199706086 rs111200574' })
-
+            { 'raw_requested_snpids' : 'rs371194064 rs199706086 rs111200574',
+              'pvalue_rank_cutoff' : 1 })
+    #should return everything.
     self.assertTrue(response.context.flatten().has_key('api_response'))
     api_response_data = response.context.flatten()['api_response']
     self.assertEqual(len(api_response_data), 3)
 
     for data_row in api_response_data:
       fields_in_data_row = data_row.keys()
-      print("one row fields:  " + str(fields_in_data_row))
       self.check_for_expected_fields_in_scores_row(fields_in_data_row)
 
     self.assertEqual(response.status_code, 200)
