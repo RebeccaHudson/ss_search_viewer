@@ -65,7 +65,9 @@ class OneScoresRowViewDetailTests(TestCase):
 
   def test_that_scores_list_loads_post_for_no_matching_snpids(self):
     response = self.client.post(reverse('ss_viewer:snpid-search'),
-           { 'raw_requested_snpids'  : 'rs111, rs1111111, rs11111111111111, rs1' })
+           { 'raw_requested_snpids'  : 'rs111, rs1111111, rs11111111111111, rs1',
+             'pvalue_rank_cutoff' : 0.05   })
+
            #banking on these being fake
 
     self.assertEqual(response.context.flatten().has_key('api_response'), True)
@@ -101,7 +103,8 @@ class OneScoresRowViewDetailTests(TestCase):
     response = self.client.post(reverse('ss_viewer:gl-region-search'),
                                 { 'selected_chromosome'  : 'ch1', 
                                   'gl_start_pos'         : 12214,
-                                  'gl_end_pos'           : 12314  })
+                                  'gl_end_pos'           : 12314,
+                                  'pvalue_rank_cutoff' : 0.05 })
     self.assertTrue(response.context.flatten().has_key('api_response'))
     print("response " + str(response.context.get('api_response')))
     data_response = response.context.get('api_response')
