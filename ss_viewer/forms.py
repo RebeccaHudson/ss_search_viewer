@@ -16,6 +16,12 @@ class SearchBySnpidForm(forms.Form):
                                     initial=default_dummy_search)
    file_of_snpids = forms.FileField(required=False) #standard everything
 
+   default_cutoff = 0.05
+   pvalue_rank_cutoff = forms.FloatField(required=False,
+                                         max_value=1, 
+                                         min_value=0, 
+                                         initial=default_cutoff)
+
    def clean(self):
      cleaned_data = super(SearchBySnpidForm, self).clean()
      print(str(cleaned_data))
@@ -56,6 +62,12 @@ class SearchByGenomicLocationForm(forms.Form):
   choices_for_chromosome =  ( ('ch1', 'ch1' ), ) 
   selected_chromosome = forms.ChoiceField(choices=choices_for_chromosome,
                                           label="Select a chromosome.")
+
+  default_cutoff = 0.05
+  pvalue_rank_cutoff = forms.FloatField(required=False,
+                                         max_value=1, 
+                                         min_value=0, 
+                                         initial=default_cutoff)
    #ensure ranges are within hard limits.  
   def clean(self):
     cleaned_data = super(SearchByGenomicLocationForm, self).clean()
@@ -81,4 +93,3 @@ class SearchByGenomicLocationForm(forms.Form):
                                    'less than or equal to.' + 
                                     str(max_size_of_region)   ),
                                    code='region-size-too-large' )
-
