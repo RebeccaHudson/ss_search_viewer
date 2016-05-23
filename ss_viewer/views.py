@@ -71,7 +71,7 @@ def get_snpid_list_from_form(request, form):
     return clean_and_validate_snpid_text_input(text_in_file) 
 
 
-def setup_context_for_snpid_search_results(api_response, snpid_list):
+def setup_context_for_snpid_search_results(api_response, snpid_list, holdover_p_value):
   status_message = ""; response_json = None
 
   if api_response.status_code == 204:
@@ -82,11 +82,12 @@ def setup_context_for_snpid_search_results(api_response, snpid_list):
              66666,  count_of_requested_snpids)
 
     response_json = json.loads(api_response.text)
-
+    
   context = { 'api_response'     :  response_json,
               'status_message'    :  status_message,
               'holdover_snpids'   :  ", ".join(snpid_list),
-              'snpid_search_form' :  SearchBySnpidForm({'raw_requested_snpids':", ".join(snpid_list)}),
+              'snpid_search_form' :  SearchBySnpidForm({'raw_requested_snpids':", ".join(snpid_list),
+                                                        'pvalue_rank_cutoff' : holdover_p_value }  ),
               'gl_search_form'    :  SearchByGenomicLocationForm()
             }
   return context
@@ -125,7 +126,7 @@ def handle_search_by_snpid(request):
                                   json=request_data, 
                                   headers={ 'content-type' : 'application/json' })
 
-    context = setup_context_for_snpid_search_results(api_response, snpid_list) 
+    context = setup_context_for_snpid_search_results(api_response, snpid_list, pvalue_rank)
 
     return render(request, searchpage_template, context )
 
@@ -152,15 +153,22 @@ def handle_search_by_genomic_location(request):
 
       print("cleaned data" + str(gl_search_form.cleaned_data) )
       form_data = gl_search_form.cleaned_data
-      specified_region = { 'chromosome': form_data['selected_chromosome'],
-                           'start_pos' : form_data['gl_start_pos'], 
-                           'end_pos'   : form_data['gl_end_pos']   }
+      specified_region = { 'chromosome' : form_data['selected_chromosome'],
+                           'start_pos'  : form_data['gl_start_pos'], 
+                           'end_pos'    : form_data['gl_end_pos'],
+                           'pvalue_rank': form_data['pvalue_rank_cutoff']   }
  
       api_response = requests.post( setup_api_url('search-by-gl'), 
              json=specified_region, headers={ 'content-type' : 'application/json' })
-      response_json = json.loads(api_response.text)
+ 
+      response_json = None
+      if api_response.status_code == 204:
+        status_message = "No matching rows"
+      else:
+        response_json = json.loads(api_response.text)
 
-      if len(response_json) == 0:
+      #TODO add a response for if the status code is 204 and there are no matches. 
+      if response_json is None or len(response_json) == 0:
         status_message = 'No matching rows from the API'
       else:
         status_message = 'Got ' + str(len(response_json)) + ' rows back from API.'

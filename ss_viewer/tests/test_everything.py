@@ -98,15 +98,31 @@ class OneScoresRowViewDetailTests(TestCase):
 
   #TODO check that gl-search view responds to GET by redirecting to multisearch
 
-
   def test_gl_search_returns_some_data(self):
+
     response = self.client.post(reverse('ss_viewer:gl-region-search'),
                                 { 'selected_chromosome'  : 'ch1', 
                                   'gl_start_pos'         : 12214,
                                   'gl_end_pos'           : 12314,
-                                  'pvalue_rank_cutoff' : 0.05 })
+                                  'pvalue_rank_cutoff'   : 0.05 })
     self.assertTrue(response.context.flatten().has_key('api_response'))
-    print("response " + str(response.context.get('api_response')))
+    data_response = response.context.get('api_response')
+    self.assertEqual(len(data_response), 0) #only one item at this position.
+    self.assertEqual(response.status_code, 200) 
+    self.assertTrue(response.context['gl_search_form'].is_valid())
+   
+   # TODO: test that the gl-search gets rejected when it's improperly specified.
+
+
+    # This request just uses a crazy-high p value, but is otherwise identical
+    # to the above.
+    response = self.client.post(reverse('ss_viewer:gl-region-search'),
+                                { 'selected_chromosome'  : 'ch1', 
+                                  'gl_start_pos'         : 12214,
+                                  'gl_end_pos'           : 12314,
+                                  'pvalue_rank_cutoff'   : 0.9  })
+
+    self.assertTrue(response.context.flatten().has_key('api_response'))
     data_response = response.context.get('api_response')
     self.assertEqual(len(data_response), 1) #only one item at this position.
     self.check_for_expected_fields_in_scores_row(data_response[0])
@@ -115,10 +131,4 @@ class OneScoresRowViewDetailTests(TestCase):
    # print("Form errors: : " + str(response.context['gl_search_form'].errors))
     self.assertEqual(response.status_code, 200) 
     self.assertTrue(response.context['gl_search_form'].is_valid())
-   # test that the gl-search gets rejected when it's improperly specified.
-
-
-
-
-
 
