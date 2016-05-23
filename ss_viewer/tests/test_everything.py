@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from ss_viewer.tests.scores_viewer_test_cases import ScoresViewerTestCase
 import unittest
 import json
 """
@@ -13,7 +14,7 @@ import json
 
 #Check that views load up and that we get status codes that make sense.
 #TODO inspect content/context information about what is going into these views.
-class OneScoresRowViewDetailTests(TestCase):
+class GeneralTestsStillYet(ScoresViewerTestCase):
   #This will have the expecetd field names hardcoded. 
   #Change that here when the time comes to add new fields.
   def check_for_expected_fields_in_scores_row(self, data_fields_in_one_row):
@@ -43,15 +44,13 @@ class OneScoresRowViewDetailTests(TestCase):
             { 'raw_requested_snpids' : 'rs371194064 rs199706086 rs111200574',
               'pvalue_rank_cutoff' : 1 })
     #should return everything.
-    self.assertTrue(response.context.flatten().has_key('api_response'))
+    self.check_for_api_response_and_200_response_code(response)
     api_response_data = response.context.flatten()['api_response']
     self.assertEqual(len(api_response_data), 3)
 
     for data_row in api_response_data:
       fields_in_data_row = data_row.keys()
       self.check_for_expected_fields_in_scores_row(fields_in_data_row)
-
-    self.assertEqual(response.status_code, 200)
 
   #there should be different combinations of inputs that make it spit. 
   #test as many of those here as possbile.
@@ -68,9 +67,8 @@ class OneScoresRowViewDetailTests(TestCase):
            { 'raw_requested_snpids'  : 'rs111, rs1111111, rs11111111111111, rs1',
              'pvalue_rank_cutoff' : 0.05   })
 
-           #banking on these being fake
+    self.check_for_api_response_and_200_response_code(response)
 
-    self.assertEqual(response.context.flatten().has_key('api_response'), True)
     api_response_data = response.context.flatten()['api_response']
     self.assertEqual(api_response_data, None)
 
@@ -78,8 +76,6 @@ class OneScoresRowViewDetailTests(TestCase):
     self.assertEqual(response.context.flatten()['status_message'],
                                              'No matches for requested snpids' )
 
-    self.assertEqual(response.status_code, 200) 
-    #no content from API, but success from ss_viewer.
 
 
   def test_that_scores_list_loads_get(self): 
@@ -105,13 +101,12 @@ class OneScoresRowViewDetailTests(TestCase):
                                   'gl_start_pos'         : 12214,
                                   'gl_end_pos'           : 12314,
                                   'pvalue_rank_cutoff'   : 0.05 })
-    self.assertTrue(response.context.flatten().has_key('api_response'))
+    self.check_for_api_response_and_200_response_code(response)
     data_response = response.context.get('api_response')
     self.assertEqual(len(data_response), 0) #only one item at this position.
-    self.assertEqual(response.status_code, 200) 
     self.assertTrue(response.context['gl_search_form'].is_valid())
    
-   # TODO: test that the gl-search gets rejected when it's improperly specified.
+    # TODO: test that the gl-search gets rejected when it's improperly specified.
 
 
     # This request just uses a crazy-high p value, but is otherwise identical
@@ -121,14 +116,12 @@ class OneScoresRowViewDetailTests(TestCase):
                                   'gl_start_pos'         : 12214,
                                   'gl_end_pos'           : 12314,
                                   'pvalue_rank_cutoff'   : 0.9  })
-
-    self.assertTrue(response.context.flatten().has_key('api_response'))
+    self.check_for_api_response_and_200_response_code(response)
     data_response = response.context.get('api_response')
     self.assertEqual(len(data_response), 1) #only one item at this position.
     self.check_for_expected_fields_in_scores_row(data_response[0])
    # print("status message" + response.context.flatten().get('status_message'))
    # #check that some data is returned.
    # print("Form errors: : " + str(response.context['gl_search_form'].errors))
-    self.assertEqual(response.status_code, 200) 
     self.assertTrue(response.context['gl_search_form'].is_valid())
 
