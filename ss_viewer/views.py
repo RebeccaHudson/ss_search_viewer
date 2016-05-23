@@ -143,8 +143,6 @@ def handle_search_by_genomic_location(request):
 
   if request.method == 'POST': 
     print("here is the request: ")
-    print(dir(request._post))
-    print(str(request._post))
     searchpage_template = 'ss_viewer/multi-searchpage.html'  
     gl_search_form = SearchByGenomicLocationForm(request.POST)  #no files in here...
    
