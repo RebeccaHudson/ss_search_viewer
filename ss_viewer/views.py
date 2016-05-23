@@ -42,6 +42,13 @@ def extract_snpids_from_textfield(text):
   list_of_snpids = gex.findall(text)
   return list_of_snpids
 
+# TODO refer to a default p-value from settings.
+def get_pvalue_rank_from_form(form):
+  if form.cleaned_data.has_key('pvalue_rank_cutoff'):
+    return form.cleaned_data.get('pvalue_rank_cutoff')
+  else:
+    return 0.05 
+   
 
 def clean_and_validate_snpid_text_input(text_input):
   snpids = extract_snpids_from_textfield(text_input)
@@ -84,7 +91,6 @@ def setup_context_for_snpid_search_results(api_response, snpid_list):
             }
   return context
 
-
 def handle_search_by_snpid(request):
   if request.method == 'GET':
     return redirect(reverse('ss_viewer:multi-search'))
@@ -112,8 +118,12 @@ def handle_search_by_snpid(request):
                      'gl_search_form'   : SearchByGenomicLocationForm(),
                      'status_message'   : status_message })
 
+    pvalue_rank = get_pvalue_rank_from_form(snpid_search_form)
+    request_data = { 'snpid_list' : snpid_list, 'pvalue_rank' : pvalue_rank }
+ 
     api_response = requests.post( setup_api_url('snpid-search'), 
-             json=snpid_list, headers={ 'content-type' : 'application/json' })
+                                  json=request_data, 
+                                  headers={ 'content-type' : 'application/json' })
 
     context = setup_context_for_snpid_search_results(api_response, snpid_list) 
 
