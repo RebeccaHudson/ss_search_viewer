@@ -1,24 +1,21 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from ss_viewer.tests.scores_viewer_test_cases import ScoresViewerTestCase
 import unittest
 import json
 
 class SearchByGenomicLocationTests(ScoresViewerTestCase):
 
-  def test_that_scores_list_loads_get(self):
-    response = self.client.get(reverse('ss_viewer:snpid-search'), follow=True)
-
+  def test_that_gl_search_loads_get(self):
+    response = self.client.get(reverse('ss_viewer:gl-region-search'), follow=True)
     self.assertTrue(response.context.has_key('gl_search_form'))
     self.assertTrue(response.context.has_key('snpid_search_form'))
     self.assertTrue(response.context.has_key('status_message'))
-    self.assertEqual(response.status_code, 200)   #302 redirection
-
+    self.assertEqual(response.status_code, 200) 
     # if follow is not true, we just get the redirection status code
-    response = self.client.get(reverse('ss_viewer:snpid-search'))
-    self.assertEqual(response.status_code, 302)   #302 redirection
-    #TODO check that gl-search view responds to GET by redirecting to multisearch
-
+    response = self.client.get(reverse('ss_viewer:gl-region-search'))
+    self.assertEqual(response.status_code, 302)
 
 
   def test_that_gl_search_returns_some_data(self):
@@ -33,8 +30,6 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
     self.assertTrue(response.context['gl_search_form'].is_valid())
 
     # TODO: test that the gl-search gets rejected when it's improperly specified.
-
-
     # This request just uses a crazy-high p value, but is otherwise identical
     # to the above.
     response = self.client.post(reverse('ss_viewer:gl-region-search'),
@@ -50,4 +45,65 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
    # #check that some data is returned.
    # print("Form errors: : " + str(response.context['gl_search_form'].errors))
     self.assertTrue(response.context['gl_search_form'].is_valid())
+
+
+  def test_nomatch_response_for_gl_search(self):
+    response = self.client.post(reverse('ss_viewer:gl-region-search'),
+                                { 'selected_chromosome'  : 'ch1',
+                                  'gl_start_pos'         : 59152,
+                                  'gl_end_pos'           : 59153,
+                                  'pvalue_rank_cutoff'   : 0.05  })
+    api_response_data = response.context.get('api_response')
+    self.check_for_api_response_and_200_response_code(response)
+    self.assertEqual(api_response_data, None)
+    self.check_status_message(response, 'No matching rows')
+
+  
+  def test_that_gl_search_post_rejects_an_invalid_form(self):
+    response = self.client.post(reverse('ss_viewer:gl-region-search'),
+                                       { 'totally_invalid_field'  : 'har-dee-har-harr!' })
+    self.check_status_message(response, 'Invalid search. Try agian.')
+    self.assertEqual(response.context['gl_search_form'].is_valid(), False)
+
+
+  def test_that_gl_search_rejects_backwards_region(self):
+    response = self.client.post(reverse('ss_viewer:gl-region-search'),
+                                { 'selected_chromosome'  : 'ch1',
+                                  'gl_start_pos'         : 6000,
+                                  'gl_end_pos'           : 5000,
+                                  'pvalue_rank_cutoff'   : 0.05  })
+    print("status message: " + response.context.flatten()['status_message'])
+    self.assertEqual(response.context['gl_search_form'].is_valid(), False)
+    self.check_status_message(response, 'Invalid search. Try agian.')
+
+  #  any p-value cutoff greater than 1 or less than 0 should be rejected.
+  def test_that_gl_search_rejects_invalid_cutoffs(self):
+    response = self.client.post(reverse('ss_viewer:gl-region-search'),
+                                { 'selected_chromosome'  : 'ch1',
+                                  'gl_start_pos'         : 100,
+                                  'gl_end_pos'           : 200,
+                                  'pvalue_rank_cutoff'   : -.1  })
+    self.assertEqual(response.context['gl_search_form'].is_valid(), False)
+    self.check_status_message(response, 'Invalid search. Try agian.')
+   
+    response = self.client.post(reverse('ss_viewer:gl-region-search'),
+                                { 'selected_chromosome'  : 'ch1',
+                                  'gl_start_pos'         : 100,
+                                  'gl_end_pos'           : 200,
+                                  'pvalue_rank_cutoff'   : 1.02  })
+    self.assertEqual(response.context['gl_search_form'].is_valid(), False)
+    self.check_status_message(response, 'Invalid search. Try agian.')
+
+
+  def test_that_gl_search_rejects_oversized_region(self):
+    big_end = 100 + settings.HARD_LIMITS['MAX_NUMBER_OF_BASES_IN_GENOMIC_LOCATION_REQUEST']
+    response = self.client.post(reverse('ss_viewer:gl-region-search'),
+                                { 'selected_chromosome'  : 'ch1'  ,
+                                  'gl_start_pos'         : 100    ,
+                                  'gl_end_pos'           : big_end, 
+                                  'pvalue_rank_cutoff'   : -.1  })
+    self.assertEqual(response.context['gl_search_form'].is_valid(), False)
+    self.check_status_message(response, 'Invalid search. Try agian.')
+
+
 
