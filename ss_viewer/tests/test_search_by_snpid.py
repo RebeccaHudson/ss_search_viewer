@@ -5,6 +5,17 @@ import unittest
 import json
 
 class SearchBySnpidTests(ScoresViewerTestCase):
+  
+  def test_that_scores_list_loads_get(self):
+     response = self.client.get(reverse('ss_viewer:snpid-search'), follow=True)
+     self.assertTrue(response.context.has_key('gl_search_form'))
+     self.assertTrue(response.context.has_key('snpid_search_form'))
+     self.assertTrue(response.context.has_key('status_message'))
+     self.assertEqual(response.status_code, 200) 
+     # if follow is not true, we just get the redirection status code
+     response = self.client.get(reverse('ss_viewer:snpid-search'))
+     self.assertEqual(response.status_code, 302)
+
   #we can only expect this test to pass if the requested snpids are actually in the database...
   #retain this code for testing when we actually expect matches to come out...
   def test_that_scores_list_loads_post(self):
