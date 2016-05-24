@@ -133,8 +133,6 @@ def handle_search_by_snpid(request):
 
 
 
-
-
 #The above function 'get_scores_for_list' should actually be called
 #handle search by genomic location.. 
 #this should only handle POST
@@ -143,15 +141,20 @@ def handle_search_by_genomic_location(request):
     return redirect(reverse('ss_viewer:multi-search'))
 
   if request.method == 'POST': 
-    print("here is the request: ")
     searchpage_template = 'ss_viewer/multi-searchpage.html'  
-    gl_search_form = SearchByGenomicLocationForm(request.POST)  #no files in here...
+    gl_search_form = SearchByGenomicLocationForm(request.POST)
    
     status_message = ""
+    if not gl_search_form.is_valid():
+       status_message = "Invalid search. Try agian."
+       return render(request, searchpage_template, 
+                        { 'gl_search_form'    : gl_search_form,
+                          'snpid_search_form' : SearchBySnpidForm(),
+                          'status_message'   : status_message     
+                        })
+    # may be able to unindent this:
     if gl_search_form.is_valid():
-      #status_message = "This form appears to be valid."
-
-      print("cleaned data" + str(gl_search_form.cleaned_data) )
+      #print("cleaned data" + str(gl_search_form.cleaned_data) )
       form_data = gl_search_form.cleaned_data
       specified_region = { 'chromosome' : form_data['selected_chromosome'],
                            'start_pos'  : form_data['gl_start_pos'], 
@@ -166,34 +169,15 @@ def handle_search_by_genomic_location(request):
         status_message = "No matching rows"
       else:
         response_json = json.loads(api_response.text)
-
-      #TODO add a response for if the status code is 204 and there are no matches. 
-      if response_json is None or len(response_json) == 0:
-        status_message = 'No matching rows from the API'
-      else:
         status_message = 'Got ' + str(len(response_json)) + ' rows back from API.'
-     
 
-      status_message += str(specified_region) 
+      # eventually remove: status_message += str(specified_region) 
       new_form = SearchByGenomicLocationForm(form_data)
-      #TODO: what other context do we actually need here?
-      #return the original form because we want to have the old data carry over. 
       return render(request, searchpage_template, { 'api_response' : response_json,
                                                     'gl_search_form': new_form, 
                                                     'snpid_search_form' : SearchBySnpidForm(),
                                                     'holdover_gl_region': specified_region,
                                                     'status_message' : status_message})                                              
-       # Will I have to include the specified region into an argument to a new SearchForm
-       # in order for the values to holdover?
-    else:
-       status_message = "This form is apparently not valid."
-       return render(request, searchpage_template, 
-                        { 'gl_search_form'    : gl_search_form,
-                          'snpid_search_form' : SearchBySnpidForm(),
-                          'status_message'   : status_message     
-                        })
-
-
 
 #Def this is the actual multi-search page, this handles the GET.
 def show_multisearch_page(request):
