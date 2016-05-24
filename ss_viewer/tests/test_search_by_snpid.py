@@ -39,6 +39,22 @@ class SearchBySnpidTests(ScoresViewerTestCase):
     self.assertEqual(response.context.flatten()['status_message'],'Invalid search. Try agian.')
     self.assertEqual(response.context['snpid_search_form'].is_valid(), False)
 
+
+  def test_that_snpid_search_rejects_invalid_cutoffs(self):
+    response = self.client.post(reverse('ss_viewer:snpid-search'),
+            { 'raw_requested_snpids' : 'rs371194064 rs199706086 rs111200574',
+              'pvalue_rank_cutoff' : -0.001 })
+    self.check_status_message(response, 'Invalid search. Try agian.')
+    self.assertEqual(response.context['snpid_search_form'].is_valid(), False)
+
+    response = self.client.post(reverse('ss_viewer:snpid-search'),
+            { 'raw_requested_snpids' : 'rs371194064 rs199706086 rs111200574',
+              'pvalue_rank_cutoff' : 1.001 })
+    self.check_status_message(response, 'Invalid search. Try agian.')
+    self.assertEqual(response.context['snpid_search_form'].is_valid(), False)
+
+
+
   def test_that_scores_list_loads_post_for_no_matching_snpids(self):
     response = self.client.post(reverse('ss_viewer:snpid-search'),
            { 'raw_requested_snpids'  : 'rs111, rs1111111, rs11111111111111, rs1',
