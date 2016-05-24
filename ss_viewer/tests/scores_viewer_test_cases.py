@@ -13,5 +13,12 @@ class ScoresViewerTestCase(TestCase):
   #this means the api returned something and response is OK. very common.
   def check_for_api_response_and_200_response_code(self, response):
       self.assertEqual(response.context.flatten().has_key('api_response'), True)
+      print("status code: " + str(response.status_code))
       self.assertEqual(response.status_code, 200) 
 
+
+  def check_status_message(self, response, expected_message):
+    self.assertTrue(response.context.flatten().has_key('status_message'))
+    self.assertEqual(response.context.flatten()['status_message'], expected_message)
+                                                 
+   
