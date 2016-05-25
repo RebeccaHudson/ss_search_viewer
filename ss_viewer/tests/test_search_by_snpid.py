@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from ss_viewer.tests.scores_viewer_test_cases import ScoresViewerTestCase
 import unittest
+import os
 import json
 
 class SearchBySnpidTests(ScoresViewerTestCase):
@@ -82,4 +83,24 @@ class SearchBySnpidTests(ScoresViewerTestCase):
      # if follow is not true, we just get the redirection status code
      response = self.client.get(reverse('ss_viewer:snpid-search'))
      self.assertEqual(response.status_code, 302)   #302 redirection
+
+
+  def test_that_file_input_works_for_snpid_search(self):
+      response = None
+      url = reverse('ss_viewer:snpid-search')
+      fpath = os.path.dirname(os.path.abspath(__file__))+'/tinysnp.txt'
+      fp = open(fpath, 'r')
+      response = self.client.post(url,
+                                  {'pvalue_rank_cutoff':0.6,'file_of_snpids':fp })
+      #print("response from file input test: " + str(response))      
+      self.check_for_api_response_and_200_response_code(response)
+
+      api_response_data = response.context.flatten()['api_response'] 
+      self.assertEqual(len(api_response_data), 15)
+
+      for one_row in api_response_data:
+          self.check_for_expected_fields_in_scores_row(one_row.keys())
+
+      self.assertEqual(response.context.flatten().has_key('status_message'), True)
+      
 
