@@ -25,18 +25,20 @@
     <tr>
         <td>chromosome</td><td>pos</td>
         <td>snpid</td><td>motif</td><td>motif length</td>
+        <td>pval rank</td>
         <td>snp start</td><td>snp end</td><td>ref start</td><td>ref end</td>
         <td>log lik ref</td> <td> log lik ratio </td>
         <td>log enhance odds</td> <td>log reduce odds</td>
         <td>log lik snp</td>  
         <td> snp strand </td>  <td> ref strand </td>
         <td>pval ref</td><td>pval snp</td><td>pval cond ref</td>
-        <td>pval cond snp</td><td>pval diff</td><td>pval rank</td>
+        <td>pval cond snp</td><td>pval diff</td>
     </tr>
     {% for onerow in api_response %}
     <tr>   
         <td>{{ onerow.chr }}</td><td>{{ onerow.pos }}</td> 
         <td>{{ onerow.snpid }}</td><td>{{ onerow.motif }}</td><td>{{ onerow.motif_len}}</td>
+        <td>  {{ onerow.pval_rank}} </td>
         <td>{{ onerow.snp_start}} </td><td>{{ onerow.snp_end}}</td><td>{{ onerow.ref_start}}</td>
         <td>{{ onerow.ref_end }} </td>
          <td>{{ onerow.log_lik_ref }} </td><td> {{ onerow.log_lik_ratio}} </td>
@@ -45,8 +47,7 @@
         <td>{{ onerow.snp_strand }}</td>  <td>{{ onerow.ref_strand }}</td>
         <td>{{ onerow.pval_ref }} </td><td>{{ onerow.pval_snp }} </td>
         <td>{{ onerow.pval_cond_ref }}</td> <td>{{ onerow.pval_cond_snp}}</td>
-        <td>{{ onerow.pval_diff }}</td><td>  {{ onerow.pval_rank}} </td>
-    </tr>
+        <td>{{ onerow.pval_diff }}</td>    </tr>
     {%  endfor %}
   </table>
   {% endif %}
