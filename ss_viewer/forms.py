@@ -50,14 +50,20 @@ class SearchByGenomicLocationForm(forms.Form):
 
   gl_pos_label_text = { 'start' : 'Start position on chromosome',
                         'end'   : 'End position on chromosome.' }
+  # These defaults are here because I know there's development subset 
+  # data in this range.
+  default_start_pos = 10000;    default_end_pos = 10500
 
+  # TODO: is there a way to put meaningful maximum values on these here?
   gl_start_pos = forms.IntegerField(label = gl_pos_label_text['start'], 
                                     required = True,
+                                    initial = default_start_pos,
                                     min_value = 1 )
 
   gl_end_pos = forms.IntegerField(label = gl_pos_label_text['end'],
                                   required = False, 
-                                  min_value = 0)
+                                  initial = default_end_pos,
+                                  min_value = 1)
 
   choices_for_chromosome =  ( ('ch1', 'ch1' ), ) 
   selected_chromosome = forms.ChoiceField(choices=choices_for_chromosome,
