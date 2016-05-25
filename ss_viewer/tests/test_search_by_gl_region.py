@@ -26,7 +26,10 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
                                   'pvalue_rank_cutoff'   : 0.05 })
     self.check_for_api_response_and_200_response_code(response)
     data_response = response.context.get('api_response')
-    self.assertEqual(len(data_response), 0) #only one item at this position.
+    #print("api response: " + str(data_response))
+    #self.assertEqual(len(data_response), 0) #only one item at this position.
+    self.assertEqual(data_response, None)
+
     self.assertTrue(response.context['gl_search_form'].is_valid())
 
     # TODO: test that the gl-search gets rejected when it's improperly specified.
