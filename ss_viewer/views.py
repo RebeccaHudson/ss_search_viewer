@@ -3,10 +3,11 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.conf import settings
+import pickle
 import requests
 import json
 import re
-
+import os
 from .forms import SearchBySnpidForm  #replaces ScoresSearchForm
 
 from .forms import SearchByGenomicLocationForm
@@ -36,6 +37,18 @@ def setup_api_url(api_function, snpid=None):
   url = host_w_port + "/" + url_args  + "/"
   return url
 
+def transform_motifs_to_transcription_factors(response_json):
+  lut = None
+  fpath = os.path.dirname(__file__) + "/lookup-tables" +\
+          '/lut_tfs_by_jaspar_motif.pkl'
+  with open(fpath , 'r') as f: 
+    lut = pickle.load(f) 
+  transformed_response = []
+  for one_row in response_json:
+    motif_value = one_row['motif']
+    one_row['trans_factor'] = lut[motif_value]
+    transformed_response.append(one_row) 
+  return transformed_response 
 
 def extract_snpids_from_textfield(text):
   gex = re.compile('(rs[0-9]+)', re.MULTILINE)  
@@ -82,7 +95,7 @@ def setup_context_for_snpid_search_results(api_response, snpid_list, holdover_p_
              66666,  count_of_requested_snpids)
 
     response_json = json.loads(api_response.text)
-    
+    response_json = transform_motifs_to_transcription_factors(response_json)
   context = { 'api_response'     :  response_json,
               'status_message'    :  status_message,
               'holdover_snpids'   :  ", ".join(snpid_list),
@@ -169,6 +182,7 @@ def handle_search_by_genomic_location(request):
         status_message = "No matching rows"
       else:
         response_json = json.loads(api_response.text)
+        response_json = transform_motifs_to_transcription_factors(response_json)
         status_message = 'Got ' + str(len(response_json)) + ' rows back from API.'
 
       # eventually remove: status_message += str(specified_region) 
