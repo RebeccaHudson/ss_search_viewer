@@ -50,6 +50,17 @@ def transform_motifs_to_transcription_factors(response_json):
     transformed_response.append(one_row) 
   return transformed_response 
 
+
+
+def lookup_motif_by_tf(trans_factor):
+  lut = None
+  fpath = os.path.dirname(__file__) + "/lookup-tables" +\
+      'lut_jaspar_motifs_by_tf.pkl'
+  with open(fpath , 'r') as f: 
+    lut = pickle.load(f) 
+  motif_value = lut[trans_factor]
+  return motif_value
+
 def extract_snpids_from_textfield(text):
   gex = re.compile('(rs[0-9]+)', re.MULTILINE)  
   list_of_snpids = gex.findall(text)
@@ -91,11 +102,11 @@ def setup_context_for_snpid_search_results(api_response, snpid_list, holdover_p_
     status_message = "No matches for requested snpids" 
   else:
     count_of_requested_snpids = len(snpid_list)
-    status_message = "Retrieved data for {0} out of {1} requested snpids.".format(
-             66666,  count_of_requested_snpids)
-
     response_json = json.loads(api_response.text)
     response_json = transform_motifs_to_transcription_factors(response_json)
+
+    status_message = 'Got ' + str(len(response_json)) + ' rows back from API.'
+
   context = { 'api_response'     :  response_json,
               'status_message'    :  status_message,
               'holdover_snpids'   :  ", ".join(snpid_list),
@@ -193,8 +204,54 @@ def handle_search_by_genomic_location(request):
                                                     'holdover_gl_region': specified_region,
                                                     'status_message' : status_message})                                              
 
+
+
+def handle_search_by_trans_factor(request):
+    if request.method == 'GET':
+        return redirect(reverse('ss_viewer:multi-search'))
+
+    if request.method == 'POST':
+        searchpage_template = 'ss_viewer/multi-searchpage.html'  
+        tf_search_form = SearchByTranscriptionFactorForm(request.POST)
+
+    status_message = ""
+    if not tf_search_form.is_valid():
+        status_message = "Invalid search. Try agian."
+        return render(request, searchpage_template, 
+                     { 'tf_search_form'    : tf_search_form,
+                       'snpid_search_form' : SearchBySnpidForm(),
+                       'gl_search_form'    : SearchByGenomicLocationForm()
+                     })
+    #invalid form case already handled.
+    form_data = tf_search_form.cleaned_data
+    motif_value = lookup_motif_by_tf(form_data['trans_factor'])
+    api_search_query = { 'motif' : motif_value,
+                         'pvalue_rank': form_data['pvalue_rank_cutoff']
+                       }
+    #are the headers nesscearry?
+    api_response = requests.post( setup_api_url('search-by-tf'),
+             json=api_search_query, headers={'content-type':'application/json'})
+  
+    response_json = None
+    if api_response.status_code == 204:
+        status_message = 'No matching rows.'
+    else:
+        response_json = json.loads(api_response.text)
+        response_json = transform_motifs_to_transcription_factors(response_json)
+        status_message = 'Got ' + str(len(response_json)) + ' rows back from API.'
+
+    return render(request, searchpage_template, {   'api_response' : response_json,
+                                                    'tf_search_form': tf_search_form,  #appropriate to use the same one?
+                                                    'gl_search_form': SearchByGenomicLocationForm(), 
+                                                    'snpid_search_form' : SearchBySnpidForm(),
+                                                    'status_message' : status_message}) 
+
+
+
+
 #Def this is the actual multi-search page, this handles the GET.
 def show_multisearch_page(request):
+
   searchpage_template = 'ss_viewer/multi-searchpage.html'  
   status_message = "Enter genomic location info."
   gl_search_form = SearchByGenomicLocationForm()
