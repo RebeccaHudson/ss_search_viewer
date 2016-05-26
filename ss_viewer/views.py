@@ -12,6 +12,8 @@ from .forms import SearchBySnpidForm  #replaces ScoresSearchForm
 
 from .forms import SearchByGenomicLocationForm
 
+from .forms import SearchByTranscriptionFactorForm
+
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 
@@ -52,14 +54,15 @@ def transform_motifs_to_transcription_factors(response_json):
 
 
 
-def lookup_motif_by_tf(trans_factor):
-  lut = None
-  fpath = os.path.dirname(__file__) + "/lookup-tables" +\
-      'lut_jaspar_motifs_by_tf.pkl'
-  with open(fpath , 'r') as f: 
-    lut = pickle.load(f) 
-  motif_value = lut[trans_factor]
-  return motif_value
+#def lookup_motif_by_tf(trans_factor):
+#  lut = None
+#  fpath = os.path.dirname(__file__) + "/lookup-tables" +\
+#      '/lut_jaspar_motifs_by_tf.pkl'
+#  with open(fpath , 'r') as f: 
+#    lut = pickle.load(f) 
+#  motif_value = lut[trans_factor]
+#  return motif_value
+#
 
 def extract_snpids_from_textfield(text):
   gex = re.compile('(rs[0-9]+)', re.MULTILINE)  
@@ -224,10 +227,15 @@ def handle_search_by_trans_factor(request):
                      })
     #invalid form case already handled.
     form_data = tf_search_form.cleaned_data
-    motif_value = lookup_motif_by_tf(form_data['trans_factor'])
+
+    motif_value = form_data['trans_factor'] 
+    # The lookup is done by the LUT on the form!
+
+
     api_search_query = { 'motif' : motif_value,
                          'pvalue_rank': form_data['pvalue_rank_cutoff']
                        }
+
     #are the headers nesscearry?
     api_response = requests.post( setup_api_url('search-by-tf'),
              json=api_search_query, headers={'content-type':'application/json'})
@@ -236,6 +244,7 @@ def handle_search_by_trans_factor(request):
     if api_response.status_code == 204:
         status_message = 'No matching rows.'
     else:
+        print("here's the API response" + str(api_response))
         response_json = json.loads(api_response.text)
         response_json = transform_motifs_to_transcription_factors(response_json)
         status_message = 'Got ' + str(len(response_json)) + ' rows back from API.'
@@ -256,8 +265,10 @@ def show_multisearch_page(request):
   status_message = "Enter genomic location info."
   gl_search_form = SearchByGenomicLocationForm()
   snpid_search_form = SearchBySnpidForm()
+  tf_search_form  = SearchByTranscriptionFactorForm()
   context = { 'gl_search_form'    : gl_search_form, 
               'snpid_search_form' : snpid_search_form,
+              'tf_search_form'    : tf_search_form,
               'status_message'    : status_message }   
   return render(request, searchpage_template, context)
 
