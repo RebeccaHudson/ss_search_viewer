@@ -1,6 +1,7 @@
 from django import forms
 from django.conf import settings
-
+import os
+import pickle
 
 #This is just one way to specify what data you are looking for.
 #TODO: this should replacde the ScoresSearch form; it needs to be renamed...
@@ -76,26 +77,49 @@ class SearchByGenomicLocationForm(forms.Form):
                                          initial=default_cutoff)
    #ensure ranges are within hard limits.  
   def clean(self):
-    cleaned_data = super(SearchByGenomicLocationForm, self).clean()
-    
-    start_pos = cleaned_data.get('gl_start_pos')
-    end_pos = cleaned_data.get('gl_end_pos')
+      cleaned_data = super(SearchByGenomicLocationForm, self).clean()
+      
+      start_pos = cleaned_data.get('gl_start_pos')
+      end_pos = cleaned_data.get('gl_end_pos')
 
-    if start_pos is None:
-      raise forms.ValidationError('We shouldn\'t be here', code='bad-case')
+      if start_pos is None:
+          raise forms.ValidationError('We shouldn\'t be here', code='bad-case')
 
-    if end_pos is None:
-      end_pos = start_pos + int(settings.QUERY_DEFAULTS['DEFAULT_REGION_SIZE'])
-      cleaned_data['gl_end_pos'] = end_pos
+      if end_pos is None:
+          end_pos = start_pos + int(settings.QUERY_DEFAULTS['DEFAULT_REGION_SIZE'])
+          cleaned_data['gl_end_pos'] = end_pos
 
-    if start_pos > end_pos:
-      raise forms.ValidationError(('Start position must be less than or equal'
-                                    'to the end position.'),
-                                    code='region-size-0'  )
+      if start_pos > end_pos:
+          raise forms.ValidationError(('Start position must be less than or equal'
+                                      'to the end position.'),
+                                      code='region-size-0'  )
+       
+      max_size_of_region = settings.HARD_LIMITS['MAX_NUMBER_OF_SNPIDS_ALLOWED_TO_REQUEST']
+      if end_pos - start_pos > max_size_of_region: 
+          raise forms.ValidationError(('The size of the specified region must be'
+                                     'less than or equal to.' + 
+                                      str(max_size_of_region)   ),
+                                     code='region-size-too-large' )
+
+ 
+class SearchByTranscriptionFactorForm(forms.Form):
+    lut = None
+    fpath = os.path.dirname(__file__) + '/lookup-tables' +\
+             '/lut_tfs_by_jaspar_motif.pkl'
+    with open(fpath, 'r') as f:
+        lut = pickle.load(f)
+    tf_choices = tuple(lut.items())
+    #default_tf =  
+    trans_factor = forms.ChoiceField(choices = tf_choices, 
+                                     label = "Select a transcription factor.")
+    default_cutoff = 0.05
+    pvalue_rank_cutoff = forms.FloatField(required=False,
+                                           max_value=1, 
+                                           min_value=0, 
+                                           initial=default_cutoff)
      
-    max_size_of_region = settings.HARD_LIMITS['MAX_NUMBER_OF_SNPIDS_ALLOWED_TO_REQUEST']
-    if end_pos - start_pos > max_size_of_region: 
-      raise forms.ValidationError(('The size of the specified region must be'
-                                   'less than or equal to.' + 
-                                    str(max_size_of_region)   ),
-                                   code='region-size-too-large' )
+
+
+
+
+                                     
