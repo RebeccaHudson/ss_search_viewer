@@ -103,12 +103,15 @@ class SearchByGenomicLocationForm(forms.Form):
 
  
 class SearchByTranscriptionFactorForm(forms.Form):
+ 
+    # sorted(list_of_medals, key=lambda x:(-x[1],x[0]))
     lut = None
     fpath = os.path.dirname(__file__) + '/lookup-tables' +\
              '/lut_tfs_by_jaspar_motif.pkl'
     with open(fpath, 'r') as f:
         lut = pickle.load(f)
     tf_choices = tuple(lut.items())
+    tf_choices = sorted(tf_choices, key=lambda x:(x[1], x[0]))
     #default_tf =  
     trans_factor = forms.ChoiceField(choices = tf_choices, 
                                      label = "Select a transcription factor.")
