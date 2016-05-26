@@ -54,15 +54,6 @@ def transform_motifs_to_transcription_factors(response_json):
 
 
 
-#def lookup_motif_by_tf(trans_factor):
-#  lut = None
-#  fpath = os.path.dirname(__file__) + "/lookup-tables" +\
-#      '/lut_jaspar_motifs_by_tf.pkl'
-#  with open(fpath , 'r') as f: 
-#    lut = pickle.load(f) 
-#  motif_value = lut[trans_factor]
-#  return motif_value
-#
 
 def extract_snpids_from_textfield(text):
   gex = re.compile('(rs[0-9]+)', re.MULTILINE)  
@@ -113,6 +104,7 @@ def setup_context_for_snpid_search_results(api_response, snpid_list, holdover_p_
   context = { 'api_response'     :  response_json,
               'status_message'    :  status_message,
               'holdover_snpids'   :  ", ".join(snpid_list),
+              'tf_search_form' : SearchByTranscriptionFactorForm(),  
               'snpid_search_form' :  SearchBySnpidForm({'raw_requested_snpids':", ".join(snpid_list),
                                                         'pvalue_rank_cutoff' : holdover_p_value }  ),
               'gl_search_form'    :  SearchByGenomicLocationForm()
@@ -131,7 +123,9 @@ def handle_search_by_snpid(request):
     if not snpid_search_form.is_valid():
        return render(request, 
                      searchpage_template, 
+
                      {'snpid_search_form': snpid_search_form, 
+                      'tf_search_form' : SearchByTranscriptionFactorForm(),  
                       'gl_search_form' : gl_search_form,                
                       'status_message':'Invalid search. Try agian.'})
     #if execution reaches this point, the form is valid.
@@ -144,6 +138,7 @@ def handle_search_by_snpid(request):
                     searchpage_template,
                     {'snpid_search_form': SearchBySnpidForm(),
                      'gl_search_form'   : SearchByGenomicLocationForm(),
+                     'tf_search_form' : SearchByTranscriptionFactorForm(),
                      'status_message'   : status_message })
 
     pvalue_rank = get_pvalue_rank_from_form(snpid_search_form)
@@ -202,11 +197,28 @@ def handle_search_by_genomic_location(request):
       # eventually remove: status_message += str(specified_region) 
       new_form = SearchByGenomicLocationForm(form_data)
       return render(request, searchpage_template, { 'api_response' : response_json,
+                                                    'tf_search_form' : SearchByTranscriptionFactorForm(),
                                                     'gl_search_form': new_form, 
                                                     'snpid_search_form' : SearchBySnpidForm(),
                                                     'holdover_gl_region': specified_region,
                                                     'status_message' : status_message})                                              
 
+
+# translating from TFs to motifs is handled in the setup for
+# form choices.....
+# ...  or.. , it would be if it was a 1-to-1 mapping back onto MOTIFs
+def lookup_motif_by_tf(trans_factor):
+    lut = None
+    #TODO: the following pickle must be processed in such a way that a 
+    # lookup on a TF with multiple motif values returns a list.
+    fpath = os.path.dirname(__file__) + "/lookup-tables" +\
+      '/lut_jaspar_motifs_by_tf.pkl'
+    with open(fpath , 'r') as f: 
+        lut = pickle.load(f) 
+    one_or_more_motif_values = lut[trans_factor]
+    if not type(one_or_more_motif_values) == list:
+      one_or_more_motif_values = [one_or_more_motif_values]
+    return one_or_more_motif_values
 
 
 def handle_search_by_trans_factor(request):
@@ -228,9 +240,9 @@ def handle_search_by_trans_factor(request):
     #invalid form case already handled.
     form_data = tf_search_form.cleaned_data
 
-    motif_value = form_data['trans_factor'] 
-    # The lookup is done by the LUT on the form!
-
+    trans_factor = form_data['trans_factor'] 
+    motif_value = lookup_motif_by_tf(trans_factor) 
+    #motif value is a list with one more more items.
 
     api_search_query = { 'motif' : motif_value,
                          'pvalue_rank': form_data['pvalue_rank_cutoff']
