@@ -108,12 +108,24 @@ class SearchByTranscriptionFactorForm(forms.Form):
     lut = None
     fpath = os.path.dirname(__file__) + '/lookup-tables' +\
              '/lut_tfs_by_jaspar_motif.pkl'
+
     with open(fpath, 'r') as f:
         lut = pickle.load(f)
+
     tf_choices = tuple(lut.items())
+
+    #tf_choices = tuple(sorted(set(lut.values())))
     tf_choices = sorted(tf_choices, key=lambda x:(x[1], x[0]))
+    use_these_choices = []
+
+    for c in set(lut.values()):
+        use_these_choices.append((c, c)) 
+
+    use_these_choices = sorted(tuple(use_these_choices))
+   
+
     #default_tf =  
-    trans_factor = forms.ChoiceField(choices = tf_choices, 
+    trans_factor = forms.ChoiceField(choices = use_these_choices, 
                                      label = "Select a transcription factor.")
     default_cutoff = 0.05
     pvalue_rank_cutoff = forms.FloatField(required=False,
