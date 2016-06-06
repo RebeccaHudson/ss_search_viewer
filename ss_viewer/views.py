@@ -268,11 +268,8 @@ def handle_search_by_trans_factor(request):
                                                     'status_message' : status_message}) 
 
 
-
-
 #Def this is the actual multi-search page, this handles the GET.
 def show_multisearch_page(request):
-
   searchpage_template = 'ss_viewer/multi-searchpage.html'  
   status_message = "Enter genomic location info."
   gl_search_form = SearchByGenomicLocationForm()
@@ -281,13 +278,21 @@ def show_multisearch_page(request):
   context = { 'gl_search_form'    : gl_search_form, 
               'snpid_search_form' : snpid_search_form,
               'tf_search_form'    : tf_search_form,
-              'status_message'    : status_message }   
+              'status_message'    : status_message,
+              'plot_path'         : 'ss_viewer/test_plot.svg' }   
+              
   return render(request, searchpage_template, context)
 
 
 
-
-
+def get_a_plot_by_snpid():  #TODO: should take a snpid!
+    #path_to_images = os.path.join(os.path.dirname(__file__), 'pictures')
+    #path_to_image = os.path.join(path_to_images, 'test_plot.svg')
+    path_to_image = os.path.join("pictures", 'test_plot.svg')
+    return path_to_image
+    #image_data = open(path_to_image, "rb").read()
+    #return HttpResponse(image_data, content_type="image/svg")
+ 
 
 
 
