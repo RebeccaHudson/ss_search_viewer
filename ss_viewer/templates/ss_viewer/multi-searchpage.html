@@ -1,7 +1,14 @@
+{% load staticfiles %}
+<head>
+<link rel="stylesheet" type="text/css" href="{% static 'ss_viewer/style.css' %}" />
+</head>
 <h1> specify genomic location OR snpid OR transcription factor</h1>
+
+
 
 <div id="status_message"> {{ status_message }} </div>
 
+<div class="side">
 <form enctype="multipart/form-data" action="{% url 'ss_viewer:gl-region-search' %}" method="post" >
 {% csrf_token %}
   <table>
@@ -23,8 +30,20 @@
   <table>
     {{ tf_search_form.as_table }}
   </table>
+
+
+
   <input type="submit" value="Search by Transcription Factor" />
 </form>
+ 
+</div> <!-- close the 'side' div' -->
+
+<!--  this is the way that we will be displaying the plot -->
+<div id="plot" class="side">
+  {% include 'ss_viewer/test_plot.html' %}
+</div>
+
+
 <!-- consider making this part modular; DRYing it up some how... -->
 <div id="scores_to_view">
   {% if api_response  %}
@@ -46,16 +65,16 @@
         <td>{{ onerow.chr }}</td><td>{{ onerow.pos }}</td> 
         <td>{{ onerow.snpid }}</td><td> {{ onerow.trans_factor }}</td>
         <td>{{ onerow.motif_len}}</td>
-        <td>  {{ onerow.pval_rank}} </td>
+        <td>  {{ onerow.pval_rank|floatformat:4 }} </td>
         <td>{{ onerow.snp_start}} </td><td>{{ onerow.snp_end}}</td><td>{{ onerow.ref_start}}</td>
         <td>{{ onerow.ref_end }} </td>
-         <td>{{ onerow.log_lik_ref }} </td><td> {{ onerow.log_lik_ratio}} </td>
-        <td>{{ onerow.log_enhance_odds}}</td><td>{{onerow.log_reduce_odds}} </td>
-        <td>{{ onerow.log_lik_snp}} </td>  
+         <td>{{ onerow.log_lik_ref|floatformat:4 }} </td><td> {{ onerow.log_lik_ratio|floatformat:4}} </td>
+        <td>{{ onerow.log_enhance_odds|floatformat:4}}</td><td>{{onerow.log_reduce_odds|floatformat:4}} </td>
+        <td>{{ onerow.log_lik_snp|floatformat:4}} </td>  
         <td>{{ onerow.snp_strand }}</td>  <td>{{ onerow.ref_strand }}</td>
-        <td>{{ onerow.pval_ref }} </td><td>{{ onerow.pval_snp }} </td>
-        <td>{{ onerow.pval_cond_ref }}</td> <td>{{ onerow.pval_cond_snp}}</td>
-        <td>{{ onerow.pval_diff }}</td>    </tr>
+        <td>{{ onerow.pval_ref|floatformat:4 }} </td><td>{{ onerow.pval_snp|floatformat:4 }} </td>
+        <td>{{ onerow.pval_cond_ref|floatformat:4 }}</td> <td>{{ onerow.pval_cond_snp|floatformat:4}}</td>
+        <td>{{ onerow.pval_diff|floatformat:4 }}</td>    </tr>
     {%  endfor %}
   </table>
   {% endif %}
