@@ -9,9 +9,9 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
 
   def test_that_gl_search_loads_get(self):
     response = self.client.get(reverse('ss_viewer:gl-region-search'), follow=True)
-    self.assertTrue(response.context.has_key('gl_search_form'))
-    self.assertTrue(response.context.has_key('snpid_search_form'))
-    self.assertTrue(response.context.has_key('status_message'))
+    self.assertTrue(response.context.__contains__('gl_search_form'))
+    self.assertTrue(response.context.__contains__('snpid_search_form'))
+    self.assertTrue(response.context.__contains__('status_message'))
     self.assertEqual(response.status_code, 200) 
     # if follow is not true, we just get the redirection status code
     response = self.client.get(reverse('ss_viewer:gl-region-search'))
@@ -25,7 +25,7 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
                                   'gl_end_pos'           : 12314,
                                   'pvalue_rank_cutoff'   : 0.05 })
     self.check_for_api_response_and_200_response_code(response)
-    data_response = response.context.get('api_response')
+    data_response = response.context.__getitem__('api_response')
     #print("api response: " + str(data_response))
     #self.assertEqual(len(data_response), 0) #only one item at this position.
     self.assertEqual(data_response, None)
@@ -41,7 +41,7 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
                                   'gl_end_pos'           : 12314,
                                   'pvalue_rank_cutoff'   : 0.9  })
     self.check_for_api_response_and_200_response_code(response)
-    data_response = response.context.get('api_response')
+    data_response = response.context.__getitem__('api_response')
     self.assertEqual(len(data_response), 1) #only one item at this position.
     self.check_for_expected_fields_in_scores_row(data_response[0])
    # print("status message" + response.context.flatten().get('status_message'))
@@ -56,7 +56,7 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
                                   'gl_start_pos'         : 59152,
                                   'gl_end_pos'           : 59153,
                                   'pvalue_rank_cutoff'   : 0.05  })
-    api_response_data = response.context.get('api_response')
+    api_response_data = response.context.__getitem__('api_response')
     self.check_for_api_response_and_200_response_code(response)
     self.assertEqual(api_response_data, None)
     self.check_status_message(response, 'No matching rows')
@@ -75,7 +75,7 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
                                   'gl_start_pos'         : 6000,
                                   'gl_end_pos'           : 5000,
                                   'pvalue_rank_cutoff'   : 0.05  })
-    print("status message: " + response.context.flatten()['status_message'])
+    print("status message: " + response.context['status_message'])
     self.assertEqual(response.context['gl_search_form'].is_valid(), False)
     self.check_status_message(response, 'Invalid search. Try agian.')
 

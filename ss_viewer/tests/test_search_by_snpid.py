@@ -9,9 +9,9 @@ class SearchBySnpidTests(ScoresViewerTestCase):
   
   def test_that_scores_list_loads_get(self):
      response = self.client.get(reverse('ss_viewer:snpid-search'), follow=True)
-     self.assertTrue(response.context.has_key('gl_search_form'))
-     self.assertTrue(response.context.has_key('snpid_search_form'))
-     self.assertTrue(response.context.has_key('status_message'))
+     self.assertTrue(response.context.__contains__('gl_search_form'))
+     self.assertTrue(response.context.__contains__('snpid_search_form'))
+     self.assertTrue(response.context.__contains__('status_message'))
      self.assertEqual(response.status_code, 200) 
      # if follow is not true, we just get the redirection status code
      response = self.client.get(reverse('ss_viewer:snpid-search'))
@@ -25,7 +25,7 @@ class SearchBySnpidTests(ScoresViewerTestCase):
               'pvalue_rank_cutoff' : 1 })
     #should return everything.
     self.check_for_api_response_and_200_response_code(response)
-    api_response_data = response.context.flatten()['api_response']
+    api_response_data = response.context['api_response']
     self.assertEqual(len(api_response_data), 3)
 
     for data_row in api_response_data:
@@ -36,8 +36,8 @@ class SearchBySnpidTests(ScoresViewerTestCase):
     #None of the form fields are filled out.
     response = self.client.post(reverse('ss_viewer:snpid-search'),
            { 'totally_invalid_field'  : 'har-dee-har-harr!' })
-    self.assertEqual(response.context.flatten().has_key('status_message'), True)
-    self.assertEqual(response.context.flatten()['status_message'],'Invalid search. Try agian.')
+    self.assertEqual(response.context.__contains__('status_message'), True)
+    self.assertEqual(response.context['status_message'],'Invalid search. Try agian.')
     self.assertEqual(response.context['snpid_search_form'].is_valid(), False)
 
 
@@ -63,20 +63,20 @@ class SearchBySnpidTests(ScoresViewerTestCase):
 
     self.check_for_api_response_and_200_response_code(response)
 
-    api_response_data = response.context.flatten()['api_response']
+    api_response_data = response.context['api_response']
     self.assertEqual(api_response_data, None)
 
-    self.assertEqual(response.context.flatten().has_key('status_message'), True)
-    self.assertEqual(response.context.flatten()['status_message'],
+    self.assertEqual(response.context.__contains__('status_message'), True)
+    self.assertEqual(response.context['status_message'],
                                              'No matches for requested snpids' )
 
 
   def test_that_scores_list_loads_get(self):
      response = self.client.get(reverse('ss_viewer:snpid-search'), follow=True)
 
-     self.assertTrue(response.context.has_key('gl_search_form'))
-     self.assertTrue(response.context.has_key('snpid_search_form'))
-     self.assertTrue(response.context.has_key('status_message'))
+     self.assertTrue(response.context.__contains__('gl_search_form'))
+     self.assertTrue(response.context.__contains__('snpid_search_form'))
+     self.assertTrue(response.context.__contains__('status_message'))
      self.assertEqual(response.status_code, 200)   #302 redirection
 
 
@@ -95,12 +95,12 @@ class SearchBySnpidTests(ScoresViewerTestCase):
       #print("response from file input test: " + str(response))      
       self.check_for_api_response_and_200_response_code(response)
 
-      api_response_data = response.context.flatten()['api_response'] 
+      api_response_data = response.context['api_response'] 
       self.assertEqual(len(api_response_data), 15)
 
       for one_row in api_response_data:
           self.check_for_expected_fields_in_scores_row(one_row.keys())
 
-      self.assertEqual(response.context.flatten().has_key('status_message'), True)
+      self.assertEqual(response.context.__contains__('status_message'), True)
       
 
