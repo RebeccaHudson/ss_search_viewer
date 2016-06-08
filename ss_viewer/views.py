@@ -15,7 +15,7 @@ from .forms import SearchByGenomicLocationForm
 from .forms import SearchByTranscriptionFactorForm
 
 from django.core.files.uploadedfile import SimpleUploadedFile
-
+from .plots import MakePlots #tempfile writer can stay hiedden
 
 #found at the URL: ss_viewer
 def index(request):
@@ -275,27 +275,38 @@ def show_multisearch_page(request):
   gl_search_form = SearchByGenomicLocationForm()
   snpid_search_form = SearchBySnpidForm()
   tf_search_form  = SearchByTranscriptionFactorForm()
+  plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
   context = { 'gl_search_form'    : gl_search_form, 
               'snpid_search_form' : snpid_search_form,
               'tf_search_form'    : tf_search_form,
               'status_message'    : status_message,
-              'plot_path'         : 'ss_viewer/test_plot.svg' }   
-              
+              'plotting_data'     : 'ss_viewer/test_plot.svg' }   
+             
+  #path to a plot should look like: 'ss_viewer/test_plot.html' 
   return render(request, searchpage_template, context)
 
 
 
-def get_a_plot_by_snpid():  #TODO: should take a snpid!
+def get_a_plot_by_snpid_and_motif(snpid, motif):  #TODO: should take a snpid!
     #path_to_images = os.path.join(os.path.dirname(__file__), 'pictures')
     #path_to_image = os.path.join(path_to_images, 'test_plot.svg')
+    url = setup_api_url('plotting-data')
+    headers = { 'content-type':'application/json' }
+    api_search_query = { 'snpid': snpid, 'motif': motif }
+    api_response = requests.post(url, 
+                                 json=api_search_query,
+                                 headers=headers)
+    response_json = None
+    if api_response.status_code == 204:
+        plot_status_message = 'No matching rows.'
+    else:
+        response_json = json.loads(api_response.text)
+        status_message = 'Got ' + str(len(response_json)) + ' rows back from API.'
+        print("here's the API response" + str(response_json))
+
+        plotter = MakePlots(response_json)
+        plotter.make_plot()
+
     path_to_image = os.path.join("pictures", 'test_plot.svg')
-    return path_to_image
-    #image_data = open(path_to_image, "rb").read()
-    #return HttpResponse(image_data, content_type="image/svg")
- 
-
-
-
-
-
+    return { 'image_path' : path_to_image, 'plotting_data' : response_json }
 
