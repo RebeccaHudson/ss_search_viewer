@@ -6,7 +6,7 @@ library(DBI)
 #we have python code that connects to a database and passes
 # an rpy2 DataFrame into this code.   
 # (in python:  'from rpy2.robjects.vectors import DataFrame')
-handle_python_params <- function(tmpfile, motif_lib_ref){
+handle_python_params <- function(tmpfile, motif_lib_ref, path_for_plots){
   #md <- motif_match_data_from_python
   #print("this is being called")
   #converted_to_table <- data.table(md)
@@ -28,7 +28,7 @@ handle_python_params <- function(tmpfile, motif_lib_ref){
   simple_query <- 'select * from dmm_table_motif_unknown;'
   results <- dbSendQuery(open_db, simple_query)
   results <- fetch(results)
-  library(data.table)
+  #library(data.table)
   to_use <- data.table(results)
   setkey(to_use, snpid)
   print(paste("to use: ", to_use))
@@ -40,9 +40,9 @@ handle_python_params <- function(tmpfile, motif_lib_ref){
  # #does motif library reference sill come through?
  # #what do I have to do with it now? 
  # print(ml[[1]])
-   fname <- makeJustOnePlot(to_use, 6, motif_lib_ref)
+   fname <- makeJustOnePlot(to_use, 6, motif_lib_ref, path_for_plots)
  # print(paste("filename: ", fname))
-  return('not quite yet')
+  return(fname)
 }
 
 
@@ -61,9 +61,9 @@ getFileNameForPlot <- function(motif_match_dt, motif_library_label){
 
 #This has been pulled out for benchmaking purposes. 
 #Covers making the plot from creating the svg file to saving it.
-makeJustOnePlot <- function(plot_making_params, i  ,motif.lib){ 
+makeJustOnePlot <- function(plot_making_params, i  ,motif.lib, path_for_plots){ 
   print("makeJustOnePlot...")
-  outfile_name <- paste("output_plots", getFileNameForPlot(plot_making_params, 'jaspar'), sep="/")
+  outfile_name <- paste(path_for_plots, getFileNameForPlot(plot_making_params, 'jaspar'), sep="/")
   print(paste("Creating plot", i, "in file:", outfile_name, sep = " "))
   svg(outfile_name)
   plotMotifMatchQuickly(plot_making_params,  motif.lib)

@@ -12,7 +12,7 @@ class MakePlots:
     #takes the path to the plotting code...
     #currently runs from within the plots directory
     def load_rpy2_basics(self):
-        #importr('motifStack')
+        importr('motifStack')
         importr('data.table')
         rfile = open(os.path.dirname(os.path.realpath(__file__))+'/plot-code/super-min-standalone-plot.R', 'r')
         rcode = rfile.read()
@@ -32,8 +32,13 @@ class MakePlots:
         tfw = TempfileWriter()
         data_for_plot = self.data_for_plot[0]
         tmpfile = tfw.write_params_to_sqlite_tempfile(data_for_plot)
-        any_r_return = ppack.handle_python_params(tmpfile, motif_lib_in_R)
-        print("r returns something? " + repr(any_r_return) )
+        path_for_output = os.path.dirname(os.path.realpath(__file__)) + "/" + "output_plots"
+        any_r_return = ppack.handle_python_params(tmpfile, motif_lib_in_R, path_for_output )
+        path_to_plot = any_r_return[0]
+        copyfile(path_to_plot,
+                 os.path.dirname(os.path.realpath(__file__)) +\
+               '/templates/ss_viewer/first-plot.html')
+        print("r returns something? " + str(any_r_return) )
         tfw.cleanup_tempfile()
 
 
