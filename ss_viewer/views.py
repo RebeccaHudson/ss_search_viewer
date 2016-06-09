@@ -275,7 +275,7 @@ def show_multisearch_page(request):
   gl_search_form = SearchByGenomicLocationForm()
   snpid_search_form = SearchBySnpidForm()
   tf_search_form  = SearchByTranscriptionFactorForm()
-  plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
+  # needs a DLL plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
   context = { 'gl_search_form'    : gl_search_form, 
               'snpid_search_form' : snpid_search_form,
               'tf_search_form'    : tf_search_form,
