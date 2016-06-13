@@ -3,7 +3,6 @@ h1 {
   color: green;
 }
 
-
 svg {
   max-height: 350px;
   max-width:  300px;
@@ -19,7 +18,7 @@ form {
 }
 
 form label, input, select, textarea {
-   font-size: .5em;
+   font-size: 12px;
 }
 
 .side {
@@ -28,7 +27,7 @@ form label, input, select, textarea {
 
 
 #scores_to_view tr {
-    font-size: .5em;
+    font-size: 1em;
  }
 
 

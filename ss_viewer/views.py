@@ -46,7 +46,10 @@ def transform_motifs_to_transcription_factors(response_json):
   with open(fpath , 'r') as f: 
     lut = pickle.load(f) 
   transformed_response = []
+  #print "response_json " +  str(len(response_json))
+  print "response_json " +  repr(response_json)
   for one_row in response_json:
+    print "one row of response json = " + repr(one_row)
     motif_value = one_row['motif']
     one_row['trans_factor'] = lut[motif_value]
     transformed_response.append(one_row) 
@@ -176,7 +179,6 @@ def handle_search_by_genomic_location(request):
                         })
     # may be able to unindent this:
     if gl_search_form.is_valid():
-      #print("cleaned data" + str(gl_search_form.cleaned_data) )
       form_data = gl_search_form.cleaned_data
       specified_region = { 'chromosome' : form_data['selected_chromosome'],
                            'start_pos'  : form_data['gl_start_pos'], 
@@ -189,6 +191,8 @@ def handle_search_by_genomic_location(request):
       response_json = None
       if api_response.status_code == 204:
         status_message = "No matching rows"
+      elif api_response.status_code == 400:
+        status_message  = "API reported an error: " + api_response.text
       else:
         response_json = json.loads(api_response.text)
         response_json = transform_motifs_to_transcription_factors(response_json)
@@ -261,11 +265,12 @@ def handle_search_by_trans_factor(request):
         response_json = transform_motifs_to_transcription_factors(response_json)
         status_message = 'Got ' + str(len(response_json)) + ' rows back from API.'
 
-    return render(request, searchpage_template, {   'api_response' : response_json,
-                                                    'tf_search_form': tf_search_form,  #appropriate to use the same one?
-                                                    'gl_search_form': SearchByGenomicLocationForm(), 
-                                                    'snpid_search_form' : SearchBySnpidForm(),
-                                                    'status_message' : status_message}) 
+    return render(request, searchpage_template, 
+                  {'api_response' : response_json,
+                   'tf_search_form': tf_search_form,  #appropriate to use the same one?
+                   'gl_search_form': SearchByGenomicLocationForm(), 
+                   'snpid_search_form' : SearchBySnpidForm(),
+                   'status_message' : status_message}) 
 
 
 #Def this is the actual multi-search page, this handles the GET.
@@ -276,6 +281,7 @@ def show_multisearch_page(request):
   snpid_search_form = SearchBySnpidForm()
   tf_search_form  = SearchByTranscriptionFactorForm()
   #plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
+  # needs a DLL plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
   context = { 'gl_search_form'    : gl_search_form, 
               'snpid_search_form' : snpid_search_form,
               'tf_search_form'    : tf_search_form,
