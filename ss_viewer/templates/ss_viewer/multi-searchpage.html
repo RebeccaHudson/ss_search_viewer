@@ -12,41 +12,60 @@
 </head>
 <body>
 
-
+<div class="container">
+<div id="content">
 
 <h1> specify genomic location OR snpid OR transcription factor</h1>
 <div id="status_message"> {{ status_message }} </div>
 
+
+<ul id="tabs" class="nav nav-tabs", data-tabs="tabs">
+  <li class="active"><a href="#first_form" data-toggle="tab">first form</a></li>
+  <li><a href="#second_form" data-toggle="tab">second form</a></li>
+  <li><a href="#third_form" data-toggle="tab" >third form</a></li>
+  <li><a href="#fourth_form" data-toggle="tab" >fourth form</a></li>
+</ul>
+
 <div class="side">
-<form enctype="multipart/form-data" action="{% url 'ss_viewer:gl-region-search' %}" method="post" >
-{% csrf_token %}
-  <table>
-    {{ gl_search_form.as_table }}
-  </table>
-  <input type="submit" value="Search by Genomic Location" />
-</form>
 
-<form enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-search' %}" method="post">
-{% csrf_token %}
-  <table>
-    {{ snpid_search_form.as_table }}
-  </table>
-  <input type="submit" value="Search by SNPid" />
-</form>
+<div id="tabbed-forms" class="tab-content">
 
-<form enctype="multipart/form-data" action="{% url 'ss_viewer:trans-factor-search' %}" method="post">
-{% csrf_token %}
-  <table>
-    {{ tf_search_form.as_table }}
-  </table>
+<div class="tab-pane active" id="first_form" >
+  <form enctype="multipart/form-data" action="{% url 'ss_viewer:gl-region-search' %}" method="post" >
+  {% csrf_token %}
+    <table>
+      {{ gl_search_form.as_table }}
+    </table>
+    <input type="submit" value="Search by Genomic Location" />
+  </form>
+</div>
 
 
+<div class="tab-pane" id="second_form" >
+  <form enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-search' %}" method="post">
+  {% csrf_token %}
+    <table>
+      {{ snpid_search_form.as_table }}
+    </table>
+    <input type="submit" value="Search by SNPid" />
+  </form>
+</div>
 
-  <input type="submit" value="Search by Transcription Factor" />
-</form>
+
+<div class="tab-pane" id="third_form" >
+  <form enctype="multipart/form-data" action="{% url 'ss_viewer:trans-factor-search' %}" method="post">
+  {% csrf_token %}
+    <table>
+      {{ tf_search_form.as_table }}
+    </table>
+    <input type="submit" value="Search by Transcription Factor" />
+  </form>
+</div>
+
  
-</div> <!-- close the 'side' div' -->
+</div> <!-- close the 'side' div -->
 
+</div> <!-- close the 'tabbed forms' div -->
 <!--  this is the way that we will be displaying the plot -->
 <div id="plot" class="side">
 </div>
@@ -89,8 +108,22 @@
 </div>
 
 
+</div> <!-- close the 'content' div -->
+</div> <!-- close the 'container' div -->
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{% static 'ss_viewer/js/bootstrap.min.js' %}"></script>
+
+
+
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('#tabs').tab();
+    });
+</script>   
+
+
+
 </body>
