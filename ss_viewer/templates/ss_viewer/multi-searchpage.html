@@ -5,7 +5,6 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" href="{% static 'ss_viewer/style.css' %}" />
 
-
   <title>atsnp data</title>
   <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
 
@@ -30,7 +29,7 @@
 <div id="tabbed-forms" class="tab-content">
 
 <div class="tab-pane active" id="gl_region_search_form" >
-  <form enctype="multipart/form-data" action="{% url 'ss_viewer:gl-region-search' %}" method="post" >
+  <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:gl-region-search' %}" method="post" >
   {% csrf_token %}
     <table>
       {{ gl_search_form.as_table }}
@@ -41,7 +40,7 @@
 
 
 <div class="tab-pane" id="snpid_search_form" >
-  <form enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-search' %}" method="post">
+  <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-search' %}" method="post">
   {% csrf_token %}
     <table>
       {{ snpid_search_form.as_table }}
@@ -52,7 +51,7 @@
 
 
 <div class="tab-pane" id="tf_search_form" >
-  <form enctype="multipart/form-data" action="{% url 'ss_viewer:trans-factor-search' %}" method="post">
+  <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:trans-factor-search' %}" method="post">
   {% csrf_token %}
     <table>
       {{ tf_search_form.as_table }}
