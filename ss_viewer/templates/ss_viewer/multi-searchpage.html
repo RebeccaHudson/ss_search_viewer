@@ -1,11 +1,20 @@
 {% load staticfiles %}
 <head>
-<link rel="stylesheet" type="text/css" href="{% static 'ss_viewer/style.css' %}" />
+  <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="{% static 'ss_viewer/style.css' %}" />
+
+
+  <title>atsnp data</title>
+  <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
+
 </head>
+<body>
+
+
+
 <h1> specify genomic location OR snpid OR transcription factor</h1>
-
-
-
 <div id="status_message"> {{ status_message }} </div>
 
 <div class="side">
@@ -78,3 +87,10 @@
   </table>
   {% endif %}
 </div>
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'ss_viewer/js/bootstrap.min.js' %}"></script>
+</body>
