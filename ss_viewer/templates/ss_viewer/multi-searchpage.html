@@ -17,7 +17,7 @@
 <h1> specify genomic location OR snpid OR transcription factor</h1>
 <div id="status_message"> {{ status_message }} </div>
 
-
+{% if active_tab == 'gl-region' or active_tab == 'none-yet'  %}
 <ul id="tabs" class="nav nav-tabs", data-tabs="tabs">
   <li class="active"><a href="#gl_region_search_form" data-toggle="tab" class='btn-default'>Genomic Location</a></li>
   <li><a href="#snpid_search_form" data-toggle="tab" class='btn-default' >SNPid</a></li>
@@ -78,7 +78,7 @@
 <!-- consider making this part modular; DRYing it up some how... -->
 <div id="scores_to_view">
   {% if api_response  %}
-  <table class="table"> 
+  <table class="table-condensed"> 
     <tr>
         <td><small>chromosome</small></td><td>pos</td>
         <td>snpid</td><td>transcription factor</td><td>motif length</td>
