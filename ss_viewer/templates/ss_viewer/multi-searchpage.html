@@ -17,18 +17,21 @@
 <h1> specify genomic location OR snpid OR transcription factor</h1>
 <div id="status_message"> {{ status_message }} </div>
 
-{% if active_tab == 'gl-region' or active_tab == 'none-yet'  %}
+
 <ul id="tabs" class="nav nav-tabs", data-tabs="tabs">
-  <li class="active"><a href="#gl_region_search_form" data-toggle="tab" class='btn-default'>Genomic Location</a></li>
-  <li><a href="#snpid_search_form" data-toggle="tab" class='btn-default' >SNPid</a></li>
-  <li><a href="#tf_search_form" data-toggle="tab" class='btn-default'>Transcription Factor</a></li>
+  <li {%if active_tab == 'gl-region' or active_tab == 'none-yet'  %}
+      class="active"
+      {% endif %}><a href="#gl_region_search_form" data-toggle="tab" class='btn-default'>Genomic Location</a></li>
+  <li  {%if active_tab == 'snpid'%}class="active"{%endif%}><a href="#snpid_search_form" data-toggle="tab" class='btn-default' >SNPid</a></li>
+  <li {%if active_tab == 'tf'%}class="active"{%endif%}><a href="#tf_search_form" data-toggle="tab" class='btn-default'>Transcription Factor</a></li>
 </ul>
 
 <div class="side">
 
 <div id="tabbed-forms" class="tab-content">
 
-<div class="tab-pane active panel-body" id="gl_region_search_form" >
+<div class="tab-pane panel-body 
+   {%if active_tab == 'gl-region' or active_tab == 'none-yet'%} active{%endif%}" id="gl_region_search_form" >
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:gl-region-search' %}" method="post" >
   {% csrf_token %}
   <div class="form-group">
@@ -41,7 +44,8 @@
 </div>
 
 
-<div class="tab-pane" id="snpid_search_form" >
+<div class="tab-pane panel-body
+   {%if active_tab == 'snpid'%} active{%endif%}"  id="snpid_search_form" >
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-search' %}" method="post">
   {% csrf_token %}
   <div class="form-group">
@@ -54,7 +58,8 @@
 </div>
 
 
-<div class="tab-pane" id="tf_search_form" >
+<div class="tab-pane panel-body
+   {%if active_tab == 'tf'%} active{%endif%}"  id="tf_search_form" >
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:trans-factor-search' %}" method="post">
   {% csrf_token %}
     <div class="form-group">
@@ -78,10 +83,11 @@
 <!-- consider making this part modular; DRYing it up some how... -->
 <div id="scores_to_view">
   {% if api_response  %}
-  <table class="table-condensed"> 
+  <table class="table-striped"> 
     <tr>
         <td><small>chromosome</small></td><td>pos</td>
-        <td>snpid</td><td>transcription factor</td><td>motif length</td>
+        <td>snpid</td><td>transcription factor</td><td>motif</td>
+        <td>motif length</td>
         <td>pval rank</td>
         <td>snp start</td><td>snp end</td><td>ref start</td><td>ref end</td>
         <td>log lik ref</td> <td> log lik ratio </td>
@@ -95,7 +101,7 @@
     <tr>   
         <td>{{ onerow.chr }}</td><td>{{ onerow.pos }}</td> 
         <td>{{ onerow.snpid }}</td><td> {{ onerow.trans_factor }}</td>
-        <td>{{ onerow.motif_len}}</td>
+        <td> {{ onerow.motif }} </td> <td>{{ onerow.motif_len}}</td>
         <td>  {{ onerow.pval_rank|floatformat:4 }} </td>
         <td>{{ onerow.snp_start}} </td><td>{{ onerow.snp_end}}</td><td>{{ onerow.ref_start}}</td>
         <td>{{ onerow.ref_end }} </td>
