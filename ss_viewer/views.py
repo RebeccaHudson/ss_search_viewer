@@ -234,23 +234,44 @@ def handle_search_by_trans_factor(request):
         searchpage_template = 'ss_viewer/multi-searchpage.html'  
         tf_search_form = SearchByTranscriptionFactorForm(request.POST)
 
+    #how do we know what the from should be? It's intially empty.
+    #next_from field that comes from the API?
     status_message = ""
+    response_data = None
     if not tf_search_form.is_valid():
         status_message = "Invalid search. Try agian."
         return render(request, searchpage_template, 
                      { 'tf_search_form'    : tf_search_form,
                        'snpid_search_form' : SearchBySnpidForm(),
-                       'gl_search_form'    : SearchByGenomicLocationForm()
+                       'gl_search_form'    : SearchByGenomicLocationForm(),
+                       'active_tab'        : 'tf'
                      })
     #invalid form case already handled.
     form_data = tf_search_form.cleaned_data
 
+
     trans_factor = form_data['trans_factor'] 
     motif_value = lookup_motif_by_tf(trans_factor) 
     #motif value is a list with one more more items.
+   
 
+    #calculate the search result to start on
+    page_of_search_results = form_data['page_of_results_shown']
+    page_size = 5  #has to match up with the API.
+ 
+    page_of_results_to_display = 1 
+    if request.POST['action'] == 'Next':
+        page_of_results_to_display = page_of_search_results + 1
+    elif request.POST['action'] == 'Prev':
+        page_of_results_to_display = page_of_search_results - 1
+   
+    # this will be zero if the regular submit button was pressed. 
+    search_result_offset = (page_of_results_to_display - 1) * page_size
+     
+    # will be 0 if showing the first page of results. 
     api_search_query = { 'motif' : motif_value,
-                         'pvalue_rank': form_data['pvalue_rank_cutoff']
+                         'pvalue_rank': form_data['pvalue_rank_cutoff'],
+                         'from_result' : search_result_offset
                        }
     print "API search query : " + repr(api_search_query)
     #are the headers nesscearry?
@@ -263,11 +284,16 @@ def handle_search_by_trans_factor(request):
     else:
         print("here's the API response" + str(api_response))
         response_json = json.loads(api_response.text)
-        response_json = transform_motifs_to_transcription_factors(response_json)
-        status_message = 'Got ' + str(len(response_json)) + ' rows back from API.'
+        response_data = transform_motifs_to_transcription_factors(response_json['data'])
+        status_message = 'Got ' + str(response_json['hitcount']) + ' rows back from API.'
+        status_message += ' page shown ' + str(page_of_results_to_display)
+        form_data['page_of_results_shown'] = page_of_results_to_display
+        # show the page of results that was just requested. 
 
+        tf_search_form = SearchByTranscriptionFactorForm(form_data)
+        #if we are displaying search results, advance the page...
     return render(request, searchpage_template, 
-                  {'api_response' : response_json,
+                  {'api_response' : response_data,
                    'tf_search_form': tf_search_form,  #appropriate to use the same one?
                    'gl_search_form': SearchByGenomicLocationForm(), 
                    'snpid_search_form' : SearchBySnpidForm(),
@@ -281,7 +307,7 @@ def show_multisearch_page(request):
   status_message = "Enter genomic location info."
   gl_search_form = SearchByGenomicLocationForm()
   snpid_search_form = SearchBySnpidForm()
-  tf_search_form  = SearchByTranscriptionFactorForm()
+  tf_search_form  = SearchByTranscriptionFactorForm(initial={'page_of_results_shown':0})
   #plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
   # needs a DLL plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
   context = { 'gl_search_form'    : gl_search_form, 
