@@ -38,7 +38,8 @@
     <table>
       {{ gl_search_form.as_table }}
     </table>
-    <input type="submit" value="Search by Genomic Location"  class="btn btn-primary" />
+    <input type="submit" name="action" value="Search by Genomic Location"  class="btn btn-primary" />
+
   </div>
   </form>
 </div>
@@ -66,7 +67,10 @@
       <table>
         {{ tf_search_form.as_table }}
       </table>
-      <input type="submit" value="Search by Transcription Factor"  class="btn btn-primary" />
+      <input type="submit" name="action" value="Search by Transcription Factor"  
+                                                      class="btn btn-primary" />
+      <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+      <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
     </div>
   </form>
 </div>
