@@ -46,10 +46,7 @@ def transform_motifs_to_transcription_factors(response_json):
   with open(fpath , 'r') as f: 
     lut = pickle.load(f) 
   transformed_response = []
-  #print "response_json " +  str(len(response_json))
-  print "response_json " +  repr(response_json)
   for one_row in response_json:
-    print "one row of response json = " + repr(one_row)
     motif_value = one_row['motif']
     one_row['trans_factor'] = lut[motif_value]
     transformed_response.append(one_row) 
@@ -110,7 +107,8 @@ def setup_context_for_snpid_search_results(api_response, snpid_list, holdover_p_
               'tf_search_form' : SearchByTranscriptionFactorForm(),  
               'snpid_search_form' :  SearchBySnpidForm({'raw_requested_snpids':", ".join(snpid_list),
                                                         'pvalue_rank_cutoff' : holdover_p_value }  ),
-              'gl_search_form'    :  SearchByGenomicLocationForm()
+              'gl_search_form'    :  SearchByGenomicLocationForm(),
+              'active_tab' : 'snpid'
             }
   return context
 
@@ -128,6 +126,7 @@ def handle_search_by_snpid(request):
                      searchpage_template, 
 
                      {'snpid_search_form': snpid_search_form, 
+                      'active_tab': 'snpid',
                       'tf_search_form' : SearchByTranscriptionFactorForm(),  
                       'gl_search_form' : gl_search_form,                
                       'status_message':'Invalid search. Try agian.'})
@@ -140,6 +139,7 @@ def handle_search_by_snpid(request):
       return render(request, 
                     searchpage_template,
                     {'snpid_search_form': SearchBySnpidForm(),
+                     'active_tab': 'snpid',
                      'gl_search_form'   : SearchByGenomicLocationForm(),
                      'tf_search_form' : SearchByTranscriptionFactorForm(),
                      'status_message'   : status_message })
@@ -205,6 +205,7 @@ def handle_search_by_genomic_location(request):
                                                     'gl_search_form': new_form, 
                                                     'snpid_search_form' : SearchBySnpidForm(),
                                                     'holdover_gl_region': specified_region,
+                                                    'active_tab'     : 'gl-region',
                                                     'status_message' : status_message})                                              
 
 
@@ -251,7 +252,7 @@ def handle_search_by_trans_factor(request):
     api_search_query = { 'motif' : motif_value,
                          'pvalue_rank': form_data['pvalue_rank_cutoff']
                        }
-
+    print "API search query : " + repr(api_search_query)
     #are the headers nesscearry?
     api_response = requests.post( setup_api_url('search-by-tf'),
              json=api_search_query, headers={'content-type':'application/json'})
@@ -270,6 +271,7 @@ def handle_search_by_trans_factor(request):
                    'tf_search_form': tf_search_form,  #appropriate to use the same one?
                    'gl_search_form': SearchByGenomicLocationForm(), 
                    'snpid_search_form' : SearchBySnpidForm(),
+                   'active_tab':     'tf',
                    'status_message' : status_message}) 
 
 
@@ -286,6 +288,7 @@ def show_multisearch_page(request):
               'snpid_search_form' : snpid_search_form,
               'tf_search_form'    : tf_search_form,
               'status_message'    : status_message,
+              'active_tab'        : 'none-yet',
               'plotting_data'     : 'ss_viewer/test_plot.svg' }   
              
   #path to a plot should look like: 'ss_viewer/test_plot.html' 
