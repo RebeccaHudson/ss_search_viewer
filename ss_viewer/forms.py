@@ -141,9 +141,10 @@ class SearchByTranscriptionFactorForm(forms.Form):
                                      label = "Select a transcription factor.")
     default_cutoff = 0.05
   
-    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.00001"})
+    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0000001"})
     pvalue_rank_cutoff = forms.FloatField(widget=styled_widget,
                                            required=False,
                                            max_value=1, 
                                            min_value=0, 
                                            initial=default_cutoff)
+    page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
