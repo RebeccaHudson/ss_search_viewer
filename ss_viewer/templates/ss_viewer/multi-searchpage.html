@@ -39,7 +39,15 @@
       {{ gl_search_form.as_table }}
     </table>
     <input type="submit" name="action" value="Search by Genomic Location"  class="btn btn-primary" />
-
+      {% if search_paging_info != None %}
+        {% if search_paging_info.show_next_btn == True %}
+            <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+        {% endif %}
+        
+        {% if search_paging_info.show_prev_btn == True %}
+            <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+        {% endif %}
+      {% endif %}
   </div>
   </form>
 </div>
