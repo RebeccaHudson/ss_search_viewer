@@ -234,7 +234,7 @@ def handle_search_by_trans_factor(request):
         searchpage_template = 'ss_viewer/multi-searchpage.html'  
         tf_search_form = SearchByTranscriptionFactorForm(request.POST)
 
-    search_paging_info  = {}
+    search_paging_info  = None 
     #how do we know what the from should be? It's intially empty.
     #next_from field that comes from the API?
     status_message = ""
@@ -251,34 +251,28 @@ def handle_search_by_trans_factor(request):
     form_data = tf_search_form.cleaned_data
 
 
-
-
     trans_factor = form_data['trans_factor'] 
     motif_value = lookup_motif_by_tf(trans_factor) 
     #motif value is a list with one more more items.
    
-
     #calculate the search result to start on
-
     page_of_search_results = form_data['page_of_results_shown']
-    page_size = 5  #has to match up with the API.
+    #page_size = 5  #has to match up with the API.
  
-    page_of_results_to_display = 1 
-    if request.POST['action'] == 'Next':
-        page_of_results_to_display = page_of_search_results + 1
-    elif request.POST['action'] == 'Prev':
-        page_of_results_to_display = page_of_search_results - 1
+    #page_of_results_to_display = 1 
+    #if request.POST['action'] == 'Next':
+    #    page_of_results_to_display = page_of_search_results + 1
+    #elif request.POST['action'] == 'Prev':
+    #    page_of_results_to_display = page_of_search_results - 1
    
-    # this will be zero if the regular submit button was pressed. 
-    search_result_offset = (page_of_results_to_display - 1) * page_size
-
-
-      
-    
+    ## this will be zero if the regular submit button was pressed. 
+    #search_result_offset = (page_of_results_to_display - 1) * page_size
+    search_request_params = get_paging_info_for_request(request, page_of_search_results) 
+ 
     # will be 0 if showing the first page of results. 
     api_search_query = { 'motif' : motif_value,
                          'pvalue_rank': form_data['pvalue_rank_cutoff'],
-                         'from_result' : search_result_offset
+                         'from_result' : search_request_params['search_result_offset']
                        }
     print "API search query : " + repr(api_search_query)
     #are the headers nesscearry?
@@ -294,23 +288,25 @@ def handle_search_by_trans_factor(request):
         response_json = json.loads(api_response.text)
         response_data = transform_motifs_to_transcription_factors(response_json['data'])
         status_message = 'Got ' + str(response_json['hitcount']) + ' rows back from API.'
-        status_message += ' page shown ' + str(page_of_results_to_display)
-        form_data['page_of_results_shown'] = page_of_results_to_display
+        status_message += ' page shown ' + str(search_request_params['page_of_results_to_display'])
+        form_data['page_of_results_shown'] = search_request_params['page_of_results_to_display']
         # show the page of results that was just requested. 
-        
-
+         
         hitcount = response_json['hitcount']
-        search_paging_info = { 'show_next_btn': False,
-                               'show_prev_btn': False
-                            }  #maybe move this down later
-        #search
-        if hitcount >= (page_of_results_to_display + 1) * page_size:
-           search_paging_info['show_next_btn'] = True
+        search_paging_info = get_paging_info_for_display(hitcount, 
+                                           search_request_params['page_of_results_to_display'])
+        # 
+        #search_paging_info = { 'show_next_btn': False,
+        #                       'show_prev_btn': False
+        #                    }  #maybe move this down later
+
+        #hits_paged = (search_request_params['page_of_results_to_display']) \
+        #             *  settings.API_HOST_INFO['result_page_size'] 
+        #if hitcount >= hits_paged:
+        #   search_paging_info['show_next_btn'] = True
  
-        if page_of_results_to_display > 1:
-           search_paging_info['show_prev_btn'] = True
-
-
+        #if search_request_params['page_of_results_to_display'] > 1:
+        #   search_paging_info['show_prev_btn'] = True
         tf_search_form = SearchByTranscriptionFactorForm(form_data)
         #if we are displaying search results, advance the page...
     return render(request, searchpage_template, 
@@ -341,6 +337,37 @@ def show_multisearch_page(request):
              
   #path to a plot should look like: 'ss_viewer/test_plot.html' 
   return render(request, searchpage_template, context)
+
+
+
+
+#takes info from the request on the form to seutp the offset 
+#for requesting data from the API.
+def get_paging_info_for_request(request, page_of_search_results):
+    page_of_results_to_display = 1 
+    
+    if request.POST['action'] == 'Next':
+         page_of_results_to_display = page_of_search_results + 1
+    elif request.POST['action'] == 'Prev': 
+         page_of_results_to_display = page_of_search_results - 1
+
+    search_result_offset = (page_of_results_to_display - 1) * \
+                          settings.API_HOST_INFO['result_page_size']
+    return { 'search_result_offset' : search_result_offset,
+             'page_of_results_to_display' : page_of_results_to_display }
+
+
+#setups up paging stuff for the webpage 
+def get_paging_info_for_display(hitcount, page_of_results_to_display):
+    search_paging_info = {'show_next_btn': False, 'show_prev_btn': False}    
+    hits_paged = (page_of_results_to_display ) * \
+                 settings.API_HOST_INFO['result_page_size']
+    if hitcount >= hits_paged:
+        search_paging_info['show_next_btn'] = True 
+    if page_of_results_to_display > 1:
+         search_paging_info['show_prev_btn'] = True
+    return search_paging_info
+
 
 
 
