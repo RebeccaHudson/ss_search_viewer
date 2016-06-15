@@ -234,6 +234,7 @@ def handle_search_by_trans_factor(request):
         searchpage_template = 'ss_viewer/multi-searchpage.html'  
         tf_search_form = SearchByTranscriptionFactorForm(request.POST)
 
+    search_paging_info  = {}
     #how do we know what the from should be? It's intially empty.
     #next_from field that comes from the API?
     status_message = ""
@@ -250,12 +251,15 @@ def handle_search_by_trans_factor(request):
     form_data = tf_search_form.cleaned_data
 
 
+
+
     trans_factor = form_data['trans_factor'] 
     motif_value = lookup_motif_by_tf(trans_factor) 
     #motif value is a list with one more more items.
    
 
     #calculate the search result to start on
+
     page_of_search_results = form_data['page_of_results_shown']
     page_size = 5  #has to match up with the API.
  
@@ -267,7 +271,10 @@ def handle_search_by_trans_factor(request):
    
     # this will be zero if the regular submit button was pressed. 
     search_result_offset = (page_of_results_to_display - 1) * page_size
-     
+
+
+      
+    
     # will be 0 if showing the first page of results. 
     api_search_query = { 'motif' : motif_value,
                          'pvalue_rank': form_data['pvalue_rank_cutoff'],
@@ -282,6 +289,7 @@ def handle_search_by_trans_factor(request):
     if api_response.status_code == 204:
         status_message = 'No matching rows.'
     else:
+
         print("here's the API response" + str(api_response))
         response_json = json.loads(api_response.text)
         response_data = transform_motifs_to_transcription_factors(response_json['data'])
@@ -289,6 +297,19 @@ def handle_search_by_trans_factor(request):
         status_message += ' page shown ' + str(page_of_results_to_display)
         form_data['page_of_results_shown'] = page_of_results_to_display
         # show the page of results that was just requested. 
+        
+
+        hitcount = response_json['hitcount']
+        search_paging_info = { 'show_next_btn': False,
+                               'show_prev_btn': False
+                            }  #maybe move this down later
+        #search
+        if hitcount >= (page_of_results_to_display + 1) * page_size:
+           search_paging_info['show_next_btn'] = True
+ 
+        if page_of_results_to_display > 1:
+           search_paging_info['show_prev_btn'] = True
+
 
         tf_search_form = SearchByTranscriptionFactorForm(form_data)
         #if we are displaying search results, advance the page...
@@ -298,6 +319,7 @@ def handle_search_by_trans_factor(request):
                    'gl_search_form': SearchByGenomicLocationForm(), 
                    'snpid_search_form' : SearchBySnpidForm(),
                    'active_tab':     'tf',
+                   'search_paging_info' : search_paging_info,
                    'status_message' : status_message}) 
 
 

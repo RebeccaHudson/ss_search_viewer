@@ -69,8 +69,16 @@
       </table>
       <input type="submit" name="action" value="Search by Transcription Factor"  
                                                       class="btn btn-primary" />
-      <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-      <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+      {% if search_paging_info != None %}
+        {% if search_paging_info.show_next_btn == True %}
+            <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+        {% endif %}
+        
+        {% if search_paging_info.show_prev_btn == True %}
+            <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+        {% endif %}
+      {% endif %}
+
     </div>
   </form>
 </div>
