@@ -39,11 +39,10 @@
       {{ gl_search_form.as_table }}
     </table>
     <input type="submit" name="action" value="Search by Genomic Location"  class="btn btn-primary" />
-      {% if search_paging_info != None %}
+      {% if search_paging_info != None and active_tab == 'gl-region' %}
         {% if search_paging_info.show_next_btn == True %}
             <input type="submit" name="action" value="Next" class="btn btn-info" /> 
         {% endif %}
-        
         {% if search_paging_info.show_prev_btn == True %}
             <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
         {% endif %}
@@ -63,6 +62,14 @@
     </table>
     <input type="submit" value="Search by SNPid"  class="btn btn-primary" />
   </div>
+      {% if search_paging_info != None and active_tab == 'snpid' %}
+        {% if search_paging_info.show_next_btn == True %}
+            <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+        {% endif %}
+        {% if search_paging_info.show_prev_btn == True %}
+            <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+        {% endif %}
+      {% endif %}
   </form>
 </div>
 
@@ -77,7 +84,7 @@
       </table>
       <input type="submit" name="action" value="Search by Transcription Factor"  
                                                       class="btn btn-primary" />
-      {% if search_paging_info != None %}
+      {% if search_paging_info != None and active_tab == 'tf'  %}
         {% if search_paging_info.show_next_btn == True %}
             <input type="submit" name="action" value="Next" class="btn btn-info" /> 
         {% endif %}
