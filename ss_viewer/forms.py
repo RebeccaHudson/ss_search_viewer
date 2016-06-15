@@ -92,31 +92,31 @@ class SearchByGenomicLocationForm(forms.Form):
     page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
   
 
-   #ensure ranges are within hard limits.  
-  def clean(self):
-      cleaned_data = super(SearchByGenomicLocationForm, self).clean()
-      
-      start_pos = cleaned_data.get('gl_start_pos')
-      end_pos = cleaned_data.get('gl_end_pos')
+    #ensure ranges are within hard limits.  
+    def clean(self):
+        cleaned_data = super(SearchByGenomicLocationForm, self).clean()
+        
+        start_pos = cleaned_data.get('gl_start_pos')
+        end_pos = cleaned_data.get('gl_end_pos')
 
-      if start_pos is None:
-          raise forms.ValidationError('We shouldn\'t be here', code='bad-case')
+        if start_pos is None:
+            raise forms.ValidationError('We shouldn\'t be here', code='bad-case')
 
-      if end_pos is None:
-          end_pos = start_pos + int(settings.QUERY_DEFAULTS['DEFAULT_REGION_SIZE'])
-          cleaned_data['gl_end_pos'] = end_pos
+        if end_pos is None:
+            end_pos = start_pos + int(settings.QUERY_DEFAULTS['DEFAULT_REGION_SIZE'])
+            cleaned_data['gl_end_pos'] = end_pos
 
-      if start_pos > end_pos:
-          raise forms.ValidationError(('Start position must be less than or equal'
-                                      ' to the end position.'),
-                                      code='region-size-0'  )
-       
-      max_size_of_region = settings.HARD_LIMITS['MAX_NUMBER_OF_SNPIDS_ALLOWED_TO_REQUEST']
-      if end_pos - start_pos > max_size_of_region: 
-          raise forms.ValidationError(('The size of the specified region must be'
-                                     'less than or equal to.' + 
-                                      str(max_size_of_region)   ),
-                                     code='region-size-too-large' )
+        if start_pos > end_pos:
+            raise forms.ValidationError(('Start position must be less than or equal'
+                                        ' to the end position.'),
+                                        code='region-size-0'  )
+         
+        max_size_of_region = settings.HARD_LIMITS['MAX_NUMBER_OF_SNPIDS_ALLOWED_TO_REQUEST']
+        if end_pos - start_pos > max_size_of_region: 
+            raise forms.ValidationError(('The size of the specified region must be'
+                                       'less than or equal to.' + 
+                                        str(max_size_of_region)   ),
+                                       code='region-size-too-large' )
 
  
 class SearchByTranscriptionFactorForm(forms.Form):
