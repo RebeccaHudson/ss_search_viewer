@@ -97,59 +97,79 @@ def get_snpid_list_from_form(request, form):
 
 
 def setup_context_for_snpid_search_results(api_response, snpid_list, holdover_p_value):
-  status_message = ""; response_json = None
+    status_message = ""; response_json = None
 
-  if api_response.status_code == 204:
-    status_message = "No matches for requested snpids" 
-  else:
-    count_of_requested_snpids = len(snpid_list)
-    response_json = json.loads(api_response.text)
-    response_json = transform_motifs_to_transcription_factors(response_json)
+    if api_response.status_code == 204:
+        status_message = "No matches for requested snpids" 
+    else:
+        count_of_requested_snpids = len(snpid_list)
+        response_json = json.loads(api_response.text)
+        response_data = transform_motifs_to_transcription_factors(response_json['data'])
+        status_message = 'Got ' + str(len(response_json)) + ' rows back from API.'
+    
+    snpid_form = SearchBySnpidForm({'raw_requested_snpids':", ".join(snpid_list),
+                                    'pvalue_rank_cutoff' : holdover_p_value }  )
+    context = setup_formset_context(snpid_form=snpid_form)
+    context.update({'api_response' :  response_data,
+                    'status_messagse' : status_message,
+                    'holdover_snpids' : ', '.join(snpid_list)  # can this param leave?
+                   }) 
+    return context
+  #context = { 'api_response'     :  response_json,
+  #            'status_message'    :  status_message,
+  #            'holdover_snpids'   :  ", ".join(snpid_list),
+  #            'tf_search_form' : SearchByTranscriptionFactorForm(),  
+  #            'snpid_search_form' :  SearchBySnpidForm({'raw_requested_snpids':", ".join(snpid_list),
+  #                                                      'pvalue_rank_cutoff' : holdover_p_value }  ),
+  #            'gl_search_form'    :  SearchByGenomicLocationForm(),
+  #            'active_tab' : 'snpid'
+  #          }
+  #return context
 
-    status_message = 'Got ' + str(len(response_json)) + ' rows back from API.'
-
-  context = { 'api_response'     :  response_json,
-              'status_message'    :  status_message,
-              'holdover_snpids'   :  ", ".join(snpid_list),
-              'tf_search_form' : SearchByTranscriptionFactorForm(),  
-              'snpid_search_form' :  SearchBySnpidForm({'raw_requested_snpids':", ".join(snpid_list),
-                                                        'pvalue_rank_cutoff' : holdover_p_value }  ),
-              'gl_search_form'    :  SearchByGenomicLocationForm(),
-              'active_tab' : 'snpid'
-            }
-  return context
+#DRY up the boilerplate.
+def setup_formset_context(tf_form=None, gl_form=None, snpid_form=None):
+    active_tab = None
+    hidden_page_number = {'page_of_results_shown':0}
+    if tf_form is None:
+        tf_form = SearchByTranscriptionFactorForm(initial=hidden_page_number)
+    else:
+        active_tab = 'tf'
+    if gl_form is None:
+        gl_form = SearchByGenomicLocationForm(initial=hidden_page_number)
+    else: 
+        active_tab = 'gl-region'
+    if snpid_form is None:
+        snpid_form = SearchBySnpidForm(initial=hidden_page_number)
+    else:
+        active_tab = 'snpid'
+    context =  { 'tf_search_form' : tf_form,
+                'gl_search_form': gl_form, 
+                'snpid_search_form' : snpid_form }                                              
+    if active_tab is not None:
+        context.update({'active_tab': active_tab })
+    return context
 
 def handle_search_by_snpid(request):
   if request.method == 'GET':
-    return redirect(reverse('ss_viewer:multi-search'))
+      return redirect(reverse('ss_viewer:multi-search'))
 
   if request.method == 'POST':
     searchpage_template = 'ss_viewer/multi-searchpage.html'  
     snpid_search_form = SearchBySnpidForm(request.POST, request.FILES)
-    gl_search_form = SearchByGenomicLocationForm()
     status_message = ""    
     if not snpid_search_form.is_valid():
-       return render(request, 
-                     searchpage_template, 
-
-                     {'snpid_search_form': snpid_search_form, 
-                      'active_tab': 'snpid',
-                      'tf_search_form' : SearchByTranscriptionFactorForm(),  
-                      'gl_search_form' : gl_search_form,                
-                      'status_message':'Invalid search. Try agian.'})
+       context = setup_formset_context(snpid_form=snpid_search_form)
+       context.update({'status_message':'Invalid search. Try agian.'})
+       return render(request, searchpage_template, context)
     #if execution reaches this point, the form is valid.
     snpid_list = None
     try:
-      snpid_list = get_snpid_list_from_form(request, snpid_search_form)
+        snpid_list = get_snpid_list_from_form(request, snpid_search_form)
     except forms.ValidationError:
-      status_message = "No properly formatted SNPids in the text."           
-      return render(request, 
-                    searchpage_template,
-                    {'snpid_search_form': SearchBySnpidForm(),
-                     'active_tab': 'snpid',
-                     'gl_search_form'   : SearchByGenomicLocationForm(),
-                     'tf_search_form' : SearchByTranscriptionFactorForm(),
-                     'status_message'   : status_message })
+        context = setup_formset_context()
+        context.update({'status_message' : "No properly formatted SNPids in the text.",
+                        'active_tab'     : 'snpid' })
+        return render(request, searchpage_template, context)
 
     pvalue_rank = get_pvalue_rank_from_form(snpid_search_form)
     request_data = { 'snpid_list' : snpid_list, 'pvalue_rank' : pvalue_rank }
@@ -159,7 +179,6 @@ def handle_search_by_snpid(request):
                                   headers={ 'content-type' : 'application/json' })
 
     context = setup_context_for_snpid_search_results(api_response, snpid_list, pvalue_rank)
-
     return render(request, searchpage_template, context )
 
 
@@ -181,13 +200,9 @@ def handle_search_by_genomic_location(request):
         response_data = None
 
         if not gl_search_form.is_valid():
-             status_message = "Invalid search. Try agian."
-             return render(request, searchpage_template, 
-                              { 'gl_search_form'    : gl_search_form,
-                                'snpid_search_form' : SearchBySnpidForm(),
-                                'status_message'   : status_message,
-                                'active_tab'       : 'gl-region'
-                              })
+             context = setup_formset_context(gl_form=gl_search_form)
+             context.update({'status_message' :  "Invalid search. Try agian."})
+             return(request, searchpage_template, context)
         form_data = gl_search_form.cleaned_data
         search_request_params = get_paging_info_for_request(request, 
                                                              form_data['page_of_results_shown'])
@@ -215,15 +230,12 @@ def handle_search_by_genomic_location(request):
             search_paging_info = get_paging_info_for_display(response_json['hitcount'],
                                              search_request_params['page_of_results_to_display'])
         new_form = SearchByGenomicLocationForm(form_data)
-        return render(request, searchpage_template, 
-                                        { 'api_response' : response_data,
-                                          'tf_search_form' : SearchByTranscriptionFactorForm(),
-                                          'gl_search_form': new_form, 
-                                          'snpid_search_form' : SearchBySnpidForm(),
-                                          'holdover_gl_region': api_search_query,
-                                          'search_paging_info' : search_paging_info,
-                                          'active_tab'     : 'gl-region',
-                                          'status_message' : status_message})                                              
+        context = setup_formset_context(gl_form = new_form)
+        context.update({'api_response' : response_data, 
+                        'holdover_gl_region': api_search_query,
+                        'search_paging_info': search_paging_info })
+        print("context : " + repr(context)) 
+        return render(request, searchpage_template, context)
 
 
 def lookup_motif_by_tf(trans_factor):
@@ -253,13 +265,9 @@ def handle_search_by_trans_factor(request):
     response_data = None
 
     if not tf_search_form.is_valid():
-        status_message = "Invalid search. Try agian."
-        return render(request, searchpage_template, 
-                     { 'tf_search_form'    : tf_search_form,
-                       'snpid_search_form' : SearchBySnpidForm(),
-                       'gl_search_form'    : SearchByGenomicLocationForm(),
-                       'active_tab'        : 'tf'
-                     })
+        context = setup_formset_context(tf_form=tf_search_form)
+        context.update({'status_message': "Invalid search. Try agian."})
+        return render(request, searchpage_template, context)
     form_data = tf_search_form.cleaned_data
     trans_factor = form_data['trans_factor'] 
     motif_value = lookup_motif_by_tf(trans_factor) 
@@ -290,32 +298,32 @@ def handle_search_by_trans_factor(request):
                                            search_request_params['page_of_results_to_display'])
 
         tf_search_form = SearchByTranscriptionFactorForm(form_data)
-    return render(request, searchpage_template, 
-                  {'api_response' : response_data,
-                   'tf_search_form': tf_search_form,  #appropriate to use the same one?
-                   'gl_search_form': SearchByGenomicLocationForm(), 
-                   'snpid_search_form' : SearchBySnpidForm(),
-                   'active_tab':     'tf',
-                   'search_paging_info' : search_paging_info,
-                   'status_message' : status_message}) 
+
+    context = setup_formset_context(tf_form=tf_search_form)
+    context.update({'api_response' : response_data, 
+                    'search_paging_info' : search_paging_info,
+                    'status_message'     : status_message})
+    return render(request, searchpage_template, context)
 
 
 #Def this is the actual multi-search page, this handles the GET.
 def show_multisearch_page(request):
     searchpage_template = 'ss_viewer/multi-searchpage.html'  
-    status_message = "Enter genomic location info."
     gl_search_form = SearchByGenomicLocationForm()
     snpid_search_form = SearchBySnpidForm()
     tf_search_form  = SearchByTranscriptionFactorForm(initial={'page_of_results_shown':0})
     #plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
     # needs a DLL plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
-    context = { 'gl_search_form'    : gl_search_form, 
-                'snpid_search_form' : snpid_search_form,
-                'tf_search_form'    : tf_search_form,
-                'status_message'    : status_message,
-                'active_tab'        : 'none-yet',
-                'plotting_data'     : 'ss_viewer/test_plot.svg' }   
-               
+    context = setup_formset_context()
+    context.update({'status_message' : "Enter a search.", 
+                    'active_tab'     : 'none-yet'})
+    #context = { 'gl_search_form'    : gl_search_form, 
+    #            'snpid_search_form' : snpid_search_form,
+    #            'tf_search_form'    : tf_search_form,
+    #            'status_message'    : status_message,
+    #            'active_tab'        : 'none-yet',
+    #            'plotting_data'     : 'ss_viewer/test_plot.svg' }   
+    #           
     #path to a plot should look like: 'ss_viewer/test_plot.html' 
     return render(request, searchpage_template, context)
 
