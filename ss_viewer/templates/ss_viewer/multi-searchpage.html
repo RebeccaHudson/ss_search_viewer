@@ -5,6 +5,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>atsnp data</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static 'ss_viewer/lavish-bootstrap.css' %}" rel="stylesheet">
   <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
@@ -14,9 +15,9 @@
 <div class="container">
 <div id="content">
 
-<h1> specify genomic location OR snpid OR transcription factor</h1>
+<h2 >Search ATSNP output</h2>
 <div id="status_message"> {{ status_message }} </div>
-
+<div class="tip" data-tip="Lorem ipsum">Odio nostrud</div>
 
 <ul id="tabs" class="nav nav-tabs", data-tabs="tabs">
   <li {%if active_tab == 'gl-region' or active_tab == 'none-yet'  %}
@@ -151,18 +152,25 @@
 </div> <!-- close the 'container' div -->
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- 
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    -->
+
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{% static 'ss_viewer/js/bootstrap.min.js' %}"></script>
-
-
 
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
         $('#tabs').tab();
     });
 </script>   
-
+<script>
+ $(".formcontrol").tooltip({
+      position: "bottom left",
+      offset: [-2, 10],
+      opacity: 0.1
+      });
+</script>
 
 
 </body>

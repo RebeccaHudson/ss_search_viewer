@@ -9,7 +9,9 @@ class SearchBySnpidForm(forms.Form):
     default_dummy_search = ("rs539483321, rs576894892, \
                              rs553761389, rs757299236, rs770590115")
     text_to_explain_snpbox = "Enter snpids to lookup scores data for"
-    styled_widget = forms.Textarea(attrs={'class':'form-control'})
+    snpid_tip = "Enter a list of snpids to search for."
+    styled_widget = forms.Textarea(attrs={'class':'form-control', 
+                                          'title': snpid_tip})
     raw_requested_snpids = forms.CharField(widget=styled_widget,
                                      max_length=100000,
                                      strip=True,
@@ -19,7 +21,9 @@ class SearchBySnpidForm(forms.Form):
                                      )
     file_of_snpids = forms.FileField(required=False) #standard everything
     default_cutoff = 0.05
-    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0001"})
+    pvalue_tip = 'Show results with pvalues less than or equal to this '
+    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0001", 
+                                             'title': pvalue_tip }) 
     pvalue_rank_cutoff = forms.FloatField(widget=styled_widget,
                                           max_value=1, 
                                           min_value=0, 
@@ -81,8 +85,11 @@ class SearchByGenomicLocationForm(forms.Form):
                                             label="Select a chromosome.")
 
     default_cutoff = 0.05
-    
-    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.00001"})
+    pvalue_tip = 'Show results with pvalues less than or equal to this '
+    styled_widget = forms.NumberInput(attrs={'class':'form-control',
+                                             'step':"0.0000001", 
+                                             'title' : pvalue_tip })
+
     pvalue_rank_cutoff = forms.FloatField(widget=styled_widget,
                                            required=False,
                                            max_value=1, 
@@ -145,8 +152,11 @@ class SearchByTranscriptionFactorForm(forms.Form):
                                      choices = use_these_choices, 
                                      label = "Select a transcription factor.")
     default_cutoff = 0.05
-  
-    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0000001"})
+    pvalue_tip = 'Show results with pvalues less than or equal to this '
+    styled_widget = forms.NumberInput(attrs={'class':'form-control',
+                                             'step':"0.00000001",
+                                             'title' : pvalue_tip})
+
     pvalue_rank_cutoff = forms.FloatField(widget=styled_widget,
                                            required=False,
                                            max_value=1, 
