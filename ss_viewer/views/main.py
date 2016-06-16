@@ -8,13 +8,15 @@ import requests
 import json
 import re
 import os
-from .forms import SearchBySnpidForm  #replaces ScoresSearchForm
+from ss_viewer.forms import SearchBySnpidForm  #replaces ScoresSearchForm
 
-from .forms import SearchByGenomicLocationForm
+from ss_viewer.forms import SearchByGenomicLocationForm
 
-from .forms import SearchByTranscriptionFactorForm
+from ss_viewer.forms import SearchByTranscriptionFactorForm
 
 from django.core.files.uploadedfile import SimpleUploadedFile
+from ss_viewer.views.shared import TFTransformer
+from ss_viewer.views.shared import APIUrls 
 #from .plots import MakePlots #tempfile writer can stay hiedden
 
 #found at the URL: ss_viewer
@@ -30,6 +32,8 @@ def one_snp_detail(request, snpid_numeric):
 
 
 def setup_api_url(api_function, snpid=None):
+  return APIUrls.setup_api_url(api_function)
+  
   hostinfo = settings.API_HOST_INFO 
   host_w_port = ':'.join([ hostinfo['host_url'], hostinfo['host_port'] ] )
   url_arglist =  [ hostinfo['api_root'], api_function] 
@@ -39,22 +43,14 @@ def setup_api_url(api_function, snpid=None):
   url = host_w_port + "/" + url_args  + "/"
   return url
 
-def transform_motifs_to_transcription_factors(response_json):
-    lut = None
-    fpath = os.path.dirname(__file__) + "/lookup-tables" +\
-            '/lut_tfs_by_jaspar_motif.pkl'
-    with open(fpath , 'r') as f: 
-        lut = pickle.load(f) 
 
+def transform_motifs_to_transcription_factors(response_json):
+    tft = TFTransformer()
     transformed_response = []
 
     for one_row in response_json:
         motif_value = one_row['motif']
-        trans_factor = lut.get(motif_value)
-        if trans_factor is None:
-             one_row['trans_factor'] = "Not found."
-        else: 
-             one_row['trans_factor'] = trans_factor
+        one_row['trans_factor'] = tft.transform_one(motif_value)
         transformed_response.append(one_row) 
 
     return transformed_response 
