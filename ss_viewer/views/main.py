@@ -15,6 +15,8 @@ from ss_viewer.forms import SearchByGenomicLocationForm
 from ss_viewer.forms import SearchByTranscriptionFactorForm
 
 from django.core.files.uploadedfile import SimpleUploadedFile
+
+from ss_viewer.views.shared import MotifTransformer
 from ss_viewer.views.shared import TFTransformer
 from ss_viewer.views.shared import APIUrls 
 #from .plots import MakePlots #tempfile writer can stay hiedden
@@ -45,12 +47,12 @@ def setup_api_url(api_function, snpid=None):
 
 
 def transform_motifs_to_transcription_factors(response_json):
-    tft = TFTransformer()
+    tft = MotifTransformer()
     transformed_response = []
 
     for one_row in response_json:
         motif_value = one_row['motif']
-        one_row['trans_factor'] = tft.transform_one(motif_value)
+        one_row['trans_factor'] = tft.transform_one_motif_to_trans_factor(motif_value)
         transformed_response.append(one_row) 
 
     return transformed_response 
@@ -238,17 +240,20 @@ def handle_search_by_genomic_location(request):
 
 
 def lookup_motif_by_tf(trans_factor):
-    lut = None
-    #TODO: the following pickle must be processed in such a way that a 
-    # lookup on a TF with multiple motif values returns a list.
-    fpath = os.path.dirname(__file__) + "/lookup-tables" +\
-      '/lut_jaspar_motifs_by_tf.pkl'
-    with open(fpath , 'r') as f: 
-        lut = pickle.load(f) 
-    one_or_more_motif_values = lut[trans_factor]
-    if not type(one_or_more_motif_values) == list:
-      one_or_more_motif_values = [one_or_more_motif_values]
-    return one_or_more_motif_values
+    tft = TFTransformer()
+    #There can be > 1 motif for one transcription factor. 
+    return tft.lookup_motifs_by_tf(trans_factor)
+    #lut = None
+    ##TODO: the following pickle must be processed in such a way that a 
+    ## lookup on a TF with multiple motif values returns a list.
+    #fpath = os.path.dirname(os.path.dirname(__file__)) + "/lookup-tables" +\
+    #  '/lut_jaspar_motifs_by_tf.pkl'
+    #with open(fpath , 'r') as f: 
+    #    lut = pickle.load(f) 
+    #one_or_more_motif_values = lut[trans_factor]
+    #if not type(one_or_more_motif_values) == list:
+    #  one_or_more_motif_values = [one_or_more_motif_values]
+    #return one_or_more_motif_values
 
 
 def handle_search_by_trans_factor(request):
