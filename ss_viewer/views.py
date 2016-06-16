@@ -15,7 +15,7 @@ from .forms import SearchByGenomicLocationForm
 from .forms import SearchByTranscriptionFactorForm
 
 from django.core.files.uploadedfile import SimpleUploadedFile
-from .plots import MakePlots #tempfile writer can stay hiedden
+#from .plots import MakePlots #tempfile writer can stay hiedden
 
 #found at the URL: ss_viewer
 def index(request):
@@ -96,35 +96,29 @@ def get_snpid_list_from_form(request, form):
     return clean_and_validate_snpid_text_input(text_in_file) 
 
 
-def setup_context_for_snpid_search_results(api_response, snpid_list, holdover_p_value):
+def setup_context_for_snpid_search_results(api_response, snpid_list, holdover_p_value, 
+                                           page_of_results_to_display):
     status_message = ""; response_json = None
-
+    response_data = None
     if api_response.status_code == 204:
         status_message = "No matches for requested snpids" 
     else:
         count_of_requested_snpids = len(snpid_list)
         response_json = json.loads(api_response.text)
         response_data = transform_motifs_to_transcription_factors(response_json['data'])
-        status_message = 'Got ' + str(len(response_json)) + ' rows back from API.'
-    
+        status_message = 'Got ' + str(response_json['hitcount']) + ' hits.'
+        status_message += " Showing page " + str(page_of_results_to_display) + " of results."    
     snpid_form = SearchBySnpidForm({'raw_requested_snpids':", ".join(snpid_list),
-                                    'pvalue_rank_cutoff' : holdover_p_value }  )
+                                    'pvalue_rank_cutoff' : holdover_p_value, 
+                                    'page_of_results_shown': page_of_results_to_display }  )
+    search_paging_info = get_paging_info_for_display(response_json['hitcount'], 
+                                                      page_of_results_to_display) 
+
     context = setup_formset_context(snpid_form=snpid_form)
-    context.update({'api_response' :  response_data,
-                    'status_messagse' : status_message,
-                    'holdover_snpids' : ', '.join(snpid_list)  # can this param leave?
-                   }) 
+    context.update({'api_response' :  response_data, 'status_message' : status_message,
+                    'holdover_snpids' : ', '.join(snpid_list), 
+                    'search_paging_info' : search_paging_info }) 
     return context
-  #context = { 'api_response'     :  response_json,
-  #            'status_message'    :  status_message,
-  #            'holdover_snpids'   :  ", ".join(snpid_list),
-  #            'tf_search_form' : SearchByTranscriptionFactorForm(),  
-  #            'snpid_search_form' :  SearchBySnpidForm({'raw_requested_snpids':", ".join(snpid_list),
-  #                                                      'pvalue_rank_cutoff' : holdover_p_value }  ),
-  #            'gl_search_form'    :  SearchByGenomicLocationForm(),
-  #            'active_tab' : 'snpid'
-  #          }
-  #return context
 
 #DRY up the boilerplate.
 def setup_formset_context(tf_form=None, gl_form=None, snpid_form=None):
@@ -165,21 +159,30 @@ def handle_search_by_snpid(request):
     snpid_list = None
     try:
         snpid_list = get_snpid_list_from_form(request, snpid_search_form)
+
     except forms.ValidationError:
         context = setup_formset_context()
         context.update({'status_message' : "No properly formatted SNPids in the text.",
                         'active_tab'     : 'snpid' })
         return render(request, searchpage_template, context)
 
+    form_data = snpid_search_form.cleaned_data
+    search_request_params = get_paging_info_for_request(request, 
+                                                form_data['page_of_results_shown'])
+
     pvalue_rank = get_pvalue_rank_from_form(snpid_search_form)
-    request_data = { 'snpid_list' : snpid_list, 'pvalue_rank' : pvalue_rank }
+    request_data = { 'snpid_list' : snpid_list, 
+                     'pvalue_rank' : pvalue_rank,
+                     'from_result' : search_request_params['search_result_offset'] }
  
     api_response = requests.post( setup_api_url('snpid-search'), 
                                   json=request_data, 
                                   headers={ 'content-type' : 'application/json' })
 
-    context = setup_context_for_snpid_search_results(api_response, snpid_list, pvalue_rank)
+    context = setup_context_for_snpid_search_results(api_response, snpid_list, 
+                       pvalue_rank ,search_request_params['page_of_results_to_display'])  
     return render(request, searchpage_template, context )
+
 
 
 
@@ -351,7 +354,7 @@ def get_paging_info_for_display(hitcount, page_of_results_to_display):
     search_paging_info = {'show_next_btn': False, 'show_prev_btn': False}    
     hits_paged = (page_of_results_to_display ) * \
                  settings.API_HOST_INFO['result_page_size']
-    if hitcount >= hits_paged:
+    if hitcount > hits_paged:
         search_paging_info['show_next_btn'] = True 
     if page_of_results_to_display > 1:
          search_paging_info['show_prev_btn'] = True
