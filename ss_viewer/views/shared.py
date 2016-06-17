@@ -100,8 +100,10 @@ class StandardFormset:
             return render(request, searchpage_template, context)
 
      @staticmethod
-     def handle_invalid_form(request, context):
-        context.update({'status_message' :  "invalid search. try agian."})
+     def handle_invalid_form(request, context, status_message=None):
+        if status_message == None:
+            status_message =  "Invalid search. Try agian."
+        context.update({'status_message' :  status_message })
         return(request,
               'ss_viewer/multi-searchpage.html',
                context) 
