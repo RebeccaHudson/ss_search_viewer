@@ -99,6 +99,14 @@ class StandardFormset:
                             'active_tab'     : 'none-yet'})
             return render(request, searchpage_template, context)
 
+     @staticmethod
+     def handle_invalid_form(request, context):
+        context.update({'status_message' :  "invalid search. try agian."})
+        return(request,
+              'ss_viewer/multi-searchpage.html',
+               context) 
+
+
 
 class Paging:
     @staticmethod
