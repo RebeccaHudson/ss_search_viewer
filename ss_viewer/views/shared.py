@@ -1,8 +1,13 @@
 from django.conf import settings
+from django.shortcuts import render
+
 import os
 import json
 import pickle
 
+from ss_viewer.forms import SearchBySnpidForm  #replaces ScoresSearchForm
+from ss_viewer.forms import SearchByGenomicLocationForm
+from ss_viewer.forms import SearchByTranscriptionFactorForm
 
 class MotifTransformer:
     def __init__(self):
@@ -20,6 +25,13 @@ class MotifTransformer:
              trans_factor  = "Not found."
         return trans_factor
 
+    def transform_motifs_to_transcription_factors(self, response_json):
+        transformed_response = []
+        for one_row in response_json:
+            motif_value = one_row['motif']
+            one_row['trans_factor'] = self.transform_one_motif_to_trans_factor(motif_value)
+            transformed_response.append(one_row)
+        return transformed_response
 
 #maybe put this with searches by transcription factor.
 class TFTransformer:
@@ -41,6 +53,77 @@ class TFTransformer:
 
 
 
+
+
+class PValueFromForm:
+    @staticmethod
+    def get_pvalue_rank_from_form(form):
+      if form.cleaned_data.has_key('pvalue_rank_cutoff'):
+        return form.cleaned_data.get('pvalue_rank_cutoff')
+      else:
+        return 0.05
+
+#includes all of the forms that should be loaded every time.
+class StandardFormset:
+     @staticmethod
+     def setup_formset_context(tf_form=None, gl_form=None, snpid_form=None):
+          active_tab = None
+          hidden_page_number = {'page_of_results_shown':0}
+          if tf_form is None:
+              tf_form = SearchByTranscriptionFactorForm(initial=hidden_page_number)
+          else:
+              active_tab = 'tf'
+          if gl_form is None:
+              gl_form = SearchByGenomicLocationForm(initial=hidden_page_number)
+          else:
+              active_tab = 'gl-region'
+          if snpid_form is None:
+              snpid_form = SearchBySnpidForm(initial=hidden_page_number)
+          else:
+              active_tab = 'snpid'
+          context =  { 'tf_search_form' : tf_form,
+                      'gl_search_form': gl_form,
+                      'snpid_search_form' : snpid_form }
+          if active_tab is not None:
+              context.update({'active_tab': active_tab })
+          return context 
+
+     @staticmethod
+     def show_multisearch_page(request):
+            searchpage_template = 'ss_viewer/multi-searchpage.html'
+            #plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
+            # needs a DLL plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
+            context = StandardFormset.setup_formset_context()
+            context.update({'status_message' : "Enter a search.",
+                            'active_tab'     : 'none-yet'})
+            return render(request, searchpage_template, context)
+
+
+class Paging:
+    @staticmethod
+    def get_paging_info_for_request(request, page_of_search_results):
+        page_of_results_to_display = 1
+
+        if request.POST['action'] == 'Next':
+             page_of_results_to_display = page_of_search_results + 1
+        elif request.POST['action'] == 'Prev':
+             page_of_results_to_display = page_of_search_results - 1
+
+        search_result_offset = (page_of_results_to_display - 1) * \
+                              settings.API_HOST_INFO['result_page_size']
+        return { 'search_result_offset' : search_result_offset,
+                 'page_of_results_to_display' : page_of_results_to_display }
+
+    @staticmethod
+    def get_paging_info_for_display(hitcount, page_of_results_to_display):
+        search_paging_info = {'show_next_btn': False, 'show_prev_btn': False}
+        hits_paged = (page_of_results_to_display ) * \
+                     settings.API_HOST_INFO['result_page_size']
+        if hitcount > hits_paged:
+            search_paging_info['show_next_btn'] = True
+        if page_of_results_to_display > 1:
+             search_paging_info['show_prev_btn'] = True
+        return search_paging_info
 
 
 
