@@ -72,11 +72,14 @@ def handle_search_by_snpid(request):
     snpid_search_form = SearchBySnpidForm(request.POST, request.FILES)
 
     if not snpid_search_form.is_valid():
-         context = StandardFormset.setup_formset_context(snpid_form=snpid_search_form)
+         #problem 
+         print "snpid search does not think it's valid."
+         context = StandardFormset.setup_formset_context(snpid_form=SearchBySnpidForm())
+         print "completed setting up the formset context."
          return StandardFormset.handle_invalid_form(request, context)
 
     snpid_list = None
-
+    print "so the form thiks that it's valid."
     try:
          snpid_list = SnpidSearchUtils.get_snpid_list_from_form(request, snpid_search_form)
     except ValidationError:

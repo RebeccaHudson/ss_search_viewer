@@ -104,10 +104,7 @@ class StandardFormset:
         if status_message == None:
             status_message =  "Invalid search. Try agian."
         context.update({'status_message' :  status_message })
-        return(request,
-              'ss_viewer/multi-searchpage.html',
-               context) 
-
+        return render(request, 'ss_viewer/multi-searchpage.html', context) 
 
 
 class Paging:
