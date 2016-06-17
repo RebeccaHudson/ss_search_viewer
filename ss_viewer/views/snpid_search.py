@@ -4,6 +4,8 @@ import json
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
+from django.shortcuts import redirect
+
 from ss_viewer.views.shared import MotifTransformer
 from ss_viewer.views.shared import TFTransformer
 from ss_viewer.views.shared import APIUrls 
@@ -32,11 +34,15 @@ class SnpidSearchUtils:
 
     @staticmethod
     def get_snpid_list_from_form(request, form):
+      print "get_snpid_list_from_form is running"
       form_snpids = form.cleaned_data.get('raw_requested_snpids')
       #remove the data in there.
+      print "just grabbed cleaned data from the form " + str(form_snpids)
       if form_snpids:
+        print "get snpid list is about to return SNPids from form"
         return SnpidSearchUtils.clean_and_validate_snpid_text_input(form_snpids)
       else:
+        print "get snpid list is about to return SNPids from file"
         file_pointer = request.FILES.get('file_of_snpids')
         text_in_file = file_pointer.read()   # TODO: read in chunks rather than all at once. 
         return SnpidSearchUtils.clean_and_validate_snpid_text_input(text_in_file)
