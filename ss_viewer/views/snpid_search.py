@@ -16,6 +16,7 @@ from ss_viewer.views.shared import APIResponseHandler
 from django.core.exceptions import ValidationError
 
 from ss_viewer.forms import SearchBySnpidForm
+from django import forms
 
 class SnpidSearchUtils:
     @staticmethod
@@ -35,15 +36,17 @@ class SnpidSearchUtils:
     @staticmethod
     def get_snpid_list_from_form(request, form):
       print "get_snpid_list_from_form is running"
+
+      print "about to get the file of snpids from the form"
+      file_pointer = request.FILES.get('file_of_snpids')
+      print "about to grab the cleaned data from the form"
       form_snpids = form.cleaned_data.get('raw_requested_snpids')
-      #remove the data in there.
-      print "just grabbed cleaned data from the form " + str(form_snpids)
-      if form_snpids:
-        print "get snpid list is about to return SNPids from form"
-        return SnpidSearchUtils.clean_and_validate_snpid_text_input(form_snpids)
+      if file_pointer is None:
+          print "just grabbed cleaned data from the form " + str(form_snpids)
+          print "get snpid list is about to return SNPids from form"
+          return SnpidSearchUtils.clean_and_validate_snpid_text_input(form_snpids)
       else:
-        print "get snpid list is about to return SNPids from file"
-        file_pointer = request.FILES.get('file_of_snpids')
+        print "get snpid list is about to return SNPids from filem"
         text_in_file = file_pointer.read()   # TODO: read in chunks rather than all at once. 
         return SnpidSearchUtils.clean_and_validate_snpid_text_input(text_in_file)
 
@@ -73,23 +76,23 @@ def handle_search_by_snpid(request):
          return StandardFormset.handle_invalid_form(request, context)
 
     snpid_list = None
-    form_data = snpid_search_form.cleaned_data
-
 
     try:
          snpid_list = SnpidSearchUtils.get_snpid_list_from_form(request, snpid_search_form)
     except ValidationError:
-         #TODO: form_data should be called "cleaned data", then blank out the snpids and pass the 
-         #rest of the form back
+         #maybe don't include whatever they had in there before.
+         #form_data['raw_requested_snpids'] = ""
+         #jfresh_form = SnpidSearchForm(form_data)
          context = StandardFormset.setup_formset_context() #pass in old form here?
-         #consider adding an optional message to the handle_invalid_form method
-         context.update({'status_message' : "No properly formatted SNPids in the text.",
-                         'active_tab'     : 'snpid' })
-         return render(request, searchpage_template, context)
+         context.update({'active_tab' : 'snpid' })
+         status_msg = "No properly formatted SNPids in the text."
+         return StandardFormset.handle_invalid_form(request, context, status_message=status_msg)
 
+    form_data = snpid_search_form.cleaned_data
     #turn the page
     search_request_params = Paging.get_paging_info_for_request(request,
                                                 form_data['page_of_results_shown'])
+
     pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(snpid_search_form)
     api_search_query = { 'snpid_list' : snpid_list,
                          'pvalue_rank' : pvalue_rank,
@@ -98,9 +101,16 @@ def handle_search_by_snpid(request):
     shared_context = APIResponseHandler.handle_search(api_search_query, 
                                                       'snpid-search', 
                                                       search_request_params)
+
     #we should be able to just pass in the form data
-    context = setup_context_for_snpid_search_results(snpid_list,
-                       pvalue_rank ,search_request_params['page_of_results_to_display'], shared_context)
+    form_data['page_of_results_shown'] = search_request_params['page_of_results_to_display']
+    form_data['raw_requested_snpids'] = ", ".join(snpid_list)
+    snpid_form = SearchBySnpidForm(form_data)
+    #snpid_form = SearchBySnpidForm({'raw_requested_snpids':", ".join(snpid_list),
+    #                                'pvalue_rank_cutoff' : holdover_p_value, 
+    #                                'page_of_results_shown': page_of_results_to_display }  )
+    context = StandardFormset.setup_formset_context(snpid_form=snpid_form)
+    context.update(shared_context)
     return render(request, searchpage_template, context )
 
 
