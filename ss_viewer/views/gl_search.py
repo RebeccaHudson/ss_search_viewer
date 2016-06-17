@@ -15,13 +15,11 @@ def handle_search_by_genomic_location(request):
     if request.method != 'POST':
         return redirect(reverse('ss_viewer:multi-search'))
 
-    searchpage_template = 'ss_viewer/multi-searchpage.html'
     gl_search_form = SearchByGenomicLocationForm(request.POST)
 
     if not gl_search_form.is_valid():
-         return StandardFormset.handle_invalid_form(
-                                      request,
-                                      StandardFormset.setup_formset_context(gl_form=gl_search_form))
+         context = StandardFormset.setup_formset_context(gl_form=gl_search_form)
+         return StandardFormset.handle_invalid_form(request, context)
 
     form_data = gl_search_form.cleaned_data
     search_request_params = Paging.get_paging_info_for_request(request,
@@ -40,7 +38,7 @@ def handle_search_by_genomic_location(request):
     new_gl_form = SearchByGenomicLocationForm(form_data)
     context = StandardFormset.setup_formset_context(gl_form = new_gl_form)
     context.update(shared_context)
-
-
-    return render(request, searchpage_template, context)
+    return render(request, 
+                  'ss_viewer/multi-searchpage.html',
+                   context)
 
