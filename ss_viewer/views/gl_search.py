@@ -9,7 +9,7 @@ from ss_viewer.views.shared import MotifTransformer
 from ss_viewer.views.shared import APIUrls 
 from ss_viewer.views.shared import StandardFormset
 from ss_viewer.views.shared import APIResponseHandler
-
+from ss_viewer.views.shared import PValueFromForm
 
 def handle_search_by_genomic_location(request):
     if request.method != 'POST':
@@ -22,12 +22,13 @@ def handle_search_by_genomic_location(request):
          return StandardFormset.handle_invalid_form(request, context)
 
     form_data = gl_search_form.cleaned_data
+    pvalue = PValueFromForm.get_pvalue_rank_from_form(gl_search_form)
     search_request_params = Paging.get_paging_info_for_request(request,
                                                          form_data['page_of_results_shown'])
     api_search_query = { 'chromosome' : form_data['selected_chromosome'],
                          'start_pos'  : form_data['gl_start_pos'],
                          'end_pos'    : form_data['gl_end_pos'],
-                         'pvalue_rank': form_data['pvalue_rank_cutoff'],
+                         'pvalue_rank': pvalue, 
                          'from_result': search_request_params['search_result_offset'] }
     shared_context = APIResponseHandler.handle_search(api_search_query, 
                                                       'search-by-gl',
