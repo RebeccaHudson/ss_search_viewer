@@ -3,9 +3,22 @@ from django.conf import settings
 import os
 import pickle
 
-#This is just one way to specify what data you are looking for.
-#TODO: this should replacde the ScoresSearch form; it needs to be renamed...
-class SearchBySnpidForm(forms.Form):
+
+#Each form type has a p-value cutoff and a page number of results shown.
+class GenericSearchForm(forms.Form):
+    default_cutoff = 0.05
+    pvalue_tip = 'Show results with pvalues less than or equal to this '
+    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0000001", 
+                                             'title': pvalue_tip }) 
+    pvalue_rank_cutoff = forms.FloatField(widget=styled_widget,
+                                          max_value=1, 
+                                          min_value=0, 
+                                          initial=default_cutoff,
+                                          )
+    page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
+    
+
+class SearchBySnpidForm(GenericSearchForm):
     default_dummy_search = ("rs539483321, rs576894892, \
                              rs553761389, rs757299236, rs770590115")
     text_to_explain_snpbox = "Enter snpids to lookup scores data for"
@@ -24,12 +37,7 @@ class SearchBySnpidForm(forms.Form):
     pvalue_tip = 'Show results with pvalues less than or equal to this '
     styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0001", 
                                              'title': pvalue_tip }) 
-    pvalue_rank_cutoff = forms.FloatField(widget=styled_widget,
-                                          max_value=1, 
-                                          min_value=0, 
-                                          initial=default_cutoff,
-                                          )
-    page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
+    field_order =  ('raw_requested_snpids', 'file_of_snpids', 'pvalue_rank_cutoff', 'page_of_results_shown')
  
     def clean(self):
         cleaned_data = super(SearchBySnpidForm, self).clean()
@@ -38,7 +46,6 @@ class SearchBySnpidForm(forms.Form):
         snpid_textbox_contents = cleaned_data.get('raw_requested_snpids')
    
         #form.errors contains any errors that have come up by this point.
-   
         if (snpid_file and snpid_textbox_contents):
             raise forms.ValidationError(('Specify snpids in the textbox,'
                                         ' OR provide a file, not both.'),
@@ -54,7 +61,7 @@ class SearchBySnpidForm(forms.Form):
 
 
 #A separate form for searching through the data by genomic location
-class SearchByGenomicLocationForm(forms.Form):
+class SearchByGenomicLocationForm(GenericSearchForm):
     default_data = None   #don't need this.
 
     gl_pos_label_text = { 'start' : 'Start position on chromosome',
@@ -84,19 +91,7 @@ class SearchByGenomicLocationForm(forms.Form):
                                             choices=choices_for_chromosome,
                                             label="Select a chromosome.")
 
-    default_cutoff = 0.05
-    pvalue_tip = 'Show results with pvalues less than or equal to this '
-    styled_widget = forms.NumberInput(attrs={'class':'form-control',
-                                             'step':"0.0000001", 
-                                             'title' : pvalue_tip })
-
-    pvalue_rank_cutoff = forms.FloatField(widget=styled_widget,
-                                           required=False,
-                                           max_value=1, 
-                                           min_value=0, 
-                                           initial=default_cutoff)
-  
-    page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
+    field_order =  ('gl_start_pos', 'gl_end_pos', 'selected_chromosome', 'pvalue_rank_cutoff', 'page_of_results_shown')
   
 
     #ensure ranges are within hard limits.  
@@ -126,9 +121,8 @@ class SearchByGenomicLocationForm(forms.Form):
                                        code='region-size-too-large' )
 
  
-class SearchByTranscriptionFactorForm(forms.Form):
+class SearchByTranscriptionFactorForm(GenericSearchForm):
  
-    # sorted(list_of_medals, key=lambda x:(-x[1],x[0]))
     lut = None
     fpath = os.path.dirname(__file__) + '/lookup-tables' +\
              '/lut_tfs_by_jaspar_motif.pkl'
@@ -151,16 +145,5 @@ class SearchByTranscriptionFactorForm(forms.Form):
     trans_factor = forms.ChoiceField(widget = styled_widget,
                                      choices = use_these_choices, 
                                      label = "Select a transcription factor.")
-    default_cutoff = 0.05
-    pvalue_tip = 'Show results with pvalues less than or equal to this '
-    styled_widget = forms.NumberInput(attrs={'class':'form-control',
-                                             'step':"0.00000001",
-                                             'title' : pvalue_tip})
 
-    pvalue_rank_cutoff = forms.FloatField(widget=styled_widget,
-                                           required=False,
-                                           max_value=1, 
-                                           min_value=0, 
-                                           initial=default_cutoff)
-    page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
-    #No clean method required because you can't mess this up? Or not so?
+    field_order =  ('trans_factor', 'pvalue_cutoff', 'page_of_results_shown')

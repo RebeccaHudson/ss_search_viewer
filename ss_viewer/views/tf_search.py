@@ -3,6 +3,9 @@ import json
 from ss_viewer.forms import SearchByTranscriptionFactorForm
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
+from django.shortcuts import redirect
+
+from ss_viewer.views.shared import PValueFromForm
 from ss_viewer.views.shared import Paging
 from ss_viewer.views.shared import MotifTransformer, TFTransformer
 from ss_viewer.views.shared import APIUrls 
@@ -27,9 +30,9 @@ def handle_search_by_trans_factor(request):
     trans_factor = form_data['trans_factor']
     tft = TFTransformer()
     motif_value = tft.lookup_motifs_by_tf(trans_factor)
-
+    pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(tf_search_form)
     api_search_query = {'motif' : motif_value,
-                        'pvalue_rank': form_data['pvalue_rank_cutoff'],
+                        'pvalue_rank':   pvalue_rank,
                         'from_result' : search_request_params['search_result_offset']
                        }
     shared_context = APIResponseHandler.handle_search(api_search_query, 

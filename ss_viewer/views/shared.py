@@ -148,7 +148,7 @@ class APIResponseHandler:
         api_response = requests.post( APIUrls.setup_api_url(api_action),
                  json=api_search_query, headers={'content-type':'application/json'})
 
-        response_json = None
+        response_data = None
         status_message = None
         search_paging_info = None
         if api_response.status_code == 204:
