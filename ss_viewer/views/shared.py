@@ -4,6 +4,7 @@ from django.shortcuts import render
 import os
 import json
 import pickle
+import requests
 
 from ss_viewer.forms import SearchBySnpidForm  #replaces ScoresSearchForm
 from ss_viewer.forms import SearchByGenomicLocationForm
@@ -126,6 +127,39 @@ class Paging:
         return search_paging_info
 
 
+
+class APIResponseHandler:
+    @staticmethod  
+    def setup_hits_message(hitcount, page_of_results_to_display):
+        return 'Got ' + str(hitcount) + ' rows back from API.' +\
+               ' Showing page: ' + str(page_of_results_to_display)
+   
+    @staticmethod
+    #api_action should be 'search-by-tf' or 'search-by-gl'
+    #This code gets repeated between every search.
+    def handle_search(api_search_query, api_action, search_request_params):
+        api_response = requests.post( APIUrls.setup_api_url(api_action),
+                 json=api_search_query, headers={'content-type':'application/json'})
+
+        response_json = None
+        status_message = None
+        search_paging_info = None
+        if api_response.status_code == 204:
+            status_message = 'No matching rows.'
+        else:
+            response_json = json.loads(api_response.text)
+            mt = MotifTransformer()
+            response_data = mt.transform_motifs_to_transcription_factors(response_json['data'])
+
+            status_message = APIResponseHandler.setup_hits_message(response_json['hitcount'], 
+                                       search_request_params['page_of_results_to_display'])
+
+            search_paging_info = Paging.get_paging_info_for_display(response_json['hitcount'],
+                                        search_request_params['page_of_results_to_display'])
+        return  {'status_message' : status_message, 
+                 'search_paging_info' : search_paging_info,
+                 'api_response'       : response_data }
+     
 
 
 class APIUrls:

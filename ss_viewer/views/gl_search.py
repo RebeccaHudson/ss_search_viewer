@@ -7,7 +7,7 @@ from ss_viewer.views.shared import Paging
 from ss_viewer.views.shared import MotifTransformer
 from ss_viewer.views.shared import APIUrls 
 from ss_viewer.views.shared import StandardFormset 
-
+from ss_viewer.views.shared import APIResponseHandler
 
 
 def handle_search_by_genomic_location(request):
@@ -34,30 +34,15 @@ def handle_search_by_genomic_location(request):
                              'end_pos'    : form_data['gl_end_pos'],
                              'pvalue_rank': form_data['pvalue_rank_cutoff'],
                              'from_result': search_request_params['search_result_offset'] }
-        api_response = requests.post( APIUrls.setup_api_url('search-by-gl'),
-               json=api_search_query, headers={ 'content-type' : 'application/json' })
+        shared_context = APIResponseHandler.handle_search(api_search_query, 
+                                                          'search-by-gl',
+                                                          search_request_params)
+        #this 'turns the page'
+        form_data['page_of_results_shown'] = search_request_params['page_of_results_to_display']
 
-        # DRY up the following part here, if it appears to be possible.
-        response_json = None
-        if api_response.status_code == 204:
-            status_message = "No matching rows"
-        elif api_response.status_code == 400:
-            status_message  = "API reported an error: " + api_response.text
-        else:
-            response_json = json.loads(api_response.text)
-            #print "whatever this is: " + str(response_json['data'])
-            tft = MotifTransformer()
-            response_data = tft.transform_motifs_to_transcription_factors(response_json['data'])
-            status_message = 'Got ' + str(response_json['hitcount']) + ' rows back from API.'
-            status_message+= ' page shown '+str(search_request_params['page_of_results_to_display'])
-            form_data['page_of_results_shown'] = search_request_params['page_of_results_to_display']
-            search_paging_info = Paging.get_paging_info_for_display(response_json['hitcount'],
-                                             search_request_params['page_of_results_to_display'])
-        new_form = SearchByGenomicLocationForm(form_data)
-        context = StandardFormset.setup_formset_context(gl_form = new_form)
-        context.update({'api_response' : response_data,
-                        'holdover_gl_region': api_search_query,
-                        'search_paging_info': search_paging_info })
+        new_gl_form = SearchByGenomicLocationForm(form_data)
+        context = StandardFormset.setup_formset_context(gl_form = new_gl_form)
+        context.update(shared_context)
         return render(request, searchpage_template, context)
 
 
