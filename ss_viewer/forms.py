@@ -168,7 +168,9 @@ class SearchBySnpidWindowForm(GenericSearchForm):
 
 class SearchByGeneNameForm(GenericSearchForm):
     styled_widget = forms.TextInput(attrs={"class":"form-control"}) 
-    gene_name = forms.CharField(widget = styled_widget)
+    gene_name = forms.CharField(widget = styled_widget,
+                                label = "Gene name",
+                                required = True)
 
     styled_widget = forms.NumberInput(attrs={"class":'form-control','step':1})
     #TODO: figure out what the max_value on this should actually be.

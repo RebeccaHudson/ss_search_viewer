@@ -20,13 +20,18 @@
 <div class="tip" data-tip="Lorem ipsum">Odio nostrud</div>
 
 <ul id="tabs" class="nav nav-tabs", data-tabs="tabs">
+
   <li {%if active_tab == 'gl-region' or active_tab == 'none-yet'  %}
       class="active"
       {% endif %}><a href="#gl_region_search_form" data-toggle="tab" class='btn-default'>Genomic Location</a></li>
+
   <li  {%if active_tab == 'snpid'%}class="active"{%endif%}><a href="#snpid_search_form" data-toggle="tab" class='btn-default' >SNPid</a></li>
+
   <li {%if active_tab == 'tf'%}class="active"{%endif%}><a href="#tf_search_form" data-toggle="tab" class='btn-default'>Transcription Factor</a></li>
 
   <li {%if active_tab == 'snpid-window'%}class="active"{%endif%}><a href="#snpid_window_form" data-toggle="tab" class='btn-default'>Snpid Window</a></li>
+
+  <li {%if active_tab == 'gene-name'%}class="active"{%endif%}><a href="#gene_name_form" data-toggle="tab" class='btn-default'>Gene Name</a></li>
 
 </ul>
 
@@ -128,6 +133,29 @@
   </form>
 </div>
 
+
+<div class="tab-pane panel-body
+   {%if active_tab == 'gene-name-window'%} active{%endif%}"  id="gene_name_form" >
+  <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:gene-name-search' %}" method="post">
+  {% csrf_token %}
+    <div class="form-group">
+      <table>
+        {{ gene_name_form.as_table }}
+      </table>
+      <input type="submit" name="action" value="Search by Gene Name"  
+                                                      class="btn btn-primary" />
+      {% if search_paging_info != None and active_tab == 'gene-name'  %}
+        {% if search_paging_info.show_next_btn == True %}
+            <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+        {% endif %}
+        
+        {% if search_paging_info.show_prev_btn == True %}
+            <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+        {% endif %}
+      {% endif %}
+    </div>
+  </form>
+</div>
 
 
  

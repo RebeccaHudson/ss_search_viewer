@@ -7,6 +7,7 @@ from .views import snpid_search
 from .views import shared
 from .views import tf_search
 from .views import snpid_window_search
+from .views import gene_name_search
 
 app_name = 'ss_viewer'
 
@@ -31,5 +32,9 @@ urlpatterns = [
 
   url(r'snpid-window-search/$',
        views.snpid_window_search.handle_snpid_window_search,
-       name='snpid-window-search')
+       name='snpid-window-search'),
+ 
+  url(r'gene-name-search/$', 
+       views.gene_name_search.handle_gene_name_search,
+       name='gene-name-search')
 ]

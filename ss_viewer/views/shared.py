@@ -99,7 +99,6 @@ class StandardFormset:
           else: 
               active_tab = 'gene-name'
 
-
           context =  { 'tf_search_form' : tf_form,
                       'gl_search_form': gl_form,
                       'snpid_search_form' : snpid_form, 
