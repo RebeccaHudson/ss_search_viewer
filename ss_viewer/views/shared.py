@@ -9,6 +9,8 @@ import requests
 from ss_viewer.forms import SearchBySnpidForm  #replaces ScoresSearchForm
 from ss_viewer.forms import SearchByGenomicLocationForm
 from ss_viewer.forms import SearchByTranscriptionFactorForm
+from ss_viewer.forms import SearchBySnpidWindowForm
+from ss_viewer.forms import SearchByGeneNameForm
 
 class MotifTransformer:
     def __init__(self):
@@ -67,7 +69,11 @@ class PValueFromForm:
 #includes all of the forms that should be loaded every time.
 class StandardFormset:
      @staticmethod
-     def setup_formset_context(tf_form=None, gl_form=None, snpid_form=None):
+     def setup_formset_context(tf_form=None, 
+                               gl_form=None,
+                               snpid_form=None,
+                               snpid_window_form=None,
+                               gene_name_form=None):
           active_tab = None
           hidden_page_number = {'page_of_results_shown':0}
           if tf_form is None:
@@ -82,9 +88,23 @@ class StandardFormset:
               snpid_form = SearchBySnpidForm(initial=hidden_page_number)
           else:
               active_tab = 'snpid'
+
+          if snpid_window_form is None:
+              snpid_window_form = SearchBySnpidWindowForm(initial=hidden_page_number)
+          else:
+              active_tab = 'snpid-window'
+
+          if gene_name_form is None:
+              gene_name_form = SearchByGeneNameForm(initial=hidden_page_number)
+          else: 
+              active_tab = 'gene-name'
+
+
           context =  { 'tf_search_form' : tf_form,
                       'gl_search_form': gl_form,
-                      'snpid_search_form' : snpid_form }
+                      'snpid_search_form' : snpid_form, 
+                      'snpid_window_form' : snpid_window_form,
+                      'gene_name_form'    : gene_name_form }
           if active_tab is not None:
               context.update({'active_tab': active_tab })
           return context 

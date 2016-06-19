@@ -147,3 +147,37 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
                                      label = "Select a transcription factor.")
 
     field_order =  ('trans_factor', 'pvalue_cutoff', 'page_of_results_shown')
+
+
+
+class SearchBySnpidWindowForm(GenericSearchForm):
+    styled_widget = forms.TextInput(attrs={"class":"form-control"}) 
+    snpid = forms.CharField(widget = styled_widget)
+
+    styled_widget = forms.NumberInput(attrs={"class":'form-control','step':1})
+    #TODO: figure out what the max_value on this should actually be.
+    window_size = forms.IntegerField(widget = styled_widget,
+                                     label = "Window size",
+                                     required = False,
+                                     initial = 0, 
+                                     min_value = 0)
+
+    field_order =  ('snpid', 'window_size', 'pvalue_cutoff', 'page_of_results_shown')
+
+
+
+class SearchByGeneNameForm(GenericSearchForm):
+    styled_widget = forms.TextInput(attrs={"class":"form-control"}) 
+    gene_name = forms.CharField(widget = styled_widget)
+
+    styled_widget = forms.NumberInput(attrs={"class":'form-control','step':1})
+    #TODO: figure out what the max_value on this should actually be.
+    window_size = forms.IntegerField(widget = styled_widget,
+                                     label = "Window size",
+                                     required = False,
+                                     initial = 0, 
+                                     min_value = 0)
+    field_order =  ('gene_name', 'window_size', 'pvalue_cutoff', 'page_of_results_shown')
+
+
+

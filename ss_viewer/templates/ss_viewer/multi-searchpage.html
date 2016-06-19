@@ -25,6 +25,9 @@
       {% endif %}><a href="#gl_region_search_form" data-toggle="tab" class='btn-default'>Genomic Location</a></li>
   <li  {%if active_tab == 'snpid'%}class="active"{%endif%}><a href="#snpid_search_form" data-toggle="tab" class='btn-default' >SNPid</a></li>
   <li {%if active_tab == 'tf'%}class="active"{%endif%}><a href="#tf_search_form" data-toggle="tab" class='btn-default'>Transcription Factor</a></li>
+
+  <li {%if active_tab == 'snpid-window'%}class="active"{%endif%}><a href="#snpid_window_form" data-toggle="tab" class='btn-default'>Snpid Window</a></li>
+
 </ul>
 
 <div class="side">
@@ -100,6 +103,32 @@
     </div>
   </form>
 </div>
+
+
+<div class="tab-pane panel-body
+   {%if active_tab == 'snpid-window'%} active{%endif%}"  id="snpid_window_form" >
+  <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-window-search' %}" method="post">
+  {% csrf_token %}
+    <div class="form-group">
+      <table>
+        {{ snpid_window_form.as_table }}
+      </table>
+      <input type="submit" name="action" value="Search by Window around SNPid"  
+                                                      class="btn btn-primary" />
+      {% if search_paging_info != None and active_tab == 'snpid-window'  %}
+        {% if search_paging_info.show_next_btn == True %}
+            <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+        {% endif %}
+        
+        {% if search_paging_info.show_prev_btn == True %}
+            <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+        {% endif %}
+      {% endif %}
+    </div>
+  </form>
+</div>
+
+
 
  
 </div> <!-- close the 'side' div -->
