@@ -168,22 +168,36 @@
 
 
 <!-- consider making this part modular; DRYing it up some how... -->
-<div id="scores_to_view">
   {% if api_response  %}
-  <table class="table-striped"> 
+  <table class="table table-inverse"> 
+    <thead>
     <tr>
-        <td><small>chromosome</small></td><td>pos</td>
-        <td>snpid</td><td>transcription factor</td><td>motif</td>
+        <td>chromosome</td>
+        <td>pos</td>
+        <td>snpid</td>
+        <td>transcription factor</td>
+        <td>motif</td>
         <td>motif length</td>
         <td>pval rank</td>
-        <td>snp start</td><td>snp end</td><td>ref start</td><td>ref end</td>
-        <td>log lik ref</td> <td> log lik ratio </td>
-        <td>log enhance odds</td> <td>log reduce odds</td>
-        <td>log lik snp</td>  
-        <td> snp strand </td>  <td> ref strand </td>
-        <td>pval ref</td><td>pval snp</td><td>pval cond ref</td>
-        <td>pval cond snp</td><td>pval diff</td>
+        <td>snp start</td>
+        <td>snp end</td>
+        <td>ref start</td>
+        <td>ref end</td>
+        <td>log lik ref</td>
+        <td> log lik ratio </td>
+        <td>log enhance odds</td>
+        <td>log reduce odds</td>
+        <td> log lik snp</td>  
+        <td> snp strand </td>
+        <td> ref strand </td>
+        <td> pval ref</td>
+        <td> pval snp</td>
+        <td>pval cond ref</td>
+        <td> pval cond snp</td>
+        <td> pval diff</td>
     </tr>
+    </thead>
+    <tbody>
     {% for onerow in api_response %}
     <tr>   
         <td>{{ onerow.chr }}</td><td>{{ onerow.pos }}</td> 
@@ -200,9 +214,9 @@
         <td>{{ onerow.pval_cond_ref|floatformat:4 }}</td> <td>{{ onerow.pval_cond_snp|floatformat:4}}</td>
         <td>{{ onerow.pval_diff|floatformat:4 }}</td>    </tr>
     {%  endfor %}
+    <tbody>
   </table>
   {% endif %}
-</div>
 
 
 </div> <!-- close the 'content' div -->
