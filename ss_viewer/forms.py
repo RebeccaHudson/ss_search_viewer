@@ -33,10 +33,6 @@ class SearchBySnpidForm(GenericSearchForm):
                                      initial=default_dummy_search,
                                      )
     file_of_snpids = forms.FileField(required=False) #standard everything
-    default_cutoff = 0.05
-    pvalue_tip = 'Show results with pvalues less than or equal to this '
-    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0001", 
-                                             'title': pvalue_tip }) 
     field_order =  ('raw_requested_snpids', 'file_of_snpids', 'pvalue_rank_cutoff', 'page_of_results_shown')
  
     def clean(self):
