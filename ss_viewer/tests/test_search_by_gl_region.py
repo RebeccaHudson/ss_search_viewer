@@ -23,7 +23,8 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
                                 { 'selected_chromosome'  : 'ch1',
                                   'gl_start_pos'         : 12214,
                                   'gl_end_pos'           : 12314,
-                                  'pvalue_rank_cutoff'   : 0.05 })
+                                  'pvalue_rank_cutoff'   : 0.05,
+                                  'action'               : 'Search by Gene Name' })
     self.check_for_api_response_and_200_response_code(response)
     data_response = response.context.__getitem__('api_response')
     #print("api response: " + str(data_response))
@@ -39,10 +40,11 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
                                 { 'selected_chromosome'  : 'ch1',
                                   'gl_start_pos'         : 12214,
                                   'gl_end_pos'           : 12314,
-                                  'pvalue_rank_cutoff'   : 0.9  })
+                                  'pvalue_rank_cutoff'   : 0.9,
+                                  'action'               : 'Search by Gene Name'  })
     self.check_for_api_response_and_200_response_code(response)
     data_response = response.context.__getitem__('api_response')
-    self.assertEqual(len(data_response), 1) #only one item at this position.
+    #print("api response: " + str(data_response))
     self.check_for_expected_fields_in_scores_row(data_response[0])
    # print("status message" + response.context.flatten().get('status_message'))
    # #check that some data is returned.
@@ -55,11 +57,12 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
                                 { 'selected_chromosome'  : 'ch1',
                                   'gl_start_pos'         : 59152,
                                   'gl_end_pos'           : 59153,
-                                  'pvalue_rank_cutoff'   : 0.05  })
+                                  'pvalue_rank_cutoff'   : 0.05,
+                                  'action'               : 'Search by Gene Name'  })
     api_response_data = response.context.__getitem__('api_response')
     self.check_for_api_response_and_200_response_code(response)
     self.assertEqual(api_response_data, None)
-    self.check_status_message(response, 'No matching rows')
+    self.check_status_message(response, 'No matching rows.')
 
   
   def test_that_gl_search_post_rejects_an_invalid_form(self):
@@ -74,7 +77,9 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
                                 { 'selected_chromosome'  : 'ch1',
                                   'gl_start_pos'         : 6000,
                                   'gl_end_pos'           : 5000,
-                                  'pvalue_rank_cutoff'   : 0.05  })
+                                  'pvalue_rank_cutoff'   : 0.05,
+                                  'action'               : 'Search by Gene Name'  })
+
     print("status message: " + response.context['status_message'])
     self.assertEqual(response.context['gl_search_form'].is_valid(), False)
     self.check_status_message(response, 'Invalid search. Try agian.')
@@ -85,7 +90,8 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
                                 { 'selected_chromosome'  : 'ch1',
                                   'gl_start_pos'         : 100,
                                   'gl_end_pos'           : 200,
-                                  'pvalue_rank_cutoff'   : -.1  })
+                                  'pvalue_rank_cutoff'   : -.1 , 
+                                  'action'               : 'Search by Gene Name'  })
     self.assertEqual(response.context['gl_search_form'].is_valid(), False)
     self.check_status_message(response, 'Invalid search. Try agian.')
    
@@ -93,7 +99,8 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
                                 { 'selected_chromosome'  : 'ch1',
                                   'gl_start_pos'         : 100,
                                   'gl_end_pos'           : 200,
-                                  'pvalue_rank_cutoff'   : 1.02  })
+                                  'pvalue_rank_cutoff'   : 1.02,
+                                  'action'               : 'Search by Gene Name'  })
     self.assertEqual(response.context['gl_search_form'].is_valid(), False)
     self.check_status_message(response, 'Invalid search. Try agian.')
 
@@ -104,7 +111,8 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
                                 { 'selected_chromosome'  : 'ch1'  ,
                                   'gl_start_pos'         : 100    ,
                                   'gl_end_pos'           : big_end, 
-                                  'pvalue_rank_cutoff'   : -.1  })
+                                  'pvalue_rank_cutoff'   : -.1 , 
+                                  'action'               : 'Search by Gene Name'  })
     self.assertEqual(response.context['gl_search_form'].is_valid(), False)
     self.check_status_message(response, 'Invalid search. Try agian.')
 
