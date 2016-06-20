@@ -195,6 +195,9 @@
         <td>pval cond ref</td>
         <td> pval cond snp</td>
         <td> pval diff</td>
+        <td> ref allele </td>
+
+        <td> snp allele </td>
     </tr>
     </thead>
     <tbody>
@@ -212,7 +215,9 @@
         <td>{{ onerow.snp_strand }}</td>  <td>{{ onerow.ref_strand }}</td>
         <td>{{ onerow.pval_ref|floatformat:4 }} </td><td>{{ onerow.pval_snp|floatformat:4 }} </td>
         <td>{{ onerow.pval_cond_ref|floatformat:4 }}</td> <td>{{ onerow.pval_cond_snp|floatformat:4}}</td>
-        <td>{{ onerow.pval_diff|floatformat:4 }}</td>    </tr>
+        <td>{{ onerow.pval_diff|floatformat:4 }}</td>  
+        <td> {{ onerow.refAllele }}</td> 
+       <td> {{ onerow.snpAllele }}</td> </tr>
     {%  endfor %}
     <tbody>
   </table>
