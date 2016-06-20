@@ -68,23 +68,31 @@ class SearchByGenomicLocationForm(GenericSearchForm):
     default_start_pos = 10000;    default_end_pos = 10500
 
     # TODO: is there a way to put meaningful maximum values on these here?
-    styled_widget = forms.NumberInput(attrs={"class":'form-control','step':1})
-    gl_start_pos = forms.IntegerField(widget = styled_widget,
+    gl_start_pos = forms.IntegerField(widget=
+                                        forms.NumberInput(attrs={"class":'form-control',
+                                          'step':1, 
+                                          "title": "Search for data in a region" +\
+                                          " that begins at this position on the chromosome"}),
                                       label = gl_pos_label_text['start'], 
                                       required = True,
                                       initial = default_start_pos,
                                       min_value = 0 )
 
-    gl_end_pos = forms.IntegerField(widget = styled_widget,
+    gl_end_pos = forms.IntegerField(widget=
+                                        forms.NumberInput(attrs={"class":'form-control',
+                                          'step':1, 
+                                          "title": "Search for data in a region" +\
+                                          " that ends at this position on the chromosome."}),
                                     label = gl_pos_label_text['end'],
                                     required = False, 
                                     initial = default_end_pos,
                                     min_value = 1)
 
-    choices_for_chromosome =  ( ('ch1', 'ch1' ), ) 
+    chromosomes = [ "ch" + str(x) for x in range(1, 24) ]
+    #all of the choices look like this: choices_for_chromosome =  ( ('ch1', 'ch1' ), ) 
     styled_widget = forms.Select(attrs={"class":"form-control"})
     selected_chromosome = forms.ChoiceField(widget=styled_widget,
-                                            choices=choices_for_chromosome,
+                                            choices= zip(chromosomes,chromosomes),
                                             label="Select a chromosome.")
 
     field_order =  ('gl_start_pos', 'gl_end_pos', 'selected_chromosome', 'pvalue_rank_cutoff', 'page_of_results_shown')
