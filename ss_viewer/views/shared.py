@@ -172,6 +172,8 @@ class APIResponseHandler:
         search_paging_info = None
         if api_response.status_code == 204:
             status_message = 'No matching rows.'
+        elif api_response.status_code == 500:
+            status_message = 'The API expeienced an error; no data returned.'
         else:
             response_json = json.loads(api_response.text)
             mt = MotifTransformer()
