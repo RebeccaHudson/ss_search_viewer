@@ -66,14 +66,12 @@ def handle_search_by_snpid(request):
     snpid_search_form = SearchBySnpidForm(request.POST, request.FILES)
 
     if not snpid_search_form.is_valid():
-         print "snpid search form is not valid!"
          context = StandardFormset.setup_formset_context(snpid_form=SearchBySnpidForm())
          return StandardFormset.handle_invalid_form(request, context)
 
     snpid_list = None
     try:
          snpid_list = SnpidSearchUtils.get_snpid_list_from_form(request, snpid_search_form)
-         print "tried to get snpids.."
     except ValidationError:
          context = StandardFormset.setup_formset_context() #pass in old form here?
          context.update({'active_tab' : 'snpid' })
@@ -81,11 +79,9 @@ def handle_search_by_snpid(request):
          return StandardFormset.handle_invalid_form(request, context, status_message=status_msg)
 
     form_data = snpid_search_form.cleaned_data
-    print "got the cleaned data"
     #turn the page
     search_request_params = Paging.get_paging_info_for_request(request,
                                                 form_data['page_of_results_shown'])
-    print "paging data handled correctly"
     pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(snpid_search_form)
     api_search_query = { 'snpid_list' : snpid_list,
                          'pvalue_rank' : pvalue_rank,
