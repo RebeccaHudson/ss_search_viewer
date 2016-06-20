@@ -12,10 +12,12 @@ from .views import gene_name_search
 app_name = 'ss_viewer'
 
 urlpatterns = [
-  url(r'^$', views.main.index, name = 'index'),
-
+   url(r'^$',
+       views.shared.StandardFormset.show_multisearch_page,
+       name = 'index'),
+ 
   url(r'^multi-search/$', 
-      views.shared.StandardFormset.show_multisearch_page,
+       views.shared.StandardFormset.show_multisearch_page,
        name='multi-search'),
 
   url(r'^gl-region-search/$', 
