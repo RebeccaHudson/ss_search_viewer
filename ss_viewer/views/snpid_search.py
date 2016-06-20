@@ -35,18 +35,12 @@ class SnpidSearchUtils:
 
     @staticmethod
     def get_snpid_list_from_form(request, form):
-      print "get_snpid_list_from_form is running"
 
-      print "about to get the file of snpids from the form"
       file_pointer = request.FILES.get('file_of_snpids')
-      print "about to grab the cleaned data from the form"
       form_snpids = form.cleaned_data.get('raw_requested_snpids')
       if file_pointer is None:
-          print "just grabbed cleaned data from the form " + str(form_snpids)
-          print "get snpid list is about to return SNPids from form"
           return SnpidSearchUtils.clean_and_validate_snpid_text_input(form_snpids)
       else:
-        print "get snpid list is about to return SNPids from filem"
         text_in_file = file_pointer.read()   # TODO: read in chunks rather than all at once. 
         return SnpidSearchUtils.clean_and_validate_snpid_text_input(text_in_file)
 
@@ -72,30 +66,26 @@ def handle_search_by_snpid(request):
     snpid_search_form = SearchBySnpidForm(request.POST, request.FILES)
 
     if not snpid_search_form.is_valid():
-         #problem 
-         print "snpid search does not think it's valid."
+         print "snpid search form is not valid!"
          context = StandardFormset.setup_formset_context(snpid_form=SearchBySnpidForm())
-         print "completed setting up the formset context."
          return StandardFormset.handle_invalid_form(request, context)
 
     snpid_list = None
-    print "so the form thiks that it's valid."
     try:
          snpid_list = SnpidSearchUtils.get_snpid_list_from_form(request, snpid_search_form)
+         print "tried to get snpids.."
     except ValidationError:
-         #maybe don't include whatever they had in there before.
-         #form_data['raw_requested_snpids'] = ""
-         #jfresh_form = SnpidSearchForm(form_data)
          context = StandardFormset.setup_formset_context() #pass in old form here?
          context.update({'active_tab' : 'snpid' })
          status_msg = "No properly formatted SNPids in the text."
          return StandardFormset.handle_invalid_form(request, context, status_message=status_msg)
 
     form_data = snpid_search_form.cleaned_data
+    print "got the cleaned data"
     #turn the page
     search_request_params = Paging.get_paging_info_for_request(request,
                                                 form_data['page_of_results_shown'])
-
+    print "paging data handled correctly"
     pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(snpid_search_form)
     api_search_query = { 'snpid_list' : snpid_list,
                          'pvalue_rank' : pvalue_rank,
@@ -109,9 +99,6 @@ def handle_search_by_snpid(request):
     form_data['page_of_results_shown'] = search_request_params['page_of_results_to_display']
     form_data['raw_requested_snpids'] = ", ".join(snpid_list)
     snpid_form = SearchBySnpidForm(form_data)
-    #snpid_form = SearchBySnpidForm({'raw_requested_snpids':", ".join(snpid_list),
-    #                                'pvalue_rank_cutoff' : holdover_p_value, 
-    #                                'page_of_results_shown': page_of_results_to_display }  )
     context = StandardFormset.setup_formset_context(snpid_form=snpid_form)
     context.update(shared_context)
     return render(request, searchpage_template, context )
