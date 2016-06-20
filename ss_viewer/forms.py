@@ -90,12 +90,15 @@ class SearchByGenomicLocationForm(GenericSearchForm):
 
     chromosomes = [ "ch" + str(x) for x in range(1, 24) ]
     #all of the choices look like this: choices_for_chromosome =  ( ('ch1', 'ch1' ), ) 
-    styled_widget = forms.Select(attrs={"class":"form-control"})
+    styled_widget = forms.Select(attrs={"class":"form-control",
+                                        "title": "Chromosome to search for data between the " +\
+                                        "start and end positions specified."})
     selected_chromosome = forms.ChoiceField(widget=styled_widget,
                                             choices= zip(chromosomes,chromosomes),
-                                            label="Select a chromosome.")
-
-    field_order =  ('gl_start_pos', 'gl_end_pos', 'selected_chromosome', 'pvalue_rank_cutoff', 'page_of_results_shown')
+                                            label="Select a chromosome")
+    field_order =  ('gl_start_pos', 'gl_end_pos', 
+                    'selected_chromosome', 
+                    'pvalue_rank_cutoff', 'page_of_results_shown')
   
 
     #ensure ranges are within hard limits.  
