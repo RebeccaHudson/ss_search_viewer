@@ -17,7 +17,6 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
     response = self.client.get(reverse('ss_viewer:gl-region-search'))
     self.assertEqual(response.status_code, 302)
 
-
   def test_that_gl_search_returns_some_data(self):
     response = self.client.post(reverse('ss_viewer:gl-region-search'),
                                 { 'selected_chromosome'  : 'ch1',
@@ -50,6 +49,17 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
    # #check that some data is returned.
    # print("Form errors: : " + str(response.context['gl_search_form'].errors))
     self.assertTrue(response.context['gl_search_form'].is_valid())
+
+
+
+  def test_that_gl_search_can_be_paged(self):
+    url = reverse('ss_viewer:gl-region-search')
+    base_request = { 'selected_chromosome'  : 'ch1',
+                     'gl_start_pos'         : 12214,
+                     'gl_end_pos'           : 102314,
+                     'pvalue_rank_cutoff'   : 0.01,
+                     'action'               : 'Search by Gene Name' }
+    self.page_through_request_data(url, base_request, 'gl_search_form')
 
 
   def test_nomatch_response_for_gl_search(self):
