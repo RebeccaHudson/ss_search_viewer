@@ -9,10 +9,7 @@ class SearchByGenomicLocationTests(ScoresViewerTestCase):
 
   def test_that_gl_search_loads_get(self):
     response = self.client.get(reverse('ss_viewer:gl-region-search'), follow=True)
-    self.assertTrue(response.context.__contains__('gl_search_form'))
-    self.assertTrue(response.context.__contains__('snpid_search_form'))
-    self.assertTrue(response.context.__contains__('status_message'))
-    self.assertEqual(response.status_code, 200) 
+    self.check_that_response_contains_expected_forms(response)
     # if follow is not true, we just get the redirection status code
     response = self.client.get(reverse('ss_viewer:gl-region-search'))
     self.assertEqual(response.status_code, 302)
