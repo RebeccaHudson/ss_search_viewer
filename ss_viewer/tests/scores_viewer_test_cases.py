@@ -19,6 +19,15 @@ class ScoresViewerTestCase(TestCase):
             print "status msg: " + response.context['status_message']
 
 
+    def check_that_response_contains_expected_forms(respone):
+        #for one_form in [ 'gl_search_form', 'snpid_search_form' ]
+        self.assertTrue(response.context.__contains__('gl_search_form'))
+        self.assertTrue(response.context.__contains__('snpid_search_form'))
+        # Add additional forms above.
+        self.assertTrue(response.context.__contains__('status_message'))
+        self.assertEqual(response.status_code, 200)
+
+
     def check_for_expected_fields_in_scores_row(self, data_fields_in_one_row):
         expected_fields = [u'motif_len', u'snp_end', u'trans_factor',  u'log_lik_ref', u'snpid', u'motif', u'log_lik_ratio', u'ref_strand', u'ref_start', u'snp_start', u'snp_strand', u'ref_end', u'log_enhance_odds', u'log_reduce_odds', u'log_lik_snp', u'pval_ref', u'pval_snp', u'pval_cond_ref', u'pval_cond_snp', u'pval_diff', u'pval_rank', u'chr', u'pos' ]
         # TODO this could be much better
