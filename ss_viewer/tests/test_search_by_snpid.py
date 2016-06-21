@@ -7,33 +7,14 @@ import json
 
 class SearchBySnpidTests(ScoresViewerTestCase):
     btn_action = "Search by SNPid" 
-    #form name should be something like 'snpid_search_form' 
-    #def  page_through_request_data(self, url, base_request, form_name):
-    #     response = None
-    #     response = self.client.post(url, base_request )
-    #     print "\n\nresponse from search form" + repr(response.context)
-    #     while response.context['search_paging_info']['show_next_btn'] is True:
-    #          page_shown = response.context[form_name].data['page_of_results_shown']
-    #          
-    #          base_request.update(
-    #             { 'action'                : 'Next',
-    #            'page_of_results_shown' :  page_shown })
-    #          response = self.client.post(url, base_request)     
-    #          print "status msg: " + response.context['status_message'] 
-
 
     def test_that_scores_list_loads_get(self):
        response = self.client.get(reverse('ss_viewer:snpid-search'), follow=True)
-       self.assertTrue(response.context.__contains__('gl_search_form'))
-       self.assertTrue(response.context.__contains__('snpid_search_form'))
-       self.assertTrue(response.context.__contains__('status_message'))
-       self.assertEqual(response.status_code, 200) 
+       self.check_that_response_contains_expected_forms(response) 
        # if follow is not true, we just get the redirection status code
        response = self.client.get(reverse('ss_viewer:snpid-search'))
        self.assertEqual(response.status_code, 302)
 
-    #we can only expect this test to pass if the requested snpids are actually in the database...
-    #retain this code for testing when we actually expect matches to come out...
     def test_that_scores_list_loads_post(self):
         response = self.client.post(reverse('ss_viewer:snpid-search'),
                 { 'raw_requested_snpids' : 'rs371194064 rs199706086 rs111200574',
