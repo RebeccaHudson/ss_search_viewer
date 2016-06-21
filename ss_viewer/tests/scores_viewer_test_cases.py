@@ -8,7 +8,7 @@ class ScoresViewerTestCase(TestCase):
     def  page_through_request_data(self, url, base_request, form_name):
         response = None
         response = self.client.post(url, base_request )
-        print "\n\nresponse from search form" + repr(response.context)
+        #print "\n\nresponse from search form" + repr(response.context)
         while response.context['search_paging_info']['show_next_btn'] is True:
             page_shown = response.context[form_name].data['page_of_results_shown']
   
@@ -19,7 +19,7 @@ class ScoresViewerTestCase(TestCase):
             print "status msg: " + response.context['status_message']
 
 
-    def check_that_response_contains_expected_forms(respone):
+    def check_that_response_contains_expected_forms(self, response):
         #for one_form in [ 'gl_search_form', 'snpid_search_form' ]
         self.assertTrue(response.context.__contains__('gl_search_form'))
         self.assertTrue(response.context.__contains__('snpid_search_form'))
@@ -36,7 +36,7 @@ class ScoresViewerTestCase(TestCase):
 
     #this means the api returned something and response is OK. very common.
     def check_for_api_response_and_200_response_code(self, response):
-        self.assertEqual(response.context.__contains__('api_response'), True)
+        #self.assertEqual(response.context.__contains__('api_response'), True)
         self.assertEqual(response.status_code, 200) 
 
     def check_status_message(self, response, expected_message):
