@@ -56,6 +56,11 @@
         {% endif %}
       {% endif %}
   </div>
+     {% if search_paging_info != None %}
+       <input type="submit" name="action" 
+         value="Download Results" class="btn-xs btn-danger"
+         onclick="return confirm('Downloads can take a while,\n and large datasets WILL be truncated. Some restrictions may apply.\n Are you sure you want this download?')" />
+     {% endif %}
   </form>
 </div>
 

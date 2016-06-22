@@ -23,13 +23,22 @@ def handle_search_by_genomic_location(request):
 
     form_data = gl_search_form.cleaned_data
     pvalue = PValueFromForm.get_pvalue_rank_from_form(gl_search_form)
+
+    #these will be the same whether it's web viewing or a download.
+    base_search_params =  { 'chromosome' : form_data['selected_chromosome'],
+                            'start_pos'  : form_data['gl_start_pos'],
+                            'end_pos'    : form_data['gl_end_pos'],
+                            'pvalue_rank': pvalue      }
+
+    if request.POST['action'] == 'Download Results':
+        #not handling paging stuff, not going to show anything.
+        return APIResponseHandler.handle_download_request(base_search_params, 'search-by-gl')        
+
     search_request_params = Paging.get_paging_info_for_request(request,
                                                          form_data['page_of_results_shown'])
-    api_search_query = { 'chromosome' : form_data['selected_chromosome'],
-                         'start_pos'  : form_data['gl_start_pos'],
-                         'end_pos'    : form_data['gl_end_pos'],
-                         'pvalue_rank': pvalue, 
-                         'from_result': search_request_params['search_result_offset'] }
+    api_search_query = base_search_params
+    api_search_query.update( 
+                          {'from_result': search_request_params['search_result_offset'] })
     shared_context = APIResponseHandler.handle_search(api_search_query, 
                                                       'search-by-gl',
                                                       search_request_params)

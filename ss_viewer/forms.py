@@ -15,6 +15,7 @@ class GenericSearchForm(forms.Form):
                                           min_value=0, 
                                           initial=default_cutoff,
                                           )
+    
     page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
     
 

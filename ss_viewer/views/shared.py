@@ -1,11 +1,13 @@
 from django.conf import settings
 from django.shortcuts import render
-
+from django.http import HttpResponse
 import os
 import json
 import pickle
 import requests
-
+import csv
+import zipfile
+from tempfile import NamedTemporaryFile
 from ss_viewer.forms import SearchBySnpidForm  #replaces ScoresSearchForm
 from ss_viewer.forms import SearchByGenomicLocationForm
 from ss_viewer.forms import SearchByTranscriptionFactorForm
@@ -110,20 +112,20 @@ class StandardFormset:
 
      @staticmethod
      def show_multisearch_page(request):
-            searchpage_template = 'ss_viewer/multi-searchpage.html'
-            #plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
-            # needs a DLL plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
-            context = StandardFormset.setup_formset_context()
-            context.update({'status_message' : "Enter a search.",
-                            'active_tab'     : 'none-yet'})
-            return render(request, searchpage_template, context)
+          searchpage_template = 'ss_viewer/multi-searchpage.html'
+          #plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
+          #needs a DLL plotting_data=get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
+          context = StandardFormset.setup_formset_context()
+          context.update({'status_message' : "Enter a search.",
+                          'active_tab'     : 'none-yet'})
+          return render(request, searchpage_template, context)
 
      @staticmethod
      def handle_invalid_form(request, context, status_message=None):
-        if status_message == None:
-            status_message =  "Invalid search. Try agian."
-        context.update({'status_message' :  status_message })
-        return render(request, 'ss_viewer/multi-searchpage.html', context) 
+          if status_message == None:
+              status_message =  "Invalid search. Try agian."
+          context.update({'status_message' :  status_message })
+          return render(request, 'ss_viewer/multi-searchpage.html', context) 
 
 
 class Paging:
@@ -155,6 +157,13 @@ class Paging:
 
 
 class APIResponseHandler:
+    order_of_fields = ['chromosome', 'pos',   'snpid',   'transcription factor', 
+                       'motif',   'motif length',  'pval rank',   'snp start',
+                       'snp end',   'ref start',   'ref end',   'log lik ref',
+                       'log lik ratio',   'log enhance odds',  'log reduce odds',
+                       'log lik snp',   'snp strand',  'ref strand',  'pval ref',
+                       'pval snp',  'pval cond ref'   'pval cond snp'   'pval diff',
+                       'ref allele',  'snp allele']
     @staticmethod  
     def setup_hits_message(hitcount, page_of_results_to_display):
         return 'Got ' + str(hitcount) + ' rows back from API.' +\
@@ -174,6 +183,8 @@ class APIResponseHandler:
             status_message = 'No matching rows.'
         elif api_response.status_code == 500:
             status_message = 'The API expeienced an error; no data returned.'
+        elif api_response.status_code == 400:
+            status_message = 'Bad request. API says: ' + api_response.text
         else:
             response_json = json.loads(api_response.text)
             mt = MotifTransformer()
@@ -187,7 +198,57 @@ class APIResponseHandler:
         return  {'status_message' : status_message, 
                  'search_paging_info' : search_paging_info,
                  'api_response'       : response_data }
-     
+    
+
+    @staticmethod
+    def write_one_response_to_csv(api_response_data, csv_writer):
+        mt = MotifTransformer()
+        prepared_data = mt.transform_motifs_to_transcription_factors(api_response_data)
+        fields_for_csv = ['chr', 'pos', 'snpid', 'trans_factor', 'motif', 'motif_len',
+                         'pval_rank', 'snp_start', 'snp_end', 'ref_start', 'ref_end',
+                         'log_lik_ref', 'log_lik_ratio', 'log_enhance_odds',  
+                         'log_reduce_odds', 'log_lik_snp', 'snp_strand', 'ref_strand',
+                         'pval_ref', 'pval_snp', 'pval_cond_ref', 'pval_cond_snp',
+                         'pval_diff', 'refAllele', 'snpAllele']
+        for dr in api_response_data:
+            row_to_write = [ dr[field_name] for field_name in fields_for_csv]
+            csv_writer.writerow(row_to_write)
+
+ 
+    @staticmethod
+    def handle_download_request(api_search_query, api_action):
+        response_data = None
+        status_message = None
+        response = HttpResponse(content_type='application/zip')
+        response['Content-Disposition'] = 'attachment; filename=test.csv.zip'
+        api_response = requests.post( APIUrls.setup_api_url(api_action),
+                 json=api_search_query, headers={'content-type':'application/json'})
+        response_json = json.loads(api_response.text)
+
+        with NamedTemporaryFile() as output_tmp:
+            writer = csv.writer(output_tmp)     
+            writer.writerow(APIResponseHandler.order_of_fields) 
+            APIResponseHandler.write_one_response_to_csv(response_json['data'], writer) 
+
+            #loop until 204 or error.. 
+            page_of_results = 1 
+            while api_response.status_code == 200:
+                search_offset = settings.API_HOST_INFO['result_page_size'] * page_of_results
+                api_search_query.update({'from_result':search_offset})                
+                page_of_results += 1
+                api_response = requests.post( APIUrls.setup_api_url(api_action),
+                     json=api_search_query, headers={'content-type':'application/json'})
+
+                if api_response.status_code == 200:
+                    response_json = json.loads(api_response.text)
+                    write_one_response_to_csv(response_json['data'], writer) 
+
+            z = zipfile.ZipFile(response, 'w')
+            output_tmp.seek(0)
+            z.writestr("test.csv", output_tmp.read())
+            z.close()
+        #tempfile will be deleted when it closes.
+        return response
 
 
 class APIUrls:
