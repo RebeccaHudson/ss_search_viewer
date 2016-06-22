@@ -25,14 +25,18 @@ def handle_gene_name_search(request):
         return StandardFormset.handle_invalid_form(request, context)
 
     form_data = gene_name_search_form.cleaned_data
+    pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(gene_name_search_form)
+    base_search_params = {'gene_name' : form_data['gene_name'], 
+                          'window_size' : form_data['window_size'],
+                          'pvalue_rank':   pvalue_rank }
+    if request.POST['action'] == 'Download Results':
+        return APIResponseHandler.handle_download_request(
+                                     base_search_params, 'search-by-gene-name')
+
     search_request_params = Paging.get_paging_info_for_request(request,
                                                 form_data['page_of_results_shown'])
-
-    pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(gene_name_search_form)
-    api_search_query = {'gene_name' : form_data['gene_name'], 
-                        'window_size' : form_data['window_size'],
-                        'pvalue_rank':   pvalue_rank,
-                        'from_result' : search_request_params['search_result_offset']}
+    api_search_query = base_search_params
+    api_search_query.update({'from_result' : search_request_params['search_result_offset']})
     shared_context = APIResponseHandler.handle_search(api_search_query, 
                                                       'search-by-gene-name',
                                                       search_request_params)
