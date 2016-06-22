@@ -78,14 +78,20 @@ def handle_search_by_snpid(request):
          status_msg = "No properly formatted SNPids in the text."
          return StandardFormset.handle_invalid_form(request, context, status_message=status_msg)
 
+    pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(snpid_search_form)
+    base_search_params = { 'snpid_list' : snpid_list,
+                           'pvalue_rank' : pvalue_rank }
+
     form_data = snpid_search_form.cleaned_data
+
+    if request.POST['action'] == 'Download Results':
+        return APIResponseHandler.handle_download_request(base_search_params, 'snpid-search')
+
     #turn the page
     search_request_params = Paging.get_paging_info_for_request(request,
                                                 form_data['page_of_results_shown'])
-    pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(snpid_search_form)
-    api_search_query = { 'snpid_list' : snpid_list,
-                         'pvalue_rank' : pvalue_rank,
-                         'from_result' : search_request_params['search_result_offset'] }
+    api_search_query = base_search_params
+    api_search_query.update({'from_result' : search_request_params['search_result_offset'] })
 
     shared_context = APIResponseHandler.handle_search(api_search_query, 
                                                       'snpid-search', 
