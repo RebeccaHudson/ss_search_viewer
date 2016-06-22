@@ -15,6 +15,10 @@ urlpatterns = [
    url(r'^$',
        views.shared.StandardFormset.show_multisearch_page,
        name = 'index'),
+
+   url(r'^download-test/$',
+       views.main.get_compressed_download,
+       name = 'download-test'),
  
   url(r'^multi-search/$', 
        views.shared.StandardFormset.show_multisearch_page,

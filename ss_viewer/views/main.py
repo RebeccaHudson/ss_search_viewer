@@ -20,12 +20,88 @@ from ss_viewer.views.shared import PValueFromForm
 from ss_viewer.views.shared import StandardFormset
 from django.core.exceptions import ValidationError
 from ss_viewer.views.snpid_search import SnpidSearchUtils
-
+from tempfile import NamedTemporaryFile 
+import csv
+import zipfile
 #TODO pare down the imports here. Most of them are not needed at this point.
 
 #from .plots import MakePlots #tempfile writer can stay hiedden
 def index(request):
   return HttpResponse("Try another url, like :ss_viewer/multi-search.")
+
+def get_compressed_download(request):
+    #with open('eggs.csv', 'wb') as csvfile:
+    #output = NamedTemporaryFile(mode='wrb') ## temp output file
+    with NamedTemporaryFile() as output:
+        #output is supposed to be a csvfile
+        writer = csv.writer(output)
+
+        writer.writerow(['first row', 'foo', 'bizzy', 'bar', "fake meat"])
+        writer.writerow(['second row', 'bim', 'bab', 3 , "bacon bomb"    ])
+        writer.writerow(['first row', 'foo', 'bizzy', 'bar', "paper towels"])
+        writer.writerow(['second row', 'bim', 'bab', 3  , "sad pandas"   ])
+        writer.writerow(['first row', 'foo', 'bizzy', 'bar', "bad weekends"])
+        writer.writerow(['second row', 'bim', 'bab', 3   , "shitty beer"  ])
+        writer.writerow(['first row', 'foo', 'bizzy', 'bar', "untreatable illness"])
+        writer.writerow(['second row', 'bim', 'bab', 3, "pain and isolation"     ])
+        writer.writerow(['first row', 'foo', 'bizzy', 'bar', "fake meat"])
+        writer.writerow(['second row', 'bim', 'bab', 3 , "bacon bomb"    ])
+        writer.writerow(['first row', 'foo', 'bizzy', 'bar', "paper towels"])
+        writer.writerow(['second row', 'bim', 'bab', 3  , "sad pandas"   ])
+        writer.writerow(['first row', 'foo', 'bizzy', 'bar', "bad weekends"])
+        writer.writerow(['second row', 'bim', 'bab', 3   , "shitty beer"  ])
+        writer.writerow(['first row', 'foo', 'bizzy', 'bar', "untreatable illness"])
+        writer.writerow(['second row', 'bim', 'bab', 3, "pain and isolation"     ])
+
+        output.write("dogs dogs dogs") 
+        output.seek(0)
+        output.flush()
+        print "read output " + output.read()
+
+        #code for writing csv file go here...
+        response = HttpResponse(content_type='application/zip')
+        response['Content-Disposition'] = 'attachment; filename=test.csv.zip'
+
+        z = zipfile.ZipFile(response,'w')   ## write zip to response
+        print " what can we do with this? " + repr(dir(output))
+        print " what can we do with this? " + repr(dir(output.file))
+        print " what can we do with this? " + repr(output.read())
+        print " what can we do with this? " + repr(output.file.name)
+        tmppath = output.name
+        print "temp path " + tmppath
+        output.seek(0)
+        data_to_write = output.read()
+        print "data to write " + data_to_write
+        z.writestr("test.csv", data_to_write)  ## write csv file to zip
+        #z.write("test.csv", output.file)
+        z.close()
+    return response
+
+
+
+#@gzip_compress   #is the decorator all that is needed?
+def get_download(request):
+  response = HttpResponse(content_type='text/csv')
+  response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'  
+  writer = csv.writer(response)
+  writer.writerow(['first row', 'foo', 'bizzy', 'bar', "fake meat"])
+  writer.writerow(['second row', 'bim', 'bab', 3 , "bacon bomb"    ])
+  writer.writerow(['first row', 'foo', 'bizzy', 'bar', "paper towels"])
+  writer.writerow(['second row', 'bim', 'bab', 3  , "sad pandas"   ])
+  writer.writerow(['first row', 'foo', 'bizzy', 'bar', "bad weekends"])
+  writer.writerow(['second row', 'bim', 'bab', 3   , "shitty beer"  ])
+  writer.writerow(['first row', 'foo', 'bizzy', 'bar', "untreatable illness"])
+  writer.writerow(['second row', 'bim', 'bab', 3, "pain and isolation"     ])
+  writer.writerow(['first row', 'foo', 'bizzy', 'bar', "fake meat"])
+  writer.writerow(['second row', 'bim', 'bab', 3 , "bacon bomb"    ])
+  writer.writerow(['first row', 'foo', 'bizzy', 'bar', "paper towels"])
+  writer.writerow(['second row', 'bim', 'bab', 3  , "sad pandas"   ])
+  writer.writerow(['first row', 'foo', 'bizzy', 'bar', "bad weekends"])
+  writer.writerow(['second row', 'bim', 'bab', 3   , "shitty beer"  ])
+  writer.writerow(['first row', 'foo', 'bizzy', 'bar', "untreatable illness"])
+  writer.writerow(['second row', 'bim', 'bab', 3, "pain and isolation"     ])
+
+  return response
 
 
 def get_a_plot_by_snpid_and_motif(snpid, motif):  #TODO: should take a snpid!
