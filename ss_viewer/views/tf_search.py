@@ -24,17 +24,22 @@ def handle_search_by_trans_factor(request):
         return StandardFormset.handle_invalid_form(request, context)
 
     form_data = tf_search_form.cleaned_data
-    search_request_params = Paging.get_paging_info_for_request(request,
-                                                form_data['page_of_results_shown'])
 
     trans_factor = form_data['trans_factor']
     tft = TFTransformer()
     motif_value = tft.lookup_motifs_by_tf(trans_factor)
+
     pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(tf_search_form)
-    api_search_query = {'motif' : motif_value,
-                        'pvalue_rank':   pvalue_rank,
-                        'from_result' : search_request_params['search_result_offset']
-                       }
+    base_search_params ={'motif' : motif_value, 'pvalue_rank':   pvalue_rank}
+
+    if request.POST['action'] == 'Download Results':
+        return APIResponseHandler.handle_download_request(base_search_params, 'search-by-tf')
+
+    search_request_params = Paging.get_paging_info_for_request(request,
+                                                form_data['page_of_results_shown'])
+    api_search_query = base_search_params
+    api_search_query.update({'from_result' : search_request_params['search_result_offset']})
+
     shared_context = APIResponseHandler.handle_search(api_search_query, 
                                                       'search-by-tf',
                                                       search_request_params)
@@ -48,7 +53,3 @@ def handle_search_by_trans_factor(request):
     return render(request, 
                  'ss_viewer/multi-searchpage.html',
                   context)
-
-
-
-
