@@ -123,6 +123,7 @@
             {% endif %}
           {% endif %}
        </div><!-- end div for submit buttons. -->
+    <button id="tf-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
     </div>
 
      {% if search_paging_info != None and active_tab == 'tf' %}
@@ -157,6 +158,7 @@
             {% endif %}
           {% endif %}
        </div><!-- end div for submit buttons. -->
+       <button id="snpid-window-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
     </div>
 
      {% if search_paging_info != None  and active_tab == 'snpid-window' %}
@@ -189,6 +191,7 @@
             {% endif %}
           {% endif %}
       </div> <!-- end div for submit buttons. -->
+       <button id="gene-name-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
     </div>
 
      {% if search_paging_info != None and active_tab == 'gene_name' %}
@@ -280,17 +283,20 @@
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
         $('#tabs').tab();
-        $('#id_snpid').val("fake");
-
         $("#snpid-search-demo").click(function(e){ 
-                                       $('#id_raw_requested_snpids').val('rs539483321, rs576894892, rs553761389, rs757299236, rs770590115');
-                                      } );
-
+                                       $('#id_raw_requested_snpids').val(
+                                             'rs539483321, rs576894892, rs553761389, rs757299236, rs770590115');
+                                        } );
         $("#gl-search-demo").click(function(e){
                                        $('#id_gl_start_pos').val(10000);
                                        $('#id_gl_end_pos').val(143511163);
-                                       $('#id_selected_chromosome').val('ch5');
-                                  });
+                                       $('#id_selected_chromosome').val('ch5'); });
+        $("#tf-search-demo").click(function(e){
+                                      $('#id_trans_factor').val('NFYB'); });
+        $("#snpid-window-search-demo").click(function(e){
+                                      $('#id_snpid').val('rs755632525'); });
+        $("#gene-name-search-demo").click(function(e){
+                                      $('#id_gene_name').val('not sure..'); });
     });
 </script>   
 <script>
