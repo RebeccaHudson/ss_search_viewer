@@ -13,6 +13,8 @@ from ss_viewer.forms import SearchByGenomicLocationForm
 from ss_viewer.forms import SearchByTranscriptionFactorForm
 from ss_viewer.forms import SearchBySnpidWindowForm
 from ss_viewer.forms import SearchByGeneNameForm
+from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 
 class MotifTransformer:
     def __init__(self):
@@ -223,6 +225,11 @@ class APIResponseHandler:
         response['Content-Disposition'] = 'attachment; filename=search-results.csv.zip'
         api_response = requests.post( APIUrls.setup_api_url(api_action),
                  json=api_search_query, headers={'content-type':'application/json'})
+
+        if api_response.status_code != 200:
+            context = { "status_message" : "Download failed for some reason." } 
+            return redirect(reverse('ss_viewer:multi-search'))
+
         response_json = json.loads(api_response.text)
 
         with NamedTemporaryFile() as output_tmp:

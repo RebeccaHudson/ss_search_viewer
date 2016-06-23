@@ -15,16 +15,13 @@ class GenericSearchForm(forms.Form):
                                           min_value=0, 
                                           initial=default_cutoff,
                                           )
-    
+    prev_search_pvalue_rank_cutoff = forms.FloatField(widget = forms.HiddenInput(), required = False)
+
     page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
     
 
 class SearchBySnpidForm(GenericSearchForm):
-    default_dummy_search = ("rs539483321, rs576894892, \
-                             rs553761389, rs757299236, rs770590115")
-    default_dummy_search = ""
-    text_to_explain_snpbox = "SNPids:"
-
+    text_to_explain_snpbox = "SNPids"
     snpid_tip = "Enter SNPids to search for."
     styled_widget = forms.Textarea(attrs={'class':'form-control', 
                                           'title': snpid_tip})
@@ -33,7 +30,6 @@ class SearchBySnpidForm(GenericSearchForm):
                                      strip=True,
                                      required=False,
                                      label=text_to_explain_snpbox,
-                                     initial=default_dummy_search,
                                      )
     file_of_snpids = forms.FileField(required=False) #standard everything
     field_order =  ('raw_requested_snpids', 'file_of_snpids', 'pvalue_rank_cutoff', 'page_of_results_shown')
@@ -78,6 +74,9 @@ class SearchByGenomicLocationForm(GenericSearchForm):
                                       label = gl_pos_label_text['start'], 
                                       required = True,
                                       min_value = 0 )
+    prev_search_gl_start_pos = forms.IntegerField(widget = forms.HiddenInput(),
+                                                required = False)
+   
 
     gl_end_pos = forms.IntegerField(widget=
                                         forms.NumberInput(attrs={"class":'form-control',
@@ -88,6 +87,9 @@ class SearchByGenomicLocationForm(GenericSearchForm):
                                     required = False, 
                                     min_value = 1)
 
+    prev_search_gl_end_pos = forms.IntegerField(widget = forms.HiddenInput(),
+                                                required = False)
+
     chromosomes = [ "ch" + str(x) for x in range(1, 24) ]
     #all of the choices look like this: choices_for_chromosome =  ( ('ch1', 'ch1' ), ) 
     styled_widget = forms.Select(attrs={"class":"form-control",
@@ -96,6 +98,9 @@ class SearchByGenomicLocationForm(GenericSearchForm):
     selected_chromosome = forms.ChoiceField(widget=styled_widget,
                                             choices= zip(chromosomes,chromosomes),
                                             label="Select a chromosome")
+
+    prev_search_selected_chromosome = forms.CharField(widget = forms.HiddenInput(),
+                                               required=False)
     field_order =  ('gl_start_pos', 'gl_end_pos', 
                     'selected_chromosome', 
                     'pvalue_rank_cutoff', 'page_of_results_shown')
@@ -153,6 +158,10 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
     trans_factor = forms.ChoiceField(widget = styled_widget,
                                      choices = use_these_choices, 
                                      label = "Select a transcription factor")
+
+    # hey there.    widget = forms.HiddenInput(), required = False)
+    prev_search_trans_factor = forms.CharField(widget = forms.HiddenInput(),
+                                               required=False)
 
     field_order =  ('trans_factor', 'pvalue_cutoff', 'page_of_results_shown')
 
