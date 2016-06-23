@@ -7,7 +7,6 @@
   <title>atsnp data</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
-  <link href="{% static 'ss_viewer/lavish-bootstrap.css' %}" rel="stylesheet">
   <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
 </head>
 <body>
@@ -18,7 +17,7 @@
 <h2 >Search ATSNP output</h2>
 <div id="status_message"> {{ status_message }} </div>
 
-<ul id="tabs" class="nav nav-tabs", data-tabs="tabs">
+<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
 
   <li {%if active_tab == 'gl-region' or active_tab == 'none-yet'  %}
       class="active"
@@ -209,7 +208,7 @@
 
 <!-- consider making this part modular; DRYing it up some how... -->
   {% if api_response  %}
-  <table class="table table-inverse"> 
+  <table class="table table-striped table-condensed"> 
     <thead>
     <tr>
         <td>chromosome</td>
