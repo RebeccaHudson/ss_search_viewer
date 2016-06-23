@@ -245,16 +245,16 @@
         <td>{{ onerow.chr }}</td><td>{{ onerow.pos }}</td> 
         <td>{{ onerow.snpid }}</td><td> {{ onerow.trans_factor }}</td>
         <td> {{ onerow.motif }} </td> <td>{{ onerow.motif_len}}</td>
-        <td>  {{ onerow.pval_rank|floatformat:4 }} </td>
+        <td>  {{ onerow.pval_rank|stringformat:".3e"}} </td>
         <td>{{ onerow.snp_start}} </td><td>{{ onerow.snp_end}}</td><td>{{ onerow.ref_start}}</td>
         <td>{{ onerow.ref_end }} </td>
-         <td>{{ onerow.log_lik_ref|floatformat:4 }} </td><td> {{ onerow.log_lik_ratio|floatformat:4}} </td>
-        <td>{{ onerow.log_enhance_odds|floatformat:4}}</td><td>{{onerow.log_reduce_odds|floatformat:4}} </td>
-        <td>{{ onerow.log_lik_snp|floatformat:4}} </td>  
+         <td>{{ onerow.log_lik_ref|stringformat:".3e"}} </td><td> {{ onerow.log_lik_ratio|stringformat:".3e"}} </td>
+        <td>{{ onerow.log_enhance_odds|stringformat:".3e"}}</td><td>{{onerow.log_reduce_odds|stringformat:".3e"}} </td>
+        <td>{{ onerow.log_lik_snp|stringformat:".3e"}} </td>  
         <td>{{ onerow.snp_strand }}</td>  <td>{{ onerow.ref_strand }}</td>
-        <td>{{ onerow.pval_ref|floatformat:4 }} </td><td>{{ onerow.pval_snp|floatformat:4 }} </td>
-        <td>{{ onerow.pval_cond_ref|floatformat:4 }}</td> <td>{{ onerow.pval_cond_snp|floatformat:4}}</td>
-        <td>{{ onerow.pval_diff|floatformat:4 }}</td>  
+        <td>{{ onerow.pval_ref|stringformat:".3e" }} </td><td>{{ onerow.pval_snp|stringformat:".3e" }} </td>
+        <td>{{ onerow.pval_cond_ref|stringformat:".3e" }}</td> <td>{{ onerow.pval_cond_snp|stringformat:".3e"}}</td>
+        <td>{{ onerow.pval_diff|stringformat:".3e" }}</td>  
         <td> {{ onerow.refAllele }}</td> 
        <td> {{ onerow.snpAllele }}</td> </tr>
     {%  endfor %}
