@@ -66,7 +66,7 @@ class SearchByGenomicLocationForm(GenericSearchForm):
 
     # These defaults are here because I know there's development subset 
     # data in this range.
-    default_start_pos = 10000;    default_end_pos = 10500
+    default_start_pos = 10000;    default_end_pos = 100500
 
     # TODO: is there a way to put meaningful maximum values on these here?
     gl_start_pos = forms.IntegerField(widget=
@@ -165,17 +165,17 @@ class SearchBySnpidWindowForm(GenericSearchForm):
                                                     "around the position of the "   +\
                                                     "snpid entered here." }) 
     snpid = forms.CharField(widget = styled_widget)
-
-    styled_widget = forms.NumberInput(attrs={"class":'form-control',
-                                             'step':1,
+    styled_widget = forms.NumberInput(attrs={"class"   : 'form-control',
+                                             'step'    : 1,
                                              "title": "Search for data within + and - this "+\
                                                       "number of bases of the position of " +\
                                                       "the snpid."})
+
     #TODO: figure out what the max_value on this should actually be.
     window_size = forms.IntegerField(widget = styled_widget,
                                      label = "Window size",
                                      required = False,
-                                     initial = 0, 
+                                     initial = 1000, 
                                      min_value = 0)
 
     field_order =  ('snpid', 'window_size', 'pvalue_cutoff', 'page_of_results_shown')
@@ -199,7 +199,7 @@ class SearchByGeneNameForm(GenericSearchForm):
     window_size = forms.IntegerField(widget = styled_widget,
                                      label = "Window size",
                                      required = False,
-                                     initial = 0, 
+                                     initial = 1000, 
                                      min_value = 0)
     field_order =  ('gene_name', 'window_size', 'pvalue_cutoff', 'page_of_results_shown')
 
