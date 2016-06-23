@@ -22,8 +22,8 @@ class GenericSearchForm(forms.Form):
 class SearchBySnpidForm(GenericSearchForm):
     default_dummy_search = ("rs539483321, rs576894892, \
                              rs553761389, rs757299236, rs770590115")
-    text_to_explain_snpbox = "Enter snpids to lookup scores data for"
-    snpid_tip = "Enter a list of snpids to search for."
+    text_to_explain_snpbox = "SNPids:"
+    snpid_tip = "Enter SNPids to search for."
     styled_widget = forms.Textarea(attrs={'class':'form-control', 
                                           'title': snpid_tip})
     raw_requested_snpids = forms.CharField(widget=styled_widget,
@@ -62,7 +62,7 @@ class SearchByGenomicLocationForm(GenericSearchForm):
     default_data = None   #don't need this.
 
     gl_pos_label_text = { 'start' : 'Start position on chromosome',
-                          'end'   : 'End position on chromosome.' }
+                          'end'   : 'End position on chromosome' }
 
     # These defaults are here because I know there's development subset 
     # data in this range.
@@ -73,7 +73,7 @@ class SearchByGenomicLocationForm(GenericSearchForm):
                                         forms.NumberInput(attrs={"class":'form-control',
                                           'step':1, 
                                           "title": "Search for data in a region" +\
-                                          " that begins at this position on the chromosome"}),
+                                          " that begins at this position on the chromosome."}),
                                       label = gl_pos_label_text['start'], 
                                       required = True,
                                       initial = default_start_pos,
@@ -153,7 +153,7 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
                                         "title" : "Select the transcription factor here."})
     trans_factor = forms.ChoiceField(widget = styled_widget,
                                      choices = use_these_choices, 
-                                     label = "Select a transcription factor.")
+                                     label = "Select a transcription factor")
 
     field_order =  ('trans_factor', 'pvalue_cutoff', 'page_of_results_shown')
 
