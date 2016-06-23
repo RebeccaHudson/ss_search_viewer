@@ -3,8 +3,13 @@
     border: 2px solid;
 }
 
+#tabs li.active a {
+    border-bottom-color: transparent;
+}
+
 .tab-pane { 
-    /* yucky looking ... border:solid 1px blue; */
+    border:solid 1px gray;
+    border-top: 0;
 }
 .tooltip {
     background-color:#000;
@@ -19,5 +24,9 @@
     /* outline radius for mozilla/firefox only */
     -moz-box-shadow:0 0 10px #000;
     -webkit-box-shadow:0 0 10px #000;
+}
+
+div.submit-buttons {
+    padding: 10px; 10px;
 }
 
