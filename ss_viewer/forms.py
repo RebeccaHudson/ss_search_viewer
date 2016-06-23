@@ -149,7 +149,8 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
 
     use_these_choices = sorted(tuple(use_these_choices))
    
-    styled_widget = forms.Select(attrs={"class":"form-control"})
+    styled_widget = forms.Select(attrs={"class":"form-control",
+                                        "title" : "Select the transcription factor here."})
     trans_factor = forms.ChoiceField(widget = styled_widget,
                                      choices = use_these_choices, 
                                      label = "Select a transcription factor.")
@@ -159,10 +160,17 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
 
 
 class SearchBySnpidWindowForm(GenericSearchForm):
-    styled_widget = forms.TextInput(attrs={"class":"form-control"}) 
+    styled_widget = forms.TextInput(attrs={"class":"form-control",
+                                           "title": "Search for data with a window "+\
+                                                    "around the position of the "   +\
+                                                    "snpid entered here." }) 
     snpid = forms.CharField(widget = styled_widget)
 
-    styled_widget = forms.NumberInput(attrs={"class":'form-control','step':1})
+    styled_widget = forms.NumberInput(attrs={"class":'form-control',
+                                             'step':1,
+                                             "title": "Search for data within + and - this "+\
+                                                      "number of bases of the position of " +\
+                                                      "the snpid."})
     #TODO: figure out what the max_value on this should actually be.
     window_size = forms.IntegerField(widget = styled_widget,
                                      label = "Window size",
@@ -175,12 +183,18 @@ class SearchBySnpidWindowForm(GenericSearchForm):
 
 
 class SearchByGeneNameForm(GenericSearchForm):
-    styled_widget = forms.TextInput(attrs={"class":"form-control"}) 
+    styled_widget = forms.TextInput(attrs={"class":"form-control",
+                                           "title" : "Name of the gene to search form."}) 
     gene_name = forms.CharField(widget = styled_widget,
                                 label = "Gene name",
                                 required = True)
 
-    styled_widget = forms.NumberInput(attrs={"class":'form-control','step':1})
+    styled_widget = forms.NumberInput(attrs={"class":'form-control',
+                                             'step':1,
+                                             "title" : "Search for data within the " +\
+                                                       "region of the gene, as well " +\
+                                                       " as + and - this many bases " +\
+                                                       " of the gene's start and end position."})
     #TODO: figure out what the max_value on this should actually be.
     window_size = forms.IntegerField(widget = styled_widget,
                                      label = "Window size",
