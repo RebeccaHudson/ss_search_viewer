@@ -233,10 +233,9 @@ class APIResponseHandler:
             #loop until 204 or error.. 
             page_of_results = 1 
             while api_response.status_code == 200:
-                print "one page of hist given back.."
                 search_offset = settings.API_HOST_INFO['result_page_size'] * page_of_results
                 api_search_query.update({'from_result':search_offset})                
-
+                #print "api search query : " + repr(api_search_query)
                 api_response = requests.post( APIUrls.setup_api_url(api_action),
                      json=api_search_query, headers={'content-type':'application/json'})
 
@@ -244,7 +243,7 @@ class APIResponseHandler:
                 if api_response.status_code == 200:
                     response_json = json.loads(api_response.text)
                     APIResponseHandler.write_one_response_to_csv(response_json['data'], writer) 
-
+           
             z = zipfile.ZipFile(response, 'w')
             output_tmp.seek(0)
             z.writestr("search-results.csv", output_tmp.read())
