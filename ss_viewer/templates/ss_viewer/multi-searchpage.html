@@ -22,15 +22,15 @@
 
   <li {%if active_tab == 'gl-region' or active_tab == 'none-yet'  %}
       class="active"
-      {% endif %}><a href="#gl_region_search_form" data-toggle="tab" class='btn-default'>Genomic Location</a></li>
+      {% endif %}><a href="#gl_region_search_form" data-toggle="tab">Genomic Location</a></li>
 
-  <li  {%if active_tab == 'snpid'%}class="active"{%endif%}><a href="#snpid_search_form" data-toggle="tab" class='btn-default' >SNPid</a></li>
+  <li  {%if active_tab == 'snpid'%}class="active"{%endif%}><a href="#snpid_search_form" data-toggle="tab"  >SNPid</a></li>
 
-  <li {%if active_tab == 'tf'%}class="active"{%endif%}><a href="#tf_search_form" data-toggle="tab" class='btn-default'>Transcription Factor</a></li>
+  <li {%if active_tab == 'tf'%}class="active"{%endif%}><a href="#tf_search_form" data-toggle="tab" >Transcription Factor</a></li>
 
-  <li {%if active_tab == 'snpid-window'%}class="active"{%endif%}><a href="#snpid_window_form" data-toggle="tab" class='btn-default'>Snpid Window</a></li>
+  <li {%if active_tab == 'snpid-window'%}class="active"{%endif%}><a href="#snpid_window_form" data-toggle="tab" >Snpid Window</a></li>
 
-  <li {%if active_tab == 'gene-name'%}class="active"{%endif%}><a href="#gene_name_form" data-toggle="tab" class='btn-default'>Gene Name</a></li>
+  <li {%if active_tab == 'gene-name'%}class="active"{%endif%}><a href="#gene_name_form" data-toggle="tab" >Gene Name</a></li>
 
 </ul>
 
@@ -46,15 +46,18 @@
     <table>
       {{ gl_search_form.as_table }}
     </table>
-    <input type="submit" name="action" value="Search by Genomic Location"  class="btn btn-primary" />
-      {% if search_paging_info != None and active_tab == 'gl-region' %}
-        {% if search_paging_info.show_next_btn == True %}
-            <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-        {% endif %}
-        {% if search_paging_info.show_prev_btn == True %}
-            <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
-        {% endif %}
-      {% endif %}
+
+    <div class="submit-buttons">
+        <input type="submit" name="action" value="Search by Genomic Location"  class="btn btn-primary" />
+          {% if search_paging_info != None and active_tab == 'gl-region' %}
+            {% if search_paging_info.show_next_btn == True %}
+                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+            {% endif %}
+            {% if search_paging_info.show_prev_btn == True %}
+                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+            {% endif %}
+          {% endif %}
+    </div><!-- end div for submit buttons. -->
   </div>
      {% if search_paging_info != None and active_tab == 'gl-region' %}
        <input type="submit" name="action" 
@@ -73,16 +76,19 @@
     <table>
       {{ snpid_search_form.as_table }}
     </table>
-    <input type="submit" name="action" value="Search by SNPid"  class="btn btn-primary" />
 
-      {% if search_paging_info != None and active_tab == 'snpid' %}
-        {% if search_paging_info.show_next_btn == True %}
-            <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-        {% endif %}
-        {% if search_paging_info.show_prev_btn == True %}
-            <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
-        {% endif %}
-      {% endif %}
+    <div class="submit-buttons">
+        <input type="submit" name="action" value="Search by SNPid"  class="btn btn-primary" />
+
+          {% if search_paging_info != None and active_tab == 'snpid' %}
+            {% if search_paging_info.show_next_btn == True %}
+                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+            {% endif %}
+            {% if search_paging_info.show_prev_btn == True %}
+                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+            {% endif %}
+          {% endif %}
+    </div><!-- end div for submit buttons. -->
   </div>
      {% if search_paging_info != None and active_tab = 'snpid' %}
        <input type="submit" name="action" 
@@ -101,18 +107,20 @@
       <table>
         {{ tf_search_form.as_table }}
       </table>
-      <input type="submit" name="action" value="Search by Transcription Factor"  
-                                                      class="btn btn-primary" />
-      {% if search_paging_info != None and active_tab == 'tf'  %}
-        {% if search_paging_info.show_next_btn == True %}
-            <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-        {% endif %}
-        
-        {% if search_paging_info.show_prev_btn == True %}
-            <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
-        {% endif %}
-      {% endif %}
 
+      <div class="submit-buttons">
+          <input type="submit" name="action" value="Search by Transcription Factor"  
+                                                          class="btn btn-primary" />
+          {% if search_paging_info != None and active_tab == 'tf'  %}
+            {% if search_paging_info.show_next_btn == True %}
+                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+            {% endif %}
+            
+            {% if search_paging_info.show_prev_btn == True %}
+                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+            {% endif %}
+          {% endif %}
+       </div><!-- end div for submit buttons. -->
     </div>
 
      {% if search_paging_info != None and active_tab == 'tf' %}
@@ -133,17 +141,20 @@
       <table>
         {{ snpid_window_form.as_table }}
       </table>
-      <input type="submit" name="action" value="Search by Window around SNPid"  
-                                                      class="btn btn-primary" />
-      {% if search_paging_info != None and active_tab == 'snpid-window'  %}
-        {% if search_paging_info.show_next_btn == True %}
-            <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-        {% endif %}
-        
-        {% if search_paging_info.show_prev_btn == True %}
-            <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
-        {% endif %}
-      {% endif %}
+
+      <div class="submit-buttons">
+          <input type="submit" name="action" value="Search by Window around SNPid"  
+                                                          class="btn btn-primary" />
+          {% if search_paging_info != None and active_tab == 'snpid-window'  %}
+            {% if search_paging_info.show_next_btn == True %}
+                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+            {% endif %}
+            
+            {% if search_paging_info.show_prev_btn == True %}
+                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+            {% endif %}
+          {% endif %}
+       </div><!-- end div for submit buttons. -->
     </div>
 
      {% if search_paging_info != None  and active_tab == 'snpid-window' %}
@@ -163,17 +174,19 @@
       <table>
         {{ gene_name_form.as_table }}
       </table>
-      <input type="submit" name="action" value="Search by Gene Name"  
-                                                      class="btn btn-primary" />
-      {% if search_paging_info != None and active_tab == 'gene-name'  %}
-        {% if search_paging_info.show_next_btn == True %}
-            <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-        {% endif %}
-        
-        {% if search_paging_info.show_prev_btn == True %}
-            <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
-        {% endif %}
-      {% endif %}
+      <div class="submit-buttons">
+          <input type="submit" name="action" value="Search by Gene Name"  
+                                                          class="btn btn-primary" />
+          {% if search_paging_info != None and active_tab == 'gene-name'  %}
+            {% if search_paging_info.show_next_btn == True %}
+                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+            {% endif %}
+            
+            {% if search_paging_info.show_prev_btn == True %}
+                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+            {% endif %}
+          {% endif %}
+      </div> <!-- end div for submit buttons. -->
     </div>
 
      {% if search_paging_info != None and active_tab == 'gene_name' %}
@@ -204,7 +217,7 @@
         <td>snpid</td>
         <td>transcription factor</td>
         <td>motif</td>
-        <td>motif length</td>
+       <td>motif length</td>
         <td>pval rank</td>
         <td>snp start</td>
         <td>snp end</td>
