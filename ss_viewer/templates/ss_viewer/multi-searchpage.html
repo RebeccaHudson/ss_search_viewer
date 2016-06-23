@@ -57,6 +57,7 @@
             {% endif %}
           {% endif %}
     </div><!-- end div for submit buttons. -->
+    <button id="gl-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
   </div>
      {% if search_paging_info != None and active_tab == 'gl-region' %}
        <input type="submit" name="action" 
@@ -74,11 +75,12 @@
   <div class="form-group">
     <table>
       {{ snpid_search_form.as_table }}
+
     </table>
 
     <div class="submit-buttons">
-        <input type="submit" name="action" value="Search by SNPid"  class="btn btn-primary" />
 
+      <input type="submit" name="action" value="Search by SNPid"  class="btn btn-primary" />
           {% if search_paging_info != None and active_tab == 'snpid' %}
             {% if search_paging_info.show_next_btn == True %}
                 <input type="submit" name="action" value="Next" class="btn btn-info" /> 
@@ -88,6 +90,7 @@
             {% endif %}
           {% endif %}
     </div><!-- end div for submit buttons. -->
+    <button id="snpid-search-demo" type="button" class="btn btn-link">Use demo values for search.</button>
   </div>
      {% if search_paging_info != None and active_tab = 'snpid' %}
        <input type="submit" name="action" 
@@ -277,6 +280,17 @@
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
         $('#tabs').tab();
+        $('#id_snpid').val("fake");
+
+        $("#snpid-search-demo").click(function(e){ 
+                                       $('#id_raw_requested_snpids').val('rs539483321, rs576894892, rs553761389, rs757299236, rs770590115');
+                                      } );
+
+        $("#gl-search-demo").click(function(e){
+                                       $('#id_gl_start_pos').val(10000);
+                                       $('#id_gl_end_pos').val(143511163);
+                                       $('#id_selected_chromosome').val('ch5');
+                                  });
     });
 </script>   
 <script>

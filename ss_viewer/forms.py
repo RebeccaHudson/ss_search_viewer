@@ -22,7 +22,9 @@ class GenericSearchForm(forms.Form):
 class SearchBySnpidForm(GenericSearchForm):
     default_dummy_search = ("rs539483321, rs576894892, \
                              rs553761389, rs757299236, rs770590115")
+    default_dummy_search = ""
     text_to_explain_snpbox = "SNPids:"
+
     snpid_tip = "Enter SNPids to search for."
     styled_widget = forms.Textarea(attrs={'class':'form-control', 
                                           'title': snpid_tip})
@@ -66,8 +68,7 @@ class SearchByGenomicLocationForm(GenericSearchForm):
 
     # These defaults are here because I know there's development subset 
     # data in this range.
-    default_start_pos = 10000;    default_end_pos = 100500
-
+    #default_start_pos = 10000;    default_end_pos = 100500
     # TODO: is there a way to put meaningful maximum values on these here?
     gl_start_pos = forms.IntegerField(widget=
                                         forms.NumberInput(attrs={"class":'form-control',
@@ -76,7 +77,6 @@ class SearchByGenomicLocationForm(GenericSearchForm):
                                           " that begins at this position on the chromosome."}),
                                       label = gl_pos_label_text['start'], 
                                       required = True,
-                                      initial = default_start_pos,
                                       min_value = 0 )
 
     gl_end_pos = forms.IntegerField(widget=
@@ -86,7 +86,6 @@ class SearchByGenomicLocationForm(GenericSearchForm):
                                           " that ends at this position on the chromosome."}),
                                     label = gl_pos_label_text['end'],
                                     required = False, 
-                                    initial = default_end_pos,
                                     min_value = 1)
 
     chromosomes = [ "ch" + str(x) for x in range(1, 24) ]
