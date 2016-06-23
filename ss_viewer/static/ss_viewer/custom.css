@@ -1,7 +1,7 @@
+/* these are hand-coded styles meant to work with and/or override
+  what Bootstrap provides already. */
 
 #tabs li a {
-    /*border-bottom-color: #AA9A66;*/
-    /* color: white; */
     border: 2px solid;
     background-color: #DCDCDC;
 }
@@ -47,3 +47,5 @@ div.submit-buttons {
 .table-striped > tbody > tr:nth-of-type(2n+1) {
     background-color: #C9C9F3;
 }
+
+form label{ margin-right: 10px; }
