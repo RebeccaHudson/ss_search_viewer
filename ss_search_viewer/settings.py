@@ -36,6 +36,7 @@ API_HOST_INFO = {
   'host_port' : '8005',
   'api_root' : 'api_v0',
   'result_page_size'  : 50, #this should be much bigger later.
+  'download_result_page_size' : 5000,
 }
 
 

@@ -15,6 +15,8 @@ from ss_viewer.forms import SearchBySnpidWindowForm
 from ss_viewer.forms import SearchByGeneNameForm
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
+from django.utils.six.moves import range
+from django.http import StreamingHttpResponse
 
 class MotifTransformer:
     def __init__(self):
@@ -258,6 +260,77 @@ class APIResponseHandler:
         #tempfile will be deleted when it closes.
         return response
 
+
+
+
+
+"""An object that implements just the write method of the file-like
+interface.
+"""
+class Echo(object):
+    def write(self, value):
+        """Write the value by returning it, instead of storing in a buffer."""
+        return value
+
+#lifted almost verbatim from django 1.9 docs
+#https://docs.djangoproject.com/en/1.9/howto/outputting-csv/#streaming-large-csv-files
+class StreamingCSVDownloadHandler:
+
+    @staticmethod
+    def fields_for_csv():
+        return  ['chr', 'pos', 'snpid', 'trans_factor', 'motif', 'motif_len',
+                 'pval_rank', 'snp_start', 'snp_end', 'ref_start', 'ref_end',
+                 'log_lik_ref', 'log_lik_ratio', 'log_enhance_odds',
+                 'log_reduce_odds', 'log_lik_snp', 'snp_strand', 'ref_strand',
+                 'pval_ref', 'pval_snp', 'pval_cond_ref', 'pval_cond_snp',
+                 'pval_diff', 'refAllele', 'snpAllele']
+
+    #get all of the needed parts
+    @staticmethod
+    def return_rows_from_api( api_search_query, api_action):
+        fields_for_csv = StreamingCSVDownloadHandler.fields_for_csv()
+        mt = MotifTransformer()
+        rows = []
+        page_of_results = 0 
+        keep_on_paging = True
+        while keep_on_paging is True:
+            search_offset = settings.API_HOST_INFO['download_result_page_size'] * page_of_results
+            api_search_query.update(
+                               {'from_result':search_offset,
+                                'page_size':settings.API_HOST_INFO['download_result_page_size']})
+            api_response = requests.post( APIUrls.setup_api_url(api_action),
+                 json=api_search_query, headers={'content-type':'application/json'})
+            
+            page_of_results += 1
+            
+            if api_response.status_code == 200:
+                response_json = json.loads(api_response.text)
+                api_response_data = response_json['data']         
+                prepared_data = mt.transform_motifs_to_transcription_factors(api_response_data)
+                print "hitcount = " + str(response_json['hitcount'])
+                print "got this much data out of API this round : " + str(len(api_response_data))
+                for dr in prepared_data:
+                    rows.append( [ dr[field_name] for field_name in fields_for_csv ])
+            else:
+                keep_on_paging = False
+
+        print "returning this many rows " + str(len(rows))
+        return rows
+
+    @staticmethod
+    def streaming_csv_view(request, api_search_query, api_action):
+        """A view that streams a large CSV file."""
+        # Generate a sequence of rows. The range is based on the maximum number of
+        # rows that can be handled by a single sheet in most spreadsheet
+        # applications.
+        #rows = (["Row {}".format(idx), str(idx)] for idx in range(65536))
+        rows = StreamingCSVDownloadHandler.return_rows_from_api(api_search_query, api_action)
+        pseudo_buffer = Echo()
+        writer = csv.writer(pseudo_buffer)
+        response = StreamingHttpResponse((writer.writerow(row) for row in rows),
+                                         content_type="text/csv")
+        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+        return response
 
 class APIUrls:
     @staticmethod

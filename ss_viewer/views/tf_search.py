@@ -11,6 +11,7 @@ from ss_viewer.views.shared import MotifTransformer, TFTransformer
 from ss_viewer.views.shared import APIUrls 
 from ss_viewer.views.shared import StandardFormset 
 from ss_viewer.views.shared import APIResponseHandler 
+from ss_viewer.views.shared import StreamingCSVDownloadHandler 
 
 def copy_valid_form_data_into_hidden_fields(form_data):
     fields_to_copy = ['pvalue_rank_cutoff', 'trans_factor']
@@ -31,15 +32,16 @@ def handle_search_by_trans_factor(request):
 
     form_data = tf_search_form.cleaned_data
 
+    tft = TFTransformer()
     #offer a download of results currently shown, use the values copied into the 
     #hidden controls on the previous form POST.
     if request.POST['action'] == 'Download Results':
         motif_value = tft.lookup_motifs_by_tf(form_data['prev_search_trans_factor'])
-        pvalue_rank = form_data['prev_search_pvalue_rank']
+        pvalue_rank = form_data['prev_search_pvalue_rank_cutoff']
         previous_search_params = {'motif' : motif_value, 'pvalue_rank':   pvalue_rank}
-        return APIResponseHandler.handle_download_request(previous_search_params, 'search-by-tf')
+        return StreamingCSVDownloadHandler.streaming_csv_view(request, previous_search_params, 'search-by-tf')
 
-    tft = TFTransformer()
+
     motif_value = tft.lookup_motifs_by_tf(form_data['trans_factor'])
 
     pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(tf_search_form)
