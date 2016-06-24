@@ -43,6 +43,7 @@ API_HOST_INFO = {
 # Application definition
 
 INSTALLED_APPS = [
+    'django_q',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

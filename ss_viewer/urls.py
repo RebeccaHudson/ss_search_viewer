@@ -17,7 +17,7 @@ urlpatterns = [
        name = 'index'),
 
    url(r'^download-test/$',
-       views.main.get_compressed_download,
+       views.shared.APIResponseHandler.handle_async_dummy_download_request,
        name = 'download-test'),
  
   url(r'^multi-search/$', 

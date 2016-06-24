@@ -31,15 +31,21 @@ def handle_search_by_trans_factor(request):
 
     form_data = tf_search_form.cleaned_data
 
+    tft = TFTransformer()
     #offer a download of results currently shown, use the values copied into the 
     #hidden controls on the previous form POST.
     if request.POST['action'] == 'Download Results':
         motif_value = tft.lookup_motifs_by_tf(form_data['prev_search_trans_factor'])
-        pvalue_rank = form_data['prev_search_pvalue_rank']
+        pvalue_rank = form_data['prev_search_pvalue_rank_cutoff']
         previous_search_params = {'motif' : motif_value, 'pvalue_rank':   pvalue_rank}
-        return APIResponseHandler.handle_download_request(previous_search_params, 'search-by-tf')
 
-    tft = TFTransformer()
+        context = StandardFormset.setup_formset_context(tf_form=tf_search_form)
+        return APIResponseHandler.handle_async_download_request(request, 
+                                                                context,
+                                                                previous_search_params,
+                                                                'search-by-tf')
+
+
     motif_value = tft.lookup_motifs_by_tf(form_data['trans_factor'])
 
     pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(tf_search_form)

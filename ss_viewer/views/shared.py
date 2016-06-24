@@ -15,6 +15,7 @@ from ss_viewer.forms import SearchBySnpidWindowForm
 from ss_viewer.forms import SearchByGeneNameForm
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
+from django_q.tasks import async
 
 class MotifTransformer:
     def __init__(self):
@@ -216,7 +217,59 @@ class APIResponseHandler:
             row_to_write = [ dr[field_name] for field_name in fields_for_csv]
             csv_writer.writerow(row_to_write)
 
+
+    @staticmethod
+    def handle_async_dummy_download_request(request):
+        if request.method == 'POST':
+            post_text = request.POST.get('the_post')
+            response_data = {}
+            response_data['result'] = 'dummy good ok!'
+            print "request recived by handle async dummy:  " + str(request)  
+            args = ('foo', 'bar')
+            function_to_run = 'APIResponseHandler.handle_dummy_download_request'
+            hook = 'APIResponseHandler.handle_dummy_download_completion'
+            uid = async(function_to_run, args, hook=hook)
+            return HttpResponse(
+                json.dumps(response_data),
+                content_type="application/json")
+        else:
+            return HttpResponse(
+                json.dumps({"nothing to see": "this isn't happening"}),
+                content_type="application/json")
+
+
+
+    @staticmethod
+    def handle_dummy_download_completion(task):
+        #how can I get this to connect back to the page?
+        print "COMPLETION HOOK!!!!"
+        print "task result " + str(task.result)
+
  
+    @staticmethod
+    #def handle_dummy_download_request(api_search_query, api_action):
+    def handle_dummy_download_request(arg1, arg2):
+        #just succeed at passing these to a file and returning it for download. 
+        #Then wire up everything else.
+        fname = None
+        with NamedTemporaryFile(delete=False) as output_tmp:
+            output_tmp.write('this is some data')
+            #output_tmp.write(repr(api_search_query))
+            #output_tmp.write('how about the api action? ' + api_action)
+            output_tmp.write("first arg" + arg1 + " second arg: " + arg2)
+            fname = output_tmp.file.name 
+            #this needs to be cleaned up later...
+        return fname
+
+    @staticmethod
+    def handle_async_download_request(request, context, api_search_query, api_action):
+        function_to_run = 'APIResponseHandler.handle_download_request'
+        args = (api_search_query, api_action)   
+        uuid = async(function_to_run, api_action)
+        print "tried to start a queued job w/ uuid : " + repr(uuid)
+        context['status_message'] = "Started a queued download at uuid : " + uuid 
+        return render(request, 'ss_viewer/multi-searchpage.html', context) 
+
     @staticmethod
     def handle_download_request(api_search_query, api_action):
         response_data = None
