@@ -243,6 +243,7 @@
         <td> ref allele </td>
 
         <td> snp allele </td>
+        <td> has plot</td>
     </tr>
     </thead>
     <tbody>
@@ -262,7 +263,8 @@
         <td>{{ onerow.pval_cond_ref|stringformat:".3e" }}</td> <td>{{ onerow.pval_cond_snp|stringformat:".3e"}}</td>
         <td>{{ onerow.pval_diff|stringformat:".3e" }}</td>  
         <td> {{ onerow.refAllele }}</td> 
-       <td> {{ onerow.snpAllele }}</td> </tr>
+       <td> {{ onerow.snpAllele }}</td> 
+       <td> {{ onerow.has_plot }}</td> </tr>
     {%  endfor %}
     <tbody>
   </table>
