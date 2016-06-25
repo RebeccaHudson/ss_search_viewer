@@ -32,7 +32,7 @@ def index(request):
 
 
 #API should be talking to ES. I just want to be sure we can display these.
-def get_svg_plot_from_es():
+def dummy_get_svg_plot_from_es():
     es_url = 'http://atsnp-db2.biostat.wisc.edu:9200'          
     es_index = '/img_update_test'
     es_type = '/dummy_record'
@@ -45,12 +45,51 @@ def get_svg_plot_from_es():
     svg_plot_data = es_result.json()['_source']['svg_plot']
     return svg_plot_data
 
+def get_plot_data_out_of_es(plot_info):
+    es_url = 'http://atsnp-db2.biostat.wisc.edu:9200'          
+    es_index = '/atsnp_data'
+    es_type = '/svg_plots'
+    search_endpoint = '/_search'
+    plot_search_url = es_url + es_index + es_type + search_endpoint 
+    q = { "query" : {
+        "bool" : {
+          "must" : [ 
+                   { "match" : { "snpid"      : plot_info['snpid']     } },
+                   { "match" : { "motif"      : plot_info['motif']     } },
+                   { "match" : { "snp_allele" : plot_info['snp_allele'] } },
+                 ]     } } }
+    #print "plot query " + str(q)
+    results = requests.post(plot_search_url, data=json.dumps(q))
+    if results.status_code == 200: 
+        #svg_data = results.json()['hits']['hits'][0]['svg_plot']    
+        result_json = results.json()
+        hits = result_json['hits']['hits']
+        print "hits : " + str(len(hits))
+        print "data keys  " + str(hits[0].keys())
+        doc_source = hits[0]['_source']
+        svg_data = doc_source['svg_plot']
+        #return "nothing special"
+        return svg_data 
+    else:
+        print "no plot found for " + str(plot_info)
+        return None
+
+def get_plot_query_info_from_string(query_str):
+    split_parts = query_str.split("_")
+    motif = split_parts[0]
+    snpid = split_parts[1]
+    snpAllele = split_parts[2]
+    return { 'motif' : motif, 
+             'snpid' : snpid, 
+             'snp_allele' : snpAllele}
 
 #this should take a post with the request data
 def dynamic_svg(request, plot_id_string):
     print "running dynamic svg, plot_id_string = "  + plot_id_string
     #should be able to make an API request with this data that will return a plot
-    image=get_svg_plot_from_es()
+    plot_info = get_plot_query_info_from_string(plot_id_string)
+    image = get_plot_data_out_of_es(plot_info)
+    #image=get_svg_plot_from_es()
     return HttpResponse(image, content_type="image/svg+xml")
 
 def test_svg_plots(request):
