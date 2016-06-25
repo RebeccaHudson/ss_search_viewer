@@ -1,0 +1,15 @@
+{% load staticfiles %}
+<head>
+  <title> test the showing of a plot... </title>
+</head>
+<body>
+<h2 >Show plot </h2>
+<p>{{ happy_data }}</p>
+
+<a href = "{{ dynamic_svg_data}}">
+    <img src="{{ dynamic_svg_data }}" alt="img1">
+</a>
+
+<div id="plot" class="side">
+</div>
+
