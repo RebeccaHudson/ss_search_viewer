@@ -208,9 +208,15 @@
 
 </div> <!-- close the 'tabbed forms' div -->
 <!--  this is the way that we will be displaying the plot -->
-{% if plot_data %}
-    {% for plot_id_str, one_svg in plot_data.items %}
-      <div id="plot_{{plot_id_str}}" class="side">
+{% if plot_source %}
+    {% for plot_id_str, one_svg in plot_source.items %}
+      <div id="plot_{{plot_id_str}}" class=" 
+            {% if plot_id_str == first_plot_id_str %}
+            show-plot
+            {% else %}
+            hide-plot
+            {% endif %}" > 
+          <p> check for match w/ first_plot = {{ first_plot_id_str }}  </p>
           <h3> {{ plot_id_str }} </h3>
           <img src="{{ one_svg }}" alt="truckin-plot">
       </div>
