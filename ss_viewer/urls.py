@@ -23,7 +23,6 @@ urlpatterns = [
   url (r'^dynamic-svg/(?P<plot_id_string>.+)$',
        views.main.dynamic_svg,
        name = 'dynamic-svg'),
-
  
   url(r'^multi-search/$', 
        views.shared.StandardFormset.show_multisearch_page,
