@@ -208,9 +208,14 @@
 
 </div> <!-- close the 'tabbed forms' div -->
 <!--  this is the way that we will be displaying the plot -->
-<div id="plot" class="side">
-</div>
-
+{% if plot_data %}
+    {% for plot_id_str, one_svg in plot_data.items %}
+      <div id="plot_{{plot_id_str}}" class="side">
+          <h3> {{ plot_id_str }} </h3>
+          <img src="{{ one_svg }}" alt="truckin-plot">
+      </div>
+    {% endfor %}
+{% endif %}
 
 <!-- consider making this part modular; DRYing it up some how... -->
   {% if api_response  %}
