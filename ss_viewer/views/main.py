@@ -45,15 +45,21 @@ def get_svg_plot_from_es():
     svg_plot_data = es_result.json()['_source']['svg_plot']
     return svg_plot_data
 
-def dynamic_svg(request):
+
+#this should take a post with the request data
+def dynamic_svg(request, plot_id_string):
+    print "running dynamic svg, plot_id_string = "  + plot_id_string
+    #should be able to make an API request with this data that will return a plot
     image=get_svg_plot_from_es()
     return HttpResponse(image, content_type="image/svg+xml")
 
 def test_svg_plots(request):
     name_of_template  =  'ss_viewer/show_test_plot.html' 
     #template = loader.get_template(name_of_template)
-
-    context =  {'dynamic_svg_data':reverse('ss_viewer:dynamic-svg'),
+    #data_from_post = requests.post(url_of_dyn, data=json.dumps({'bit of post data':69})
+    #I intend to put the data that comes out of ES on the result itself into the output file.
+    plot_id_string = 'MA0002.2_rs538221432_T'
+    context =  {'dynamic_svg_data' : reverse('ss_viewer:dynamic-svg', args=[plot_id_string]),
                  "happy_data" : "eat, shit, and die." } 
     # in original example ,reverse also has args=['gene_links_graph'])})
 

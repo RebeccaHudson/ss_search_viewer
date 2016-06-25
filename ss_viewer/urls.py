@@ -20,7 +20,7 @@ urlpatterns = [
        views.main.test_svg_plots,
        name = 'show-plot-test'),
 
-  url (r'^dynamic-svg/$',
+  url (r'^dynamic-svg/(?P<plot_id_string>.+)$',
        views.main.dynamic_svg,
        name = 'dynamic-svg'),
 
