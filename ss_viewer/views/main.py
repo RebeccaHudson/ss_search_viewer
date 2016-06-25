@@ -23,11 +23,44 @@ from ss_viewer.views.snpid_search import SnpidSearchUtils
 from tempfile import NamedTemporaryFile 
 import csv
 import zipfile
+
 #TODO pare down the imports here. Most of them are not needed at this point.
 
 #from .plots import MakePlots #tempfile writer can stay hiedden
 def index(request):
   return HttpResponse("Try another url, like :ss_viewer/multi-search.")
+
+
+#API should be talking to ES. I just want to be sure we can display these.
+def get_svg_plot_from_es():
+    es_url = 'http://atsnp-db2.biostat.wisc.edu:9200'          
+    es_index = '/img_update_test'
+    es_type = '/dummy_record'
+    dummy_id = '/AVWER04sBpk2eOuD830v'
+    url = es_url + es_index + es_type + dummy_id
+    es_result = requests.get(url)
+    to_show = es_result.json()['_source'].keys()
+    print "showing this " + str(to_show)
+    #print "dumping it out ... " + es_result.text
+    svg_plot_data = es_result.json()['_source']['svg_plot']
+    return svg_plot_data
+
+def dynamic_svg(request):
+    image=get_svg_plot_from_es()
+    return HttpResponse(image, content_type="image/svg+xml")
+
+def test_svg_plots(request):
+    name_of_template  =  'ss_viewer/show_test_plot.html' 
+    #template = loader.get_template(name_of_template)
+
+    context =  {'dynamic_svg_data':reverse('ss_viewer:dynamic-svg'),
+                 "happy_data" : "eat, shit, and die." } 
+    # in original example ,reverse also has args=['gene_links_graph'])})
+
+    #context = { "happy_data" : "eat, shit, and die.",
+    #            "plot_data"  : svg_plot_data }
+    return render(request, name_of_template, context)
+
 
 def get_compressed_download(request):
     #with open('eggs.csv', 'wb') as csvfile:
