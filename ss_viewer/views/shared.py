@@ -172,7 +172,22 @@ class APIResponseHandler:
     def setup_hits_message(hitcount, page_of_results_to_display):
         return 'Got ' + str(hitcount) + ' rows back from API.' +\
                ' Showing page: ' + str(page_of_results_to_display)
-   
+     
+    @staticmethod 
+    #meant to handle one page of results at a time.
+    #start with just the first result
+    def get_plots_for_rows_with_plots(rows_to_display):
+        plot_data = {} 
+        field_names = ['motif', 'snpid', 'snpAllele'] 
+        for one_row in rows_to_display:
+            if one_row['has_plot'] is True:
+                plot_id_str = "_".join([one_row[field_name] for field_name in field_names ])
+                plot_data[plot_id_str] = reverse('ss_viewer:dynamic-svg', args=[plot_id_str])  
+                print "grabbed a plot from right here: " + plot_id_str
+        if not any(plot_data):
+            return None
+        return plot_data 
+ 
     @staticmethod
     #api_action should be 'search-by-tf' or 'search-by-gl'
     #This code gets repeated between every search.
@@ -193,6 +208,7 @@ class APIResponseHandler:
             response_json = json.loads(api_response.text)
             mt = MotifTransformer()
             response_data = mt.transform_motifs_to_transcription_factors(response_json['data'])
+            plot_data = APIResponseHandler.get_plots_for_rows_with_plots(response_data)
 
             status_message = APIResponseHandler.setup_hits_message(response_json['hitcount'], 
                                        search_request_params['page_of_results_to_display'])
@@ -201,7 +217,8 @@ class APIResponseHandler:
                                         search_request_params['page_of_results_to_display'])
         return  {'status_message' : status_message, 
                  'search_paging_info' : search_paging_info,
-                 'api_response'       : response_data }
+                 'api_response'       : response_data,
+                 'plot_data'          : plot_data }
     
 
     @staticmethod
