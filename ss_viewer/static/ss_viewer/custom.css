@@ -49,3 +49,7 @@ div.submit-buttons {
 }
 
 form label{ margin-right: 10px; }
+
+div .hide-plot { display : none; }
+div .show-plot { display: block; }/* maybe it should be inline? */ 
+
