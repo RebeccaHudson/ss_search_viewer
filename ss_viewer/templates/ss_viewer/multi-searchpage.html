@@ -171,7 +171,7 @@
 
 
 <div class="tab-pane panel-body
-   {%if active_tab == 'gene-name-window'%} active{%endif%}"  id="gene_name_form" >
+   {%if active_tab == 'gene-name'%} active{%endif%}"  id="gene_name_form" >
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:gene-name-search' %}" method="post">
   {% csrf_token %}
     <div class="form-group">
@@ -289,12 +289,6 @@
 </div> <!-- close the 'content' div -->
 </div> <!-- close the 'container' div -->
 
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <!-- 
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    -->
-
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{% static 'ss_viewer/js/bootstrap.min.js' %}"></script>
 
 <script type="text/javascript">
@@ -313,33 +307,22 @@
         $("#snpid-window-search-demo").click(function(e){
                                       $('#id_snpid').val('rs755632525'); });
         $("#gene-name-search-demo").click(function(e){
-                                      $('#id_gene_name').val('not sure..'); });
+                                      $('#id_gene_name').val('NM_001293798'); });
         /*$("#show_plot").click(function(e){ */
         $("td.show_plots > button").click(function(e) {
-                                console.log("it's at least ok..");
-                                
                                 var plotstr_attr = e.target.attributes.getNamedItem('plotstr');
                                 var plot_str  = plotstr_attr.value;
-                                alert(plot_str);
 
                                 /* hides the currently shown plot */
                                 var currently_shown_plot = $("div.show-plot");
                                 currently_shown_plot.removeClass('show-plot');
                                 currently_shown_plot.addClass('hide-plot'); 
-                                console.log("this is what currplot looks like when logged...");
-                                console.log(currently_shown_plot); 
-
                                 var id_of_plot_div = 'plot_'.concat(plot_str); 
                                 var plot_selector = '#'.concat(id_of_plot_div);
-                                /*var plot_selector = "div".concat(selector_for_plot_div);*/
-                                console.log("value of plot_selector now follows: ");
-                                console.log(plot_selector);
                                 var div_to_show_now = $(plot_selector);
-                                console.log(div_to_show_now);
                                 div_to_show_now.removeClass('hide-plot');
                                 div_to_show_now.addClass('show-plot');
-                               });
-                                     
+                               }); 
     });
 </script>
 <script>
