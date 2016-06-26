@@ -183,13 +183,16 @@ class APIResponseHandler:
         for one_row in rows_to_display:
             if one_row['has_plot'] is True:
                 plot_id_str = "_".join([one_row[field_name] for field_name in field_names ])
-                plot_data[plot_id_str] = reverse('ss_viewer:dynamic-svg', args=[plot_id_str])  
-                print "grabbed a plot from right here: " + plot_id_str
+                plot_id_str_for_web_page = plot_id_str.replace(".", "_")
+                print "plot ID for web page looks like this "+ plot_id_str_for_web_page
+                plot_data[plot_id_str_for_web_page] = reverse('ss_viewer:dynamic-svg', args=[plot_id_str])  
+                one_row['plot_id_str'] = plot_id_str_for_web_page
                 if first_plot_id_str is None:
-                    first_plot_id_str = plot_id_str  #tell the interface which plot to show first.
+                    first_plot_id_str = plot_id_str_for_web_page #tell the interface which plot to show first.
         if not any(plot_data):
             return None
-        return { 'plot_data':plot_data , 
+        return { 'response_data' : rows_to_display, 
+                 'plot_data':plot_data , 
                  'first_plot_id_str': first_plot_id_str}
  
     @staticmethod
@@ -217,6 +220,9 @@ class APIResponseHandler:
             plot_data = APIResponseHandler.get_plots_for_rows_with_plots(response_data)
             plot_source = plot_data['plot_data']          
             first_plot_id_str = plot_data['first_plot_id_str']
+
+            if plot_data is not None: #append the plot id strings to each row..
+                response_data = plot_data['response_data']
  
             status_message = APIResponseHandler.setup_hits_message(response_json['hitcount'], 
                                        search_request_params['page_of_results_to_display'])
