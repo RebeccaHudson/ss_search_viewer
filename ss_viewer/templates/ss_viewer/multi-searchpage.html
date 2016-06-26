@@ -117,7 +117,7 @@
             {% if search_paging_info.show_next_btn == True %}
                 <input type="submit" name="action" value="Next" class="btn btn-info" /> 
             {% endif %}
-            
+    
             {% if search_paging_info.show_prev_btn == True %}
                 <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
             {% endif %}
@@ -201,7 +201,7 @@
      {% endif %}
   </form>
 </div>
-
+ 
 
  
 </div> <!-- close the 'side' div -->
@@ -210,12 +210,7 @@
 <!--  this is the way that we will be displaying the plot -->
 {% if plot_source %}
     {% for plot_id_str, one_svg in plot_source.items %}
-      <div id="plot_{{plot_id_str}}" class=" 
-            {% if plot_id_str == first_plot_id_str %}
-            show-plot
-            {% else %}
-            hide-plot
-            {% endif %}" > 
+      <div id="plot_{{plot_id_str}}" class="{% if plot_id_str == first_plot_id_str %}show-plot{% else %}hide-plot{% endif %}" > 
           <p> check for match w/ first_plot = {{ first_plot_id_str }}  </p>
           <h3> {{ plot_id_str }} </h3>
           <img src="{{ one_svg }}" alt="truckin-plot">
@@ -275,7 +270,16 @@
         <td>{{ onerow.pval_diff|stringformat:".3e" }}</td>  
         <td> {{ onerow.refAllele }}</td> 
        <td> {{ onerow.snpAllele }}</td> 
-       <td> {{ onerow.has_plot }}</td> </tr>
+       <td class="show_plots" > {% if onerow.has_plot %}
+                  <button id="show_plot_{{onerow.plot_id_str}}" 
+                          type="button" class="btn btn-link" 
+                          plotstr="{{onerow.plot_id_str}}"
+                          title="Show the plot for this data."> 
+                  Show Plot</button>
+            {% else %}
+               N/A
+            {% endif %} 
+       </td> </tr>
     {%  endfor %}
     <tbody>
   </table>
@@ -310,8 +314,34 @@
                                       $('#id_snpid').val('rs755632525'); });
         $("#gene-name-search-demo").click(function(e){
                                       $('#id_gene_name').val('not sure..'); });
+        /*$("#show_plot").click(function(e){ */
+        $("td.show_plots > button").click(function(e) {
+                                console.log("it's at least ok..");
+                                
+                                var plotstr_attr = e.target.attributes.getNamedItem('plotstr');
+                                var plot_str  = plotstr_attr.value;
+                                alert(plot_str);
+
+                                /* hides the currently shown plot */
+                                var currently_shown_plot = $("div.show-plot");
+                                currently_shown_plot.removeClass('show-plot');
+                                currently_shown_plot.addClass('hide-plot'); 
+                                console.log("this is what currplot looks like when logged...");
+                                console.log(currently_shown_plot); 
+
+                                var id_of_plot_div = 'plot_'.concat(plot_str); 
+                                var plot_selector = '#'.concat(id_of_plot_div);
+                                /*var plot_selector = "div".concat(selector_for_plot_div);*/
+                                console.log("value of plot_selector now follows: ");
+                                console.log(plot_selector);
+                                var div_to_show_now = $(plot_selector);
+                                console.log(div_to_show_now);
+                                div_to_show_now.removeClass('hide-plot');
+                                div_to_show_now.addClass('show-plot');
+                               });
+                                     
     });
-</script>   
+</script>
 <script>
  $(".formcontrol").tooltip({
       position: "bottom left",
