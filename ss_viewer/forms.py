@@ -24,7 +24,8 @@ class SearchBySnpidForm(GenericSearchForm):
     text_to_explain_snpbox = "SNPids"
     snpid_tip = "Enter SNPids to search for."
     styled_widget = forms.Textarea(attrs={'class':'form-control', 
-                                          'title': snpid_tip})
+                                          'title': snpid_tip,
+                                          'cols': '25', 'rows': '3'} )
     raw_requested_snpids = forms.CharField(widget=styled_widget,
                                      max_length=100000,
                                      strip=True,
