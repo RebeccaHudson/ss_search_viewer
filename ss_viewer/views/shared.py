@@ -205,6 +205,8 @@ class APIResponseHandler:
         response_data = None
         status_message = None
         search_paging_info = None
+        plot_source = None
+        first_plot_id_str = None
         if api_response.status_code == 204:
             status_message = 'No matching rows.'
         elif api_response.status_code == 500:
@@ -218,12 +220,12 @@ class APIResponseHandler:
 
             #slyly avoiding nested dictionaries. 
             plot_data = APIResponseHandler.get_plots_for_rows_with_plots(response_data)
-            plot_source = plot_data['plot_data']          
-            first_plot_id_str = plot_data['first_plot_id_str']
 
             if plot_data is not None: #append the plot id strings to each row..
                 response_data = plot_data['response_data']
- 
+                plot_source = plot_data['plot_data']          
+                first_plot_id_str = plot_data['first_plot_id_str']
+
             status_message = APIResponseHandler.setup_hits_message(response_json['hitcount'], 
                                        search_request_params['page_of_results_to_display'])
 
