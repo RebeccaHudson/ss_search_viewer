@@ -17,6 +17,8 @@
 <h2 >Search ATSNP output</h2>
 <div id="status_message"> {{ status_message }} </div>
 
+<div class="side"> 
+
 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
 
   <li {%if active_tab == 'gl-region' or active_tab == 'none-yet'  %}
@@ -33,7 +35,7 @@
 
 </ul>
 
-<div class="side">
+
 
 <div id="tabbed-forms" class="tab-content">
 
@@ -208,15 +210,17 @@
 
 </div> <!-- close the 'tabbed forms' div -->
 <!--  this is the way that we will be displaying the plot -->
-{% if plot_source %}
-    {% for plot_id_str, one_svg in plot_source.items %}
-      <div id="plot_{{plot_id_str}}" class="{% if plot_id_str == first_plot_id_str %}show-plot{% else %}hide-plot{% endif %}" > 
-          <p> check for match w/ first_plot = {{ first_plot_id_str }}  </p>
-          <h3> {{ plot_id_str }} </h3>
-          <a href="{{ one_svg }}"><img src="{{ one_svg }}" alt="truckin-plot"></a>
-      </div>
-    {% endfor %}
-{% endif %}
+<div class="side plot">
+    {% if plot_source %}
+        {% for plot_id_str, one_svg in plot_source.items %}
+          <div id="plot_{{plot_id_str}}" class="{% if plot_id_str == first_plot_id_str %}show-plot{% else %}hide-plot{% endif %}" > 
+              <!-- <p> {{ plot_id_str }} </p>   -->
+              <a href="{{ one_svg }}"><img title="Click image for a full-sized version." src="{{ one_svg }}" alt="truckin-plot"></a>
+          </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
 
 <!-- consider making this part modular; DRYing it up some how... -->
   {% if api_response  %}
