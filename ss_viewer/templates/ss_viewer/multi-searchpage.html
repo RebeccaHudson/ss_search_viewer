@@ -196,7 +196,7 @@
        <button id="gene-name-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
     </div>
 
-     {% if search_paging_info != None and active_tab == 'gene_name' %}
+     {% if search_paging_info != None and active_tab == 'gene-name' %}
        <input type="submit" name="action" 
          value="Download Results" class="btn-xs btn-danger"
          onclick="return confirm('Downloads can take a while,\n if the dataset is > 60000 rows,only the first 60,000 rows will be downloaded.')" />
