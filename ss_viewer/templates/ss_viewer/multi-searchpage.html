@@ -234,67 +234,77 @@
     <thead>
     <tr>
 
-        <td>snpid</td>
-        <td>chromosome</td>
-        <td>pos</td>
-        <td> ref allele </td>
-        <td> snp allele </td>
-        <td>transcription factor</td>
-        <td>motif</td>
-       <td>motif length</td>
-        <td>pval rank</td>
+        <td>SNPid                   </td>
+        <td>Chromosome              </td>
+        <td>Position                </td>
+        <td>Reference Allele        </td>
+        <td>SNP Allele              </td>
+        <td>p-value Rank            </td>
+        <td>Log Likelihood Reference</td>
+        <td>Log Likelihood SNP      </td>  
+        <td>Log Likelihood Ratio    </td>
+        <td>p-value Reference       </td>
+        <td>p-value SNP             </td>
+        <td>p-value Difference      </td>
+      
+        <td>Transcription Factor    </td>
+        <td>Motif                   </td>
+        <td>Plot Available          </td>
+
+        <!-- 
+        <td>motif length</td>
         <td>snp start</td>
         <td>snp end</td>
         <td>ref start</td>
         <td>ref end</td>
-        <td>log lik ref</td>
-        <td> log lik ratio </td>
         <td>log enhance odds</td>
         <td>log reduce odds</td>
-        <td> log lik snp</td>  
         <td> snp strand </td>
         <td> ref strand </td>
-        <td> pval ref</td>
-        <td> pval snp</td>
         <td>pval cond ref</td>
-        <td> pval cond snp</td>
-        <td> pval diff</td>
-
-        <td> has plot</td>
+        <td> pval cond snp</td> -->
     </tr>
     </thead>
     <tbody>
     {% for onerow in api_response %}
     <tr>   
-        <td>{{ onerow.snpid }}</td>
-        <td>{{ onerow.chr }}</td>
-        <td>{{ onerow.pos }}</td> 
+        <td> {{ onerow.snpid }}</td>
+        <td> {{ onerow.chr }}</td>
+        <td> {{ onerow.pos }}</td> 
         <td> {{ onerow.refAllele }}</td> 
         <td> {{ onerow.snpAllele }}</td> 
+        <td> {{ onerow.pval_rank|stringformat:".3e"}} </td>
+        <td> {{ onerow.log_lik_ref|stringformat:".3e"}} </td>
+        <td> {{ onerow.log_lik_snp|stringformat:".3e"}} </td>  
+        <td> {{ onerow.log_lik_ratio|stringformat:".3e"}} </td>
+        <td> {{ onerow.pval_ref|stringformat:".3e" }} </td>
+        <td> {{ onerow.pval_snp|stringformat:".3e" }} </td>
+        <td> {{ onerow.pval_diff|stringformat:".3e" }}</td>  
 
         <td> {{ onerow.trans_factor }}</td>
-        <td> {{ onerow.motif }} </td> <td>{{ onerow.motif_len}}</td>
-        <td>  {{ onerow.pval_rank|stringformat:".3e"}} </td>
-        <td>{{ onerow.snp_start}} </td><td>{{ onerow.snp_end}}</td><td>{{ onerow.ref_start}}</td>
-        <td>{{ onerow.ref_end }} </td>
-         <td>{{ onerow.log_lik_ref|stringformat:".3e"}} </td><td> {{ onerow.log_lik_ratio|stringformat:".3e"}} </td>
-        <td>{{ onerow.log_enhance_odds|stringformat:".3e"}}</td><td>{{onerow.log_reduce_odds|stringformat:".3e"}} </td>
-        <td>{{ onerow.log_lik_snp|stringformat:".3e"}} </td>  
-        <td>{{ onerow.snp_strand }}</td>  <td>{{ onerow.ref_strand }}</td>
-        <td>{{ onerow.pval_ref|stringformat:".3e" }} </td><td>{{ onerow.pval_snp|stringformat:".3e" }} </td>
-        <td>{{ onerow.pval_cond_ref|stringformat:".3e" }}</td> <td>{{ onerow.pval_cond_snp|stringformat:".3e"}}</td>
-        <td>{{ onerow.pval_diff|stringformat:".3e" }}</td>  
-
-       <td class="show_plots" > {% if onerow.has_plot %}
+        <td> {{ onerow.motif }} </td>
+        <td class="show_plots" > {% if onerow.has_plot %}
                   <button id="show_plot_{{onerow.plot_id_str}}" 
                           type="button" class="btn btn-link" 
                           plotstr="{{onerow.plot_id_str}}"
                           title="Show the plot for this data."> 
-                  Show Plot</button>
-            {% else %}
-               N/A
-            {% endif %} 
-       </td> </tr>
+                  Show Plot</button>{% else %} N/A {% endif %}</td> 
+
+        <!-- 
+        <td>{{ onerow.motif_len}}</td>
+        <td>{{ onerow.snp_start}} </td>
+        <td>{{ onerow.snp_end}}</td>
+        <td>{{ onerow.ref_start}}</td>
+        <td>{{ onerow.ref_end }} </td>
+        <td>{{ onerow.log_enhance_odds|stringformat:".3e"}}</td>
+        <td>{{onerow.log_reduce_odds|stringformat:".3e"}} </td>
+        <td>{{ onerow.snp_strand }}</td> 
+        <td>{{ onerow.ref_strand }}</td>
+        <td>{{ onerow.pval_cond_ref|stringformat:".3e" }}</td>
+        <td>{{ onerow.pval_cond_snp|stringformat:".3e"}}</td> -->
+
+
+       </tr>
     {%  endfor %}
     <tbody>
   </table>
