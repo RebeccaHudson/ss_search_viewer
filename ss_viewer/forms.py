@@ -26,12 +26,16 @@ class SearchBySnpidForm(GenericSearchForm):
     styled_widget = forms.Textarea(attrs={'class':'form-control', 
                                           'title': snpid_tip,
                                           'cols': '25', 'rows': '3'} )
-    raw_requested_snpids = forms.CharField(widget=styled_widget,
+    raw_requested_snpids = forms.CharField(
+                                     widget=styled_widget,
                                      max_length=100000,
                                      strip=True,
                                      required=False,
                                      label=text_to_explain_snpbox,
                                      )
+
+    prev_search_raw_requested_snpids = forms.CharField(widget = forms.HiddenInput(),
+                                        required = False)
     file_of_snpids = forms.FileField(required=False) #standard everything
     field_order =  ('raw_requested_snpids', 'file_of_snpids', 'pvalue_rank_cutoff', 'page_of_results_shown')
  
@@ -179,7 +183,8 @@ class SearchBySnpidWindowForm(GenericSearchForm):
                                              "title": "Search for data within + and - this "+\
                                                       "number of bases of the position of " +\
                                                       "the snpid."})
-
+    prev_search_snpid = forms.CharField(widget = forms.HiddenInput(),
+                                        required = False)
     #TODO: figure out what the max_value on this should actually be.
     window_size = forms.IntegerField(widget = styled_widget,
                                      label = "Window size",
@@ -187,6 +192,8 @@ class SearchBySnpidWindowForm(GenericSearchForm):
                                      initial = 1000, 
                                      min_value = 0)
 
+    prev_search_window_size = forms.IntegerField(widget = forms.HiddenInput(),
+                                                required = False)
     field_order =  ('snpid', 'window_size', 'pvalue_cutoff', 'page_of_results_shown')
 
 
