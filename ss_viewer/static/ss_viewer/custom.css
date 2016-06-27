@@ -65,7 +65,8 @@ div .side { display: inline-block;
 
 div .plot { margin-left:1.5em; }
 
-
+td.show_plots > button { font-size: 12px;
+                         padding  :  0px; }
 
 
 
