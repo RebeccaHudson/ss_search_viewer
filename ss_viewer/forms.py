@@ -152,17 +152,26 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
     #tf_choices = tuple(sorted(set(lut.values())))
     tf_choices = sorted(tf_choices, key=lambda x:(x[1], x[0]))
     use_these_choices = []
-
+    use_these_choices.append( (None, 'None (using ENCODE)'))
     for c in set(lut.values()):
         use_these_choices.append((c, c)) 
-
     use_these_choices = sorted(tuple(use_these_choices))
-   
+    
+  
     styled_widget = forms.Select(attrs={"class":"form-control",
                                         "title" : "Select the transcription factor here."})
     trans_factor = forms.ChoiceField(widget = styled_widget,
                                      choices = use_these_choices, 
                                      label = "Select a transcription factor")
+
+
+    styled_widget = forms.Select(attrs={"class":"form-control",
+                                        "title" : "Seelect an ENCODE transcription factor."})
+
+    encode_trans_factor = forms.ChoiceField(widget = styled_widget, 
+                                            choices = ( (None, 'None (using JASPAR)'), ('a', 1), ('b', 2), ),
+                                            required = False)
+   
 
     # hey there.    widget = forms.HiddenInput(), required = False)
     prev_search_trans_factor = forms.CharField(widget = forms.HiddenInput(),
@@ -202,7 +211,7 @@ class SearchByGeneNameForm(GenericSearchForm):
     styled_widget = forms.TextInput(attrs={"class":"form-control",
                                            "title" : "Name of the gene to search form."}) 
     gene_name = forms.CharField(widget = styled_widget,
-                                label = "Gene name",
+                                label = "Gene Symbol",
                                 required = True)
 
     prev_search_gene_name = forms.CharField(widget = forms.HiddenInput(), 
