@@ -16,6 +16,8 @@ from ss_viewer.views.shared import APIResponseHandler
 from django.core.exceptions import ValidationError
 
 from ss_viewer.forms import SearchBySnpidForm
+from ss_viewer.views.shared import StreamingCSVDownloadHandler
+
 from django import forms
 
 class SnpidSearchUtils:
@@ -56,6 +58,11 @@ def setup_context_for_snpid_search_results(snpid_list, holdover_p_value,
     return context
 
 
+def  copy_valid_form_data_into_hidden_fields(form_data):
+    fields_to_copy = ['pvalue_rank_cutoff', 'raw_requested_snpids']
+    for form_field in fields_to_copy:
+        form_data['prev_search_' + form_field] = form_data[form_field]
+    return form_data
 
 
 def handle_search_by_snpid(request):
@@ -79,19 +86,26 @@ def handle_search_by_snpid(request):
          return StandardFormset.handle_invalid_form(request, context, status_message=status_msg)
 
     pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(snpid_search_form)
-    base_search_params = { 'snpid_list' : snpid_list,
-                           'pvalue_rank' : pvalue_rank }
+
 
     form_data = snpid_search_form.cleaned_data
+    #ensure that this works for file input.
 
     if request.POST['action'] == 'Download Results':
-        return APIResponseHandler.handle_download_request(base_search_params, 'snpid-search')
+        pvalue_rank = form_data['prev_search_pvalue_rank_cutoff']
+        snpid_list = form_data['prev_search_raw_requested_snpids']
+        snpid_list = [one_snpid.strip() for one_snpid in snpid_list.split(",")]
+        previous_search_params = { 'snpid_list' : snpid_list, 'pvalue_rank' : pvalue_rank }
+        return StreamingCSVDownloadHandler.streaming_csv_view(request,
+                                                              previous_search_params,
+                                                              'snpid-search')
 
     #turn the page
     search_request_params = Paging.get_paging_info_for_request(request,
                                                 form_data['page_of_results_shown'])
-    api_search_query = base_search_params
-    api_search_query.update({'from_result' : search_request_params['search_result_offset'] })
+    api_search_query =  { 'snpid_list' : snpid_list,
+                          'pvalue_rank' : pvalue_rank,
+                          'from_result' : search_request_params['search_result_offset'] }
 
     shared_context = APIResponseHandler.handle_search(api_search_query, 
                                                       'snpid-search', 
@@ -100,6 +114,8 @@ def handle_search_by_snpid(request):
     #we should be able to just pass in the form data
     form_data['page_of_results_shown'] = search_request_params['page_of_results_to_display']
     form_data['raw_requested_snpids'] = ", ".join(snpid_list)
+    form_data =  copy_valid_form_data_into_hidden_fields(form_data)
+
     snpid_form = SearchBySnpidForm(form_data)
     context = StandardFormset.setup_formset_context(snpid_form=snpid_form)
     context.update(shared_context)
