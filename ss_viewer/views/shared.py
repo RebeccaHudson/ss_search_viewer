@@ -336,7 +336,6 @@ class StreamingCSVDownloadHandler:
                  json=api_search_query, headers={'content-type':'application/json'})
             
             page_of_results += 1
-            
             if api_response.status_code == 200:
                 response_json = json.loads(api_response.text)
                 api_response_data = response_json['data']         
@@ -345,7 +344,11 @@ class StreamingCSVDownloadHandler:
                 print "got this much data out of API this round : " + str(len(api_response_data))
                 for dr in prepared_data:
                     rows.append( [ dr[field_name] for field_name in fields_for_csv ])
+                    if len(rows) >= settings.HARD_LIMITS['MAX_CSV_DOWNLOAD']:
+                        keep_on_paging = False
+                        break
             else:
+                print "api response : " + api_response.text
                 keep_on_paging = False
 
         print "returning this many rows " + str(len(rows))
