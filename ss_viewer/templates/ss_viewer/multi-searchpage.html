@@ -64,7 +64,7 @@
      {% if search_paging_info != None and active_tab == 'gl-region' %}
        <input type="submit" name="action" 
          value="Download Results" class="btn-xs btn-danger"
-         onclick="return confirm('Downloads can take a while,\n and large datasets WILL be truncated. Some restrictions may apply.\n Are you sure you want this download?')" />
+         onclick="return confirm('Downloads can take a while,\n if the dataset is > 60000 rows,only the first 60,000 rows will be downloaded.')" />
      {% endif %}
   </form>
 </div>
@@ -97,7 +97,7 @@
      {% if search_paging_info != None and active_tab = 'snpid' %}
        <input type="submit" name="action" 
          value="Download Results" class="btn-xs btn-danger"
-         onclick="return confirm('Downloads can take a while,\n and large datasets WILL be truncated. Some restrictions may apply.\n Are you sure you want this download?')" />
+         onclick="return confirm('Downloads can take a while,\n if the dataset is > 60000 rows,only the first 60,000 rows will be downloaded.')" />
      {% endif %}
   </form>
 </div>
@@ -131,7 +131,7 @@
      {% if search_paging_info != None and active_tab == 'tf' %}
        <input type="submit" name="action" 
          value="Download Results" class="btn-xs btn-danger"
-         onclick="return confirm('Downloads can take a while,\n and large datasets WILL be truncated. Some restrictions may apply.\n Are you sure you want this download?')" />
+         onclick="return confirm('Downloads can take a while,\n if the dataset is > 60000 rows,only the first 60,000 rows will be downloaded.')" />
      {% endif %}
 
   </form>
@@ -166,7 +166,7 @@
      {% if search_paging_info != None  and active_tab == 'snpid-window' %}
        <input type="submit" name="action" 
          value="Download Results" class="btn-xs btn-danger"
-         onclick="return confirm('Downloads can take a while,\n and large datasets WILL be truncated. Some restrictions may apply.\n Are you sure you want this download?')" />
+         onclick="return confirm('Downloads can take a while,\n if the dataset is > 60000 rows,only the first 60,000 rows will be downloaded.')" />
      {% endif %}
   </form>
 </div>
@@ -199,7 +199,7 @@
      {% if search_paging_info != None and active_tab == 'gene_name' %}
        <input type="submit" name="action" 
          value="Download Results" class="btn-xs btn-danger"
-         onclick="return confirm('Downloads can take a while,\n and large datasets WILL be truncated. Some restrictions may apply.\n Are you sure you want this download?')" />
+         onclick="return confirm('Downloads can take a while,\n if the dataset is > 60000 rows,only the first 60,000 rows will be downloaded.')" />
      {% endif %}
   </form>
 </div>
@@ -210,6 +210,7 @@
 
 </div> <!-- close the 'tabbed forms' div -->
 <!--  this is the way that we will be displaying the plot -->
+{% if plot_source %}
 <div class="side plot">
     {% if plot_source %}
         {% for plot_id_str, one_svg in plot_source.items %}
@@ -220,7 +221,7 @@
         {% endfor %}
     {% endif %}
 </div>
-
+{% endif %}
 
 <!-- consider making this part modular; DRYing it up some how... -->
   {% if api_response  %}
