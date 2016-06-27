@@ -205,6 +205,9 @@ class SearchByGeneNameForm(GenericSearchForm):
                                 label = "Gene name",
                                 required = True)
 
+    prev_search_gene_name = forms.CharField(widget = forms.HiddenInput(), 
+                                            required = False)
+
     styled_widget = forms.NumberInput(attrs={"class":'form-control',
                                              'step':1,
                                              "title" : "Search for data within the " +\
@@ -217,6 +220,9 @@ class SearchByGeneNameForm(GenericSearchForm):
                                      required = False,
                                      initial = 1000, 
                                      min_value = 0)
+
+    prev_search_window_size = forms.IntegerField(widget = forms.HiddenInput(),
+                                                required = False)
     field_order =  ('gene_name', 'window_size', 'pvalue_cutoff', 'page_of_results_shown')
 
 
