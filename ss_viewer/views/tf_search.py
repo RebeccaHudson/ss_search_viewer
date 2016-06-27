@@ -39,7 +39,9 @@ def handle_search_by_trans_factor(request):
         motif_value = tft.lookup_motifs_by_tf(form_data['prev_search_trans_factor'])
         pvalue_rank = form_data['prev_search_pvalue_rank_cutoff']
         previous_search_params = {'motif' : motif_value, 'pvalue_rank':   pvalue_rank}
-        return StreamingCSVDownloadHandler.streaming_csv_view(request, previous_search_params, 'search-by-tf')
+        return StreamingCSVDownloadHandler.streaming_csv_view(request, 
+                                                              previous_search_params, 
+                                                              'search-by-tf')
 
 
     motif_value = tft.lookup_motifs_by_tf(form_data['trans_factor'])
