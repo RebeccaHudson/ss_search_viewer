@@ -45,7 +45,7 @@
 <div id="tabbed-forms" class="tab-content">
 
 <div class="tab-pane panel-body 
-   {%if active_tab == 'gl-region' or active_tab == 'none-yet'%} active{%endif%}" id="gl_region_search_form" >
+   {%if active_tab == 'gl-region' %} active{%endif%}" id="gl_region_search_form" >
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:gl-region-search' %}" method="post" >
   {% csrf_token %}
   <div class="form-group">
@@ -76,7 +76,7 @@
 
 
 <div class="tab-pane panel-body
-   {%if active_tab == 'snpid'%} active{%endif%}"  id="snpid_search_form" >
+   {%if active_tab == 'snpid' or active_tab == 'none-yet'%} active{%endif%}"  id="snpid_search_form" >
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-search' %}" method="post">
   {% csrf_token %}
   <div class="form-group">
@@ -221,7 +221,7 @@
         {% for plot_id_str, one_svg in plot_source.items %}
           <div id="plot_{{plot_id_str}}" class="{% if plot_id_str == first_plot_id_str %}show-plot{% else %}hide-plot{% endif %}" > 
               <!-- <p> {{ plot_id_str }} </p>   -->
-              <a href="{{ one_svg }}"><img title="Click image for a full-sized version." src="{{ one_svg }}" alt="truckin-plot"></a>
+              <a href="{{ one_svg }}"><img title="Click image for a full-sized version." src="{{ one_svg }}" alt="current plot"></a>
           </div>
         {% endfor %}
     {% endif %}
@@ -234,29 +234,28 @@
     <thead>
     <tr>
 
-        <td>SNPid                   </td>
-        <td>Chromosome              </td>
-        <td>Position                </td>
-        <td>Reference Allele        </td>
-        <td>SNP Allele              </td>
-        <td>p-value Rank            </td>
-        <td>Log Likelihood Reference</td>
-        <td>Log Likelihood SNP      </td>  
-        <td>Log Likelihood Ratio    </td>
-        <td>p-value Reference       </td>
-        <td>p-value SNP             </td>
-        <td>p-value Difference      </td>
-      
-        <td>Transcription Factor    </td>
-        <td>Motif                   </td>
-        <td>Plot Available          </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#snpid">SNPid                   </a>       </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#chromosome">Chromosome              </a>  </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#position">Position                </a>    </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#ref_allele">Reference Allele        </a>  </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#snp_allele">SNP Allele              </a>  </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#pval_rank" >p-value Rank            </a>  </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#log_lik_ref">Log Likelihood Reference</a> </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#log_lik_snp">Log Likelihood SNP      </a> </td>  
+        <td><a href="{% url 'ss_viewer:help-page' %}#log_lik_ratio">Log Likelihood Ratio   </a> </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#pval_ref">    p-value Reference       </a> </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#pval_snp">p-value SNP              </a>    </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#pval_diff">p-value Difference       </a>   </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#trans_factor">Transcription Factor </a>   </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#motif"> Motif                </a>         </td>
+        <td><a href="{% url 'ss_viewer:help-page' %}#has_plot">Plot Available     </a>         </td>
 
         <!-- 
         <td>motif length</td>
         <td>snp start</td>
         <td>snp end</td>
         <td>ref start</td>
-        <td>ref end</td>
+        <pi><td>ref end</td>
         <td>log enhance odds</td>
         <td>log reduce odds</td>
         <td> snp strand </td>
@@ -289,21 +288,6 @@
                           plotstr="{{onerow.plot_id_str}}"
                           title="Show the plot for this data."> 
                   Show Plot</button>{% else %} N/A {% endif %}</td> 
-
-        <!-- 
-        <td>{{ onerow.motif_len}}</td>
-        <td>{{ onerow.snp_start}} </td>
-        <td>{{ onerow.snp_end}}</td>
-        <td>{{ onerow.ref_start}}</td>
-        <td>{{ onerow.ref_end }} </td>
-        <td>{{ onerow.log_enhance_odds|stringformat:".3e"}}</td>
-        <td>{{onerow.log_reduce_odds|stringformat:".3e"}} </td>
-        <td>{{ onerow.snp_strand }}</td> 
-        <td>{{ onerow.ref_strand }}</td>
-        <td>{{ onerow.pval_cond_ref|stringformat:".3e" }}</td>
-        <td>{{ onerow.pval_cond_snp|stringformat:".3e"}}</td> -->
-
-
        </tr>
     {%  endfor %}
     <tbody>
