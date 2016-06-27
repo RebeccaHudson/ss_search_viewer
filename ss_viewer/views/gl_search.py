@@ -11,6 +11,8 @@ from ss_viewer.views.shared import StandardFormset
 from ss_viewer.views.shared import APIResponseHandler
 from ss_viewer.views.shared import PValueFromForm
 from django.core.urlresolvers import reverse
+from ss_viewer.views.shared import StreamingCSVDownloadHandler
+
 def copy_valid_form_data_into_hidden_fields(valid_form_data):
     fields_to_copy = ['selected_chromosome', 'gl_start_pos', 'gl_end_pos', 'pvalue_rank_cutoff'] 
     for form_field in fields_to_copy:
@@ -35,8 +37,9 @@ def handle_search_by_genomic_location(request):
                                    'end_pos'    : form_data['prev_search_gl_end_pos'],
                                    'pvalue_rank': form_data['prev_search_pvalue_rank_cutoff'] }
         print "requested gl search download with these params : " + repr(previous_search_params)
-        #not handling paging stuff, not going to show anything.
-        return APIResponseHandler.handle_download_request(previous_search_params, 'search-by-gl')        
+        return StreamingCSVDownloadHandler.streaming_csv_view(request, 
+                                                             previous_search_params, 
+                                                             'search-by-gl')
 
     pvalue = PValueFromForm.get_pvalue_rank_from_form(gl_search_form)
     search_request_params = Paging.get_paging_info_for_request(request,
@@ -44,8 +47,8 @@ def handle_search_by_genomic_location(request):
     api_search_query =  { 'chromosome' : form_data['selected_chromosome'],
                           'start_pos'  : form_data['gl_start_pos'],
                           'end_pos'    : form_data['gl_end_pos'],
-                          'pvalue_rank': pvalue      }
-    api_search_query.update( {'from_result': search_request_params['search_result_offset'] })
+                          'pvalue_rank': pvalue,
+                          'from_result': search_request_params['search_result_offset'] }
     shared_context = APIResponseHandler.handle_search(api_search_query, 
                                                       'search-by-gl',
                                                       search_request_params)
