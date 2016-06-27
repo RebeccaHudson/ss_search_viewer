@@ -24,13 +24,13 @@
 
   <li  {%if active_tab == 'snpid' or active_tab == 'none-yet'%}class="active"{%endif%}><a href="#snpid_search_form" data-toggle="tab"  >SNPid List</a></li>
 
-  <li {%if active_tab == 'snpid-window'%}class="active"{%endif%}><a href="#snpid_window_form" data-toggle="tab" >Snpid Window</a></li>
+  <li {%if active_tab == 'snpid-window'%}class="active"{%endif%}><a href="#snpid_window_form" data-toggle="tab" >SNPid Window</a></li>
 
   <li {%if active_tab == 'gl-region' %}
       class="active"
       {% endif %}><a href="#gl_region_search_form" data-toggle="tab">Genomic Location</a></li>
 
-  <li {%if active_tab == 'gene-name'%}class="active"{%endif%}><a href="#gene_name_form" data-toggle="tab" >Gene Name</a></li>
+  <li {%if active_tab == 'gene-name'%}class="active"{%endif%}><a href="#gene_name_form" data-toggle="tab" >Gene</a></li>
 
   <li {%if active_tab == 'tf'%}class="active"{%endif%}><a href="#tf_search_form" data-toggle="tab" >Transcription Factor</a></li>
 
@@ -347,6 +347,7 @@
                                 var div_to_show_now = $(plot_selector);
                                 div_to_show_now.removeClass('hide-plot');
                                 div_to_show_now.addClass('show-plot');
+                                window.scrollTo(0, 0); 
                                }); 
     });
 </script>
