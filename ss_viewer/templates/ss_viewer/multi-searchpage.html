@@ -303,6 +303,32 @@
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
         $('#tabs').tab();
+        $('#id_encode_trans_factor').attr('disabled', 'disabled');
+        $('#id_tf_library_0').attr('checked', 'checked');
+        $('#id_tf_library_1').removeAttr('checked');
+
+        $('#id_tf_library').change(function(e){
+             var target_val = e.target.attributes.getNamedItem('value');
+             if (target_val.value == 'encode'){
+                $("#id_trans_factor").attr('disabled', 'disabled');
+                /*$("#id_trans_factor").val(''); */
+
+                $("#id_encode_trans_factor").removeAttr('disabled'); }
+                /*$("#id_encode_trans_factor").val("AR"); */
+                alert("clicked encode");
+             if ( target_val.value == 'jaspar'){
+
+                $("#id_encode_trans_factor").attr('disabled', 'disabled');
+                /*$("#id_encode_trans_factor").val('');*/
+
+                $("#id_trans_factor").removeAttr('disabled');
+                /*$("#id_trans_factor").val("AT1");*/
+                alert("clicked jaspar");
+               }
+         });
+   
+
+
         $("#snpid-search-demo").click(function(e){ 
                                        $('#id_raw_requested_snpids').val(
                                              'rs539483321, rs576894892, rs553761389, rs757299236, rs770590115');
