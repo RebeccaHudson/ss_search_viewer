@@ -140,44 +140,71 @@ class SearchByGenomicLocationForm(GenericSearchForm):
  
 class SearchByTranscriptionFactorForm(GenericSearchForm):
  
+    tf_library_options=[('jaspar','JASPAR'),
+                        ('encode','ENCODE')]
+    styled_widget = forms.RadioSelect(attrs={"class" : "form-control",
+                                             "title" : "Select either the ENCODE or JASPAR motif library."})
+    tf_library = forms.ChoiceField(choices=tf_library_options,
+                                   widget=styled_widget,
+                                   initial='jaspar',
+                                   label = "Select a transcription factor library.")
+    prev_search_tf_library = forms.CharField(widget = forms.HiddenInput(), required = False)
+
+
+
+
     lut = None
     fpath = os.path.dirname(__file__) + '/lookup-tables' +\
              '/lut_tfs_by_jaspar_motif.pkl'
-
     with open(fpath, 'r') as f:
         lut = pickle.load(f)
-
     tf_choices = tuple(lut.items())
-
-    #tf_choices = tuple(sorted(set(lut.values())))
     tf_choices = sorted(tf_choices, key=lambda x:(x[1], x[0]))
     use_these_choices = []
-    use_these_choices.append( (None, 'None (using ENCODE)'))
+
     for c in set(lut.values()):
         use_these_choices.append((c, c)) 
+
     use_these_choices = sorted(tuple(use_these_choices))
-    
   
     styled_widget = forms.Select(attrs={"class":"form-control",
                                         "title" : "Select the transcription factor here."})
     trans_factor = forms.ChoiceField(widget = styled_widget,
                                      choices = use_these_choices, 
+                                     required = False,
                                      label = "Select a transcription factor")
 
 
-    styled_widget = forms.Select(attrs={"class":"form-control",
-                                        "title" : "Seelect an ENCODE transcription factor."})
 
-    encode_trans_factor = forms.ChoiceField(widget = styled_widget, 
-                                            choices = ( (None, 'None (using JASPAR)'), ('a', 1), ('b', 2), ),
+
+    other_styled_widget = forms.Select(attrs={"class":"form-control",
+                                              "title" : "Seelect an ENCODE transcription factor."})
+    encode_lut = None
+    fpath = os.path.dirname(__file__) + '/lookup-tables' +\
+             '/lut_encode_prefixes.pkl'
+    with open(fpath, 'r') as f:
+        encode_lut = pickle.load(f)
+
+    encode_tf_choices = tuple(encode_lut.items())
+    encode_tf_choices = sorted(encode_tf_choices, key=lambda x:(x[1], x[0]))
+    
+    use_these_encode_choices = [ (c, c) for c in set(encode_lut.values() ) ]
+    use_these_encode_choices = sorted(tuple(use_these_encode_choices))
+
+    encode_trans_factor = forms.ChoiceField(widget = other_styled_widget,
+                                            choices = use_these_encode_choices,
                                             required = False)
-   
+
 
     # hey there.    widget = forms.HiddenInput(), required = False)
     prev_search_trans_factor = forms.CharField(widget = forms.HiddenInput(),
                                                required=False)
+    prev_search_encode_trans_factor = forms.CharField(widget = forms.HiddenInput(),
+                                               required=False)
 
-    field_order =  ('trans_factor', 'pvalue_cutoff', 'page_of_results_shown')
+
+
+    field_order =  ('tf_library', 'trans_factor', 'pvalue_cutoff', 'page_of_results_shown')
 
 
 
