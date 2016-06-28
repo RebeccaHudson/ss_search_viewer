@@ -46,10 +46,10 @@ def dummy_get_svg_plot_from_es():
     return svg_plot_data
 
 def get_plot_data_out_of_es(plot_info):
-    es_url = 'http://atsnp-db2.biostat.wisc.edu:9200'          
+    es_url = 'http://atsnp-db1.biostat.wisc.edu:9200'          
     es_index = '/atsnp_data'
     es_type = '/svg_plots'
-    search_endpoint = '/_search'
+    search_endpoint = '/_search?size=1'
     plot_search_url = es_url + es_index + es_type + search_endpoint 
     q = { "query" : {
         "bool" : {
@@ -58,7 +58,6 @@ def get_plot_data_out_of_es(plot_info):
                    { "match" : { "motif"      : plot_info['motif']     } },
                    { "match" : { "snp_allele" : plot_info['snp_allele'] } },
                  ]     } } }
-    #print "plot query " + str(q)
     results = requests.post(plot_search_url, data=json.dumps(q))
     if results.status_code == 200: 
         #svg_data = results.json()['hits']['hits'][0]['svg_plot']    
@@ -71,6 +70,7 @@ def get_plot_data_out_of_es(plot_info):
             svg_data = doc_source['svg_plot']
             #return "nothing special"
             return svg_data 
+        print result_json
     print "no plot found for " + str(plot_info)
     return None
 
