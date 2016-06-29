@@ -14,6 +14,7 @@ class GenericSearchForm(forms.Form):
                                           max_value=1, 
                                           min_value=0, 
                                           initial=default_cutoff,
+                                          label = "P-value cutoff"
                                           )
     prev_search_pvalue_rank_cutoff = forms.FloatField(widget = forms.HiddenInput(), required = False)
 
@@ -36,7 +37,8 @@ class SearchBySnpidForm(GenericSearchForm):
 
     prev_search_raw_requested_snpids = forms.CharField(widget = forms.HiddenInput(),
                                         required = False)
-    file_of_snpids = forms.FileField(required=False) #standard everything
+    file_of_snpids = forms.FileField(required=False,
+                                     label = "File of SNPids") #standard everything
     field_order =  ('raw_requested_snpids', 'file_of_snpids', 'pvalue_rank_cutoff', 'page_of_results_shown')
  
     def clean(self):
@@ -215,7 +217,8 @@ class SearchBySnpidWindowForm(GenericSearchForm):
                                            "title": "Search for data with a window "+\
                                                     "around the position of the "   +\
                                                     "snpid entered here." }) 
-    snpid = forms.CharField(widget = styled_widget)
+    snpid = forms.CharField(widget = styled_widget, 
+                            label = "SNPid")
     styled_widget = forms.NumberInput(attrs={"class"   : 'form-control',
                                              'step'    : 1,
                                              "title": "Search for data within + and - this "+\
