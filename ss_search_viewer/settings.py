@@ -39,7 +39,7 @@ API_HOST_INFO = {
   'download_result_page_size' : 5000,
 }
 
-
+ELASTICSEARCH_URLS = [ 'http://atsnp-db'+ str(x) +'.biostat.wisc.edu:9200' for x in range(1,4) ]
 
 # Application definition
 
