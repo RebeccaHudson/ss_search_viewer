@@ -202,6 +202,7 @@ class APIResponseHandler:
         api_response = requests.post( APIUrls.setup_api_url(api_action),
                  json=api_search_query, headers={'content-type':'application/json'})
 
+
         response_data = None
         status_message = None
         search_paging_info = None
@@ -211,7 +212,7 @@ class APIResponseHandler:
             status_message = 'No matching rows.'
         elif api_response.status_code == 500:
             status_message = 'API error; no data returned.'
-            if len(status_message) > 0:
+            if len(api_response.text) > 0 and len(api_response.text) < 200:
                 status_message += " More info: "+api_response.text.replace('"', "")
 
         elif api_response.status_code == 400:
