@@ -8,7 +8,7 @@ import pickle
 class GenericSearchForm(forms.Form):
     default_cutoff = 0.05
     pvalue_tip = 'Show results with pvalues less than or equal to this '
-    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0000001", 
+    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.001", 
                                              'title': pvalue_tip }) 
     pvalue_rank_cutoff = forms.FloatField(widget=styled_widget,
                                           max_value=1, 
@@ -95,7 +95,9 @@ class SearchByGenomicLocationForm(GenericSearchForm):
     prev_search_gl_end_pos = forms.IntegerField(widget = forms.HiddenInput(),
                                                 required = False)
 
-    chromosomes = [ "ch" + str(x) for x in range(1, 24) ]
+    chromosomes = [ "ch" + str(x) for x in range(1, 23) ]
+    chromosomes.extend(['chX', 'chY', 'chM'])
+    print "chromo: " + str(chromosomes)
     #all of the choices look like this: choices_for_chromosome =  ( ('ch1', 'ch1' ), ) 
     styled_widget = forms.Select(attrs={"class":"form-control",
                                         "title": "Chromosome to search for data between the " +\
@@ -114,14 +116,15 @@ class SearchByGenomicLocationForm(GenericSearchForm):
     #ensure ranges are within hard limits.  
     def clean(self):
         cleaned_data = super(SearchByGenomicLocationForm, self).clean()
-        
+        #print "running clean for the genomic location form." 
         start_pos = cleaned_data.get('gl_start_pos')
         end_pos = cleaned_data.get('gl_end_pos')
+        #raise forms.ValidationError( " This is a validation error") 
 
         if start_pos is None:
-            raise forms.ValidationError('We shouldn\'t be here', code='bad-case')
+            start_pos = 0
 
-        if end_pos is None:
+        if end_pos is None and start_pos is not None:
             end_pos = start_pos + int(settings.QUERY_DEFAULTS['DEFAULT_REGION_SIZE'])
             cleaned_data['gl_end_pos'] = end_pos
 
@@ -169,11 +172,11 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
   
     styled_widget = forms.Select(attrs={"class":"form-control",
                                         "title" : "Select the transcription factor here."})
+
     trans_factor = forms.ChoiceField(widget = styled_widget,
                                      choices = use_these_choices, 
                                      required = False,
-                                     label = "Select a transcription factor")
-
+                                     label = "Select JASPAR transcription factor")
 
 
 
@@ -193,8 +196,8 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
 
     encode_trans_factor = forms.ChoiceField(widget = other_styled_widget,
                                             choices = use_these_encode_choices,
+                                            label = "Select ENCODE transcription factor",
                                             required = False)
-
 
     # hey there.    widget = forms.HiddenInput(), required = False)
     prev_search_trans_factor = forms.CharField(widget = forms.HiddenInput(),
@@ -203,8 +206,7 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
                                                required=False)
 
 
-
-    field_order =  ('tf_library', 'trans_factor', 'pvalue_cutoff', 'page_of_results_shown')
+    field_order =  ('tf_library', 'trans_factor', 'encode_trans_factor',  'pvalue_cutoff', 'page_of_results_shown')
 
 
 
