@@ -210,7 +210,10 @@ class APIResponseHandler:
         if api_response.status_code == 204:
             status_message = 'No matching rows.'
         elif api_response.status_code == 500:
-            status_message = 'The API expeienced an error; no data returned.'
+            status_message = 'API error; no data returned.'
+            if len(status_message) > 0:
+                status_message += " More info: "+api_response.text.replace('"', "")
+
         elif api_response.status_code == 400:
             status_message = "Problem with search: " + api_response.text.replace('"', "")
         else:
