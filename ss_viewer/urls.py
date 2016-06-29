@@ -16,10 +16,6 @@ urlpatterns = [
        views.shared.StandardFormset.show_multisearch_page,
        name = 'index'),
 
-   url(r'^plot-test/$',
-       views.main.test_svg_plots,
-       name = 'show-plot-test'),
-
   url (r'^dynamic-svg/(?P<plot_id_string>.+)$',
        views.main.dynamic_svg,
        name = 'dynamic-svg'),
