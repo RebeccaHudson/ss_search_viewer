@@ -38,16 +38,14 @@ class SearchBySnpidForm(GenericSearchForm):
     prev_search_raw_requested_snpids = forms.CharField(widget = forms.HiddenInput(),
                                         required = False)
     file_of_snpids = forms.FileField(required=False,
-                                     label = "File of SNPids") #standard everything
+                                     label = "File of SNPids")
     field_order =  ('raw_requested_snpids', 'file_of_snpids', 'pvalue_rank_cutoff', 'page_of_results_shown')
  
     def clean(self):
         cleaned_data = super(SearchBySnpidForm, self).clean()
-        print(str(cleaned_data))
         snpid_file = cleaned_data.get('file_of_snpids')
         snpid_textbox_contents = cleaned_data.get('raw_requested_snpids')
    
-        #form.errors contains any errors that have come up by this point.
         if (snpid_file and snpid_textbox_contents):
             raise forms.ValidationError(('Specify snpids in the textbox,'
                                         ' OR provide a file, not both.'),
@@ -69,10 +67,6 @@ class SearchByGenomicLocationForm(GenericSearchForm):
     gl_pos_label_text = { 'start' : 'Start position on chromosome',
                           'end'   : 'End position on chromosome' }
 
-    # These defaults are here because I know there's development subset 
-    # data in this range.
-    #default_start_pos = 10000;    default_end_pos = 100500
-    # TODO: is there a way to put meaningful maximum values on these here?
     gl_start_pos = forms.IntegerField(widget=
                                         forms.NumberInput(attrs={"class":'form-control',
                                           'step':1, 
@@ -99,7 +93,6 @@ class SearchByGenomicLocationForm(GenericSearchForm):
 
     chromosomes = [ "ch" + str(x) for x in range(1, 23) ]
     chromosomes.extend(['chX', 'chY', 'chM'])
-    print "chromo: " + str(chromosomes)
     #all of the choices look like this: choices_for_chromosome =  ( ('ch1', 'ch1' ), ) 
     styled_widget = forms.Select(attrs={"class":"form-control",
                                         "title": "Chromosome to search for data between the " +\
@@ -118,10 +111,8 @@ class SearchByGenomicLocationForm(GenericSearchForm):
     #ensure ranges are within hard limits.  
     def clean(self):
         cleaned_data = super(SearchByGenomicLocationForm, self).clean()
-        #print "running clean for the genomic location form." 
         start_pos = cleaned_data.get('gl_start_pos')
         end_pos = cleaned_data.get('gl_end_pos')
-        #raise forms.ValidationError( " This is a validation error") 
 
         if start_pos is None:
             start_pos = 0
@@ -201,7 +192,6 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
                                             label = "Select ENCODE transcription factor",
                                             required = False)
 
-    # hey there.    widget = forms.HiddenInput(), required = False)
     prev_search_trans_factor = forms.CharField(widget = forms.HiddenInput(),
                                                required=False)
     prev_search_encode_trans_factor = forms.CharField(widget = forms.HiddenInput(),
@@ -226,6 +216,7 @@ class SearchBySnpidWindowForm(GenericSearchForm):
                                                       "the snpid."})
     prev_search_snpid = forms.CharField(widget = forms.HiddenInput(),
                                         required = False)
+
     #TODO: figure out what the max_value on this should actually be.
     window_size = forms.IntegerField(widget = styled_widget,
                                      label = "Window size",
@@ -265,6 +256,3 @@ class SearchByGeneNameForm(GenericSearchForm):
     prev_search_window_size = forms.IntegerField(widget = forms.HiddenInput(),
                                                 required = False)
     field_order =  ('gene_name', 'window_size', 'pvalue_cutoff', 'page_of_results_shown')
-
-
-
