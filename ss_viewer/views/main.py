@@ -33,7 +33,7 @@ def index(request):
 
 def find_working_es_url(): 
     found_working = False
-    i = 0
+    i = 1 
     while found_working is False:
         url_to_try = settings.ELASTICSEARCH_URLS[i] + '/_cluster/health?timeout=1s&pretty=true'
         es_check_response = requests.get(url_to_try)
