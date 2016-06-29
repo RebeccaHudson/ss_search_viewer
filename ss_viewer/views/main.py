@@ -31,9 +31,21 @@ def index(request):
   return HttpResponse("Try another url, like :ss_viewer/multi-search.")
 
 
+
+def find_working_es_url(): 
+    found_working = False
+    i = 0
+    while found_working is False:
+        url_to_try = settings.ELASTICSEARCH_URLS[i] + '/_cluster/health?timeout=1s&pretty=true'
+        es_check_response = requests.get(url_to_try)
+        es_check_data = json.loads(es_check_response.text)
+        if es_check_data.get('error') is  None:
+            return settings.ELASTICSEARCH_URLS[i]
+        i += 1
+
 #API should be talking to ES. I just want to be sure we can display these.
 def dummy_get_svg_plot_from_es():
-    es_url = 'http://atsnp-db2.biostat.wisc.edu:9200'          
+
     es_index = '/img_update_test'
     es_type = '/dummy_record'
     dummy_id = '/AVWER04sBpk2eOuD830v'
@@ -46,7 +58,8 @@ def dummy_get_svg_plot_from_es():
     return svg_plot_data
 
 def get_plot_data_out_of_es(plot_info):
-    es_url = 'http://atsnp-db1.biostat.wisc.edu:9200'          
+    #es_url = 'http://atsnp-db1.biostat.wisc.edu:9200'          
+    es_url = find_working_es_url()
     es_index = '/atsnp_data'
     es_type = '/svg_plots'
     search_endpoint = '/_search?size=1'
