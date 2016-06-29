@@ -27,6 +27,10 @@ urlpatterns = [
   url (r'^help/$', 
        views.main.help_page,
        name = 'help-page'),
+
+  url (r'^about/$', 
+       views.main.about_page,
+       name = 'about-page'),
  
   url(r'^multi-search/$', 
        views.shared.StandardFormset.show_multisearch_page,
