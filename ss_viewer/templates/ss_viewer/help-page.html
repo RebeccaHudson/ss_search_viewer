@@ -1,98 +1,117 @@
+{% load staticfiles %}
 <html>
-<head><title>atSNP Search Help</title></head>
+<head>
+ <meta charset="utf-8">
+<title>atSNP Search Help</title>
+    <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
+</head>
 
-<body>
+<body  style="background-color: #DCDCDC;" >
+<div class="container">
 
-<h1>atSNP Search Help</h1>
+  <div id="content">
 
-<!--  There's not enough here to justify a Table of Contents, unfortunately..
-<ul >
-        <li><a href="#snpid"        >  SNPid                   </a></li>
-        <li><a href="#chromosome"   >  Chromosome              </a></li>
-        <li><a href="#position"     >  Position                </a></li>
-        <li><a href="#ref_allele"   >  Reference Allele        </a></li>
-        <li><a href="#snp_allele"   >  SNP Allele              </a></li>
-        <li><a href="#pval_rank"    >  p-value Rank            </a></li>
-        <li><a href="#log_lik_ref"  >  Log Likelihood Reference</a></li>
-        <li><a href="#log_lik_snp"  >  Log Likelihood SNP      </a></li>
-        <li><a href="#log_lik_ratio">  Log Likelihood Ratio    </a></li>
-        <li><a href="#pval_ref"     >  p-value Reference       </a></li>
-        <li><a href="#pval_snp"     >  p-value SNP             </a></li>
-        <li><a href="#pval_diff"    >  p-value Difference      </a></li>
-        <li><a href="#trans_factor" >  Transcription Factor    </a></li>
-        <li><a href="#motif"        >  Motif                   </a></li>
-        <li><a href="#has_plot"     >  Plot Available          </a></li>
-</ul> -->
-<a href="{% url 'ss_viewer:multi-search' %}">Back to Search</a>
+      <h1>atSNP Search Help</h1>
 
-<a name="snpid" > <h3>SNPid</h3> </a>
-<p>SNPid</p>
+      <!--  There's not enough here to justify a Table of Contents, unfortunately..
+      <ul >
+              <li><a href="#snpid"        >  SNPid                   </a></li>
+              <li><a href="#chromosome"   >  Chromosome              </a></li>
+              <li><a href="#position"     >  Position                </a></li>
+              <li><a href="#ref_allele"   >  Reference Allele        </a></li>
+              <li><a href="#snp_allele"   >  SNP Allele              </a></li>
+              <li><a href="#pval_rank"    >  p-value Rank            </a></li>
+              <li><a href="#log_lik_ref"  >  Log Likelihood Reference</a></li>
+              <li><a href="#log_lik_snp"  >  Log Likelihood SNP      </a></li>
+              <li><a href="#log_lik_ratio">  Log Likelihood Ratio    </a></li>
+              <li><a href="#pval_ref"     >  p-value Reference       </a></li>
+              <li><a href="#pval_snp"     >  p-value SNP             </a></li>
+              <li><a href="#pval_diff"    >  p-value Difference      </a></li>
+              <li><a href="#trans_factor" >  Transcription Factor    </a></li>
+              <li><a href="#motif"        >  Motif                   </a></li>
+              <li><a href="#has_plot"     >  Plot Available          </a></li>
+      </ul> -->
+      <a href="{% url 'ss_viewer:multi-search' %}">Back to Search</a>
 
-<a name="chromosome"><h3>Chromosome</h3></a>
-<p>Chromosome </p> 
+      <a name="snpid"><h4>SNPid</h4> </a>
+      <p>SNPid</p>
 
-<a name="position"><h3>Position</h3> </a>
-<p> The nucleotide position of the SNP.</p>
+      <a name="chromosome"><h4>Chromosome</h4></a>
+      <p>Chromosome </p> 
 
-
-<a name="ref_allele" ><h3>Reference Allele</h3></a>
-<p> Reference allele nucleotide.</p>
-
-
-<a name="snp_allele"> <h3>SNP Allele</h3></a>
-<p> SNP allele nucleotide. </p>
-
-
-
-<a name="pval_rank"><h3>p-value Rank</h3></a>
-<p>P-values for the log rank ratio between the reference and the SNP alleles.</p>
+      <a name="position"><h4>Position</h4> </a>
+      <p> The nucleotide position of the SNP.</p>
 
 
+      <a name="ref_allele" ><h4>Reference Allele</h4></a>
+      <p> Reference allele nucleotide.</p>
 
-<a name="log_lik_ref"><h3>Log Likelihood Reference</h3></a>
-<p>The log-likelihood score for the reference allele.</p>
+
+      <a name="snp_allele"> <h4>SNP Allele</h4></a>
+      <p> SNP allele nucleotide. </p>
 
 
 
-<a name="log_lik_snp"><h3>Log Likelihood SNP</h3></a>
-<p>The log-likelihood score for the SNP allele.</p>
-
-
-<a name="log_lik_ratio"><h3>Log Likelihood Ratio</h3></a>
-<p>The log-likelihood ratio. </p>
-
-<a name="pval_ref"><h3>p-value Reference</h3></a>
-<p>P-values for scores on the reference allele.</p>
-
-
-<a name="pval_snp"><h3 >p-value SNP</h3></a>
-<p>P-values for scores on the SNP allele.</p>
-
-
-<a name="pval_diff"><h3>p-value Difference</h3></a>
-<p>
-P-values for the difference in scores between the reference and the SNP alleles.
-</p>
-
-
-<a name="trans_factor"> <h3>Transcription Factor</h3></a>
-<p>Transcription factor name.</p>
-
-
-<a name="motif"><h3>Motif</h3></a>
-<p>Motif name.</p>
-
-
-<a name="has_plot"><h3>Plot Available</h3></a>
-<p>
-  Indicates if composite logo plot is available or not (only composite logo plots with pval_rank<0.05 are available).
-</p>
+      <a name="pval_rank"><h4>p-value Rank</h4></a>
+      <p>P-values for the log rank ratio between the reference and the SNP alleles.</p>
 
 
 
+      <a name="log_lik_ref"><h4>Log Likelihood Reference</h4></a>
+      <p>The log-likelihood score for the reference allele.</p>
 
-<a href="{% url 'ss_viewer:multi-search' %}">Back to Search</a>
 
+
+      <a name="log_lik_snp"><h4>Log Likelihood SNP</h4></a>
+      <p>The log-likelihood score for the SNP allele.</p>
+
+
+      <a name="log_lik_ratio"><h4>Log Likelihood Ratio</h4></a>
+      <p>The log-likelihood ratio. </p>
+
+      <a name="pval_ref"><h4>p-value Reference</h4></a>
+      <p>P-values for scores on the reference allele.</p>
+
+
+      <a name="pval_snp"><h4 >p-value SNP</h4></a>
+      <p>P-values for scores on the SNP allele.</p>
+
+
+      <a name="pval_diff"><h4>p-value Difference</h4></a>
+      <p>
+      P-values for the difference in scores between the reference and the SNP alleles.
+      </p>
+
+
+      <a name="trans_factor"> <h4>Transcription Factor</h4></a>
+      <p>Transcription factor name.</p>
+
+
+      <a name="motif"><h4>Motif</h4></a>
+      <p>Motif name.</p>
+
+
+      <a name="has_plot"><h4>Plot Available</h4></a>
+      <p>
+        Indicates if composite logo plot is available or not (only composite logo plots with pval_rank<0.05 are available).
+      By clicking “Show plot”, the page scrolls back up to the composite logo plot of the SNP-motif pair. atSNP database has all composite logo plots with a significance change on the matches at level 0.05. Composite logo plots of SNP-motif pairs with no significant changes at level 0.05 are not available on the web. User interested in plotting them can create plots with atSNP R package available at <a href="https://github.com/keleslab/atSNP">https://github.com/keleslab/atSNP</a>. We provide two examples below to help users quickly understand how to read the plot.
+      </p>
+
+      <div>
+          <div class="side">
+             <img height="320" src="{% static 'ss_viewer/example_rs572373948.png' %}"/>
+          </div>
+
+          <div class="side">
+             <img height="320" src="{% static 'ss_viewer/example_rs199894601.png' %}"/>
+          </div>
+      </div>
+
+      <a href="{% url 'ss_viewer:multi-search' %}">Back to Search</a>
+
+   </div>
+</div>
 
 </body>
 </html>
