@@ -212,7 +212,7 @@ class APIResponseHandler:
         elif api_response.status_code == 500:
             status_message = 'The API expeienced an error; no data returned.'
         elif api_response.status_code == 400:
-            status_message = 'Bad request. API says: ' + api_response.text
+            status_message = "Problem with search: " + api_response.text.replace('"', "")
         else:
             response_json = json.loads(api_response.text)
             mt = MotifTransformer()
