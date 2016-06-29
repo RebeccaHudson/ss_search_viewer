@@ -31,7 +31,8 @@ class MotifTransformer:
         trans_factor = self.lut.get(motif_value)
         #TODO load the correct motif file and replace this.
         if trans_factor is None:
-             trans_factor  = "Not found."
+             #probably  encode.
+             trans_factor = motif_value.split("_")[0]
         return trans_factor
 
     def transform_motifs_to_transcription_factors(self, response_json):
