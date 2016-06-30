@@ -5,7 +5,6 @@ import os
 import json
 import pickle
 import requests
-import zipfile
 from tempfile import NamedTemporaryFile
 from ss_viewer.forms import SearchBySnpidForm  #replaces ScoresSearchForm
 from ss_viewer.forms import SearchByGenomicLocationForm
