@@ -1,5 +1,6 @@
 import requests
 import json
+import re
 from ss_viewer.forms import SearchBySnpidWindowForm
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
@@ -20,6 +21,10 @@ def copy_valid_form_data_into_hidden_fields(form_data):
         form_data['prev_search_' + form_field] = form_data[form_field]
     return form_data
 
+def extract_snpid_from_textfield(text):
+    gex = re.compile('(rs[0-9]+)')
+    snpid = gex.search(text)
+    return snpid.group(0)
 
 def handle_snpid_window_search(request):
     if request.method != 'POST':
@@ -34,7 +39,15 @@ def handle_snpid_window_search(request):
 
     form_data = snpid_window_search_form.cleaned_data
 
-    requested_snpid = form_data['snpid']
+    requested_snpid = extract_snpid_from_textfield(form_data['snpid'])
+    if requested_snpid is None:
+        context = StandardFormset.setup_formset_context(
+                                     snpid_window_form=snpid_window_search_form)
+        return StandardFormset.handle_invalid_form(request,
+                                              context, 
+                                              status_message = "SNPid not properly formatted.")
+
+
     window_size = form_data['window_size']
     pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(snpid_window_search_form)
 
