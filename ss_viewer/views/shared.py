@@ -258,52 +258,6 @@ class APIResponseHandler:
             row_to_write = [ dr[field_name] for field_name in fields_for_csv]
             csv_writer.writerow(row_to_write)
 
- 
-    @staticmethod
-    def handle_download_request(api_search_query, api_action):
-        response_data = None
-        status_message = None
-        response = HttpResponse(content_type='application/zip')
-        response['Content-Disposition'] = 'attachment; filename=search-results.csv.zip'
-        api_response = requests.post( APIUrls.setup_api_url(api_action),
-                 json=api_search_query, headers={'content-type':'application/json'})
-
-        if api_response.status_code != 200:
-            context = { "status_message" : "Download failed for some reason." } 
-            return redirect(reverse('ss_viewer:multi-search'))
-
-        response_json = json.loads(api_response.text)
-
-        with NamedTemporaryFile() as output_tmp:
-            writer = csv.writer(output_tmp)     
-            writer.writerow(APIResponseHandler.order_of_fields) 
-            APIResponseHandler.write_one_response_to_csv(response_json['data'], writer) 
-
-            #loop until 204 or error.. 
-            page_of_results = 1 
-            while api_response.status_code == 200:
-                search_offset = settings.API_HOST_INFO['result_page_size'] * page_of_results
-                api_search_query.update({'from_result':search_offset})                
-                #print "api search query : " + repr(api_search_query)
-                api_response = requests.post( APIUrls.setup_api_url(api_action),
-                     json=api_search_query, headers={'content-type':'application/json'})
-
-                page_of_results += 1
-                if api_response.status_code == 200:
-                    response_json = json.loads(api_response.text)
-                    APIResponseHandler.write_one_response_to_csv(response_json['data'], writer) 
-           
-            z = zipfile.ZipFile(response, 'w')
-            output_tmp.seek(0)
-            z.writestr("search-results.csv", output_tmp.read())
-            z.close()
-        #tempfile will be deleted when it closes.
-        return response
-
-
-
-
-
 """An object that implements just the write method of the file-like
 interface.
 """
@@ -372,7 +326,7 @@ class StreamingCSVDownloadHandler:
         writer = csv.writer(pseudo_buffer)
         response = StreamingHttpResponse((writer.writerow(row) for row in rows),
                                          content_type="text/csv")
-        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+        response['Content-Disposition'] = 'attachment; filename="search-results.csv"'
         return response
 
 class APIUrls:
