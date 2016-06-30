@@ -14,24 +14,6 @@
 
       <h1>atSNP Search Help</h1>
 
-      <!--  There's not enough here to justify a Table of Contents, unfortunately..
-      <ul >
-              <li><a href="#snpid"        >  SNPid                   </a></li>
-              <li><a href="#chromosome"   >  Chromosome              </a></li>
-              <li><a href="#position"     >  Position                </a></li>
-              <li><a href="#ref_allele"   >  Reference Allele        </a></li>
-              <li><a href="#snp_allele"   >  SNP Allele              </a></li>
-              <li><a href="#pval_rank"    >  p-value Rank            </a></li>
-              <li><a href="#log_lik_ref"  >  Log Likelihood Reference</a></li>
-              <li><a href="#log_lik_snp"  >  Log Likelihood SNP      </a></li>
-              <li><a href="#log_lik_ratio">  Log Likelihood Ratio    </a></li>
-              <li><a href="#pval_ref"     >  p-value Reference       </a></li>
-              <li><a href="#pval_snp"     >  p-value SNP             </a></li>
-              <li><a href="#pval_diff"    >  p-value Difference      </a></li>
-              <li><a href="#trans_factor" >  Transcription Factor    </a></li>
-              <li><a href="#motif"        >  Motif                   </a></li>
-              <li><a href="#has_plot"     >  Plot Available          </a></li>
-      </ul> -->
       <a href="{% url 'ss_viewer:multi-search' %}">Back to Search</a>
 
       <a name="snpid"><h4>SNPid</h4> </a>
@@ -54,7 +36,11 @@
 
 
       <a name="pval_rank"><h4>p-value Rank</h4></a>
-      <p>P-values for the log rank ratio between the reference and the SNP alleles.</p>
+      <p>   
+     This is the field that is restricted by the search input called "P-value cutoff". <br />
+      P-values for the log rank ratio between the reference and the SNP alleles.
+     </p>
+
 
 
 
@@ -104,13 +90,16 @@
       </p>
 
       <div>
-          <div class="side">
+          <p> 
+          <div>
              <img height="320" src="{% static 'ss_viewer/example_rs572373948.png' %}"/>
           </div>
-
-          <div class="side">
+         </p>
+         <p>
+          <div >
              <img height="320" src="{% static 'ss_viewer/example_rs199894601.png' %}"/>
           </div>
+         </p>
       </div>
 
       <a href="{% url 'ss_viewer:multi-search' %}">Back to Search</a>
