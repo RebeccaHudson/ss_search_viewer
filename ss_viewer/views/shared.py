@@ -201,8 +201,9 @@ class APIResponseHandler:
     #This code gets repeated between every search.
     def handle_search(api_search_query, api_action, search_request_params):
         api_response = requests.post( APIUrls.setup_api_url(api_action),
-                 json=api_search_query, headers={'content-type':'application/json'})
-
+                                      json=api_search_query, 
+                                      timeout=15,
+                                      headers={'content-type':'application/json'})
 
         response_data = None
         status_message = None
