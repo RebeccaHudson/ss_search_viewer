@@ -75,7 +75,9 @@ def handle_search_by_snpid(request):
     if not snpid_search_form.is_valid():
          new_snpid_form = SearchBySnpidForm()
          context = StandardFormset.setup_formset_context(snpid_form=snpid_search_form)
-         return StandardFormset.handle_invalid_form(request, context)
+         return StandardFormset.handle_invalid_form(request,  
+                                                    context, 
+                                                    status_message="See search error(s) in form below.")
     snpid_list = None
     try:
          snpid_list = SnpidSearchUtils.get_snpid_list_from_form(request, snpid_search_form)
