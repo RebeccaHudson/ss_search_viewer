@@ -185,16 +185,24 @@ class APIResponseHandler:
     #api_action should be 'search-by-tf' or 'search-by-gl'
     #This code gets repeated between every search.
     def handle_search(api_search_query, api_action, search_request_params):
-        api_response = requests.post( APIUrls.setup_api_url(api_action),
-                                      json=api_search_query, 
-                                      timeout=15,
-                                      headers={'content-type':'application/json'})
+
         response_data = None
-        status_message = None
-        search_paging_info = None
         plot_source = None
         first_plot_id_str = None
-        if api_response.status_code == 204:
+        api_response = None
+        search_paging_info = None
+
+        try:
+            api_response = requests.post( APIUrls.setup_api_url(api_action),
+                                      json=api_search_query, 
+                                      timeout=25,
+                                      headers={'content-type':'application/json'})
+        except requests.exceptions.Timeout:
+             print "Request timed out !! for the following query" + str(api_search_query) 
+
+        if api_response is  None:
+             status_message = "API timed out. Request took too long."
+        elif api_response.status_code == 204:
             status_message = 'No matching rows.'
         elif api_response.status_code == 500:
             status_message = 'API error; no data returned.'
