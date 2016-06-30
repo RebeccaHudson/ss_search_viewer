@@ -244,19 +244,6 @@ class APIResponseHandler:
                  'first_plot_id_str'  : first_plot_id_str }
     
 
-    @staticmethod
-    def write_one_response_to_csv(api_response_data, csv_writer):
-        mt = MotifTransformer()
-        prepared_data = mt.transform_motifs_to_transcription_factors(api_response_data)
-        fields_for_csv = ['chr', 'pos', 'snpid', 'trans_factor', 'motif', 'motif_len',
-                         'pval_rank', 'snp_start', 'snp_end', 'ref_start', 'ref_end',
-                         'log_lik_ref', 'log_lik_ratio', 'log_enhance_odds',  
-                         'log_reduce_odds', 'log_lik_snp', 'snp_strand', 'ref_strand',
-                         'pval_ref', 'pval_snp', 'pval_cond_ref', 'pval_cond_snp',
-                         'pval_diff', 'refAllele', 'snpAllele']
-        for dr in api_response_data:
-            row_to_write = [ dr[field_name] for field_name in fields_for_csv]
-            csv_writer.writerow(row_to_write)
 
 """An object that implements just the write method of the file-like
 interface.
