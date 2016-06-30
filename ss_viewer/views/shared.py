@@ -162,13 +162,6 @@ class Paging:
 
 
 class APIResponseHandler:
-    order_of_fields = ['chromosome', 'pos',   'snpid',   'transcription factor', 
-                       'motif',   'motif length',  'pval rank',   'snp start',
-                       'snp end',   'ref start',   'ref end',   'log lik ref',
-                       'log lik ratio',   'log enhance odds',  'log reduce odds',
-                       'log lik snp',   'snp strand',  'ref strand',  'pval ref',
-                       'pval snp',  'pval cond ref'   'pval cond snp'   'pval diff',
-                       'ref allele',  'snp allele']
     @staticmethod  
     def setup_hits_message(hitcount, page_of_results_to_display):
         return 'Got ' + str(hitcount) + ' rows back from API.' +\
@@ -185,7 +178,7 @@ class APIResponseHandler:
             if one_row['has_plot'] is True:
                 plot_id_str = "_".join([one_row[field_name] for field_name in field_names ])
                 plot_id_str_for_web_page = plot_id_str.replace(".", "_")
-                print "plot ID for web page looks like this "+ plot_id_str_for_web_page
+                #print "plot ID for web page looks like this "+ plot_id_str_for_web_page
                 plot_data[plot_id_str_for_web_page] = reverse('ss_viewer:dynamic-svg', args=[plot_id_str])  
                 one_row['plot_id_str'] = plot_id_str_for_web_page
                 if first_plot_id_str is None:
@@ -204,7 +197,6 @@ class APIResponseHandler:
                                       json=api_search_query, 
                                       timeout=15,
                                       headers={'content-type':'application/json'})
-
         response_data = None
         status_message = None
         search_paging_info = None
