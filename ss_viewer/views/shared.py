@@ -5,7 +5,6 @@ import os
 import json
 import pickle
 import requests
-import csv
 import zipfile
 from tempfile import NamedTemporaryFile
 from ss_viewer.forms import SearchBySnpidForm  #replaces ScoresSearchForm
@@ -15,7 +14,6 @@ from ss_viewer.forms import SearchBySnpidWindowForm
 from ss_viewer.forms import SearchByGeneNameForm
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
-from django.utils.six.moves import range
 from django.http import StreamingHttpResponse
 
 class MotifTransformer:
@@ -29,9 +27,8 @@ class MotifTransformer:
      
     def transform_one_motif_to_trans_factor(self, motif_value):
         trans_factor = self.lut.get(motif_value)
-        #TODO load the correct motif file and replace this.
         if trans_factor is None:
-             #probably  encode.
+             #probably  encode, if not, fall back as though it was.
              trans_factor = motif_value.split("_")[0]
         return trans_factor
 
@@ -62,9 +59,6 @@ class TFTransformer:
         return one_or_more_motif_values
 
 
-
-
-
 class PValueFromForm:
     @staticmethod
     def get_pvalue_rank_from_form(form):
@@ -72,6 +66,7 @@ class PValueFromForm:
         return form.cleaned_data.get('pvalue_rank_cutoff')
       else:
         return 0.05
+
 
 #includes all of the forms that should be loaded every time.
 class StandardFormset:
@@ -118,8 +113,6 @@ class StandardFormset:
      @staticmethod
      def show_multisearch_page(request):
           searchpage_template = 'ss_viewer/multi-searchpage.html'
-          #plotting_data = get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
-          #needs a DLL plotting_data=get_a_plot_by_snpid_and_motif('rs111200574', 'fake.motif')
           context = StandardFormset.setup_formset_context()
           context.update({'status_message' : "Enter a search.",
                           'active_tab'     : 'none-yet'})
