@@ -56,12 +56,15 @@
     <div class="submit-buttons">
         <input type="submit" name="action" value="Search by Genomic Location"  class="btn btn-primary" />
           {% if search_paging_info != None and active_tab == 'gl-region' %}
-            {% if search_paging_info.show_next_btn == True %}
-                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-            {% endif %}
+
             {% if search_paging_info.show_prev_btn == True %}
                 <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
             {% endif %}
+
+            {% if search_paging_info.show_next_btn == True %}
+                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+            {% endif %}
+
           {% endif %}
     </div><!-- end div for submit buttons. -->
     <button id="gl-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
@@ -89,12 +92,15 @@
 
       <input type="submit" name="action" value="Search by SNPid"  class="btn btn-primary" />
           {% if search_paging_info != None and active_tab == 'snpid' %}
-            {% if search_paging_info.show_next_btn == True %}
-                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-            {% endif %}
+
             {% if search_paging_info.show_prev_btn == True %}
                 <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
             {% endif %}
+
+            {% if search_paging_info.show_next_btn == True %}
+                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+            {% endif %}
+
           {% endif %}
     </div><!-- end div for submit buttons. -->
     <button id="snpid-search-demo" type="button" class="btn btn-link">Use demo values for search.</button>
@@ -121,13 +127,15 @@
           <input type="submit" name="action" value="Search by Transcription Factor"  
                                                           class="btn btn-primary" />
           {% if search_paging_info != None and active_tab == 'tf'  %}
-            {% if search_paging_info.show_next_btn == True %}
-                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-            {% endif %}
-    
+
             {% if search_paging_info.show_prev_btn == True %}
                 <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
             {% endif %}
+
+            {% if search_paging_info.show_next_btn == True %}
+                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+            {% endif %}
+
           {% endif %}
        </div><!-- end div for submit buttons. -->
     <button id="tf-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
@@ -156,13 +164,15 @@
           <input type="submit" name="action" value="Search by Window around SNPid"  
                                                           class="btn btn-primary" />
           {% if search_paging_info != None and active_tab == 'snpid-window'  %}
+
+            {% if search_paging_info.show_prev_btn == True %}
+                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+            {% endif %}
+
             {% if search_paging_info.show_next_btn == True %}
                 <input type="submit" name="action" value="Next" class="btn btn-info" /> 
             {% endif %}
             
-            {% if search_paging_info.show_prev_btn == True %}
-                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
-            {% endif %}
           {% endif %}
        </div><!-- end div for submit buttons. -->
        <button id="snpid-window-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
@@ -189,13 +199,15 @@
           <input type="submit" name="action" value="Search by Gene Name"  
                                                           class="btn btn-primary" />
           {% if search_paging_info != None and active_tab == 'gene-name'  %}
-            {% if search_paging_info.show_next_btn == True %}
-                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-            {% endif %}
             
             {% if search_paging_info.show_prev_btn == True %}
                 <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
             {% endif %}
+
+            {% if search_paging_info.show_next_btn == True %}
+                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+            {% endif %}
+
           {% endif %}
       </div> <!-- end div for submit buttons. -->
        <button id="gene-name-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
@@ -249,19 +261,6 @@
         <td><a href="{% url 'ss_viewer:help-page' %}#trans_factor">Transcription Factor </a>   </td>
         <td><a href="{% url 'ss_viewer:help-page' %}#motif"> Motif                </a>         </td>
         <td><a href="{% url 'ss_viewer:help-page' %}#has_plot">Plot Available     </a>         </td>
-
-        <!-- 
-        <td>motif length</td>
-        <td>snp start</td>
-        <td>snp end</td>
-        <td>ref start</td>
-        <pi><td>ref end</td>
-        <td>log enhance odds</td>
-        <td>log reduce odds</td>
-        <td> snp strand </td>
-        <td> ref strand </td>
-        <td>pval cond ref</td>
-        <td> pval cond snp</td> -->
     </tr>
     </thead>
     <tbody>
@@ -344,7 +343,13 @@
                                        $('#id_gl_end_pos').val(143511163);
                                        $('#id_selected_chromosome').val('ch5'); });
         $("#tf-search-demo").click(function(e){
-                                      $('#id_trans_factor').val('NFYB'); });
+                                      $('#id_trans_factor').val('NFYB'); 
+                                        $('#id_encode_trans_factor').attr('disabled', 'disabled');
+                                        $("#id_trans_factor").removeAttr('disabled');
+                                        $('#id_tf_library_0').prop('checked', true);
+                                        $('#id_tf_library_1').removeAttr('checked'); 
+                                        });
+
         $("#snpid-window-search-demo").click(function(e){
                                       $('#id_snpid').val('rs755632525'); });
         $("#gene-name-search-demo").click(function(e){

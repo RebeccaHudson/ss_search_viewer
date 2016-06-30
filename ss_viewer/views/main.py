@@ -41,6 +41,8 @@ def find_working_es_url():
         if es_check_data.get('error') is  None:
             return settings.ELASTICSEARCH_URLS[i]
         i += 1
+        if i > 2:
+            return None
 
 def get_plot_data_out_of_es(plot_info):
     #es_url = 'http://atsnp-db1.biostat.wisc.edu:9200'          
