@@ -30,18 +30,24 @@ import zipfile
 def index(request):
   return HttpResponse("Try another url, like :ss_viewer/multi-search.")
 
-
-def find_working_es_url(): 
+def find_working_es_url():
     found_working = False
-    i = 1 
+    i = 0 
+    #db-1 is broken for some reason; normally would start at 0
     while found_working is False:
-        url_to_try = settings.ELASTICSEARCH_URLS[i] + '/_cluster/health?timeout=1s&pretty=true'
-        es_check_response = requests.get(url_to_try)
-        es_check_data = json.loads(es_check_response.text)
-        if es_check_data.get('error') is  None:
+        url_to_try = settings.ELASTICSEARCH_URLS[i] + '/atsnp_data/atsnp_output/_search?size=1'
+        print "trying this url " + url_to_try
+        es_check_response = None
+        try:
+            es_check_response = requests.get(url_to_try, timeout=18)  
+        except requests.exceptions.Timeout:
+            print "request for search at : " + url_to_try +  " timed out."  
+        else:    
+            print "url " + url_to_try + " es_check_response" + str(json.loads(es_check_response.text))
+            es_check_data = json.loads(es_check_response.text)
             return settings.ELASTICSEARCH_URLS[i]
         i += 1
-        if i > 2:
+        if i > 2:  
             return None
 
 def get_plot_data_out_of_es(plot_info):
