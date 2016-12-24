@@ -195,7 +195,7 @@ class APIResponseHandler:
         try:
             api_response = requests.post( APIUrls.setup_api_url(api_action),
                                       json=api_search_query, 
-                                      timeout=25,
+                                      timeout=100,
                                       headers={'content-type':'application/json'})
         except requests.exceptions.Timeout:
              print "Request timed out !! for the following query" + str(api_search_query) 

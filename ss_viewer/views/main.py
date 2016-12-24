@@ -39,7 +39,7 @@ def find_working_es_url():
         print "trying this url " + url_to_try
         es_check_response = None
         try:
-            es_check_response = requests.get(url_to_try, timeout=18)  
+            es_check_response = requests.get(url_to_try, timeout=35)  
         except requests.exceptions.Timeout:
             print "request for search at : " + url_to_try +  " timed out."  
         else:    
