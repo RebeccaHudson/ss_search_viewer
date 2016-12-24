@@ -1,0 +1,58 @@
+{% load staticfiles %}
+<html>
+<head>
+ <meta charset="utf-8">
+<title>atSNP Homepage</title>
+    <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
+</head>
+<body  style="background-color: #DCDCDC;" >
+<nav class="navbar navbar-default navbar-fixed-top">
+<div class="container">
+  <div id="content">
+      {% include "ss_viewer/navbar.html" with active='home' %}  
+     <img height="240" src="{% static 'ss_viewer/atsnp-logo.png' %}" />
+     <p>On the front page, it would be helpful to explain the title of the
+      database and state that it works exclusively for humans.</p>
+<p>
+    @SNP DB provides statistical evaluation of impact of SNPs on transcription
+    factor-DNA interactions based on position weight matrices (PWM).
+    The current version is built on SNPs from dbSNP Build 144 for the
+    human genome assembly GRCh38/hg38. atSNP DB uses in silico
+    calculations based on the statistical method in Zuo et al.,
+    Bioinformatics (2015).
+    atSNP first-time users can start scanning vast amounts of
+    SNP-PWM combinations with two key features:
+</p>          
+
+
+
+            
+<ul style="list-style-type: circle;">
+<li> p-values quantifying the impact of SNP on the PWM matches (p-value rank)</li>
+<li> composite logo plots</li>
+</ul>
+<p>
+   @SNP identifies and quantifies best matches to the transcription
+   factor PWMs with both the reference and the SNP alleles in a small
+   window around the SNP location (up to +/- 30 base pairs and considering
+   subsequences spanning the SNP position). It evaluates statistical
+   significance of scores on each allele and calculates statistical
+   significance of the score difference between the reference and the SNP alleles.
+</p>
+<p>
+  The discovery of best matches on the reference and SNP alleles are
+   conducted separately, thus genomic subsequences providing the best matches
+   with both alleles may be different. The change in goodness of match between
+   both alleles indicates impact of SNPs on transcription factor binding ability
+   to DNA. @SNP also provides a composite logo plot for easy visualization
+   of the quality of the reference and SNP allele matches to the PWM and the
+   influence of SNPs on the match change. Read more under "Help".
+</p>          
+
+   </div>  <!-- end content div -->
+</div> <!-- end container div -->
+</nav>
+</body>
+</html>
+
