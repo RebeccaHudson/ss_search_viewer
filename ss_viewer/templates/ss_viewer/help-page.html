@@ -8,10 +8,11 @@
 </head>
 
 <body  style="background-color: #DCDCDC;" >
+<nav class="navbar navbar-default navbar-fixed-top">
 <div class="container">
 
   <div id="content">
-
+      {% include "ss_viewer/navbar.html" with active='help' %}
       <h1>atSNP Search Help</h1>
 
       <a href="{% url 'ss_viewer:multi-search' %}">Back to Search</a>
@@ -108,5 +109,6 @@
 </div>
 
 </body>
+</nav> <!-- is this closing nav tag really needed? -->
 </html>
 

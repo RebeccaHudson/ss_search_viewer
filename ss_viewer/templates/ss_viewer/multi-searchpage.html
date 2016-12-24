@@ -10,10 +10,12 @@
   <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
 </head>
 <body>
-
-<div class="container-fluid">
+<nav class="navbar navbar-default navbar-fixed-top">
+<!-- <div class="container-fluid"> was there a good reason not to just
+                                   have this as 'container'?   -->
+<div class="container">
 <div id="content">
-<span><a href="{% url 'ss_viewer:about-page' %}">About</a></span>
+{% include "ss_viewer/navbar.html" with active='searches' %}
 <h2 >Search atSNP output</h2>
 <div id="status_message"> {{ status_message }} </div>
 
@@ -381,5 +383,5 @@
     });
 </script>
 
-
+</nav>
 </body>

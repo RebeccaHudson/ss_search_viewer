@@ -7,14 +7,11 @@
 </head>
 
 <body style="background-color: #dcdcdc;"  >
-
+<nav class="navbar navbar-default navbar-fixed-top">
 <div class="container">
 <div id="content">
-
+{% include "ss_viewer/navbar.html" with active='about' %}
 <h1>About atSNP Search</h1>
-
-<a href="{% url 'ss_viewer:multi-search' %}">Back to Search</a>
-
 
 <h3 style="text-decoration:underline;"> About </h3>
 <p>
@@ -65,7 +62,7 @@ Center for Predictive Computational Phenotyping, University of Wisconsin Madison
 <a href="{% url 'ss_viewer:multi-search' %}">Back to Search</a>
 </div>
 </div>
-
+</nav>
 </body>
 </html>
 

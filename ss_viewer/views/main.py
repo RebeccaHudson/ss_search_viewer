@@ -152,3 +152,8 @@ def about_page(request):
     context = {}
     return render(request, about_page_template, context) 
 
+def home_page(request):
+    home_page_template = 'ss_viewer/happyhome.html'
+    context = {}
+    return render(request, home_page_template, context)
+

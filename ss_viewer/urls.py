@@ -11,10 +11,16 @@ from .views import gene_name_search
 
 app_name = 'ss_viewer'
 
+
+ #  url(r'^$',
+ #      views.shared.StandardFormset.show_multisearch_page,
+ #      name = 'index'),
+ # For home page to be the search page.
+
 urlpatterns = [
-   url(r'^$',
-       views.shared.StandardFormset.show_multisearch_page,
-       name = 'index'),
+  url(r'^$', 
+         views.main.home_page,
+         name = 'index'),           #does this need also to be 'home-page'?
 
   url (r'^dynamic-svg/(?P<plot_id_string>.+)$',
        views.main.dynamic_svg,
@@ -27,6 +33,10 @@ urlpatterns = [
   url (r'^about/$', 
        views.main.about_page,
        name = 'about-page'),
+  
+  url(r'^home/$',
+       views.main.home_page,
+       name = 'home-page'), 
  
   url(r'^multi-search/$', 
        views.shared.StandardFormset.show_multisearch_page,
