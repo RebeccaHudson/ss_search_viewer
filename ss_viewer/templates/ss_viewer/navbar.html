@@ -19,16 +19,25 @@
       <ul class="nav navbar-nav">
         <!-- the li that represents the page we're on should have class == 'active' -->
         <li {% if active == 'home' %}class="active"{%endif%} >
-            <a href="{% url 'ss_viewer:home-page' %}">Home</a> </li>
+            <a href="{% url 'ss_viewer:home-page' %}">
+            <span class="glyphicon glyphicon-home"></span>
+            Home</a>
+        </li>
 
         <li {% if active == 'searches' %}class="active"{%endif%} >
-            <a href="{% url 'ss_viewer:multi-search' %}">Searches</a></li>
+           <a href="{% url 'ss_viewer:multi-search' %}">
+           <span class="glyphicon glyphicon-search"></span>
+            Searches</a></li>
 
         <li {% if active == 'help' %}class="active"{%endif%} >
-            <a href="{% url 'ss_viewer:help-page'  %}">Help</a></li>
+            <a href="{% url 'ss_viewer:help-page'  %}">
+            <span class="glyphicon glyphicon-question-sign"></span>
+            Help</a></li>
 
         <li {% if active == 'about' %}class="active"{%endif%} >
-         <a href="{% url 'ss_viewer:about-page'  %}">About</a></li>
+         <a href="{% url 'ss_viewer:about-page'  %}">
+         <span class="glyphicon glyphicon-info-sign"></span>
+         About</a></li>
 
         <li><a href="#">FAQ(missing)</a></li>
       </ul>

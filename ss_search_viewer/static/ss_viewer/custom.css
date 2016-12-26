@@ -1,0 +1,87 @@
+/* these are hand-coded styles meant to work with and/or override
+  what Bootstrap provides already. */
+
+#tabs li a {
+    border: 2px solid;
+    background-color: #DCDCDC;
+}
+
+#tabs li.active a {
+    border-bottom-color: transparent;
+}
+
+.tab-pane { 
+    border:solid 1px gray;
+    border-top: 0;
+}
+
+.panel-body {
+    background-color: #DCDCDC;
+}
+
+
+
+.tooltip {
+    background-color:#000;
+    border:1px solid #fff;
+    padding:10px 15px;
+    width:200px;
+    display:none;
+    color:#fff;
+    text-align:left;
+    font-size:12px;
+ 
+    /* outline radius for mozilla/firefox only */
+    -moz-box-shadow:0 0 10px #000;
+    -webkit-box-shadow:0 0 10px #000;
+}
+
+div.submit-buttons {
+    padding: 10px 10px;
+}
+
+.table { text-align: center; }
+.table thead { font-size: 10px; }
+.table tbody { font-size: 12px; }
+
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+    background-color: #C9C9F3;
+}
+
+form label{ margin-right: 10px; }
+
+div .hide-plot { display : none; }
+div .show-plot { display: inline;
+                 float: right;
+ }/* maybe it should be inline? */ 
+
+div .show-plot img {  height: 375px; }
+
+/*div .tab-pane { width: 6px;  } */
+
+div .side { display: inline-block;
+            vertical-align: top;
+            } 
+
+div .plot { margin-left:1.5em; }
+
+td.show_plots > button { font-size: 12px;
+                         padding  :  0px; }
+
+
+/* don't put dots next to the radio buttons */
+ul { list-style-type: none; }
+
+input[type="radio"] {  
+  float: left;
+  height: 15px;
+  width: 15px;
+  margin-right: 15px; 
+  padding : 8;
+  vertical-align: middle;
+}
+
+label[for^="id_tf_library"] {
+  vertical-align: middle;
+}
+

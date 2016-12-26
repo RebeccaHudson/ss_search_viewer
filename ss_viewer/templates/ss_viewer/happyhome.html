@@ -5,6 +5,10 @@
 <title>atSNP Homepage</title>
     <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
+    <script src="{% static 'ss_viewer/js/jquery-2.2.4.js' %}"></script>
+    <script src="{% static 'ss_viewer/js/bootstrap.min.js' %}"></script>
+
+    <!-- does adding a link to the bootstrap JS make glyphicons appear? -->
 </head>
 <body  style="background-color: #DCDCDC;" >
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -14,7 +18,11 @@
      <img height="240" src="{% static 'ss_viewer/atsnp-logo.png' %}" />
      <p>On the front page, it would be helpful to explain the title of the
       database and state that it works exclusively for humans.</p>
+<!-- todo; remove in-line styles from homepage -->
+<div style="box-shadow: 1px 1px 1px 1px #888888;">
 <p>
+
+               <p><span class="glyphicon glyphicon-home"></span></p>
     @SNP DB provides statistical evaluation of impact of SNPs on transcription
     factor-DNA interactions based on position weight matrices (PWM).
     The current version is built on SNPs from dbSNP Build 144 for the
@@ -25,9 +33,6 @@
     SNP-PWM combinations with two key features:
 </p>          
 
-
-
-            
 <ul style="list-style-type: circle;">
 <li> p-values quantifying the impact of SNP on the PWM matches (p-value rank)</li>
 <li> composite logo plots</li>
@@ -49,6 +54,35 @@
    of the quality of the reference and SNP allele matches to the PWM and the
    influence of SNPs on the match change. Read more under "Help".
 </p>          
+</div>
+
+<div style="box-shadow: 1px 1px 1px 1px #888888;"> 
+<span>News and Updates</span>
+<p>
+   @SNP DB human version 1.0.0 has been released on July 20, 2016.
+</p>
+<p>
+  The current version of @SNP enables querying 133 million SNPs from the
+  <a href="http://www.ncbi.nlm.nih.gov/SNP/">NCBI database</a>
+  of genetic variation (dbSNP Build 144 for human genome GRCh38)
+  with 2,270 PWMs (position weight matrices) from two major sources  
+  of transcription factor position weight matrix libraries
+  <a href="http://jaspar.genereg.net/">JASPAR</a>
+  @SNP DB contains statistical evaluations for a total of 308 billion SNP-PWM pairs.
+</p>
+</div>
+
+
+<div style="box-shadow: 1px 1px 1px 1px #888888;">
+  <span>Contact</span>
+  <p>
+  If you have any questions or experience technical difficulties,
+  please feel free to contact us at keles@stat.wisc.edu.
+  </p>
+</div>
+
+
+
 
    </div>  <!-- end content div -->
 </div> <!-- end container div -->

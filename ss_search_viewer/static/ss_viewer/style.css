@@ -1,0 +1,34 @@
+h1 {
+  font-size: .5em;
+  color: green;
+}
+
+svg {
+  max-height: 350px;
+  max-width:  300px;
+}
+
+
+table {
+   width: 30em;
+}
+
+form {
+   width: 30em;
+}
+
+form label, input, select, textarea {
+   font-size: 12px;
+}
+
+.side {
+    display: inline-block
+}
+
+
+#scores_to_view tr {
+    font-size: 1em;
+ }
+
+
+
