@@ -10,7 +10,7 @@
   <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar navbar-default navbar-fixed-top">
+<!-- <nav class="navbar navbar-default navbar-fixed-top"> -->
 <!-- <div class="container-fluid"> was there a good reason not to just
                                    have this as 'container'?   -->
 <div class="container">
@@ -222,7 +222,7 @@
   </form>
 </div>
  
-
+ <!-- if the nav tab ends here, you can independently scroll the search results -->
  
 </div> <!-- close the 'side' div -->
 
@@ -240,7 +240,6 @@
     {% endif %}
 </div>
 {% endif %}
-
 <!-- consider making this part modular; DRYing it up some how... -->
   {% if api_response  %}
   <table class="table table-striped table-condensed"> 
@@ -282,12 +281,15 @@
 
         <td> {{ onerow.trans_factor }}</td>
         <td> {{ onerow.motif }} </td>
-        <td class="show_plots" > {% if onerow.has_plot %}
+        <!-- plots are now available for ALL data -->
+        <td class="show_plots" > 
                   <button id="show_plot_{{onerow.plot_id_str}}" 
                           type="button" class="btn btn-link" 
                           plotstr="{{onerow.plot_id_str}}"
                           title="Show the plot for this data."> 
-                  Show Plot</button>{% else %} N/A {% endif %}</td> 
+                  Show Plot</button></td> 
+       <td id="plot_data_{{onerow.plot_id_str}}" 
+       class="plotting_data" >{{ onerow.json_for_plotting }}</td>
        </tr>
     {%  endfor %}
     <tbody>
@@ -358,8 +360,14 @@
         $("td.show_plots > button").click(function(e) {
                                 var plotstr_attr = e.target.attributes.getNamedItem('plotstr');
                                 var plot_str  = plotstr_attr.value;
-
+                                console.log("going to show a plot");
                                 /* hides the currently shown plot */
+                                console.dir(e.target);
+                                 
+                                var jtarget = $("td#plot_data_".concat(plot_str));
+                                var json_to_plot = jtarget[0].textContent.trim();
+                                console.log("json to plot: " + json_to_plot);
+  
                                 var currently_shown_plot = $("div.show-plot");
                                 currently_shown_plot.removeClass('show-plot');
                                 currently_shown_plot.addClass('hide-plot'); 
@@ -382,5 +390,4 @@
     });
 </script>
 
-</nav>
 </body>
