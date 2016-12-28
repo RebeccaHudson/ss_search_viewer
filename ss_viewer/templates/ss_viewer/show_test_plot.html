@@ -1,16 +1,94 @@
 {% load staticfiles %}
 <head>
   <title> test the showing of a plot... </title>
+    <!-- <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet"> -->
+    <link href="{% static 'ss_viewer/plot-styles.css' %}" rel="stylesheet">
+    <script src="{% static 'ss_viewer/js/jquery-2.2.4.js' %}"></script>
+    <script src="{% static 'ss_viewer/js/bootstrap.min.js' %}"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="{% static 'ss_viewer/plotIntoSVGSkeleton.js' %}"> </script> 
 </head>
 <body>
-<h2 >Show plot </h2>
-<p>{{ happy_data }}</p>
 
-<a href = "{{ dynamic_svg_data}}">
-    <img src="{{ dynamic_svg_data }}" alt="img1">
-</a>
+<button id="show_plot" type="button" class="btn btn-link">
+  Show plot 
+</button>
+
+<span> plot data: </span>
+<p id="plot_data">{{ happy_data }}</p>
+
+<span> motif data:  </span>
+<p id="motif_data">{{ motif_data }}</p>
+
+<!--<a href ="dynamic_svg_data">
+    <img src="dynamic_svg_data" alt="img1">
+</a> -->
 
 
 <div id="plot" class="side">
+<svg class="target" id="target-0" width="900" height="400">
+        <g id="legend" transform="translate(10)"  >
+            <g id="line1margin" transform="translate(0, 50)" >
+                <!-- x controls how far the legend symbol is from the left edge of 
+                     the SVG, y controls how far from the top of the SVG, and 
+                     dy is ???? 
+                     to move the text, change the attributes of the text itself.  -->
+                <text style="center">PWM</text>
+            </g>
+            <g id="line2margin" transform="translate(0, 100)" >
+                <text style="center">+/-</text>
+            </g>
+            <!-- add a little gap between lines 2 and 3 -->
+            <g id="line3margin" transform="translate(0,170)" >
+                <text style="center">+/-</text>
+            </g>
+            <g id="line4margin" transform="translate(0, 220)">
+                <text style="center">PWM</text>
+            </g>
+        </g>
+        <!-- the legend actually prints, at least -->
+<!-- the logoplots group gets a transform away from the left edge that
+             will apply to all child elements (each of the 4 plots)'
+             NOTE: the logoplots group had  width="860" height="400"
+             keep this intention in mind.-->
+        <g id="logoplots" transform="translate(100)" >
+            <rect id="highlight" />
+            <g id="line1data" transform="translate(0, 0)" >
+            <!-- setting the x and y on a group does not make sense, use the 
+                 group's transform attribute and apply a translate(x, y) -->
+              <!--  <text>motif 1here</text> -->
+            </g>
+            <!-- Notice how each of these groups gets the translation of the parent
+                 group applied to it, as well as the one specified for itself. -->
+            <g id="line2data" transform="translate(0, 50)" >
+             <!--   <text>motif 2here</text> -->
+            </g>
+            <g id="line3data" transform="translate(0, 120)" >
+            <!-- <text>motif 3 here</text> -->
+            </g>
+            <g id="line4data" transform="translate(0, 190)"  >
+            <!-- <text>motif 4   here</text> -->
+        </g>
+        </g>
+    </svg>
 </div>
 
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        //if jquery is being updated, note: 
+        //As of jQuery 3.0, $.parseJSON is deprecated. To parse JSON 
+        //strings use the native JSON.parse method instead.
+        var plottingJSON = $("p#plot_data")[0].textContent;
+        var plottingData = jQuery.parseJSON(plottingJSON);
+        var motifJSON = $("p#motif_data")[0].textContent; 
+        var motif = jQuery.parseJSON(motifJSON);
+        console.log(plottingData);
+        console.log(motif);
+        makeAPlot(plottingData, "target-0", motif);
+        $("button#show_plot").click(function(e) {
+         });
+});
+</script>
+
+</body>
+</html>
