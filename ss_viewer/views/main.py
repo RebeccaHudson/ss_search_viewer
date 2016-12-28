@@ -18,6 +18,11 @@ from ss_viewer.views.shared import TFTransformer
 from ss_viewer.views.shared import APIUrls 
 from ss_viewer.views.shared import PValueFromForm 
 from ss_viewer.views.shared import StandardFormset
+
+
+#TODO: pull the motif data out of the API, not this static file
+from ss_viewer.views.shared import MotifPlottingData
+
 from django.core.exceptions import ValidationError
 from ss_viewer.views.snpid_search import SnpidSearchUtils
 from tempfile import NamedTemporaryFile 
@@ -99,13 +104,33 @@ def dynamic_svg(request, plot_id_string):
     return HttpResponse(image, content_type="image/svg+xml")
 
 def test_svg_plots(request):
+
     name_of_template  =  'ss_viewer/show_test_plot.html' 
-    #template = loader.get_template(name_of_template)
-    #data_from_post = requests.post(url_of_dyn, data=json.dumps({'bit of post data':69})
-    #I intend to put the data that comes out of ES on the result itself into the output file.
+
+    path_to_tests = '/test_data/plotsToTest.json'
+    testData = None
+    fpath = os.path.dirname(os.path.dirname(__file__)) + path_to_tests
+    with open(fpath,  'r') as f:
+        testjson = json.load(f)
+        testdata = testjson['hits']
+        print "testjson hits " + str(testdata.keys())
+        testdata2 = testdata['hits'][2]['_source']
+        print "testjson2 hits " + str(testdata2.keys())
+
+    motif = testdata2['motif']   
+    motifMap = MotifPlottingData()
     plot_id_string = 'MA0002.2_rs538221432_T'
-    context =  {'dynamic_svg_data' : reverse('ss_viewer:dynamic-svg', args=[plot_id_string]),
-                 "happy_data" : "eat, shit, and die." } 
+
+    motif_data = motifMap.lookup_motif_data(motif)
+    print "motif data : " + str(motif_data)
+
+    context =  {'dynamic_svg_data' : 'scooby doo',
+                 #reverse('ss_viewer:dynamic-svg', args=[plot_id_string]),
+                 "happy_data" : json.dumps(testdata2),
+                 "motif_data" : json.dumps(motifMap.lookup_motif_data(motif)) }
+                    
+    #read happy_data out of a file of test data.
+    #use the motifs from file thing to load the motif data.
     # in original example ,reverse also has args=['gene_links_graph'])})
 
     #context = { "happy_data" : "eat, shit, and die.",
