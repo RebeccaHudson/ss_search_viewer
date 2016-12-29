@@ -48,14 +48,14 @@
         var snpPWMOffset = plotToMake.snp_extra_pwm_off;
         var refPWMOffset = plotToMake.ref_extra_pwm_off;
 
-        console.log("snp sequence: " + snpSeq );
+       /* console.log("snp sequence: " + snpSeq );
         console.log("ref sequence: " + refSeq );
         console.log("loading motif: " + motifName );
         console.log("snp PWM offset: " + snpPWMOffset 
                   + "  ref PWM offset: " + refPWMOffset);
         console.log("ref strand: " + refStrand + 
                     "  snp strand: " + snpStrand);
-
+        */
         var randomMotif = plotToMake.motif_data;
         var maxColumnCount = d3.max([snpSeq.length, 
                                      randomMotif.forward.length + snpPWMOffset,
@@ -147,9 +147,9 @@ function findSNPLocation(snpDirection, refDirection, snpSeq, refSeq){
    }
    for ( i = 0; i < snpSeq.length;  i ++ ) {
       var result = comparison(snpSeq[i], refSeq[i]);
-     console.log("result of comparing " + 
+      /*console.log("result of comparing " + 
                   snpSeq[i] +  " and " + refSeq[i] +
-                  "is " + result);
+                  "is " + result);*/
       if ( result === false ){ return i; }
    }
    console.log("Failed to find SNP location." +
