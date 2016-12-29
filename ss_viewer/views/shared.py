@@ -210,7 +210,6 @@ class APIResponseHandler:
             #everything is a JASPAR motif right now. Switch to ENCODE somewhere else.
             
             motif_data = mpd.lookup_motif_data(one_row['motif'])
-            print "plot id string: " + plot_id_str_for_web_page
             json_for_plotting = { 'snp_aug_match_seq': one_row['snp_aug_match_seq'],
                                   'snp_extra_pwm_off': one_row['snp_extra_pwm_off'],
                                   'ref_aug_match_seq': one_row['ref_aug_match_seq'],
