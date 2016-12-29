@@ -8,6 +8,13 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
+  <link href="{% static 'ss_viewer/plot-styles.css' %}" rel="stylesheet"> 
+  
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+   
+   <script type="text/javascript" src="{% static 'ss_viewer/cloneTheSkeleton.js' %}"> </script>  
+   <script type="text/javascript" src="{% static 'ss_viewer/plotIntoSVGSkeleton.js' %}"> </script> 
+
 </head>
 <body>
 <!-- <nav class="navbar navbar-default navbar-fixed-top"> -->
@@ -228,6 +235,13 @@
 
 </div> <!-- close the 'tabbed forms' div -->
 <!--  this is the way that we will be displaying the plot -->
+
+<div class="side plot">
+   <div id="plots">
+   {% include "ss_viewer/svg_skeleton.html" %}
+   </div>
+</div>
+
 {% if plot_source %}
 <div class="side plot">
     {% if plot_source %}
@@ -282,13 +296,14 @@
         <td> {{ onerow.trans_factor }}</td>
         <td> {{ onerow.motif }} </td>
         <!-- plots are now available for ALL data -->
-        <td class="show_plots" > 
+        <td class="show_plots"  >
                   <button id="show_plot_{{onerow.plot_id_str}}" 
                           type="button" class="btn btn-link" 
                           plotstr="{{onerow.plot_id_str}}"
                           title="Show the plot for this data."> 
                   Show Plot</button></td> 
-       <td id="plot_data_{{onerow.plot_id_str}}" 
+       <!--  how to hide the hidden data -->
+       <td id="plot_data_{{onerow.plot_id_str}}" style="display:none;"
        class="plotting_data" >{{ onerow.json_for_plotting }}</td>
        </tr>
     {%  endfor %}
@@ -300,12 +315,12 @@
 </div> <!-- close the 'content' div -->
 </div> <!-- close the 'container' div -->
 
+    <!-- TODO: ensure this is handled in <head> and get it out of here. -->
     <script src="{% static 'ss_viewer/js/bootstrap.min.js' %}"></script>
 
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
         $('#tabs').tab();
-
 
         /* either have JASPAR selected by default, or if it's 
            what was being used before*/
@@ -333,8 +348,10 @@
                 $("#id_encode_trans_factor").attr('disabled', 'disabled');
                 $("#id_trans_factor").removeAttr('disabled');
                }
+
          });
-   
+         //cloneSVGSkeleton(plottingData);
+         /* end of document.ready stuff */
 
         /* clickable examples for demo searches */
         $("#snpid-search-demo").click(function(e){ 
@@ -362,26 +379,53 @@
                                 var plot_str  = plotstr_attr.value;
                                 console.log("going to show a plot");
                                 /* hides the currently shown plot */
-                                console.dir(e.target);
-                                 
-                                var jtarget = $("td#plot_data_".concat(plot_str));
-                                var json_to_plot = jtarget[0].textContent.trim();
-                                console.log("json to plot: " + json_to_plot);
-  
+                                //console.dir(e.target);
+                                //var jtarget = $("td#plot_data_".concat(plot_str));
+                                //var json_to_plot = jtarget[0].textContent.trim();
+
+                               // plottingData = jQuery.parseJSON(json_to_plot); 
+                                //console.log("json to plot: " + plottingData);
+                                
+                                // makeAPlot(plottingData, "target-0"); 
+                                /* the code below would be useful for showing/hiding
+                                   all of the plots prepared for this one page */ 
                                 var currently_shown_plot = $("div.show-plot");
                                 currently_shown_plot.removeClass('show-plot');
-                                currently_shown_plot.addClass('hide-plot'); 
-                                var id_of_plot_div = 'plot_'.concat(plot_str); 
-                                var plot_selector = '#'.concat(id_of_plot_div);
-                                var div_to_show_now = $(plot_selector);
-                                div_to_show_now.removeClass('hide-plot');
+                                currently_shown_plot.addClass('hidden'); 
+                                var id_of_plot_svg = 'target-'.concat(plot_str); 
+                                var plot_selector = 'svg#'.concat(id_of_plot_svg);
+                                var div_to_show_now = $(plot_selector).parent();
+                                div_to_show_now.removeClass('hidden');
                                 div_to_show_now.addClass('show-plot');
                                 window.scrollTo(0, 0); /* scroll to the top of the page */
                                }); 
 
        /* blank out the snpdis requested if the file upload button is clicked. */
        $("#id_file_of_snpids").click(function(e)  { $("#id_raw_requested_snpids").val(""); }); 
-    });
+  
+       /* plotting data from each of the searched items.*/
+       var plottingData = [];
+       $("td.plotting_data" ).each(function() {
+           var data_for_one_plot = this.textContent;
+           onePlotData = jQuery.parseJSON(data_for_one_plot);
+           plottingData.push(onePlotData);
+           console.log("preparing for one plot.. " + data_for_one_plot ); 
+       });
+       cloneSVGSkeleton(plottingData);
+       $("svg#target-0").hide();
+       for ( var n = 0; n < plottingData.length; n++){
+           var targetSVGid = "target-" + plottingData[n].plot_id_str;
+           console.log("creating plot for id : " + targetSVGid);
+           makeAPlot(plottingData[n], targetSVGid);
+           if ( n > 0 ){
+             $("#"+targetSVGid).parent().addClass("hidden");
+           }else {
+             $("#"+targetSVGid).parent().addClass("show-plot");
+           } 
+       } 
+       console.log("completed plotting!");
+       //$( this ).addClass( "foo" );
+    });//end of document.ready stuff.
 
     $(".formcontrol").tooltip({
       position: "bottom left",
