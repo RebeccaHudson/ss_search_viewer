@@ -82,9 +82,11 @@
         var plottingData = jQuery.parseJSON(plottingJSON);
         var motifJSON = $("p#motif_data")[0].textContent; 
         var motif = jQuery.parseJSON(motifJSON);
-        console.log(plottingData);
-        console.log(motif);
-        makeAPlot(plottingData, "target-0", motif);
+        plottingData['motif_data'] = motif;
+        console.log(plottingData);  //should now contain the motif_data
+        //console.log(motif);
+        //makeAPlot(plottingData, "target-0", motif);
+        makeAPlot(plottingData, "target-0");
         $("button#show_plot").click(function(e) {
          });
 });
