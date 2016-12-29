@@ -192,14 +192,15 @@ class APIResponseHandler:
     @staticmethod 
     #meant to handle one page of results at a time.
     #start with just the first result
+    #TODO: remove 'for_rows_with_plots' from the name of this method
     def get_plots_for_rows_with_plots(rows_to_display):
         plot_data = {} 
         field_names = ['motif', 'snpid', 'snpAllele'] 
         first_plot_id_str = None
          
         #motifPlotData object gets the actual motif data.    
-        motif_data = 'fake'    
-
+        mpd = MotifPlottingData()
+     
         for one_row in rows_to_display:
             plot_id_str = "_".join([one_row[field_name] for field_name in field_names ])
             plot_id_str_for_web_page = plot_id_str.replace(".", "_")
@@ -207,7 +208,9 @@ class APIResponseHandler:
             #print "plot ID for web page looks like this "+ plot_id_str_for_web_page
             #plot_data[plot_id_str_for_ web_page] = reverse('ss_viewer:dynamic-svg', args=[plot_id_str])  
             #everything is a JASPAR motif right now. Switch to ENCODE somewhere else.
-            motif_data = motifs[one_row['motif']]
+            
+            motif_data = mpd.lookup_motif_data(one_row['motif'])
+            print "plot id string: " + plot_id_str_for_web_page
             json_for_plotting = { 'snp_aug_match_seq': one_row['snp_aug_match_seq'],
                                   'snp_extra_pwm_off': one_row['snp_extra_pwm_off'],
                                   'ref_aug_match_seq': one_row['ref_aug_match_seq'],
@@ -215,17 +218,17 @@ class APIResponseHandler:
                                   'snp_strand'      : one_row['snp_strand'],
                                   'ref_strand'      : one_row['ref_strand'], 
                                   'motif'           : one_row['motif'],
-                                  'motif_data'      : motif_data 
+                                  'motif_data'      : motif_data,
+                                  'plot_id_str'     : plot_id_str_for_web_page
                                  }
             one_row['json_for_plotting'] = json.dumps(json_for_plotting)
-
             if first_plot_id_str is None:
                 first_plot_id_str = plot_id_str_for_web_page
                 #tell the interface which plot to show first.
         if not any(plot_data):
             return None
         return { 'response_data' : rows_to_display, 
-                 'plot_data':plot_data , 
+                 'plot_data': plot_data , 
                  'first_plot_id_str': first_plot_id_str}
  
 
@@ -243,7 +246,7 @@ class APIResponseHandler:
         first_plot_id_str = None
         api_response = None
         search_paging_info = None
-
+        print "attempting search"
         try:
             api_response = requests.post( APIUrls.setup_api_url(api_action),
                                       json=api_search_query, 
@@ -332,8 +335,8 @@ class StreamingCSVDownloadHandler:
                 response_json = json.loads(api_response.text)
                 api_response_data = response_json['data']         
                 prepared_data = mt.transform_motifs_to_transcription_factors(api_response_data)
-                print "hitcount = " + str(response_json['hitcount'])
-                print "got this much data out of API this round : " + str(len(api_response_data))
+                #print "hitcount = " + str(response_json['hitcount'])
+                #print "got this much data out of API this round : " + str(len(api_response_data))
                 for dr in prepared_data:
                     rows.append( [ dr[field_name] for field_name in fields_for_csv ])
                     if len(rows) >= settings.HARD_LIMITS['MAX_CSV_DOWNLOAD']:
