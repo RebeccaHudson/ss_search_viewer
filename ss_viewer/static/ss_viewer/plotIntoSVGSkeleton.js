@@ -29,15 +29,14 @@
       //makeAPlot(plotToMake, "target-"+k, motifMap);
       makeAPlot(plotToMake, "target-"+k, motifForPlot);
       //alert("pause");
-
     }
-    
      */
     //makeAPlot(plottingData[4], 'target-1', motifMap); 
  
     //get it down to one call per plot?
     //motifMap gets loaded earlier from test-motif-data.js
-    function makeAPlot(plotToMake, idOfTargetSVG, motif){
+    //motif_data, a key in plotToMake, replaces the motif parameter
+    function makeAPlot(plotToMake, idOfTargetSVG){
 
         var motifName = plotToMake.motif;
         var snpSeq = plotToMake.snp_aug_match_seq.split("");
@@ -57,8 +56,7 @@
         console.log("ref strand: " + refStrand + 
                     "  snp strand: " + snpStrand);
 
-        //var randomMotif = motifMap[motifName]; //TODO: make it not 'randomMotif'
-        var randomMotif = motif;
+        var randomMotif = plotToMake.motif_data;
         var maxColumnCount = d3.max([snpSeq.length, 
                                      randomMotif.forward.length + snpPWMOffset,
                                      randomMotif.forward.length + refPWMOffset  ]);
