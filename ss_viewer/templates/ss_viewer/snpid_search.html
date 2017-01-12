@@ -1,0 +1,34 @@
+<div class="tab-pane panel-body
+   {%if active_tab == 'snpid' or active_tab == 'none-yet'%} active{%endif%}"  id="snpid_search_form" >
+  <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-search' %}" method="post">
+  {% csrf_token %}
+  <div class="form-group">
+    <table>
+      {{ snpid_search_form.as_table }}
+
+    </table>
+
+    <div class="submit-buttons">
+
+      <input type="submit" name="action" value="Search by SNPid"  class="btn btn-primary" />
+          {% if search_paging_info != None and active_tab == 'snpid' %}
+
+            {% if search_paging_info.show_prev_btn == True %}
+                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+            {% endif %}
+
+            {% if search_paging_info.show_next_btn == True %}
+                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+            {% endif %}
+
+          {% endif %}
+    </div><!-- end div for submit buttons. -->
+    <button id="snpid-search-demo" type="button" class="btn btn-link">Use demo values for search.</button>
+  </div>
+     {% if search_paging_info != None and active_tab = 'snpid' %}
+       <input type="submit" name="action" 
+         value="Download Results" class="btn-xs btn-danger"
+         onclick="return confirm('Downloads can take a while,\n if the dataset is > 60000 rows,only the first 60,000 rows will be downloaded.')" />
+     {% endif %}
+  </form>
+</div>
