@@ -28,214 +28,28 @@
 <div class="side"> 
 
 <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-
-
   <li  {%if active_tab == 'snpid' or active_tab == 'none-yet'%}class="active"{%endif%}><a href="#snpid_search_form" data-toggle="tab"  >SNPid List</a></li>
-
   <li {%if active_tab == 'snpid-window'%}class="active"{%endif%}><a href="#snpid_window_form" data-toggle="tab" >SNPid Window</a></li>
-
   <li {%if active_tab == 'gl-region' %}
       class="active"
       {% endif %}><a href="#gl_region_search_form" data-toggle="tab">Genomic Location</a></li>
-
   <li {%if active_tab == 'gene-name'%}class="active"{%endif%}><a href="#gene_name_form" data-toggle="tab" >Gene</a></li>
-
   <li {%if active_tab == 'tf'%}class="active"{%endif%}><a href="#tf_search_form" data-toggle="tab" >Transcription Factor</a></li>
-
-
-
-
-
 </ul>
 
 
 
 <div id="tabbed-forms" class="tab-content">
-
-<div class="tab-pane panel-body 
-   {%if active_tab == 'gl-region' %} active{%endif%}" id="gl_region_search_form" >
-  <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:gl-region-search' %}" method="post" >
-  {% csrf_token %}
-  <div class="form-group">
-    <table>
-      {{ gl_search_form.as_table }}
-    </table>
-
-    <div class="submit-buttons">
-        <input type="submit" name="action" value="Search by Genomic Location"  class="btn btn-primary" />
-          {% if search_paging_info != None and active_tab == 'gl-region' %}
-
-            {% if search_paging_info.show_prev_btn == True %}
-                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
-            {% endif %}
-
-            {% if search_paging_info.show_next_btn == True %}
-                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-            {% endif %}
-
-          {% endif %}
-    </div><!-- end div for submit buttons. -->
-    <button id="gl-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
-  </div>
-     {% if search_paging_info != None and active_tab == 'gl-region' %}
-       <input type="submit" name="action" 
-         value="Download Results" class="btn-xs btn-danger"
-         onclick="return confirm('Downloads can take a while,\n if the dataset is > 60000 rows,only the first 60,000 rows will be downloaded.')" />
-     {% endif %}
-  </form>
-</div>
-
-
-<div class="tab-pane panel-body
-   {%if active_tab == 'snpid' or active_tab == 'none-yet'%} active{%endif%}"  id="snpid_search_form" >
-  <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-search' %}" method="post">
-  {% csrf_token %}
-  <div class="form-group">
-    <table>
-      {{ snpid_search_form.as_table }}
-
-    </table>
-
-    <div class="submit-buttons">
-
-      <input type="submit" name="action" value="Search by SNPid"  class="btn btn-primary" />
-          {% if search_paging_info != None and active_tab == 'snpid' %}
-
-            {% if search_paging_info.show_prev_btn == True %}
-                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
-            {% endif %}
-
-            {% if search_paging_info.show_next_btn == True %}
-                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-            {% endif %}
-
-          {% endif %}
-    </div><!-- end div for submit buttons. -->
-    <button id="snpid-search-demo" type="button" class="btn btn-link">Use demo values for search.</button>
-  </div>
-     {% if search_paging_info != None and active_tab = 'snpid' %}
-       <input type="submit" name="action" 
-         value="Download Results" class="btn-xs btn-danger"
-         onclick="return confirm('Downloads can take a while,\n if the dataset is > 60000 rows,only the first 60,000 rows will be downloaded.')" />
-     {% endif %}
-  </form>
-</div>
-
-
-<div class="tab-pane panel-body
-   {%if active_tab == 'tf'%} active{%endif%}"  id="tf_search_form" >
-  <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:trans-factor-search' %}" method="post">
-  {% csrf_token %}
-    <div class="form-group">
-      <table>
-        {{ tf_search_form.as_table }}
-      </table>
-
-      <div class="submit-buttons">
-          <input type="submit" name="action" value="Search by Transcription Factor"  
-                                                          class="btn btn-primary" />
-          {% if search_paging_info != None and active_tab == 'tf'  %}
-
-            {% if search_paging_info.show_prev_btn == True %}
-                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
-            {% endif %}
-
-            {% if search_paging_info.show_next_btn == True %}
-                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-            {% endif %}
-
-          {% endif %}
-       </div><!-- end div for submit buttons. -->
-    <button id="tf-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
-    </div>
-
-     {% if search_paging_info != None and active_tab == 'tf' %}
-       <input type="submit" name="action" 
-         value="Download Results" class="btn-xs btn-danger"
-         onclick="return confirm('Downloads can take a while,\n if the dataset is > 60000 rows,only the first 60,000 rows will be downloaded.')" />
-     {% endif %}
-
-  </form>
-</div>
-
-
-<div class="tab-pane panel-body
-   {%if active_tab == 'snpid-window'%} active{%endif%}"  id="snpid_window_form" >
-  <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-window-search' %}" method="post">
-  {% csrf_token %}
-    <div class="form-group">
-      <table>
-        {{ snpid_window_form.as_table }}
-      </table>
-
-      <div class="submit-buttons">
-          <input type="submit" name="action" value="Search by Window around SNPid"  
-                                                          class="btn btn-primary" />
-          {% if search_paging_info != None and active_tab == 'snpid-window'  %}
-
-            {% if search_paging_info.show_prev_btn == True %}
-                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
-            {% endif %}
-
-            {% if search_paging_info.show_next_btn == True %}
-                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-            {% endif %}
-            
-          {% endif %}
-       </div><!-- end div for submit buttons. -->
-       <button id="snpid-window-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
-    </div>
-
-     {% if search_paging_info != None  and active_tab == 'snpid-window' %}
-       <input type="submit" name="action" 
-         value="Download Results" class="btn-xs btn-danger"
-         onclick="return confirm('Downloads can take a while,\n if the dataset is > 60000 rows,only the first 60,000 rows will be downloaded.')" />
-     {% endif %}
-  </form>
-</div>
-
-
-<div class="tab-pane panel-body
-   {%if active_tab == 'gene-name'%} active{%endif%}"  id="gene_name_form" >
-  <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:gene-name-search' %}" method="post">
-  {% csrf_token %}
-    <div class="form-group">
-      <table>
-        {{ gene_name_form.as_table }}
-      </table>
-      <div class="submit-buttons">
-          <input type="submit" name="action" value="Search by Gene Name"  
-                                                          class="btn btn-primary" />
-          {% if search_paging_info != None and active_tab == 'gene-name'  %}
-            
-            {% if search_paging_info.show_prev_btn == True %}
-                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
-            {% endif %}
-
-            {% if search_paging_info.show_next_btn == True %}
-                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
-            {% endif %}
-
-          {% endif %}
-      </div> <!-- end div for submit buttons. -->
-       <button id="gene-name-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
-    </div>
-
-     {% if search_paging_info != None and active_tab == 'gene-name' %}
-       <input type="submit" name="action" 
-         value="Download Results" class="btn-xs btn-danger"
-         onclick="return confirm('Downloads can take a while,\n if the dataset is > 60000 rows,only the first 60,000 rows will be downloaded.')" />
-     {% endif %}
-  </form>
-</div>
- 
+{% include "ss_viewer/gl_search.html" %} 
+{% include "ss_viewer/snpid_search.html" %}
+{% include "ss_viewer/trans_factor_search.html" %}
+{% include "ss_viewer/snpid_window_search.html" %}
+{% include "ss_viewer/gene_name_search.html" %}
  <!-- if the nav tab ends here, you can independently scroll the search results -->
- 
 </div> <!-- close the 'side' div -->
-
 </div> <!-- close the 'tabbed forms' div -->
-<!--  this is the way that we will be displaying the plot -->
 
+<!--  this is the way that we will be displaying the plot -->
 <div class="side plot">
    <div id="plots">
    {% include "ss_viewer/svg_skeleton.html" %}
@@ -408,7 +222,7 @@
            var data_for_one_plot = this.textContent;
            onePlotData = jQuery.parseJSON(data_for_one_plot);
            plottingData.push(onePlotData);
-           console.log("preparing for one plot.. " + data_for_one_plot ); 
+           //console.log("preparing for one plot.. " + data_for_one_plot ); 
        });
        cloneSVGSkeleton(plottingData);
        $("svg#target-0").hide();
@@ -417,6 +231,7 @@
            console.log("creating plot for id : " + targetSVGid);
            makeAPlot(plottingData[n], targetSVGid);
            if ( n > 0 ){
+             console.log("adding hidden class to " + targetSVGid);
              $("#"+targetSVGid).parent().addClass("hidden");
            }else {
              $("#"+targetSVGid).parent().addClass("show-plot");

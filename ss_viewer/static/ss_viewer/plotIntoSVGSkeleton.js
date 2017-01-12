@@ -313,17 +313,13 @@ function drawLettersIntoColumns(columnsSelector, x, y){
       .attr( "lengthAdjust", "spacingAndGlyphs" )
       .attr( "font-size", function(e) { return ( y(e.y0) - y(e.y1) ) * capHeightAdjust; } )
       .attr("y", function(e, i) { 
-                        var calculatedYValue = (y(e.y0) - (y(e.y0) - y(e.y1))*logoYAdjust);
-                        var letterBelow = this.previousSibling;
-                        if (letterBelow){ 
-                           var letterBelowBBoxHeight = letterBelow.getBBox().height;
-                           var downshift = 0;//downshift = ( letterBelowBBoxHeight / 4 ) * .17 * i;  
-                           //downshift makes a little bit of overshoot sometimes.
-                           //no downshift makes a gap with some letters.
-                           return calculatedYValue + downshift;
-                           //This may be as tight as I can get it to be...
-                        } 
-                        return calculatedYValue;  } )
+                        var yVal =  (y(e.y0) - (y(e.y0) - y(e.y1))*logoYAdjust); 
+                        if (isNaN(yVal)) {
+                            console.log("avoiding NaN..");
+                            return 0;
+                        }
+                        return yVal;
+                       })
       .style( "font-size", function(e) { return ( y(e.y0) - y(e.y1) ) * capHeightAdjust; } );
 }
 
