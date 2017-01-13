@@ -13,11 +13,11 @@
           {% if search_paging_info != None and active_tab == 'snpid-window'  %}
 
             {% if search_paging_info.show_prev_btn == True %}
-                <input type="submit" name="action" value="Prev"  class="btn btn-info" /> 
+                <input type="submit"  style="display: none;" name="action" value="Prev"  class="btn btn-info" /> 
             {% endif %}
 
             {% if search_paging_info.show_next_btn == True %}
-                <input type="submit" name="action" value="Next" class="btn btn-info" /> 
+                <input type="submit"  style="display: none;" name="action" value="Next" class="btn btn-info" /> 
             {% endif %}
             
           {% endif %}

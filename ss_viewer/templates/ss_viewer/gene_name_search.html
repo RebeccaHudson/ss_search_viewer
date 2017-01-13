@@ -1,6 +1,10 @@
 <div class="tab-pane panel-body
    {%if active_tab == 'gene-name'%} active{%endif%}"  id="gene_name_form" >
-  <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:gene-name-search' %}" method="post">
+  <form role="form"  
+        enctype="multipart/form-data" 
+        action="{% url 'ss_viewer:gene-name-search' %}" 
+        onsubmit="alert('form submitted.');"
+        method="post">
   {% csrf_token %}
     <div class="form-group">
       <table>
