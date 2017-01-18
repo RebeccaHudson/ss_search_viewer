@@ -24,7 +24,10 @@ def copy_valid_form_data_into_hidden_fields(form_data):
 def extract_snpid_from_textfield(text):
     gex = re.compile('(rs[0-9]+)')
     snpid = gex.search(text)
-    return snpid.group(0)
+    if snpid is not None:
+       return snpid.group(1)
+    else:
+       return None
 
 def handle_snpid_window_search(request):
     if request.method != 'POST':
@@ -46,7 +49,6 @@ def handle_snpid_window_search(request):
         return StandardFormset.handle_invalid_form(request,
                                               context, 
                                               status_message = "SNPid not properly formatted.")
-
 
     window_size = form_data['window_size']
     pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(snpid_window_search_form)
@@ -75,6 +77,7 @@ def handle_snpid_window_search(request):
                                                       'search-by-window-around-snpid',
                                                       search_request_params)
     #the next line of code 'turns the page'
+    form_data['snpid'] = requested_snpid
     form_data = copy_valid_form_data_into_hidden_fields(form_data)
     form_data['page_of_results_shown'] = search_request_params['page_of_results_to_display']
     snpid_window_search_form = SearchBySnpidWindowForm(form_data)
