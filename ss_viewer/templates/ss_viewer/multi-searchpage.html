@@ -55,43 +55,24 @@
    </div>
 </div>
 
-<!-- TODO: remove this chunk -->
-{% if plot_source %}
-<div class="side plot">
-    {% if plot_source %}
-        {% for plot_id_str, one_svg in plot_source.items %}
-          <div id="plot_{{plot_id_str}}" class="{% if plot_id_str == first_plot_id_str %}show-plot{% else %}hide-plot{% endif %}" > 
-              <!-- <p> {{ plot_id_str }} </p>   -->
-              <a href="{{ one_svg }}"><img title="Click image for a full-sized version." src="{{ one_svg }}" alt="current plot"></a>
-          </div>
-        {% endfor %}
-    {% endif %}
-</div>
-{% endif %}
-<!-- consider making this part modular; DRYing it up some how... -->
-
-
 <span id='type_of_shown_results' style="display:none;" >
 {% if active_tab  %}
   {{ active_tab }} 
 {% endif %}
 </span>
 
-{% if search_paging_info != None %}
-   <div>
-   {% if search_paging_info.show_next_btn == True %}
-     <button type="submit" 
-             onclick='clickNext();'>
-             Next</button>
-   {% endif %}
-
+{% if search_paging_info != None %}<div>
    {% if search_paging_info.show_prev_btn == True %}
      <button type="button"
              onclick='clickPrev();'>
              Previous</button>
    {% endif %}
-   </div>
-{% endif %} 
+   {% if search_paging_info.show_next_btn == True %}
+     <button type="submit" 
+             onclick='clickNext();'>
+             Next</button>
+   {% endif %}
+</div>{% endif %} 
 
 <div id="status_message"> {{ status_message }} </div>
   {% if api_response  %}
