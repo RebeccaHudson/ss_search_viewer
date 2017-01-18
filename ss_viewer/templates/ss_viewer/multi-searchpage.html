@@ -17,13 +17,11 @@
 
 </head>
 <body>
-<!-- <nav class="navbar navbar-default navbar-fixed-top"> -->
 <!-- <div class="container-fluid"> was there a good reason not to just
                                    have this as 'container'?   -->
 <div class="container">
 <div id="content">
 {% include "ss_viewer/navbar.html" with active='searches' %}
-<div id="status_message"> {{ status_message }} </div>
 
 <div class="side"> 
 
@@ -61,6 +59,8 @@
 {% endif %}
 </span>
 
+<div id="status_message"> {{ status_message }} </div>
+
 {% if search_paging_info != None %}<div>
    {% if search_paging_info.show_prev_btn == True %}
      <button type="button"
@@ -74,7 +74,7 @@
    {% endif %}
 </div>{% endif %} 
 
-<div id="status_message"> {{ status_message }} </div>
+
   {% if api_response  %}
   <table class="table table-striped table-condensed"> 
     <thead>
