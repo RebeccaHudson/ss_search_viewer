@@ -55,6 +55,7 @@
    </div>
 </div>
 
+<!-- TODO: remove this chunk -->
 {% if plot_source %}
 <div class="side plot">
     {% if plot_source %}
@@ -70,10 +71,15 @@
 <!-- consider making this part modular; DRYing it up some how... -->
 
 
+<span id='type_of_shown_results' style="display:none;" >
+{% if active_tab  %}
+  {{ active_tab }} 
+{% endif %}
+</span>
+
 {% if search_paging_info != None %}
    <div>
    {% if search_paging_info.show_next_btn == True %}
-     <!-- onclick='$("#tabbed-forms > div.active > form").submit();'-->
      <button type="submit" 
              onclick='clickNext();'>
              Next</button>
@@ -273,11 +279,33 @@
 
 
       function clickNext(){
-           $("div.active  input[value='Next']").click();
+           var active_search = $("span#type_of_shown_results")[0].innerText.trim();
+           if (active_search == 'snpid'){
+              $("div#snpid_search_form input[value='Next']").click();
+           } else if (active_search == 'snpid-window'){
+              $("div#snpid_window_form input[value='Next']").click();
+           } else if (active_search == 'gl-region'){
+              $("div#gl_region_search_form input[value='Next']").click();
+           } else if (active_search == 'gene-name'){
+              $("div#gene_name_form input[value='Next']").click();
+           } else if (active_search == 'tf'){
+              $("div#tf_search_form input[value='Next']").click();
+           }
       }
 
       function clickPrev(){
-           $("div.active  input[value='Prev']").click();
+           var active_search = $("span#type_of_shown_results")[0].innerText.trim();
+           if (active_search == 'snpid'){
+              $("div#snpid_search_form input[value='Prev']").click();
+           } else if (active_search == 'snpid-window'){
+              $("div#snpid_window_form input[value='Prev']").click();
+           } else if (active_search == 'gl-region'){
+              $("div#gl_region_search_form input[value='Prev']").click();
+           } else if (active_search == 'gene-name'){
+              $("div#gene_name_form input[value='Prev']").click();
+           } else if (active_search == 'tf'){
+              $("div#tf_search_form input[value='Prev']").click();
+           }
       }
 
 
