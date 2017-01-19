@@ -8,7 +8,7 @@ import pickle
 class GenericSearchForm(forms.Form):
     default_cutoff = 0.05
     pvalue_tip = 'Show results with pvalues less than or equal to this '
-    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.001", 
+    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0000001", 
                                              'title': pvalue_tip }) 
     pvalue_rank_cutoff = forms.FloatField(widget=styled_widget,
                                           max_value=1, 
