@@ -19,12 +19,21 @@ def copy_valid_form_data_into_hidden_fields(form_data):
         form_data['prev_search_'+form_field] = form_data[form_field]
     return form_data
 
+def copy_hidden_fields_into_form_data(form_data):
+    fields_to_copy = ['gene_name', 'window_size', 'pvalue_rank_cutoff']
+    for form_field in fields_to_copy:
+        form_data[form_field] = form_data['prev_search_'+form_field] 
+    return form_data
 
 def handle_gene_name_search(request):
     if request.method != 'POST':
         return redirect(reverse('ss_viewer:multi-search'))
-
-    gene_name_search_form = SearchByGeneNameForm(request.POST)
+    gene_name_search_form = None
+    if request.POST['action'] in ['Prev', 'Next']:
+        oneDict = copy_hidden_fields_into_form_data(request.POST.dict())
+        gene_name_search_form = SearchByGeneNameForm(oneDict)
+    else:
+        gene_name_search_form = SearchByGeneNameForm(request.POST)
 
     if not gene_name_search_form.is_valid():
         context = StandardFormset.setup_formset_context(

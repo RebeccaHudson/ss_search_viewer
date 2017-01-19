@@ -19,6 +19,11 @@ def copy_valid_form_data_into_hidden_fields(valid_form_data):
         valid_form_data['prev_search_'+form_field] = valid_form_data[form_field]
     return valid_form_data
 
+def copy_hidden_fields_into_form_data(valid_form_data):
+    fields_to_copy = ['selected_chromosome', 'gl_start_pos', 'gl_end_pos', 'pvalue_rank_cutoff'] 
+    for form_field in fields_to_copy:
+        valid_form_data[form_field] = valid_form_data['prev_search_'+form_field] 
+    return valid_form_data
 
 #can't make django do what it's supposed to w/ form validation; so check fields here..
 def field_checker(request, form_data):
@@ -37,8 +42,12 @@ def field_checker(request, form_data):
 def handle_search_by_genomic_location(request):
     if request.method != 'POST':
         return redirect(reverse('ss_viewer:multi-search'))
-
-    gl_search_form = SearchByGenomicLocationForm(request.POST)
+    gl_search_form = None
+    if request.POST['action'] in ['Prev', 'Next']:
+        oneDict = copy_hidden_fields_into_form_data(request.POST.dict())
+        gl_search_form = SearchByGenomicLocationForm(oneDict)
+    else: 
+        gl_search_form = SearchByGenomicLocationForm(request.POST)
  
     if not gl_search_form.is_valid() and not request.POST['action'] != 'Download Results':
          context = StandardFormset.setup_formset_context(gl_form=gl_search_form)

@@ -21,6 +21,12 @@ def copy_valid_form_data_into_hidden_fields(form_data):
         form_data['prev_search_' + form_field] = form_data[form_field]
     return form_data
 
+def copy_hidden_fields_into_form_data(form_data):
+    fields_to_copy = ['pvalue_rank_cutoff', 'snpid', 'window_size']
+    for form_field in fields_to_copy:
+        form_data[form_field] = form_data['prev_search_' + form_field]
+    return form_data
+
 def extract_snpid_from_textfield(text):
     gex = re.compile('(rs[0-9]+)')
     snpid = gex.search(text)
@@ -32,8 +38,12 @@ def extract_snpid_from_textfield(text):
 def handle_snpid_window_search(request):
     if request.method != 'POST':
         return redirect(reverse('ss_viewer:multi-search'))
-
-    snpid_window_search_form = SearchBySnpidWindowForm(request.POST)
+    snpid_window_search_form = None
+    if request.POST['action'] in ['Prev', 'Next']:
+        oneDict = copy_hidden_fields_into_form_data(request.POST.dict()) 
+        snpid_window_search_form = SearchBySnpidWindowForm(oneDict)   
+    else:
+        snpid_window_search_form = SearchBySnpidWindowForm(request.POST)
 
     if not snpid_window_search_form.is_valid():
         context = StandardFormset.setup_formset_context(
