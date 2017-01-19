@@ -19,21 +19,35 @@ def copy_valid_form_data_into_hidden_fields(form_data):
         form_data['prev_search_'+form_field] = form_data[form_field]
     return form_data
 
+def copy_hidden_fields_into_form_data(form_data):
+    fields_to_copy = ['pvalue_rank_cutoff', 'trans_factor', 'encode_trans_factor', 'tf_library']
+    for form_field in fields_to_copy:
+       form_data[form_field]  = form_data['prev_search_'+form_field] 
+    return form_data
+
 
 def handle_search_by_trans_factor(request):
     if request.method != 'POST':
         return redirect(reverse('ss_viewer:multi-search'))
 
-    tf_search_form = SearchByTranscriptionFactorForm(request.POST)
+    #just take the previous_search values 
+    # and copy them into a POST-like dictionary.
+    # then pass that to the Form constructor.
+    #translate the request.POST queryDict into a dict.
+    tf_search_form = None
+    if request.POST['action'] in ['Prev', 'Next']:
+        oneDict = request.POST.dict()
+        oneDict = copy_hidden_fields_into_form_data(oneDict) 
+        tf_search_form = SearchByTranscriptionFactorForm(oneDict)
+    else: 
+        tf_search_form = SearchByTranscriptionFactorForm(request.POST)
 
     if not tf_search_form.is_valid() and not request.POST['action'] == 'Download Results':
         context = StandardFormset.setup_formset_context(tf_form=tf_search_form)
         return StandardFormset.handle_invalid_form(request, context)
 
     form_data = tf_search_form.cleaned_data
-
     pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(tf_search_form)
-
     print "form data for tf search " + str(form_data)
     # ENCODE motifs are prefixes, JASPAR are actually mapped with TFTransformer
     if form_data['tf_library'] == 'encode':
@@ -55,7 +69,7 @@ def handle_search_by_trans_factor(request):
                                                               previous_search_params, 
                                                               'search-by-tf')
 
-
+    #if it's not the special paging actions, carry on as normal.
     motif_value = tft.lookup_motifs_by_tf(form_data['trans_factor'])
     search_request_params = Paging.get_paging_info_for_request(request,
                                                 form_data['page_of_results_shown'])
