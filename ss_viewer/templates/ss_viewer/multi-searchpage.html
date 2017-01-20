@@ -61,6 +61,15 @@
 
 <div id="status_message"> {{ status_message }} </div>
 
+{% if form_errors %}
+<ul>
+{% for one_error in form_errors %}
+<li> {{ one_error }} </li>
+{% endfor %}
+</ul>
+{% endif %}
+
+
 {% if search_paging_info != None %}<div>
    {% if search_paging_info.show_prev_btn == True %}
      <button type="button"

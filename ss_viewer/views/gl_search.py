@@ -28,17 +28,21 @@ def copy_hidden_fields_into_form_data(valid_form_data):
 #can't make django do what it's supposed to w/ form validation; so check fields here..
 def field_checker(request, form_data):
    form_msg = ""
+   print "form data: " + str(form_data)
    if form_data.get('selected_chromosome') is None:
        form_msg += "Missing chromosome value."
    if form_data.get('gl_start_pos') is None:
        form_msg += " Missing start position. (required)"
    if form_data.get('gl_end_pos') is None:
        form_msg += " Missing end position."
+   if form_data.get('pvalue_rank_cutoff') is None:
+       form_msg += " Missing pvalue cutoff."
    if form_msg == "":
        return None
    return form_msg
 
-
+#There's validation, then More validation.
+#better to have one round of validation if possible.
 def handle_search_by_genomic_location(request):
     if request.method != 'POST':
         return redirect(reverse('ss_viewer:multi-search'))
@@ -49,10 +53,13 @@ def handle_search_by_genomic_location(request):
     else: 
         gl_search_form = SearchByGenomicLocationForm(request.POST)
  
-    if not gl_search_form.is_valid() and not request.POST['action'] != 'Download Results':
+    if not gl_search_form.is_valid() and not request.POST['action'] == 'Download Results':
          context = StandardFormset.setup_formset_context(gl_form=gl_search_form)
+         print "Form errors: " + repr(gl_search_form.errors.values())
+         context['form_errors'] = gl_search_form.errors.values()
          return StandardFormset.handle_invalid_form(request, context)
-   
+
+    print "is form valid? " + str(gl_search_form.is_valid()) 
     print "about to get cleaned data"  
     form_data = gl_search_form.cleaned_data
     print "just got cleaned form data " + str(form_data) 
@@ -70,7 +77,7 @@ def handle_search_by_genomic_location(request):
                                                              'search-by-gl')
 
     pvalue = PValueFromForm.get_pvalue_rank_from_form(gl_search_form)
-    if form_data['pvalue_rank_cutoff'] is None:
+    if not ['pvalue_rank_cutoff'] in form_data.keys():
        form_data['pvalue_rank_cutoff'] = pvalue
 
     search_request_params = Paging.get_paging_info_for_request(request,
