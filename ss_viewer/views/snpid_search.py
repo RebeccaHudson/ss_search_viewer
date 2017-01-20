@@ -83,29 +83,48 @@ def handle_search_by_snpid(request):
     else:
         snpid_search_form = SearchBySnpidForm(request.POST, request.FILES)
 
+
+    #check for errors originating from cleaning form data.
     if not snpid_search_form.is_valid():
+         errs = snpid_search_form.errors
+
          new_snpid_form = SearchBySnpidForm()
          context = StandardFormset.setup_formset_context(snpid_form=snpid_search_form)
+         print "errs; " + repr(errs)
+         print "error text? "  + repr(errs.values()[0][0].__class__.__name__)
+         #context['form_errors'] = [ str(item) for item in one_error  for one_error in errs.values()]
+         #[item for sublist in l for item in sublist]
+         context['form_errors'] = \
+                 [ str(item) for one_error in errs.values() for item in one_error]
+         #context['form_errors'] = errs
+         #print "form errors:" + str(context['form_errors'])
          return StandardFormset.handle_invalid_form(request,  
-                                                    context, 
-                                                    status_message="See search error(s) in form below.")
+                                               context, 
+                                               status_message="Invalid search"\
+                                                      + "; see error(s) below:")
+                                        #status_message="See search error(s)"\
+                                        #             + " in form below." )
+    #If a valid combination of inputs is present, check for valid SNPids. 
     snpid_list = None
     try:
          snpid_list = SnpidSearchUtils.get_snpid_list_from_form(request, snpid_search_form)
     except ValidationError:
          context = StandardFormset.setup_formset_context() #pass in old form here?
          context.update({'active_tab' : 'snpid' })
-         status_msg = "No properly formatted SNPids in the text."
+         context.update({'form_errors': ["No properly formatted SNPids in the text."] })
+         status_msg = "Invalid search; see error(s) below:"
          return StandardFormset.handle_invalid_form(request, context, status_message=status_msg)
+    #the snpid list does not come out of cleaned_data.
+
 
     pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(snpid_search_form)
 
-
     form_data = snpid_search_form.cleaned_data
     #ensure that this works for file input.
-
+ 
+    form_data['pvalue_rank_cutoff'] = pvalue_rank #drop in the default
     if request.POST['action'] == 'Download Results':
-        pvalue_rank = form_data['prev_search_pvalue_rank_cutoff']
+        pvalue_rank = form_data['prev_search_pvalue_rank_cutoff']  
         snpid_list = form_data['prev_search_raw_requested_snpids']
         snpid_list = [one_snpid.strip() for one_snpid in snpid_list.split(",")]
         previous_search_params = { 'snpid_list' : snpid_list, 'pvalue_rank' : pvalue_rank }
