@@ -14,12 +14,18 @@ class GenericSearchForm(forms.Form):
                                           max_value=1, 
                                           min_value=0, 
                                           initial=default_cutoff,
-                                          label = "P-value cutoff"
+                                          label = "P-value cutoff",
+                                          required=False 
                                           )
     prev_search_pvalue_rank_cutoff = forms.FloatField(widget = forms.HiddenInput(), required = False)
-
     page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
-    
+    def clean(self):
+        cleaned_data = super(GenericSearchForm, self).clean()
+        if cleaned_data.get('pvalue_rank_cutoff') is None:
+            cleaned_data['pvalue_rank_cutoff'] = 0.05
+            print "assigned pvalue default"
+        return cleaned_data
+  
 
 class SearchBySnpidForm(GenericSearchForm):
     text_to_explain_snpbox = "SNPids"
@@ -73,7 +79,7 @@ class SearchByGenomicLocationForm(GenericSearchForm):
                                           "title": "Search for data in a region" +\
                                           " that begins at this position on the chromosome."}),
                                       label = gl_pos_label_text['start'], 
-                                      required = True,
+                                      required=False,
                                       min_value = 0 )
     prev_search_gl_start_pos = forms.IntegerField(widget = forms.HiddenInput(),
                                                 required = False)
@@ -85,7 +91,7 @@ class SearchByGenomicLocationForm(GenericSearchForm):
                                           "title": "Search for data in a region" +\
                                           " that ends at this position on the chromosome."}),
                                     label = gl_pos_label_text['end'],
-                                    required = False, 
+                                    required=False,
                                     min_value = 1)
 
     prev_search_gl_end_pos = forms.IntegerField(widget = forms.HiddenInput(),
@@ -116,9 +122,11 @@ class SearchByGenomicLocationForm(GenericSearchForm):
 
         if start_pos is None:
             start_pos = 0
+            cleaned_data['gl_start_pos'] = start_pos
 
         if end_pos is None and start_pos is not None:
-            end_pos = start_pos + int(settings.QUERY_DEFAULTS['DEFAULT_REGION_SIZE'])
+            end_pos = cleaned_data['gl_start_pos'] + \
+                      int(settings.QUERY_DEFAULTS['DEFAULT_REGION_SIZE'])
             cleaned_data['gl_end_pos'] = end_pos
 
         if start_pos > end_pos:
