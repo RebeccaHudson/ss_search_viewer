@@ -25,21 +25,6 @@ def copy_hidden_fields_into_form_data(valid_form_data):
         valid_form_data[form_field] = valid_form_data['prev_search_'+form_field] 
     return valid_form_data
 
-#can't make django do what it's supposed to w/ form validation; so check fields here..
-def field_checker(request, form_data):
-   form_msg = ""
-   print "form data: " + str(form_data)
-   if form_data.get('selected_chromosome') is None:
-       form_msg += "Missing chromosome value."
-   if form_data.get('gl_start_pos') is None:
-       form_msg += " Missing start position. (required)"
-   if form_data.get('gl_end_pos') is None:
-       form_msg += " Missing end position."
-   if form_data.get('pvalue_rank_cutoff') is None:
-       form_msg += " Missing pvalue cutoff."
-   if form_msg == "":
-       return None
-   return form_msg
 
 #There's validation, then More validation.
 #better to have one round of validation if possible.
@@ -55,8 +40,10 @@ def handle_search_by_genomic_location(request):
  
     if not gl_search_form.is_valid() and not request.POST['action'] == 'Download Results':
          context = StandardFormset.setup_formset_context(gl_form=gl_search_form)
+         errs = gl_search_form.errors
          print "Form errors: " + repr(gl_search_form.errors.values())
-         context['form_errors'] = gl_search_form.errors.values()
+         context['form_errors'] = \
+           [ str(item) for one_error in errs.values() for item in one_error]
          return StandardFormset.handle_invalid_form(request, context)
 
     print "is form valid? " + str(gl_search_form.is_valid()) 
@@ -82,11 +69,6 @@ def handle_search_by_genomic_location(request):
 
     search_request_params = Paging.get_paging_info_for_request(request,
                                                          form_data['page_of_results_shown'])
-    possible_errors = field_checker(request, form_data)
-
-    if possible_errors is not None:
-         context = StandardFormset.setup_formset_context(gl_form=gl_search_form)
-         return StandardFormset.handle_invalid_form(request, context, status_message=possible_errors)
 
     api_search_query =  { 'chromosome' : form_data['selected_chromosome'],
                           'start_pos'  : form_data['gl_start_pos'],
