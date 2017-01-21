@@ -217,6 +217,7 @@ class SearchBySnpidWindowForm(GenericSearchForm):
                                                     "snpid entered here." }) 
     snpid = forms.CharField(widget = styled_widget, 
                             label = "SNPid")
+    snpid.error_messages = {'required': 'Missing SNPid (required).'}
     styled_widget = forms.NumberInput(attrs={"class"   : 'form-control',
                                              'step'    : 1,
                                              "title": "Search for data within + and - this "+\
@@ -228,9 +229,9 @@ class SearchBySnpidWindowForm(GenericSearchForm):
     #TODO: figure out what the max_value on this should actually be.
     window_size = forms.IntegerField(widget = styled_widget,
                                      label = "Window size",
-                                     required = False,
                                      initial = 1000, 
                                      min_value = 0)
+    window_size.error_messages = { 'required': 'Missing window size (required).'}
 
     prev_search_window_size = forms.IntegerField(widget = forms.HiddenInput(),
                                                 required = False)
@@ -257,9 +258,10 @@ class SearchByGeneNameForm(GenericSearchForm):
     #TODO: figure out what the max_value on this should actually be.
     window_size = forms.IntegerField(widget = styled_widget,
                                      label = "Window size",
-                                     required = False,
+                                     required = True,
                                      initial = 1000, 
                                      min_value = 0)
+    window_size.error_messages = { 'required': 'Missing window size (required).'}
 
     prev_search_window_size = forms.IntegerField(widget = forms.HiddenInput(),
                                                 required = False)
