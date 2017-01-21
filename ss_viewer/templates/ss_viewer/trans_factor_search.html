@@ -2,11 +2,31 @@
    {%if active_tab == 'tf'%} active{%endif%}"  id="tf_search_form" >
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:trans-factor-search' %}" method="post">
   {% csrf_token %}
-    <div class="form-group">
-      <table>
-        {{ tf_search_form.as_table }}
-      </table>
+<table class="formControls">
+<tbody>
+<tr> 
+  <td>   {{ tf_search_form.tf_library.label_tag }}  </td>
+  <td>   {{ tf_search_form.tf_library  }} </td>
+</tr>
 
+<tr> 
+  <td>   {{ tf_search_form.trans_factor.label_tag }}  </td>
+  <td class='trans-factor'>   {{ tf_search_form.trans_factor  }} </td>
+</tr>
+<tr> 
+  <td>   {{ tf_search_form.encode_trans_factor.label_tag }}  </td>
+  <td class='trans-factor'>   {{ tf_search_form.encode_trans_factor  }} </td>
+</tr>
+<tr> 
+  <td>   {{ tf_search_form.pvalue_rank_cutoff.label_tag }}  </td>
+  <td>   {{ tf_search_form.pvalue_rank_cutoff  }} </td>
+</tr>
+</tbody>
+</table>
+  {# Include the hidden fields #}
+  {% for hidden in tf_search_form.hidden_fields %}
+  {{ hidden }}
+  {% endfor %}
       <div class="submit-buttons">
           <input type="submit" name="action" value="Search by Transcription Factor"  
                                                           class="btn btn-primary" />
@@ -23,7 +43,6 @@
           {% endif %}
        </div><!-- end div for submit buttons. -->
     <button id="tf-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
-    </div>
 
      {% if search_paging_info != None and active_tab == 'tf' %}
        <input type="submit" name="action" 

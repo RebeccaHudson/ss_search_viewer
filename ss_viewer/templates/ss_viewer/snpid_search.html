@@ -2,22 +2,27 @@
    {%if active_tab == 'snpid' or active_tab == 'none-yet'%} active{%endif%}"  id="snpid_search_form" >
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-search' %}" method="post">
   {% csrf_token %}
-  <div class="form-group">
-
   <div class="fieldWrapper">
-    <label for="{{ snpid_search_form.raw_requested_snpids.id_for_label }}">SNPIds:</label>
+    {{ snpid_search_form.raw_requested_snpids.label_tag }}
     {{ snpid_search_form.raw_requested_snpids  }}
   </div>
+<table class="formControls">
+<tr> 
+  <td><label  for="snpid_search_form.file_of_snpids.id_for_label }}">
+    {{ snpid_search_form.file_of_snpids.label }}</label>    </td>
+   <td> {{  snpid_search_form.file_of_snpids  }} </td>
+</tr>
 
-  <div class="fieldWrapper">
-    <label for="{{ snpid_search_form.file_of_snpids.id_for_label }}">File  of SNPids:</label>
-    {{ snpid_search_form.file_of_snpids }}
-  </div>
+<tr>
+<td>
+<label  for="{{ snpid_search_form.pvalue_rank_cutoff.id_for_label }}">
+    {{ snpid_search_form.pvalue_rank_cutoff.label }}
+</label>
+</td>
+<td> {{ snpid_search_form.pvalue_rank_cutoff }}</td>
+</tr>
+</table>
 
-  <div class="fieldWrapper">
-    <label for="{{ snpid_search_form.pvalue_rank_cutoff.id_for_label }}">P-value:</label>
-    {{ snpid_search_form.pvalue_rank_cutoff }}
-  </div>
 {# Include the hidden fields #}
 {% for hidden in snpid_search_form.hidden_fields %}
 {{ hidden }}
@@ -41,7 +46,6 @@
           {% endif %}
     </div><!-- end div for submit buttons. -->
     <button id="snpid-search-demo" type="button" class="btn btn-link">Use demo values for search.</button>
-  </div>
      {% if search_paging_info != None and active_tab = 'snpid' %}
        <input type="submit" name="action" 
          value="Download Results" class="btn-xs btn-danger"

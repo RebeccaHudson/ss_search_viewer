@@ -5,10 +5,26 @@
         action="{% url 'ss_viewer:gene-name-search' %}" 
         method="post">
   {% csrf_token %}
-    <div class="form-group">
-      <table>
-        {{ gene_name_form.as_table }}
-      </table>
+<table class="formControls">
+<tbody>
+<tr> 
+  <td>   {{ gene_name_form.gene_name.label_tag }}  </td>
+  <td> {{ gene_name_form.gene_name  }} </td>
+</tr>
+<tr> 
+  <td>   {{ gene_name_form.window_size.label_tag }}  </td>
+  <td> {{ gene_name_form.window_size  }} </td>
+</tr>
+<tr>
+<td> {{ gene_name_form.pvalue_rank_cutoff.label_tag }} </td>
+<td> {{ gene_name_form.pvalue_rank_cutoff }}</td>
+</tr>
+</tbody>
+</table>
+  {# Include the hidden fields #}
+  {% for hidden in gene_name_form.hidden_fields %}
+  {{ hidden }}
+  {% endfor %}
       <div class="submit-buttons">
           <input type="submit" name="action" value="Search by Gene Name"  
                                                           class="btn btn-primary" />
@@ -25,7 +41,6 @@
           {% endif %}
       </div> <!-- end div for submit buttons. -->
        <button id="gene-name-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
-    </div>
 
      {% if search_paging_info != None and active_tab == 'gene-name' %}
        <input type="submit" name="action" 

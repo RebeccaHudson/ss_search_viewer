@@ -2,10 +2,30 @@
    {%if active_tab == 'snpid-window'%} active{%endif%}"  id="snpid_window_form" >
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-window-search' %}" method="post">
   {% csrf_token %}
-    <div class="form-group">
-      <table>
-        {{ snpid_window_form.as_table }}
-      </table>
+
+<table class="formControls">
+<tbody>
+
+<tr>  
+<td>     {{ snpid_window_form.snpid.label_tag }} </td>
+<td>     {{ snpid_window_form.snpid  }}</td>
+</tr> 
+
+ <tr> 
+     <td>    {{ snpid_window_form.window_size.label_tag }}</td> 
+     <td>    {{ snpid_window_form.window_size }}          </td>
+ </tr>
+
+  <tr>
+      <td>   {{ snpid_window_form.pvalue_rank_cutoff.label_tag }}</td>
+      <td>   {{ snpid_window_form.pvalue_rank_cutoff }}          </td>
+  </tr>
+</tbody>
+</table>
+  {# Include the hidden fields #}
+  {% for hidden in snpid_window_form.hidden_fields %}
+  {{ hidden }}
+  {% endfor %}
 
       <div class="submit-buttons">
           <input type="submit" name="action" value="Search by Window around SNPid"  
@@ -23,7 +43,6 @@
           {% endif %}
        </div><!-- end div for submit buttons. -->
        <button id="snpid-window-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
-    </div>
 
      {% if search_paging_info != None  and active_tab == 'snpid-window' %}
        <input type="submit" name="action" 
