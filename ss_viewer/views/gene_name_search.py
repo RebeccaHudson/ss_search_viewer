@@ -38,6 +38,9 @@ def handle_gene_name_search(request):
     if not gene_name_search_form.is_valid():
         context = StandardFormset.setup_formset_context(
                                      gene_name_form = gene_name_search_form)
+        errs  = gene_name_search_form.errors
+        context['form_errors'] = \
+           [ str(item) for one_error in errs.values() for item in one_error]
         return StandardFormset.handle_invalid_form(request, context)
 
     form_data = gene_name_search_form.cleaned_data
@@ -59,7 +62,7 @@ def handle_gene_name_search(request):
                           'window_size' : form_data['window_size'],
                           'pvalue_rank' :  pvalue_rank, 
                           'from_result' : search_request_params['search_result_offset']}
-
+    #is the gene not showing up in the database reported correctly?
     shared_context = APIResponseHandler.handle_search(api_search_query, 
                                                       'search-by-gene-name',
                                                       search_request_params)
