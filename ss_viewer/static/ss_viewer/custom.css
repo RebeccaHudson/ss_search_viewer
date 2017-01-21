@@ -48,7 +48,11 @@ div.submit-buttons {
     background-color: #C9C9F3;
 }
 
-form label{ margin-right: 10px; }
+form label{ 
+   margin-right: 10px; 
+   margin-top: 6px;
+   /*float: left;*/
+}
 
 div .hide-plot { display : none; }
 div .show-plot { display: inline;
@@ -85,3 +89,26 @@ label[for^="id_tf_library"] {
   vertical-align: middle;
 }
 
+input[type='number'] {
+  width: 50%;
+}
+
+input[type='text'] {
+  width: 50%;
+}
+
+select.form-control { 
+  width: 30%;
+}
+
+td.trans-factor > select.form-control { 
+  width: 90%;
+}
+
+table.formControls{
+  width: 35em;
+}
+
+.formControls tr { 
+  height: 45px;
+}
