@@ -46,8 +46,11 @@ def handle_snpid_window_search(request):
         snpid_window_search_form = SearchBySnpidWindowForm(request.POST)
 
     if not snpid_window_search_form.is_valid():
+        errs = snpid_window_search_form.errors
         context = StandardFormset.setup_formset_context(
                                      snpid_window_form=snpid_window_search_form)
+        context['form_errors'] =\
+           [ str(item) for one_error in errs.values() for item in one_error ]
         return StandardFormset.handle_invalid_form(request, context)
 
     form_data = snpid_window_search_form.cleaned_data
@@ -56,10 +59,11 @@ def handle_snpid_window_search(request):
     if requested_snpid is None:
         context = StandardFormset.setup_formset_context(
                                      snpid_window_form=snpid_window_search_form)
+        context.update({'form_errors': ["SNPid not properly formatted."]})
         return StandardFormset.handle_invalid_form(request,
                                               context, 
-                                              status_message = "SNPid not properly formatted.")
-
+                                              status_message="Invalid search"\
+                                                     + "; see error(s) below:") 
     window_size = form_data['window_size']
     pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(snpid_window_search_form)
 
