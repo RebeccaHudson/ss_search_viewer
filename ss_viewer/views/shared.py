@@ -319,6 +319,8 @@ class StreamingCSVDownloadHandler:
         fields_for_csv = StreamingCSVDownloadHandler.fields_for_csv()
         mt = MotifTransformer()
         rows = []
+        #Add headers to the downloaded data.
+        rows.append(fields_for_csv) 
         page_of_results = 0 
         keep_on_paging = True
         while keep_on_paging is True:
