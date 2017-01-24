@@ -218,6 +218,7 @@ class APIResponseHandler:
                                   'ref_strand'      : one_row['ref_strand'], 
                                   'motif'           : one_row['motif'],
                                   'motif_data'      : motif_data,
+                                  'snpid'           : one_row['snpid'],
                                   'plot_id_str'     : plot_id_str_for_web_page
                                  }
             one_row['json_for_plotting'] = json.dumps(json_for_plotting)
