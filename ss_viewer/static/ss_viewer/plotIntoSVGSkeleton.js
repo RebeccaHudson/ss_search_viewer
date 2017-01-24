@@ -1,4 +1,3 @@
-
 //setup shared between all plots:
     var margin = {top: 20, right: 20, bottom: 30, left: 40},
         width = 500 - margin.left - margin.right,
@@ -8,34 +7,21 @@
     var y = d3.scale.linear()
         .range([height, 0]);
 
-
     var capHeightAdjust  = 0.99, // approximation to bring cap-height to full font size
         logoYAdjust = 0.0053;
+
+    var columnWidth = 35;
 
     //This actually puts the first svg object onto the page body.
     var svg = d3.select("body")
                 .append("svg")
                 .attr("height", 0);//so sequencelogoFont() works..
-    //don't call this unless there's already an SVG on the page!
-    //sequencelogoFont();
 
-    var columnWidth = 35;
-    //motifData should correspond to plotting Data
-    //var plotToMake = plottingData[Math.floor(Math.random()*plottingData.length)];
-    /*for ( k = 0; k < plottingData.length; k++){
-      var plotToMake = plottingData[k];
-      var motifForPlot = motifs[k];
-      console.log("plotting the N = " + k + "th plot.");
-      //makeAPlot(plotToMake, "target-"+k, motifMap);
-      makeAPlot(plotToMake, "target-"+k, motifForPlot);
-      //alert("pause");
-    }
-     */
-    //makeAPlot(plottingData[4], 'target-1', motifMap); 
- 
-    //get it down to one call per plot?
+    //don't call this unless there's already an SVG on the page!
+    sequencelogoFont();
+
     //motifMap gets loaded earlier from test-motif-data.js
-    //motif_data, a key in plotToMake, replaces the motif parameter
+    //motif_data, a key in the plotToMake dict, replaces the motif parameter
     function makeAPlot(plotToMake, idOfTargetSVG){
 
         var motifName = plotToMake.motif;
@@ -48,73 +34,98 @@
         var snpPWMOffset = plotToMake.snp_extra_pwm_off;
         var refPWMOffset = plotToMake.ref_extra_pwm_off;
 
-       /* console.log("snp sequence: " + snpSeq );
-        console.log("ref sequence: " + refSeq );
-        console.log("loading motif: " + motifName );
-        console.log("snp PWM offset: " + snpPWMOffset 
-                  + "  ref PWM offset: " + refPWMOffset);
-        console.log("ref strand: " + refStrand + 
-                    "  snp strand: " + snpStrand);
-        */
         var randomMotif = plotToMake.motif_data;
         var maxColumnCount = d3.max([snpSeq.length, 
                                      randomMotif.forward.length + snpPWMOffset,
                                      randomMotif.forward.length + refPWMOffset  ]);
 
         // Expand the SVG to fit the widest row.
-        var svgWidth = maxColumnCount * columnWidth + margin.left + margin.right + 50;
+        var svgWidth = maxColumnCount * columnWidth + 
+                       margin.left + margin.right + 50;
+        if (svgWidth < 460) { svgWidth = 460; }
+        //force width to ensure the main plot label fits
         d3.select("svg#"+idOfTargetSVG).attr("width", svgWidth);
+
 
         //make a range of integers that will be the values for the ordinal X scale.
         var ordinalXRange = [];  //list of integers 0 thru max columns required. 
         for (i = 0; i < maxColumnCount; i++){ ordinalXRange[i] = i; }
 
         //draw the 'strand' data next to where the SNP and reference sequences will appear
-        d3.select("svg#" + idOfTargetSVG + " g#line2margin text").text(snpStrand);
-        d3.select("svg#" + idOfTargetSVG + " g#line3margin text").text(refStrand);
+        //ref strand on line 2, SNP strand on line 3 (this is the + and -s)
+        d3.select("svg#" + idOfTargetSVG + " g#line2margin text").text(refStrand);
+        d3.select("svg#" + idOfTargetSVG + " g#line3margin text").text(snpStrand);
 
-        //The [].concat(arrayWithData) is used to make a deep copy of the motif's
-        //forward and reverse data before feeding it into the code that unshifts the
-        //array as many spaces as indicated by the 'extra SNP/ref PWM offset'
-        
+
+      
+        //Draw the scaled motifs (aka "PWM"s)
+        //The line1 and line4 motifs will be the same motif, but possibly with
+        //different offsets and different strand directions.
+ 
         //draw the line 1 motif.
+        //Reference strand determines the direction the line 1 motif is displayed.
         var targetGroup = d3.select("svg#" + idOfTargetSVG + " g#line1data");
+        var targetForLine;
         var dataForMotif;
-
-        if ( snpStrand == '+' ){ dataForMotif = [].concat(randomMotif.forward); }
-        else { dataForMotif = [].concat(randomMotif.reverse); }
-        dataForMotif = applyOffsetToMotifData(dataForMotif, snpPWMOffset);
+        var unshiftedMotifLength;
         var xScale = d3.scale
-                         .ordinal()
-                         .rangeRoundBands([0, maxColumnCount*columnWidth], .1);
+                       .ordinal()
+                       .rangeRoundBands([0, maxColumnCount*columnWidth], .1);
+
+        if ( refStrand == '+' ){ dataForMotif = [].concat(randomMotif.forward); }
+        else { dataForMotif = [].concat(randomMotif.reverse); }
+ 
+        unshiftedMotifLength = dataForMotif.length; 
+        //determine how long the line should be
+        
+        dataForMotif = applyOffsetToMotifData(dataForMotif, refPWMOffset);
         setupScalesDomainsForOneMotif(xScale, y, ordinalXRange, dataForMotif);
         drawOneMotif(dataForMotif, targetGroup, xScale, y, ordinalXRange);
+ 
+        targetForLine = d3.select("svg#" + idOfTargetSVG + " g#line1data");
+        drawMarkerLine(targetForLine, refPWMOffset, unshiftedMotifLength, 
+                                                  xScale, 55, refStrand); 
 
 
         //draw the line 4 motif.
+        //SNP strand determines the direction the line 4 motif is displayed
         targetGroup = d3.select("svg#"+ idOfTargetSVG + " g#line4data");
-        if ( refStrand == '+' ) { dataForMotif = [].concat(randomMotif.forward); }
+        if ( snpStrand == '+' ) { dataForMotif = [].concat(randomMotif.forward); }
         else{ dataForMotif = [].concat(randomMotif.reverse);}
+        
+        unshiftedMotifLength = dataForMotif.length;
+        //determine how long the line should be
 
-        dataForMotif = applyOffsetToMotifData(dataForMotif, refPWMOffset);
+        dataForMotif = applyOffsetToMotifData(dataForMotif, snpPWMOffset);
+        setupScalesDomainsForOneMotif(xScale, y, ordinalXRange, snpSeq);
+        //can the above call be omitted?
         drawOneMotif(dataForMotif, targetGroup, xScale, y, ordinalXRange);
+ 
+        targetForLine = d3.select("svg#" + idOfTargetSVG + " g#line4data");
+        drawMarkerLine(targetForLine, snpPWMOffset, unshiftedMotifLength, 
+                                                  xScale, 55, snpStrand); 
+          //The [].concat(arrayWithData) is used to make a deep copy of 
+          //the motif's forward and reverse data before feeding it into the 
+          //code that unshifts the array as many spaces as indicated by the 
+          //'extra SNP/ref PWM offset'
 
 
-
-        //draw the SNP sequence and the ref sequence.
-        columnCount = snpSeq.length;
+        //draw the unscaled SNP sequence and the ref sequence.
+        columnCount = snpSeq.length; //TODO: is this needed? are we not using maxColumnCount?
         setupScalesDomainsForOneMotif(xScale, y, ordinalXRange, snpSeq);
 
-        //draw the SNP sequence.
-        var snpSeqTargetSelector = d3.select("svg#" + idOfTargetSVG + " g#line2data");
+        //draw the reference sequence on line 2.
+        var refSeqTargetSelector = d3.select("svg#" + idOfTargetSVG + " g#line2data");
+        drawUnscaledSequence(refSeqTargetSelector, refSeq, xScale);
+        drawHorizontalAxis(refSeqTargetSelector, xScale, refSeq, maxColumnCount);
+
+        //draw the SNP sequence on line 3
+        var snpSeqTargetSelector = d3.select("svg#" + idOfTargetSVG + " g#line3data");
         drawUnscaledSequence(snpSeqTargetSelector, snpSeq, xScale);
         drawHorizontalAxis(snpSeqTargetSelector, xScale, snpSeq, maxColumnCount);
 
-        //draw the ref sequence.
-        var snpRefTargetSelector = d3.select("svg#" + idOfTargetSVG + " g#line3data");
-        drawUnscaledSequence(snpRefTargetSelector, refSeq, xScale);
-        drawHorizontalAxis(snpRefTargetSelector, xScale, snpSeq, maxColumnCount);
 
+        //highlight the location of the SNP and Refernce alleles on the plot.
         var highlightPosition = findSNPLocation(snpStrand, refStrand, snpSeq, refSeq);
         //if there's a problem calculating where to put the hightlight, omit it altogether.
         if (highlightPosition >= 0) {
@@ -122,13 +133,74 @@
           highlight.attr("x", function(){ 
                                    var happyX = xScale(highlightPosition) - 2; 
                                    return  happyX; })
-                   .attr("y", "10")
-                   .attr("height", "250")
+                   .attr("y", "110")
+                   .attr("height", "270")
                    .attr("width", function(){ return columnWidth; } )
                    .style("fill", "#d3d3d3");
         }
 
+               //adjust the label positions..
+        var labelShift = (svgWidth - 300)/2 - 10;
+        d3.select("svg#" + idOfTargetSVG + " g.snp-label")
+          .attr('transform', 'translate('+labelShift+', 18)');
+
+        labelShift = labelShift - 20;
+        d3.select("svg#"+ idOfTargetSVG + " g.ref-label")
+          .attr('transform', 'translate('+labelShift+', 8)');
+
+
+        var label = motifName + " Motif Scan for " + plotToMake.snpid;
+        labelShift = labelShift - 30;
+        d3.select("svg#"+idOfTargetSVG + " g.plot-label text")
+          .text(label);
+        d3.select("svg#"+idOfTargetSVG + " g.plot-label")
+          .attr("transform", "translate("+ labelShift +", 0)");
+
+
 }//end function to plot one SVG composite logo plot in an already-existing SVG.
+
+//unshiftedMotifLength either Ref or SNP
+//pwmOffset -> either ref or SNP
+//xScale is the same xScale that's being used elsewhere.
+function drawMarkerLine(targetForLine, pwmOffset, unshiftedMotifLength, xScale, y, strand){
+          var direction; //left to right (5' to 3')    right to left (3' to 5')
+          s = pwmOffset + unshiftedMotifLength;
+          var xLeft = xScale.rangeBand() * (pwmOffset + 1/2 + (pwmOffset * .1));
+          var xRight = xScale.rangeBand() * (s - 1/3 + (s * .1)); 
+          var leftLabelText; var rightLabelText;
+          if (strand == '+' ) { xBegin = xLeft;  xEnd =  xRight; 
+                                leftLabelText = "5'";    
+                                rightLabelText = "3'"; }
+                      else    { xBegin = xRight; xEnd =  xLeft;  
+                                leftLabelText = "3'";  
+                                rightLabelText = "5'";    }   
+          targetForLine.append("line")
+                     .attr("x1", xBegin) 
+                     .attr("y1", y)  //y1 == y2,    x1 and x2 are determined by the motif data.
+                     .attr("x2", xEnd) 
+                     .attr("y2", y)
+                     .attr("stroke-width", 2)
+                     .attr("stroke", "blue")
+                     .attr("marker-end", "url(#Triangle)");
+
+         targetForLine.append('text') 
+                       .attr("font-size", 12)  
+                       .attr('stroke', 'blue') 
+                       .text(leftLabelText)
+                       .attr('x', xLeft - 13) 
+                       .attr('y', y + 12);
+
+         targetForLine.append('text') 
+                       .attr("font-size", 12)  
+                       .attr('stroke', 'blue') 
+                       .text(rightLabelText)
+                       .attr('x', xRight + 10) 
+                       .attr('y', y + 12);
+}
+
+
+
+
 
 //The snp_location field is null in many records; it also takes up space.
 function findSNPLocation(snpDirection, refDirection, snpSeq, refSeq){
