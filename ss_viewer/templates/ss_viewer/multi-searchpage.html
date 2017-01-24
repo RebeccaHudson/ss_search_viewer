@@ -245,10 +245,10 @@
        $("svg#target-0").hide();
        for ( var n = 0; n < plottingData.length; n++){
            var targetSVGid = "target-" + plottingData[n].plot_id_str;
-           console.log("creating plot for id : " + targetSVGid);
+           //console.log("creating plot for id : " + targetSVGid);
            makeAPlot(plottingData[n], targetSVGid);
            if ( n > 0 ){
-             console.log("adding hidden class to " + targetSVGid);
+             //console.log("adding hidden class to " + targetSVGid);
              $("#"+targetSVGid).parent().addClass("hidden");
            }else {
              $("#"+targetSVGid).parent().addClass("show-plot");
