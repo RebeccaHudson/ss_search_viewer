@@ -10,6 +10,10 @@ class GenericSearchForm(forms.Form):
     pvalue_tip = 'Show results with pvalues less than or equal to this '
     styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0000001", 
                                              'title': pvalue_tip }) 
+
+    page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
+
+
     pvalue_rank_cutoff = forms.FloatField(widget=styled_widget,
                                           max_value=1, 
                                           min_value=0, 
@@ -18,7 +22,28 @@ class GenericSearchForm(forms.Form):
                                           required=False 
                                           )
     prev_search_pvalue_rank_cutoff = forms.FloatField(widget = forms.HiddenInput(), required = False)
-    page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
+
+
+    pvalue_snpid_cutoff = forms.FloatField(widget=styled_widget, 
+                                           max_value=1,
+                                           min_value=0, 
+                                           initial=default_cutoff,
+                                           label = "P-value SNPid cutoff",
+                                           required = False)
+    prev_search_pvalue_snpid_cutoff = \
+            forms.FloatField(widget = forms.HiddenInput(), required = False)
+
+ 
+    pvalue_ref_cutoff = forms.FloatField(widget=styled_widget, 
+                                           max_value=1,
+                                           min_value=0, 
+                                           initial=default_cutoff,
+                                           label = "P-value Reference cutoff",
+                                           required = False)
+    prev_search_pvalue_ref_cutoff = \
+            forms.FloatField(widget = forms.HiddenInput(), required = False)
+    
+    
     def clean(self):
         cleaned_data = super(GenericSearchForm, self).clean()
         if cleaned_data.get('pvalue_rank_cutoff') is None:
@@ -45,7 +70,8 @@ class SearchBySnpidForm(GenericSearchForm):
                                         required = False)
     file_of_snpids = forms.FileField(required=False,
                                      label = "File of SNPids")
-    field_order =  ('raw_requested_snpids', 'file_of_snpids', 'pvalue_rank_cutoff', 'page_of_results_shown')
+    field_order =  ('raw_requested_snpids', 'file_of_snpids', 'pvalue_rank_cutoff',
+                   'pvalue_ref_cutoff',   'page_of_results_shown')
  
     def clean(self):
         cleaned_data = super(SearchBySnpidForm, self).clean()
@@ -111,7 +137,7 @@ class SearchByGenomicLocationForm(GenericSearchForm):
                                                required=False)
     field_order =  ('gl_start_pos', 'gl_end_pos', 
                     'selected_chromosome', 
-                    'pvalue_rank_cutoff', 'page_of_results_shown')
+                    'pvalue_rank_cutoff','pvalue_ref_cutoff', 'page_of_results_shown')
   
 
     #ensure ranges are within hard limits.  
@@ -206,7 +232,8 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
                                                required=False)
 
 
-    field_order =  ('tf_library', 'trans_factor', 'encode_trans_factor',  'pvalue_cutoff', 'page_of_results_shown')
+    field_order =  ('tf_library', 'trans_factor', 'encode_trans_factor', 
+     'pvalue_cutoff', 'pvalue_ref_cutoff', 'page_of_results_shown')
 
 
 
@@ -235,7 +262,7 @@ class SearchBySnpidWindowForm(GenericSearchForm):
 
     prev_search_window_size = forms.IntegerField(widget = forms.HiddenInput(),
                                                 required = False)
-    field_order =  ('snpid', 'window_size', 'pvalue_cutoff', 'page_of_results_shown')
+    field_order =  ('snpid', 'window_size', 'pvalue_cutoff','pvalue_ref_cutoff','page_of_results_shown')
 
 
 
@@ -265,4 +292,5 @@ class SearchByGeneNameForm(GenericSearchForm):
 
     prev_search_window_size = forms.IntegerField(widget = forms.HiddenInput(),
                                                 required = False)
-    field_order =  ('gene_name', 'window_size', 'pvalue_cutoff', 'page_of_results_shown')
+    field_order =  ('gene_name', 'window_size', 'pvalue_cutoff', 'pvalue_ref_cutoff', 
+                    'page_of_results_shown')
