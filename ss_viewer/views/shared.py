@@ -87,7 +87,8 @@ class MotifPlottingData:
             motif_data = self.motifs[motif]
         return motif_data
 
-
+#TODO: finish deprecating this class and fully replace it
+# with the one below.
 class PValueFromForm:
     @staticmethod
     def get_pvalue_rank_from_form(form):
@@ -95,6 +96,25 @@ class PValueFromForm:
         return form.cleaned_data.get('pvalue_rank_cutoff')
       else:
         return 0.05
+
+
+#maybe allow searches with only 1 to 2 out of 3 p-values.
+class PValueDictFromForm:
+    @staticmethod
+    def get_pvalues_from_form(form):
+        pv_dict = {}
+        for pv_name in ['rank', 'ref', 'snp']:
+            key = "_".join(['pvalue', pv_name, 'cutoff'])
+            if form.cleaned_data.has_key(key) and \
+               form.cleaned_data.get(key) is not None:
+                print "this has key: " + key + " value: " + \
+                      str(form.cleaned_data.get(key))
+                pv_dict[key] = form.cleaned_data.get(key)
+
+        if not pv_dict.has_key('pvalue_rank_cutoff'): 
+            pv_dict['pvalue_rank_cutoff'] = 0.05
+
+        return pv_dict
 
 
 #includes all of the forms that should be loaded every time.
