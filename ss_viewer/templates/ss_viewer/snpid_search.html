@@ -12,15 +12,19 @@
     {{ snpid_search_form.file_of_snpids.label }}</label>    </td>
    <td> {{  snpid_search_form.file_of_snpids  }} </td>
 </tr>
-
-<tr>
-<td>
-<label  for="{{ snpid_search_form.pvalue_rank_cutoff.id_for_label }}">
-    {{ snpid_search_form.pvalue_rank_cutoff.label }}
-</label>
-</td>
-<td> {{ snpid_search_form.pvalue_rank_cutoff }}</td>
+<tr> 
+  <td>   {{ snpid_search_form.pvalue_rank_cutoff.label_tag }}  </td>
+  <td>   {{ snpid_search_form.pvalue_rank_cutoff  }} </td>
 </tr>
+    <tr> 
+  <td>   {{ snpid_search_form.pvalue_ref_cutoff.label_tag }}  </td>
+  <td>   {{ snpid_search_form.pvalue_ref_cutoff  }} </td>
+</tr>
+<tr> 
+  <td>   {{ snpid_search_form.pvalue_snp_cutoff.label_tag }}  </td>
+  <td>   {{ snpid_search_form.pvalue_snp_cutoff  }} </td>
+</tr>
+
 </table>
 
 {# Include the hidden fields #}
