@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 
 from ss_viewer.views.shared import PValueFromForm
+from ss_viewer.views.shared import PValueDictFromForm
 from ss_viewer.views.shared import Paging
 from ss_viewer.views.shared import MotifTransformer, TFTransformer
 from ss_viewer.views.shared import APIUrls 
@@ -14,15 +15,19 @@ from ss_viewer.views.shared import APIResponseHandler
 from ss_viewer.views.shared import StreamingCSVDownloadHandler
 
 def copy_valid_form_data_into_hidden_fields(form_data):
-    fields_to_copy = ['gene_name', 'window_size', 'pvalue_rank_cutoff']
+    fields_to_copy = ['gene_name', 'window_size', 'pvalue_rank_cutoff',\
+                     'pvalue_ref_cutoff', 'pvalue_snp_cutoff'  ]
     for form_field in fields_to_copy:
-        form_data['prev_search_'+form_field] = form_data[form_field]
+        if form_field in form_data:
+            form_data['prev_search_'+form_field] = form_data[form_field]
     return form_data
 
 def copy_hidden_fields_into_form_data(form_data):
-    fields_to_copy = ['gene_name', 'window_size', 'pvalue_rank_cutoff']
+    fields_to_copy = ['gene_name', 'window_size', 'pvalue_rank_cutoff',\
+                      'pvalue_ref_cutoff', 'pvalue_snp_cutoff' ]
     for form_field in fields_to_copy:
-        form_data[form_field] = form_data['prev_search_'+form_field] 
+        if 'prev_search_' + form_field in form_data:       
+            form_data[form_field] = form_data['prev_search_'+form_field] 
     return form_data
 
 def handle_gene_name_search(request):
@@ -44,7 +49,7 @@ def handle_gene_name_search(request):
         return StandardFormset.handle_invalid_form(request, context)
 
     form_data = gene_name_search_form.cleaned_data
-    pvalue_rank = PValueFromForm.get_pvalue_rank_from_form(gene_name_search_form)
+
 
     if request.POST['action'] == 'Download Results':
         gene_name = form_data['prev_search_gene_name']
@@ -53,15 +58,29 @@ def handle_gene_name_search(request):
         previous_search_params = { 'gene_name'   :  gene_name,
                                    'pvalue_rank' :  pvalue_rank,
                                    'window_size' :  window_size  }
+        if form_data['prev_search_pvalue_ref_cutoff'] is not None:
+            previous_search_params.update(
+                         {'pvalue_ref'  : form_data['prev_search_pvalue_ref_cutoff']})
+        if form_data['prev_search_pvalue_snp_cutoff'] is not None:
+            previous_search_params.update(
+                         {'pvalue_snp'  : form_data['prev_search_pvalue_snp_cutoff']})
         return StreamingCSVDownloadHandler.streaming_csv_view(request,
                                                               previous_search_params, 
                                                               'search-by-gene-name')
     search_request_params = Paging.get_paging_info_for_request(request,
                                                 form_data['page_of_results_shown'])
+
+    pvalue_dict = PValueDictFromForm.get_pvalues_from_form(gene_name_search_form)
     api_search_query  =  {'gene_name'   : form_data['gene_name'], 
                           'window_size' : form_data['window_size'],
-                          'pvalue_rank' :  pvalue_rank, 
+                          'pvalue_rank' : pvalue_dict['pvalue_rank_cutoff'],
                           'from_result' : search_request_params['search_result_offset']}
+    #Only include pvalue_ref and pvalue_snp if they are present in the input.
+    if 'pvalue_ref_cutoff' in pvalue_dict:
+        api_search_query.update({'pvalue_ref'  : pvalue_dict['pvalue_ref_cutoff']})
+    if 'pvalue_snp_cutoff' in pvalue_dict:
+        api_search_query.update({'pvalue_snp'  : pvalue_dict['pvalue_snp_cutoff']})
+
     #is the gene not showing up in the database reported correctly?
     shared_context = APIResponseHandler.handle_search(api_search_query, 
                                                       'search-by-gene-name',
