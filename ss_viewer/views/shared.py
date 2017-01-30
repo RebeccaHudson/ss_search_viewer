@@ -171,12 +171,13 @@ class StandardFormset:
           else:
               active_tab = 'tf'
           if 'gl_search_form' not in form_dict:
-              form_dict['gl_form'] =\
+
+              form_dict['gl_search_form'] =\
                        SearchByGenomicLocationForm(initial=hidden_page_number)
           else:
               active_tab = 'gl-region'
           if 'snpid_search_form' not in form_dict:
-              form_dict['snpid_form'] =\
+              form_dict['snpid_search_form'] =\
                         SearchBySnpidForm(initial=hidden_page_number)
           else:
               active_tab = 'snpid'
