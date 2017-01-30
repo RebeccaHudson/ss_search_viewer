@@ -18,7 +18,6 @@ class GenericSearchView(View):
                         #should be overridden in each inheriting class. 
     #initial = {'key': 'value'}
     template_name = 'ss_viewer/multi-searchpage.html'
-
     search_form = None #this means it's available, right?
 
     #For search views, this should just point back to the main search page.
@@ -43,12 +42,14 @@ class GenericSearchView(View):
 
         if not search_form.is_valid() \
           and not request.POST['action'] == 'Download Results':
-            context = StandardFormset.setup_formset_context(\
-                                          {form_name_in_context:search_form})
+            context = StandardFormset.dict_based_setup_formset_context(\
+                                          {self.form_name_in_context:search_form})
+            errs = search_form.errors
+            context['form_errors'] = \
+               [ str(item) for one_error in errs.values() for item in one_error]
             return StandardFormset.handle_invalid_form(request, context)
 
         self.search_form = search_form
- 
         form_data = self.search_form.cleaned_data
 
         #TODO: find a way to sidestep validation for Prev, Next, and Download. 
@@ -59,15 +60,13 @@ class GenericSearchView(View):
       
         search_request_params = Paging.get_paging_info_for_request(request, 
                                              form_data['page_of_results_shown']) 
-        api_search_query = self.setup_api_search_query(form_data, 
-                                                       request, 
-                                                       search_request_params)
+        api_search_query = self.setup_api_search_query(form_data, request)
         api_search_query.update(
                {'from_result' :  search_request_params['search_result_offset']})
 
 
         shared_context = APIResponseHandler.handle_search(api_search_query,
-                                                          self.csv_action_name,
+                                                          self.api_action_name,
                                                           search_request_params)
         context = self.handle_paging_and_return_context(
                                                  self.search_form.cleaned_data,
@@ -99,10 +98,8 @@ class GenericSearchView(View):
                 {'pvalue_snp'  : form_data['prev_search_pvalue_snp_cutoff']})
         return StreamingCSVDownloadHandler.streaming_csv_view(request, 
                                                                prev_search_params, 
-                                                               self.csv_action_name)
+                                                               self.api_action_name)
  
-               
-
 
     def get_pvalues_from_form(self):
         pvalues_for_search = {}
