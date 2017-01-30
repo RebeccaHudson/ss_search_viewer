@@ -9,7 +9,7 @@ from .views import tf_search
 from .views import snpid_window_search
 from .views import gene_name_search
 from .views.tf_classbased_search import TranscriptionFactorSearchView
-
+from .views.gl_classbased_search import GenomicLocationSearchView
 app_name = 'ss_viewer'
 
 
@@ -23,6 +23,9 @@ app_name = 'ss_viewer'
 #      views.tf_search.handle_search_by_trans_factor,
 #      name='trans-factor-search'),
 
+#  url(r'^gl-region-search/$', 
+#      views.gl_search.handle_search_by_genomic_location,
+#      name='gl-region-search'),
 urlpatterns = [
   url(r'^$', 
          views.main.home_page,
@@ -53,7 +56,7 @@ urlpatterns = [
        name='multi-search'),
 
   url(r'^gl-region-search/$', 
-      views.gl_search.handle_search_by_genomic_location,
+      views.gl_classbased_search.GenomicLocationSearchView.as_view(),
       name='gl-region-search'),
 
   url(r'^trans-factor-search/$',
