@@ -21,13 +21,15 @@ from ss_viewer.views.shared import StreamingCSVDownloadHandler
 class TranscriptionFactorSearchView(GenericSearchView):
     form_class = SearchByTranscriptionFactorForm
     form_name_in_context = 'tf_search_form'
-    csv_action_name = 'search-by-tf'  #TODO: This should be called API action name
+    api_action_name = 'search-by-tf'  #TODO: This should be called API action name
     previous_search_params = None
 
     def post(self, request, *args, **kwargs):
         return super(TranscriptionFactorSearchView, self).post(request)
-        return self.handle_search_by_trans_factor(request)
+        #return self.handle_search_by_trans_factor(request)
 
+
+    #unused, remove later.
     def handle_search_by_trans_factor(self, request):
         #tf_search_form = None
         #if request.POST['action'] in ['Prev', 'Next']:
@@ -117,7 +119,7 @@ class TranscriptionFactorSearchView(GenericSearchView):
                       context)
 
     #do transcription-factor specific stuff here. 
-    def setup_api_search_query(self, form_data, request, search_request_params):
+    def setup_api_search_query(self, form_data, request):
         tft = TFTransformer()
         motif_value = tft.lookup_motifs_by_tf(form_data['trans_factor'])
         api_search_query = {'motif'       :  motif_value }
@@ -134,9 +136,6 @@ class TranscriptionFactorSearchView(GenericSearchView):
            'pvalue_rank': form_data['prev_search_pvalue_rank_cutoff'],
            'tf_library' : 'jaspar'  
           }
-         
-
-
 
     # Note/remember for ENCODE, the transcription factor is ABC the motif value 
     #is ABC-omg-why-is-this-name-so-long
