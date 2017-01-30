@@ -40,7 +40,6 @@ def handle_search_by_trans_factor(request):
     #translate the request.POST queryDict into a dict.
     tf_search_form = None
     if request.POST['action'] in ['Prev', 'Next']:
-        #why isn't the transcription factor field being copied back?
         oneDict = request.POST.dict()
         oneDict = copy_hidden_fields_into_form_data(oneDict) 
         tf_search_form = SearchByTranscriptionFactorForm(oneDict)
@@ -52,7 +51,6 @@ def handle_search_by_trans_factor(request):
         return StandardFormset.handle_invalid_form(request, context)
 
     form_data = tf_search_form.cleaned_data
-
     
     print "form data for tf search " + str(form_data)
     # ENCODE motifs are prefixes, JASPAR are actually mapped with TFTransformer

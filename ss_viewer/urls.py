@@ -8,6 +8,7 @@ from .views import shared
 from .views import tf_search
 from .views import snpid_window_search
 from .views import gene_name_search
+from .views.tf_classbased_search import TranscriptionFactorSearchView
 
 app_name = 'ss_viewer'
 
@@ -16,6 +17,11 @@ app_name = 'ss_viewer'
  #      views.shared.StandardFormset.show_multisearch_page,
  #      name = 'index'),
  # For home page to be the search page.
+
+#known-working version:
+#  url(r'^trans-factor-search/$',
+#      views.tf_search.handle_search_by_trans_factor,
+#      name='trans-factor-search'),
 
 urlpatterns = [
   url(r'^$', 
@@ -51,7 +57,7 @@ urlpatterns = [
       name='gl-region-search'),
 
   url(r'^trans-factor-search/$',
-      views.tf_search.handle_search_by_trans_factor,
+      views.tf_classbased_search.TranscriptionFactorSearchView.as_view(),
       name='trans-factor-search'),
 
   url(r'snpid-search/$', 

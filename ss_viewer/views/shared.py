@@ -159,6 +159,45 @@ class StandardFormset:
               context.update({'active_tab': active_tab })
           return context 
 
+     #TODO: deprecate the above method in favor of this one.
+     #fills up the search page with blank forms EXCEPT for the one that's active.
+     @staticmethod
+     def dict_based_setup_formset_context(form_dict):
+          active_tab = None
+          hidden_page_number = {'page_of_results_shown':0}
+          if 'tf_search_form' not in form_dict:
+              form_dict['tf_search_form'] =\
+                      SearchByTranscriptionFactorForm(initial=hidden_page_number)
+          else:
+              active_tab = 'tf'
+          if 'gl_search_form' not in form_dict:
+              form_dict['gl_form'] =\
+                       SearchByGenomicLocationForm(initial=hidden_page_number)
+          else:
+              active_tab = 'gl-region'
+          if 'snpid_search_form' not in form_dict:
+              form_dict['snpid_form'] =\
+                        SearchBySnpidForm(initial=hidden_page_number)
+          else:
+              active_tab = 'snpid'
+
+          if 'snpid_window_form' not in form_dict:
+              form_dict['snpid_window_form'] =\
+                         SearchBySnpidWindowForm(initial=hidden_page_number)
+          else:
+              active_tab = 'snpid-window'
+
+          if 'gene_name_form' not in form_dict:
+              form_dict['gene_name_form'] =\
+                          SearchByGeneNameForm(initial=hidden_page_number)
+          else: 
+              active_tab = 'gene-name'
+
+          context = form_dict 
+          if active_tab is not None:
+              context.update({'active_tab': active_tab })
+          return context 
+
      @staticmethod
      def show_multisearch_page(request):
           searchpage_template = 'ss_viewer/multi-searchpage.html'
