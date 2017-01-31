@@ -2,7 +2,8 @@ from django import forms
 from django.conf import settings
 import os
 import pickle
-
+import re
+#from ss_viewer.views.snpid_classbased_search import SnpidSearchUtils
 
 #Each form type has a p-value cutoff and a page number of results shown.
 class GenericSearchForm(forms.Form):
@@ -51,6 +52,21 @@ class GenericSearchForm(forms.Form):
             print "assigned pvalue default"
         return cleaned_data
   
+#Used for parsing out SNPids from text files uploaded on the SNPid search form.
+class SnpidSearchUtils:
+    @staticmethod
+    def extract_snpids_from_textfield(text):
+        gex = re.compile('(rs[0-9]+)', re.MULTILINE)  
+        list_of_snpids = gex.findall(text)
+        return list_of_snpids
+    
+    @staticmethod
+    def clean_and_validate_snpid_text_input(text_input):
+        snpids = SnpidSearchUtils.extract_snpids_from_textfield(text_input)
+        deduped_snpids = list(set(snpids))  #don't allow any duplicate requests.
+        if len(deduped_snpids) == 0:  
+          raise forms.ValidationError("No valid SNPids have been included.")  
+        return sorted(deduped_snpids)
 
 class SearchBySnpidForm(GenericSearchForm):
     text_to_explain_snpbox = "SNPids"
@@ -77,6 +93,7 @@ class SearchBySnpidForm(GenericSearchForm):
         cleaned_data = super(SearchBySnpidForm, self).clean()
         snpid_file = cleaned_data.get('file_of_snpids')
         snpid_textbox_contents = cleaned_data.get('raw_requested_snpids')
+        snpid_list = None
    
         if (snpid_file and snpid_textbox_contents):
             raise forms.ValidationError(('Specify snpids in the textbox,'
@@ -87,9 +104,21 @@ class SearchBySnpidForm(GenericSearchForm):
             raise forms.ValidationError(('You must specify snpids in the textbox,'
                                         ' OR provide a file.'),
                                          code='missing-input')
-        return cleaned_data
- 
-
+        
+        if not snpid_file:
+            snpid_list  = \
+                 SnpidSearchUtils.clean_and_validate_snpid_text_input(
+                                                     snpid_textbox_contents)
+        else:
+            text_in_file = snpid_file.read()
+            snpid_list =  \
+                 SnpidSearchUtils.clean_and_validate_snpid_text_input(
+                                                          text_in_file)
+        if snpid_list is None: 
+            raise forms.ValidationError(
+                                ('No properly formatted SNPids in the text.'))
+        cleaned_data['snpid_list'] = snpid_list
+        cleaned_data['raw_requested_snpids'] = ", ".join(snpid_list)
 
 
 #A separate form for searching through the data by genomic location
@@ -265,6 +294,15 @@ class SearchBySnpidWindowForm(GenericSearchForm):
                                                 required = False)
     field_order =  ('snpid', 'window_size', 'pvalue_rank_cutoff','pvalue_ref_cutoff',
                     'pvalue_snp_cutoff', 'page_of_results_shown')
+    def clean(self):
+        cleaned_data = super(SearchBySnpidWindowForm, self).clean()
+        gex = re.compile('(rs[0-9]+)')
+        snpid = gex.search(cleaned_data['snpid'])
+        if snpid is not None:
+            cleaned_data['snpid'] =  snpid.group(1)
+        else:
+            raise forms.ValidationError(('SNPid not properly formatted.'),
+                                        code='bad-snpid'  )
 
 
 
