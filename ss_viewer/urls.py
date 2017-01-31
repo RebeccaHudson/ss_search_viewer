@@ -10,6 +10,9 @@ from .views import snpid_window_search
 from .views import gene_name_search
 from .views.tf_classbased_search import TranscriptionFactorSearchView
 from .views.gl_classbased_search import GenomicLocationSearchView
+from .views.gene_name_classbased_search import GeneNameSearchView
+from .views.snpid_window_classbased_search import SnpidWindowSearchView
+from .views.snpid_classbased_search import SnpidSearchView
 app_name = 'ss_viewer'
 
 
@@ -26,6 +29,19 @@ app_name = 'ss_viewer'
 #  url(r'^gl-region-search/$', 
 #      views.gl_search.handle_search_by_genomic_location,
 #      name='gl-region-search'),
+
+#  url(r'gene-name-search/$', 
+#       views.gene_name_search.handle_gene_name_search,
+#       name='gene-name-search')
+
+#  url(r'snpid-window-search/$',
+#       views.snpid_window_search.handle_snpid_window_search,
+#       name='snpid-window-search'),
+
+#  url(r'snpid-search/$', 
+#     views.snpid_search.handle_search_by_snpid, 
+#     name='snpid-search'),
+
 urlpatterns = [
   url(r'^$', 
          views.main.home_page,
@@ -64,14 +80,14 @@ urlpatterns = [
       name='trans-factor-search'),
 
   url(r'snpid-search/$', 
-     views.snpid_search.handle_search_by_snpid, 
+     views.snpid_classbased_search.SnpidSearchView.as_view(), 
      name='snpid-search'),
 
   url(r'snpid-window-search/$',
-       views.snpid_window_search.handle_snpid_window_search,
+       views.snpid_window_classbased_search.SnpidWindowSearchView.as_view(),
        name='snpid-window-search'),
  
   url(r'gene-name-search/$', 
-       views.gene_name_search.handle_gene_name_search,
+       views.gene_name_classbased_search.GeneNameSearchView.as_view(),
        name='gene-name-search')
 ]
