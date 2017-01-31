@@ -24,7 +24,6 @@ from ss_viewer.views.shared import StandardFormset
 from ss_viewer.views.shared import MotifPlottingData
 
 from django.core.exceptions import ValidationError
-from ss_viewer.views.snpid_search import SnpidSearchUtils
 from tempfile import NamedTemporaryFile 
 import csv
 import zipfile
