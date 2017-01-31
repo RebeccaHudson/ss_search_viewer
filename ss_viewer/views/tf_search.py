@@ -1,22 +1,6 @@
-import requests
-import json
 from ss_viewer.forms import SearchByTranscriptionFactorForm
-from django.core.urlresolvers import reverse
-from django.shortcuts import render
-from django.shortcuts import redirect
-
-#Can I inherit behavior from this class?
 from ss_viewer.views.generic_search import GenericSearchView
-
-from ss_viewer.views.shared import PValueFromForm
-from ss_viewer.views.shared import PValueDictFromForm
-from ss_viewer.views.shared import Paging
 from ss_viewer.views.shared import MotifTransformer, TFTransformer
-from ss_viewer.views.shared import APIUrls 
-from ss_viewer.views.shared import StandardFormset 
-from ss_viewer.views.shared import APIResponseHandler 
-from ss_viewer.views.shared import StreamingCSVDownloadHandler 
-
 
 class TranscriptionFactorSearchView(GenericSearchView):
     form_class = SearchByTranscriptionFactorForm
@@ -116,21 +100,35 @@ class TranscriptionFactorSearchView(GenericSearchView):
     #do transcription-factor specific stuff here. 
     def setup_api_search_query(self, form_data, request):
         tft = TFTransformer()
-        motif_value = tft.lookup_motifs_by_tf(form_data['trans_factor'])
-        api_search_query = {'motif'       :  motif_value }
+        motif_value = None
+        if form_data['tf_library'] == 'encode':
+            #The transcription factor IS the motif's prefix; search by that.
+            motif_value = form_data['encode_trans_factor'] 
+        else:
+            #Use JASPAR motifs.
+            trans_factor = form_data['trans_factor']
+            motif_value = tft.lookup_motifs_by_tf(form_data['trans_factor'])
+
+        api_search_query = {'motif'      :  motif_value, 
+                            'tf_library' :  form_data['tf_library'] }
         api_search_query.update(self.get_pvalues_from_form())
         return api_search_query
 
 
     #TODO: properly handle ENCODE data.
     def handle_params_for_download(self, form_data):
-        tft = TFTransformer()
+        motif_value = None
+        if form_data['prev_search_tf_library'] == 'encode': 
+            motif_value = form_data['prev_search_encode_trans_factor'] 
+        else:   
+            #JASPAR
+            tft = TFTransformer()
+            motif_value = tft.lookup_motifs_by_tf(
+                                  form_data['prev_search_trans_factor']),
         return \
-          {'motif'      : tft.lookup_motifs_by_tf(
-                                form_data['prev_search_trans_factor']),
+          {'motif'      : motif_value,
            'pvalue_rank': form_data['prev_search_pvalue_rank_cutoff'],
-           'tf_library' : 'jaspar'  
-          }
+           'tf_library' : form_data['prev_search_tf_library']         }
 
     # Note/remember for ENCODE, the transcription factor is ABC the motif value 
     #is ABC-omg-why-is-this-name-so-long
