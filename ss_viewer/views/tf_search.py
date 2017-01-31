@@ -5,7 +5,7 @@ from ss_viewer.views.shared import MotifTransformer, TFTransformer
 class TranscriptionFactorSearchView(GenericSearchView):
     form_class = SearchByTranscriptionFactorForm
     form_name_in_context = 'tf_search_form'
-    api_action_name = 'search-by-tf'  #TODO: This should be called API action name
+    api_action_name = 'search-by-tf'
     previous_search_params = None
 
     #do transcription-factor specific stuff here. 
