@@ -30,15 +30,13 @@ class GenericSearchView(View):
     #put code that is shared in here... 
     #what can be 'super()-ed?'
     def post(self, request, *args, **kwargs):
-        #form = self.form_class(request.POST)
-        print "super!"
         search_form = None 
         if request.POST['action'] in ['Prev', 'Next']:
             oneDict = request.POST.dict()
             oneDict = self.copy_hidden_fields_into_form_data(oneDict)
             search_form = self.form_class(oneDict)
         else: 
-            search_form = self.form_class(request.POST)
+            search_form = self.form_class(request.POST, request.FILES)
 
         if not search_form.is_valid() \
           and not request.POST['action'] == 'Download Results':
