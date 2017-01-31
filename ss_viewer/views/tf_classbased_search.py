@@ -24,11 +24,6 @@ class TranscriptionFactorSearchView(GenericSearchView):
     api_action_name = 'search-by-tf'  #TODO: This should be called API action name
     previous_search_params = None
 
-    def post(self, request, *args, **kwargs):
-        return super(TranscriptionFactorSearchView, self).post(request)
-        #return self.handle_search_by_trans_factor(request)
-
-
     #unused, remove later.
     def handle_search_by_trans_factor(self, request):
         #tf_search_form = None
