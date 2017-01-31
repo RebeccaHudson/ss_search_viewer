@@ -86,8 +86,6 @@ class SearchBySnpidForm(GenericSearchForm):
                                         required = False)
     file_of_snpids = forms.FileField(required=False,
                                      label = "File of SNPids")
-    field_order =  ('raw_requested_snpids', 'file_of_snpids', 'pvalue_rank_cutoff',
-                   'pvalue_ref_cutoff', 'pvalue_snp_cutoff',   'page_of_results_shown')
  
     def clean(self):
         cleaned_data = super(SearchBySnpidForm, self).clean()
@@ -164,11 +162,6 @@ class SearchByGenomicLocationForm(GenericSearchForm):
 
     prev_search_selected_chromosome = forms.CharField(widget = forms.HiddenInput(),
                                                required=False)
-    field_order =  ('gl_start_pos', 'gl_end_pos', 
-                    'selected_chromosome', 
-                    'pvalue_rank_cutoff','pvalue_ref_cutoff', 'pvalue_snp_cutoff',
-                     'page_of_results_shown')
-  
 
     #ensure ranges are within hard limits.  
     def clean(self):
@@ -262,11 +255,6 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
                                                required=False)
 
 
-    field_order =  ('tf_library', 'trans_factor', 'encode_trans_factor', 
-     'pvalue_rank_cutoff', 'pvalue_ref_cutoff', 'pvalue_snp_cutoff','page_of_results_shown')
-
-
-
 class SearchBySnpidWindowForm(GenericSearchForm):
     styled_widget = forms.TextInput(attrs={"class":"form-control",
                                            "title": "Search for data with a window "+\
@@ -292,8 +280,6 @@ class SearchBySnpidWindowForm(GenericSearchForm):
 
     prev_search_window_size = forms.IntegerField(widget = forms.HiddenInput(),
                                                 required = False)
-    field_order =  ('snpid', 'window_size', 'pvalue_rank_cutoff','pvalue_ref_cutoff',
-                    'pvalue_snp_cutoff', 'page_of_results_shown')
     def clean(self):
         cleaned_data = super(SearchBySnpidWindowForm, self).clean()
         gex = re.compile('(rs[0-9]+)')
@@ -332,5 +318,3 @@ class SearchByGeneNameForm(GenericSearchForm):
 
     prev_search_window_size = forms.IntegerField(widget = forms.HiddenInput(),
                                                 required = False)
-    field_order =  ('gene_name', 'window_size', 'pvalue_cutoff', 'pvalue_ref_cutoff', 
-                    'pvalue_snp_cutoff', 'page_of_results_shown')
