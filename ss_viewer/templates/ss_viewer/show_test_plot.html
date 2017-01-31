@@ -14,60 +14,121 @@
   Show plot 
 </button>
 
+<!-- all plot-saving code based on : 
+http://stackoverflow.com/questions/28226677/save-inline-svg-as-jpeg-png-svg -->
+<button id="save_plot" type="button" class="btn btn-link">
+  Save Plot
+</button>
+
 <span> plot data: </span>
 <p id="plot_data">{{ happy_data }}</p>
 
 <span> motif data:  </span>
 <p id="motif_data">{{ motif_data }}</p>
-
 <!--<a href ="dynamic_svg_data">
     <img src="dynamic_svg_data" alt="img1">
 </a> -->
+<canvas id="canvas" height="400" width="900"></canvas>
 
+<svg width="0" height="0" id="defs">
+    <!-- Arrowhead marker below was shamelessly plagirized from: 
+     https://developer.mozilla.org/en-US/docs/Web/SVG/Element/marker -->
+    <defs>  
+      <marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5"
+          markerWidth="5" markerHeight="3" fill="blue" stroke="blue" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" />
+      </marker>
+    </defs>
+    <!-- This SVG is for defining the arrowhead symbols used in the plots; it
+         is not (and does not need to be) copied for each plot -->
+</svg>
 
 <div id="plot" class="side">
 <svg class="target" id="target-0" width="900" height="400">
+<style type="text/css">
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+svg {
+  background-color: white;
+}
+.letter-A
+{
+  fill: green;
+  font-weight: bold;
+}
+.letter-C {
+    fill: blue;
+    font-weight: bold;
+}
+.letter-T {
+    fill: red;
+    font-weight: bold;
+}
+.letter-G {
+    fill: orange; 
+    font-weight: bold;
+}
+#legend {
+    font-size: 20px;
+}
+</style>
+    <defs>  
+      <marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5"
+          markerWidth="5" markerHeight="3" fill="blue" stroke="blue" orient="auto">
+        <path d="M 0 0 L 10 5 L 0 10 z" />
+      </marker>
+    </defs>
+    <rect fill="white" width="500" height="400" x="10" y="10"></rect>
+    <g class="plot-label">
+      <text style="center" font-size="20" font-weight="bold" 
+            transform="translate(70, 70)" font-family="Arial">
+          Plot Label
+      </text>
+    </g>
         <g id="legend" transform="translate(10)"  >
-            <g id="line1margin" transform="translate(0, 50)" >
-                <!-- x controls how far the legend symbol is from the left edge of 
-                     the SVG, y controls how far from the top of the SVG, and 
-                     dy is ???? 
-                     to move the text, change the attributes of the text itself.  -->
-                <text style="center">PWM</text>
+            <g id="line1margin" transform="translate(0, 150)" >
+                <text style="center">Ref</text>
             </g>
-            <g id="line2margin" transform="translate(0, 100)" >
+            <g id="line2margin" transform="translate(0, 200)" >
                 <text style="center">+/-</text>
             </g>
-            <!-- add a little gap between lines 2 and 3 -->
-            <g id="line3margin" transform="translate(0,170)" >
+
+            <!-- added a gap between lines 2 and 3 -->
+            <g id="line3margin" transform="translate(0, 300)" >
                 <text style="center">+/-</text>
             </g>
-            <g id="line4margin" transform="translate(0, 220)">
-                <text style="center">PWM</text>
+            <g id="line4margin" transform="translate(0, 360)">
+                <text style="center">SNP</text>
             </g>
         </g>
-        <!-- the legend actually prints, at least -->
-<!-- the logoplots group gets a transform away from the left edge that
-             will apply to all child elements (each of the 4 plots)'
-             NOTE: the logoplots group had  width="860" height="400"
-             keep this intention in mind.-->
         <g id="logoplots" transform="translate(100)" >
             <rect id="highlight" />
-            <g id="line1data" transform="translate(0, 0)" >
-            <!-- setting the x and y on a group does not make sense, use the 
-                 group's transform attribute and apply a translate(x, y) -->
-              <!--  <text>motif 1here</text> -->
+            <g id="line1data" transform="translate(0, 100)" >
+                <g class="ref-label">
+                    <text style="center" font-family="Arial" font-size="15"
+                          font-weight="bold">
+                       Best Match to the Reference Genome
+                    </text>
+                </g>
             </g>
+            <!-- Setting the x and y on a group does not make sense, use the 
+                 group's transform attribute and apply a translate(x, y) -->
             <!-- Notice how each of these groups gets the translation of the parent
                  group applied to it, as well as the one specified for itself. -->
-            <g id="line2data" transform="translate(0, 50)" >
-             <!--   <text>motif 2here</text> -->
+            <g id="line2data" transform="translate(0, 150)" >
             </g>
-            <g id="line3data" transform="translate(0, 120)" >
-            <!-- <text>motif 3 here</text> -->
+            <g id="line3data" transform="translate(0, 250)" >
+                <g class="snp-label">
+                    <text style="center" font-family="Arial" font-size="15" 
+                          font-weight="bold">
+                        Best Match to the SNP Genome
+                    </text>
+                </g>
             </g>
-            <g id="line4data" transform="translate(0, 190)"  >
-            <!-- <text>motif 4   here</text> -->
+        <g id="line4data" transform="translate(0, 320)"  >
         </g>
         </g>
     </svg>
@@ -89,8 +150,102 @@
         makeAPlot(plottingData, "target-0");
         $("button#show_plot").click(function(e) {
          });
+
+      //  d3.select("svg")  //.append("svg:svg")
+      //  .attr("width", 300)
+      //  .attr("height", 200)
+      //  .style("background-color", "WhiteSmoke")
+      //  .append("svg:rect")
+      //  .attr("fill", "aliceblue")
+      //  .attr("stroke", "cadetblue")
+      //  .attr("width", 60)
+      //  .attr("height", 40)
+      //  .attr("x", 50)
+      //  .attr("y", 50);
+var btn = document.querySelector('button#save_plot');
+var svg = document.querySelector('svg#target-0');
+var canvas = document.querySelector('canvas');
+
+function triggerDownload (imgURI) {
+  var evt = new MouseEvent('click', {
+    view: window,
+    bubbles: false,
+    cancelable: true
+  });
+
+  var a = document.createElement('a');
+  a.setAttribute('download', 'MY_COOL_IMAGE.png');
+  a.setAttribute('href', imgURI);
+  a.setAttribute('target', '_blank');
+
+  a.dispatchEvent(evt);
+}
+
+btn.addEventListener('click', function () {
+  var canvas = document.getElementById('canvas');
+  var ctx = canvas.getContext('2d');
+  var data = (new XMLSerializer()).serializeToString(svg);
+  var DOMURL = window.URL || window.webkitURL || window;
+
+  var img = new Image();
+  var svgBlob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
+  var url = DOMURL.createObjectURL(svgBlob);
+
+  img.onload = function () {
+    ctx.drawImage(img, 0, -30);
+    DOMURL.revokeObjectURL(url);
+
+    var imgURI = canvas
+        .toDataURL('image/png')
+        .replace('image/png', 'image/octet-stream');
+
+    triggerDownload(imgURI);
+  };
+
+  img.src = url;
+});
+
+
+
 });
 </script>
 
 </body>
 </html>
+
+<!-- 
+        /* this seems to work OK 
+        d3.select("#generate")
+             .on("click", writeDownloadLink);
+ 
+        function writeDownloadLink(){
+           var html = d3.select("svg#target-0")
+            .attr("title", "test2")
+            .attr("version", 1.1)
+            .attr("xmlns", "http://www.w3.org/2000/svg")
+            .node().parentNode.innerHTML;
+
+             console.log("svg html" + html);
+
+
+           d3.select("body").append("div")
+          .attr("id", "download")
+          .style("top", "20px")
+          .style("left", "0px")
+          .html("Right-click on this preview and choose Save as<br />Left-Click to dismiss<br />")
+          .append("img")
+          .attr("src", "data:image/svg+xml;base64,"+ btoa(html));
+
+           d3.select("#download")
+          .on("click", function(){
+              if(event.button == 0){
+                  d3.select(this).transition()
+                      .style("opacity", 0)
+                      .remove();
+              }
+          })
+          .transition()
+          .duration(500)
+          .style("opacity", 1);
+               };
+*/ -->
