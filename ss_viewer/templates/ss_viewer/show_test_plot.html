@@ -28,7 +28,8 @@ http://stackoverflow.com/questions/28226677/save-inline-svg-as-jpeg-png-svg -->
 <!--<a href ="dynamic_svg_data">
     <img src="dynamic_svg_data" alt="img1">
 </a> -->
-<canvas id="canvas" height="400" width="900"></canvas>
+<canvas id="canvas" style="display:none;" 
+        height="400" width="900"></canvas>
 
 <svg width="0" height="0" id="defs">
     <!-- Arrowhead marker below was shamelessly plagirized from: 
@@ -75,14 +76,8 @@ svg {
     font-size: 20px;
 }
 </style>
-    <defs>  
-      <marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5"
-          markerWidth="5" markerHeight="3" fill="blue" stroke="blue" orient="auto">
-        <path d="M 0 0 L 10 5 L 0 10 z" />
-      </marker>
-    </defs>
-    <rect fill="white" width="500" height="400" x="10" y="10"></rect>
     <g class="plot-label">
+     <!-- how to add defs programatically to the SVG source -->
       <text style="center" font-size="20" font-weight="bold" 
             transform="translate(70, 70)" font-family="Arial">
           Plot Label
@@ -182,9 +177,22 @@ function triggerDownload (imgURI) {
 }
 
 btn.addEventListener('click', function () {
+
+  var defs = d3.select('svg#target-0').append("defs").append("marker")
+                                 .attr("id","Triangle")
+                                 .attr("markerWidth","5")
+                                 .attr("markerHeight","3")
+                                 .attr("stroke", "blue")
+                                 .attr("orient", "auto")
+                                 .attr("viewBox", "0 0 10 10")
+                                 .attr('refX', '1')
+                                 .attr('refY', '5')
+                                 .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
   var canvas = document.getElementById('canvas');
   var ctx = canvas.getContext('2d');
   var data = (new XMLSerializer()).serializeToString(svg);
+  //data = data + $("svg#defs")[0].innerHTML;
+  console.log(data);
   var DOMURL = window.URL || window.webkitURL || window;
 
   var img = new Image();
