@@ -102,9 +102,7 @@ def dynamic_svg(request, plot_id_string):
     return HttpResponse(image, content_type="image/svg+xml")
 
 def test_svg_plots(request):
-
     name_of_template  =  'ss_viewer/show_test_plot.html' 
-
     path_to_tests = '/test_data/plotsToTest.json'
     testData = None
     fpath = os.path.dirname(os.path.dirname(__file__)) + path_to_tests
