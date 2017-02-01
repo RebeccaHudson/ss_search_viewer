@@ -51,11 +51,11 @@
    <div id="plots">
    {% include "ss_viewer/svg_skeleton.html" %}
    <!-- this should hide unless a plot is shown -->
-   <button id="save_plot" type="button" class="btn btn-link">
+   <button id="save_plot" type="button" style="display:none;" class="btn btn-link">
    Save Plot </button>
    </div>
 </div>
- <canvas id="canvas" style="display:none;" width="800" height="400"></canvas>
+ <canvas id="canvas" style="display:none;" width="800" height="370"></canvas>
 
 
 <span id='type_of_shown_results' style="display:none;" >
@@ -257,6 +257,7 @@
              //console.log("adding hidden class to " + targetSVGid);
              $("#"+targetSVGid).parent().addClass("hidden");
            }else {
+             $("#save_plot").attr('style', 'display: inline;');
              $("#"+targetSVGid).parent().addClass("show-plot");
            } 
        } 
@@ -299,7 +300,7 @@
      // works OK
      //appends   the definitions
      var defs = d3.select(svg).append("defs").append("marker")
-                                 .attr("id","triangle")
+                                 .attr("id","Triangle")
                                  .attr("markerWidth","5")
                                  .attr("markerHeight","3")
                                  .attr("stroke", "blue")
@@ -309,12 +310,15 @@
                                  .attr('refY', '5')
                                  .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
       var canvas = document.getElementById('canvas');
+      canvas.setAttribute('width',  $("div.show-plot svg").attr('width'));
+      //400 - 30 = 370
       var ctx = canvas.getContext('2d');
 
       // Reset the canvas to remove any plots drawn before this one 
       //taken from :http://www.html5canvastutorials.com/advanced/html5-clear-canvas/ 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+ 
       var data = (new XMLSerializer()).serializeToString(svg);
       var DOMURL = window.URL || window.webkitURL || window;
 
