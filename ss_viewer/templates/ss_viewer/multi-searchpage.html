@@ -48,16 +48,14 @@
 
 <!--  this is the way that we will be displaying the plot -->
 <div class="side plot">
-   <canvas id="canvas" style="display:none;" height="400" width="900"></canvas>
    <div id="plots">
    {% include "ss_viewer/svg_skeleton.html" %}
    <!-- this should hide unless a plot is shown -->
    <button id="save_plot" type="button" class="btn btn-link">
    Save Plot </button>
    </div>
-
 </div>
-
+ <canvas id="canvas" style="display:none;" width="800" height="400"></canvas>
 
 
 <span id='type_of_shown_results' style="display:none;" >
@@ -307,6 +305,10 @@
 
       var canvas = document.getElementById('canvas');
       var ctx = canvas.getContext('2d');
+      // Reset the canvas to remove any plots drawn before this one 
+      //taken from :http://www.html5canvastutorials.com/advanced/html5-clear-canvas/ 
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 
       var svg = document.querySelector('div.show-plot > svg');
       var data = (new XMLSerializer()).serializeToString(svg);
