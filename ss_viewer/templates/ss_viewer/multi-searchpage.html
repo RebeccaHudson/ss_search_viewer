@@ -275,7 +275,7 @@
 
     var btn = document.querySelector('button#save_plot');
     var canvas =  document.querySelector('canvas');
-
+    
     function triggerDownload(imgURI) {
       console.log("triggering download.");
       var evt = new MouseEvent('click', {
@@ -292,8 +292,38 @@
       a.dispatchEvent(evt);
     }
      btn.addEventListener('click', function () {
-     var defs = d3.select('div.show-plot > svg').append("defs").append("marker")
-                                 .attr("id","Triangle")
+     var svg = document.querySelector('div.show-plot > svg');
+    
+
+     svg = svg.cloneNode(true); //can I make a deep copy?
+     svg.setAttribute("id", "tempSVG");
+     
+     /* 
+     var defs = document.createElement('defs');
+     var marker = document.createElement('marker');
+     marker.setAttribute("id","triangle");
+     marker.setAttribute("markerWidth","5");
+     marker.setAttribute("markerHeight","3");   
+     marker.setAttribute("stroke", "blue");        
+     marker.setAttribute("orient", "auto");       
+     marker.setAttribute("viewBox", "0 0 10 10");
+     marker.setAttribute('refX', '1');        
+     marker.setAttribute('refY', '5');            
+     var path = document.createElement("path");
+     path.setAttribute("d", "M 0 0 L 10 5 L 0 10 z");
+
+     var theFirstChild = svg.firstChild;
+     svg.insertBefore(defs, theFirstChild);
+
+     //svg.appendChild(defs);
+     marker.appendChild(path);
+     defs.appendChild(marker); 
+     */    
+
+     // works OK
+     //appends   the definitions
+     var defs = d3.select(svg).append("defs").append("marker")
+                                 .attr("id","triangle")
                                  .attr("markerWidth","5")
                                  .attr("markerHeight","3")
                                  .attr("stroke", "blue")
@@ -305,15 +335,16 @@
 
       var canvas = document.getElementById('canvas');
       var ctx = canvas.getContext('2d');
+
       // Reset the canvas to remove any plots drawn before this one 
       //taken from :http://www.html5canvastutorials.com/advanced/html5-clear-canvas/ 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 
-      var svg = document.querySelector('div.show-plot > svg');
+
       var data = (new XMLSerializer()).serializeToString(svg);
       //data = data + $("svg#defs")[0].innerHTML;
-      //console.log(data);
+      console.log(data);
       var DOMURL = window.URL || window.webkitURL || window;
 
       var img = new Image();
@@ -325,6 +356,9 @@
         console.log("about to call drawImage");
         ctx.drawImage(img, 0, -30);
         DOMURL.revokeObjectURL(url);
+
+        //d3.selectAll('div.show-plot > svg > defs').remove();
+        //console.log("remove defs..");
 
         var imgURI = canvas
             .toDataURL('image/png')
