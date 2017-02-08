@@ -13,6 +13,9 @@ from .views.gl_search import GenomicLocationSearchView
 from .views.gene_name_search import GeneNameSearchView
 from .views.snpid_window_search import SnpidWindowSearchView
 from .views.snpid_search import SnpidSearchView
+
+from .views.ajaxy_snpid_window_search import AjaxySnpidWindowSearchView
+
 app_name = 'ss_viewer'
 
 urlpatterns = [
@@ -56,6 +59,10 @@ urlpatterns = [
      views.snpid_search.SnpidSearchView.as_view(), 
      name='snpid-search'),
 
+  url(r'ajaxy-snpid-window-search/$', 
+       views.ajaxy_snpid_window_search.AjaxySnpidWindowSearchView.as_view(),
+       name='ajaxy-snpid-window-search'),
+
   url(r'snpid-window-search/$',
        views.snpid_window_search.SnpidWindowSearchView.as_view(),
        name='snpid-window-search'),
@@ -63,4 +70,6 @@ urlpatterns = [
   url(r'gene-name-search/$', 
        views.gene_name_search.GeneNameSearchView.as_view(),
        name='gene-name-search')
+
+
 ]
