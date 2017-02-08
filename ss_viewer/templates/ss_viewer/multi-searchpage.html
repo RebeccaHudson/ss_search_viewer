@@ -71,7 +71,7 @@
 
 <div id="status_message"> {{ status_message }} </div>
 
-
+<div id="form_errors">
 {% if form_errors %}
 <ul>
 {% for one_error in form_errors %}
@@ -79,7 +79,7 @@
 {% endfor %}
 </ul>
 {% endif %}
-
+</div>
 
 <div id="ajaxyPagingButtons" >
      <button type="button"
@@ -380,6 +380,10 @@
          event.preventDefault();
          console.log("prevented default submit behavior!");
          //action should be Prev, Next or Search, or Download?
+         $("div#form_errors").empty();
+         
+         $("#search_results").remove();   
+         $("#drop-in").empty();
          create_post('search', 'snpid_window');
      });
 
@@ -388,28 +392,27 @@
     //parse the JSON describing the current search; 
     //drop in the current page number
     //rewrite the JSON 
-    function updatePageOfResultsShown(search_paging_info){
+    /*function updatePageOfResultsShown(search_paging_info){
         var val_text = $("div#current_search_params").text();
         values = jQuery.parseJSON(val_text); 
         values.page_of_results_shown = search_paging_info.page_of_results_to_display;
         console.log("setting page number of results shown to : " + values.page_of_results_shown);
         var values_to_save_for_paging = JSON.stringify(values);
         $("div#current_search_params").text(values_to_save_for_paging);
-    } 
+    } */
 
  
     function showHidePrevNext(search_paging_info){
-        if (search_paging_info.show_next_btn){
+        if ( (search_paging_info != null) && (search_paging_info.show_next_btn) ){
           $("#ajaxyPagingButtons #next_button").attr("style", "display:inline;"); 
         }else{
           $("#ajaxyPagingButtons #next_button").attr("style", "display:none;"); 
         }
-        if (search_paging_info.show_prev_btn){
+        if ( (search_paging_info != null) && (search_paging_info.show_prev_btn) ){
           $("#ajaxyPagingButtons #prev_button").attr("style", "display:inline;"); 
         }else{ 
           $("#ajaxyPagingButtons #prev_button").attr("style", "display:none;"); 
         }
-
     }
 
 
@@ -544,13 +547,20 @@
 
           //take the search results and put them into the document.
           function show_search_results(json) {
-            $("#search_results").remove();   
-            $("div#status_message").text(json.status_message);
+            //$("#search_results").remove();    //moved this removal higher up the call chain.
 
-            //what about showing the Prev/Next buttons?
-            showHidePrevNext(json.search_paging_info);
-
-
+            
+            //if ( json.search_paging_info != null ){
+              //what about showing the Prev/Next buttons?
+              showHidePrevNext(json.search_paging_info);
+           // }
+            //else {
+             //   console.log("Not engaging show/hide logic for Prev and Next buttons");
+            //}
+            if (json.api_response == null){ 
+             console.log("No search results returned!"); 
+             return;
+            }
             var content = `<table id="search_results" class="table table-striped table-condensed"> \
               <thead>                                                         \   
               <tr>                                     \ 
@@ -629,6 +639,7 @@
              */
           } 
           values['action'] = action_name;
+          $("div#status_message").text("Processing search... ");
           console.log("about to send ajax with these values:");
           console.log(values);
           $.ajax({
@@ -644,18 +655,33 @@
                   console.log("AJAX call reported success. Next line w/ response");
                   console.log(json);
                   show_search_results(json);
-                  values.page_of_results_shown = json.search_paging_info.page_of_results_to_display;
-                  console.log(" ...  setting page number of results shown to : " + values.page_of_results_shown);
+                  if (json.search_paging_info != null){ 
+                      values.page_of_results_shown =
+                              json.search_paging_info.page_of_results_to_display;
+                      console.log("...setting page number of results shown to:" + values.page_of_results_shown);
+                  }
                   $("#type_of_shown_results").text(search_type);
                   var values_to_save_for_paging = JSON.stringify(values);
                   $("div#current_search_params").text(values_to_save_for_paging);
                   //this should contain a correct version of page_of_results_shown.
+                  $("div#status_message").text(json.status_message);
               },
               error: function(xhr, errmsg, err) {
                   /* would put code down here to append error messages onto the search page.*/
                   console.log(xhr.status + ": " + xhr.responseText);
+                  //MOVE THIS TO ITS OWN FUNCTION:
+                  var errorJSON = jQuery.parseJSON(xhr.responseText);
+                  var errlist = '<ul>';
+                  for ( var j = 0; j < errorJSON.form_errors.length; j++){
+                      errlist += '<li>' + errorJSON.form_errors[j] + '</li>';
+                  } 
+                  errlist += '</ul>';
+                  $("div#form_errors").append(errlist);
+                  $("div#status_message").text(errorJSON.status_message);
+                  showHidePrevNext(null); //hides the next and previous buttons.
               }
           });              
+
           }//end of create_post function.
 
       function clickNext(){
@@ -676,12 +702,20 @@
       function clickNextAJAX(){
            var active_search = $("span#type_of_shown_results")[0].innerText.trim();
            console.log("clicked next AJAX active_search." + active_search);
+           //copied out of the form's on_submit event handler  
+           $("div#form_errors").empty();
+           $("#search_results").remove();   
+           $("#drop-in").empty();
            create_post('Next', active_search); //action name, search type
       }
 
       function clickPrevAJAX(){
            var active_search = $("span#type_of_shown_results")[0].innerText.trim();
            console.log("clicked prev AJAX active_search." + active_search);
+           //copied out of the form's on_submit event handler  
+           $("div#form_errors").empty();
+           $("#search_results").remove();   
+           $("#drop-in").empty();
            create_post('Prev', active_search); //action name, search type
       }
 

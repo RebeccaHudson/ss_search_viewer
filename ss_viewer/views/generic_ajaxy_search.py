@@ -36,14 +36,19 @@ class GenericAjaxySearchView(View):
 
         if not search_form.is_valid() \
           and not request.POST['action'] == 'Download Results':
-            
-            context = StandardFormset.dict_based_setup_formset_context(\
-                                          {self.form_name_in_context:search_form})
+            #context = StandardFormset.dict_based_setup_formset_context(\
+            #                              {self.form_name_in_context:search_form})
+            context = {}
             errs = search_form.errors
+            print "form errors! " + repr(errs)
             context['form_errors'] = \
                [ str(item) for one_error in errs.values() for item in one_error]
-            print "errors context keys : " + str(", ".join([context.keys()]))
-            return StandardFormset.handle_invalid_form(request, context)
+
+            context =  StandardFormset.ajaxy_handle_invalid_form(context)
+            #just sets the status message...
+            return HttpResponse(json.dumps(context), 
+                            content_type="application/json",
+                            status=400) 
 
         self.search_form = search_form
         form_data = self.search_form.cleaned_data

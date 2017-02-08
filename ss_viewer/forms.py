@@ -283,7 +283,13 @@ class SearchBySnpidWindowForm(GenericSearchForm):
     def clean(self):
         cleaned_data = super(SearchBySnpidWindowForm, self).clean()
         gex = re.compile('(rs[0-9]+)')
-        snpid = gex.search(cleaned_data['snpid'])
+        snpid = None
+        if 'snpid' in cleaned_data:
+          #this could be refactored.
+          snpid = gex.search(cleaned_data['snpid'])
+        else:
+            raise forms.ValidationError('SNPid is missing.');       
+ 
         if snpid is not None:
             cleaned_data['snpid'] =  snpid.group(1)
         else:
