@@ -14,7 +14,7 @@
    
    <script type="text/javascript" src="{% static 'ss_viewer/cloneTheSkeleton.js' %}"> </script>  
    <script type="text/javascript" src="{% static 'ss_viewer/plotIntoSVGSkeleton.js' %}"> </script> 
-
+   <script type="text/javascript" src="{% static 'ss_viewer/spin.min.js' %}"> </script> 
 
 </head>
 <body>
@@ -71,6 +71,8 @@
 
 <div id="status_message"> {{ status_message }} </div>
 
+
+<!-- these will go away in favor of AJAXy stuff -->
 <div id="form_errors">
 {% if form_errors %}
 <ul>
@@ -80,6 +82,14 @@
 </ul>
 {% endif %}
 </div>
+
+<div id="download_button" style="display:none;" >
+    <input type="submit" name="action"
+           value="Download Results"
+           class="btn-xs btn-danger"
+           onclick="clickDownloadResultsAJAX();" />
+</div>
+
 
 <div id="ajaxyPagingButtons" >
      <button type="button"
@@ -93,6 +103,7 @@
              id="next_button">
              Next</button>
 </div>
+
 
 
 
@@ -547,20 +558,10 @@
 
           //take the search results and put them into the document.
           function show_search_results(json) {
-            //$("#search_results").remove();    //moved this removal higher up the call chain.
+            showHidePrevNext(json.search_paging_info);
+            //if it's null, no buttons will be shown.
 
-            
-            //if ( json.search_paging_info != null ){
-              //what about showing the Prev/Next buttons?
-              showHidePrevNext(json.search_paging_info);
-           // }
-            //else {
-             //   console.log("Not engaging show/hide logic for Prev and Next buttons");
-            //}
-            if (json.api_response == null){ 
-             console.log("No search results returned!"); 
-             return;
-            }
+            $("#download_button").attr("style", "display: inline;");
             var content = `<table id="search_results" class="table table-striped table-condensed"> \
               <thead>                                                         \   
               <tr>                                     \ 
@@ -615,7 +616,9 @@
           }//end of show_search_results function.
 
       function create_post(action_name, search_type) {
-          if ( (action_name != 'Next') && (action_name != 'Prev') ){
+          if ( (action_name != 'Next') && 
+               (action_name != 'Prev') &&
+               (action_name != 'Download Results')   ){
             var controls_to_scrape = $("div.active form input[id^='id']");
             var values = {};
             for ( var i = 0; i < controls_to_scrape.length; i ++){
@@ -629,17 +632,11 @@
           else{ //if it's for paging, use the values we copied down earlier...
               var val_text = $("div#current_search_params").text();
               values = jQuery.parseJSON(val_text);
-              /*  try to just handle paging on the server side.
-              numericPage = parseInt(values.page_of_results_shown);
-              var pageTurn;
-              if ( action_name == 'Next'){ pageTurn = 1; } 
-              if ( action_name == 'Prev'){ pageTurn = -1; }
-              values.page_of_results_shown = numericPage + pageTurn;
-              console.log("calculated page number as: " + values.page_of_results_shown);
-             */
           } 
           values['action'] = action_name;
-          $("div#status_message").text("Processing search... ");
+          $("div#status_message").text("Working... ");
+          $("div#download_button").attr("style", "display:none;");
+          showHidePrevNext(null); //hides the search buttons while we are working...
           console.log("about to send ajax with these values:");
           console.log(values);
           $.ajax({
@@ -647,6 +644,10 @@
                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
                    }
+                   var target = $("body");
+                   var spinner = new Spinner().spin();
+                   target.append(spinner.el);
+                   console.log("appended spinner!");
               },
               url: "ajaxy-snpid-window-search/",
               type: "POST", 
@@ -665,6 +666,7 @@
                   $("div#current_search_params").text(values_to_save_for_paging);
                   //this should contain a correct version of page_of_results_shown.
                   $("div#status_message").text(json.status_message);
+
               },
               error: function(xhr, errmsg, err) {
                   /* would put code down here to append error messages onto the search page.*/
@@ -679,10 +681,111 @@
                   $("div#form_errors").append(errlist);
                   $("div#status_message").text(errorJSON.status_message);
                   showHidePrevNext(null); //hides the next and previous buttons.
+              },
+              complete: function(){
+                  console.log("complete is acctually happenning; do shared stuff if this triggers for success AND error.");
+                  $("div.spinner").remove();
               }
           });              
 
           }//end of create_post function.
+
+
+       //may be factored back into other create_post function; separate for now.
+      function create_download_post(search_type) {
+          //using the stored values for the download.
+          var val_text = $("div#current_search_params").text();
+          values = jQuery.parseJSON(val_text);
+          values['action'] = 'Download Results';
+
+          var result_text = $("div#status_message").text();
+          $("div#status_message").text("Working... ");
+
+          // Use XMLHttpRequest instead of Jquery $ajax.
+          // SOURCE:
+          //http://stackoverflow.com/questions/28165424/download-file-via-jquery-ajax-post
+          xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+              var a;
+              if (xhttp.readyState === 4 && xhttp.status === 200) {
+                  // Trick for making downloadable link
+                  a = document.createElement('a');
+                  a.href = window.URL.createObjectURL(xhttp.response);
+                  // Give filename you wish to download
+                  a.download = "search-results-down.csv";
+                  a.style.display = 'none';
+                  document.body.appendChild(a);
+                  a.click();
+                  console.log("link clicked, download triggered?");
+                  $("div#status_message").text(result_text);
+              }
+          };
+          // Post data to URL which handles post request
+          //var download_url = "http://atsnp.biostat.wisc.edu/old/ajaxy-snpid-window-search/";
+          var download_url = "ajaxy-snpid-window-search/";
+          xhttp.open("POST", download_url);
+         
+          //is this valid?
+          //xhttp.setRequestHeader("Content-type", "application/json");
+          xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+          xhttp.setRequestHeader("X-CSRFToken", csrftoken);
+         
+          console.log(xhttp);
+          console.log("values for submitting for download; ");
+          console.log(values);
+          // You should set responseType as blob for binary responses
+
+
+          xhttp.responseType = 'blob';
+          xhttp.withCredentials = true;
+          //xhttp.send(values);
+          xhttp.send(JSON.stringify(values));
+          console.log("send XHTTP the post");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       function clickNext(){
            var active_search = $("span#type_of_shown_results")[0].innerText.trim();
@@ -718,7 +821,12 @@
            $("#drop-in").empty();
            create_post('Prev', active_search); //action name, search type
       }
-
+      //this may need to change.
+      function clickDownloadResultsAJAX(){
+           var active_search = $("span#type_of_shown_results")[0].innerText.trim();
+           console.log("clicked Donwload Results AJAX active_search." + active_search);
+           create_download_post(active_search); //action name, search type
+      }
       function clickPrev(){
            var active_search = $("span#type_of_shown_results")[0].innerText.trim();
            if (active_search == 'snpid'){

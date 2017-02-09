@@ -26,6 +26,7 @@ class AjaxySnpidWindowSearchView(GenericAjaxySearchView):
         return api_search_query
 
     def handle_params_for_download(self, form_data):
+        #don't do for ajaxy
         return \
          { 'snpid'       : form_data['prev_search_snpid'], 
            'window_size' : form_data['prev_search_window_size'], 

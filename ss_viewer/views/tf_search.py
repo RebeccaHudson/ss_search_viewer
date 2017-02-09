@@ -19,7 +19,7 @@ class TranscriptionFactorSearchView(GenericSearchView):
             #Use JASPAR motifs.
             trans_factor = form_data['trans_factor']
             motif_value = tft.lookup_motifs_by_tf(form_data['trans_factor'])
-
+            print "motif value for not download " + repr(motif_value)
         api_search_query = {'motif'      :  motif_value, 
                             'tf_library' :  form_data['tf_library'] }
         api_search_query.update(self.get_pvalues_from_form())
@@ -36,6 +36,8 @@ class TranscriptionFactorSearchView(GenericSearchView):
             tft = TFTransformer()
             motif_value = tft.lookup_motifs_by_tf(
                                   form_data['prev_search_trans_factor']),
+            print "motif value for download " + repr(motif_value)
+            motif_value = motif_value[0]
         return \
           {'motif'      : motif_value,
            'pvalue_rank': form_data['prev_search_pvalue_rank_cutoff'],

@@ -24,7 +24,15 @@ class GenericAjaxySearchView(View):
     def post(self, request, *args, **kwargs):
         print "GenericAjaxySearchView is called..."
         search_form = None 
-
+        #print "request.POST contents: " + repr(request.POST)
+        #print "The keys: " + repr(request.POST.keys())
+        #print "first key" + repr(request.POST.keys()[0]) 
+        if len(request.POST.keys()) == 1:
+            print "This is a download; rework the post."
+            st = request.POST.keys()[0]      
+            request.POST = json.loads(st)
+ 
+        #print "The values: " + repr(request.POST.values())
         #get the 'Action' out of the post.
         if request.POST['action'] in ['Prev', 'Next']:
             oneDict = request.POST.dict()
@@ -53,9 +61,9 @@ class GenericAjaxySearchView(View):
         self.search_form = search_form
         form_data = self.search_form.cleaned_data
 
-        #TODO: find a way to sidestep validation for Prev, Next, and Download. 
-        #EG: would I just call 'data' or something?
         if request.POST['action'] == 'Download Results':
+            print "handling download!"
+            print "data from search form " + repr(self.search_form.cleaned_data)
             return self.handle_download(self.search_form.cleaned_data, request)
    
         #don't get it out of the form data? We are not scraping the form data for this.
@@ -105,15 +113,17 @@ class GenericAjaxySearchView(View):
         return context
 
     def handle_download(self, form_data, request):
-        prev_search_params = self.handle_params_for_download(form_data)
-        if form_data['prev_search_pvalue_ref_cutoff'] is not None:
-               prev_search_params.update(
-                {'pvalue_ref'  : form_data['prev_search_pvalue_ref_cutoff']})
-        if form_data['prev_search_pvalue_snp_cutoff'] is not None:
-               prev_search_params.update(
-                {'pvalue_snp'  : form_data['prev_search_pvalue_snp_cutoff']})
+        search_params = form_data #self.handle_params_for_download(form_data)
+        search_params.update(self.get_pvalues_from_form())
+        #give names to the pvalue fields that are expected by the API.
+        #if form_data['prev_search_pvalue_ref_cutoff'] is not None:
+        #       prev_search_params.update(
+        #        {'pvalue_ref'  : form_data['prev_search_pvalue_ref_cutoff']})
+        #if form_data['prev_search_pvalue_snp_cutoff'] is not None:
+        #       prev_search_params.update(
+        #        {'pvalue_snp'  : form_data['prev_search_pvalue_snp_cutoff']})
         return StreamingCSVDownloadHandler.streaming_csv_view(request, 
-                                                               prev_search_params, 
+                                                               search_params, 
                                                                self.api_action_name)
     def get_pvalues_from_form(self):
         pvalues_for_search = {}
