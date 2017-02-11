@@ -194,20 +194,10 @@
 
         $('#tabs').tab();
 
-        /* either have JASPAR selected by default, or if it's 
-           what was being used before*/
-        var prev_search_tf_lib = $("#id_prev_search_tf_library").val();
-        if (  (  prev_search_tf_lib == '' )  ||  ( prev_search_tf_lib == 'jaspar'  ) ){
+        /* have JASPAR selected by default */
             $('#id_encode_trans_factor').attr('disabled', 'disabled');
             $('#id_tf_library_0').attr('checked', 'checked');
             $('#id_tf_library_1').removeAttr('checked');
-        }else {
-            /* select encode initially on page load if it is what was
-               being searched in previously*/
-            $('#id_trans_factor').attr('disabled', 'disabled');
-            $('#id_tf_library_1').attr('checked', 'checked');
-            $('#id_tf_library_0').removeAttr('checked');
-        }
 
         /* enable and disable the Transcription Factor selectors based 
            on which one the user is going to search*/
@@ -220,7 +210,6 @@
                 $("#id_encode_trans_factor").attr('disabled', 'disabled');
                 $("#id_trans_factor").removeAttr('disabled');
                }
-
          });
          //cloneSVGSkeleton(plottingData);
          /* end of document.ready stuff */
@@ -249,17 +238,6 @@
         $("td.show_plots > button").click(function(e) {
                                 var plotstr_attr = e.target.attributes.getNamedItem('plotstr');
                                 var plot_str  = plotstr_attr.value;
-                                /* hides the currently shown plot */
-                                //console.dir(e.target);
-                                //var jtarget = $("td#plot_data_".concat(plot_str));
-                                //var json_to_plot = jtarget[0].textContent.trim();
-
-                               // plottingData = jQuery.parseJSON(json_to_plot); 
-                                //console.log("json to plot: " + plottingData);
-                                
-                                // makeAPlot(plottingData, "target-0"); 
-                                /* the code below would be useful for showing/hiding
-                                   all of the plots prepared for this one page */ 
                                 var currently_shown_plot = $("div.show-plot");
                                 currently_shown_plot.removeClass('show-plot');
                                 currently_shown_plot.addClass('hidden'); 
