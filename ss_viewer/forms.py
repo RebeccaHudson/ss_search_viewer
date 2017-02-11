@@ -3,7 +3,6 @@ from django.conf import settings
 import os
 import pickle
 import re
-#from ss_viewer.views.snpid_classbased_search import SnpidSearchUtils
 
 #Each form type has a p-value cutoff and a page number of results shown.
 class GenericSearchForm(forms.Form):
@@ -22,8 +21,6 @@ class GenericSearchForm(forms.Form):
                                           label = "P-value cutoff",
                                           required=False 
                                           )
-    prev_search_pvalue_rank_cutoff = forms.FloatField(widget = forms.HiddenInput(), required = False)
-
 
     pvalue_snp_cutoff = forms.FloatField(widget=styled_widget, 
                                            max_value=1,
@@ -31,9 +28,6 @@ class GenericSearchForm(forms.Form):
                                            initial=default_cutoff,
                                            label = "P-value SNP cutoff",
                                            required = False)
-    prev_search_pvalue_snp_cutoff = \
-            forms.FloatField(widget = forms.HiddenInput(), required = False)
-
  
     pvalue_ref_cutoff = forms.FloatField(widget=styled_widget, 
                                            max_value=1,
@@ -41,9 +35,6 @@ class GenericSearchForm(forms.Form):
                                            initial=default_cutoff,
                                            label = "P-value Reference cutoff",
                                            required = False)
-    prev_search_pvalue_ref_cutoff = \
-            forms.FloatField(widget = forms.HiddenInput(), required = False)
-    
     
     def clean(self):
         cleaned_data = super(GenericSearchForm, self).clean()
@@ -82,8 +73,6 @@ class SearchBySnpidForm(GenericSearchForm):
                                      label=text_to_explain_snpbox,
                                      )
 
-    prev_search_raw_requested_snpids = forms.CharField(widget = forms.HiddenInput(),
-                                        required = False)
     file_of_snpids = forms.FileField(required=False,
                                      label = "File of SNPids")
  
@@ -134,9 +123,6 @@ class SearchByGenomicLocationForm(GenericSearchForm):
                                       label = gl_pos_label_text['start'], 
                                       required=False,
                                       min_value = 0 )
-    prev_search_gl_start_pos = forms.IntegerField(widget = forms.HiddenInput(),
-                                                required = False)
-   
 
     gl_end_pos = forms.IntegerField(widget=
                                         forms.NumberInput(attrs={"class":'form-control',
@@ -147,9 +133,6 @@ class SearchByGenomicLocationForm(GenericSearchForm):
                                     required=False,
                                     min_value = 1)
 
-    prev_search_gl_end_pos = forms.IntegerField(widget = forms.HiddenInput(),
-                                                required = False)
-
     chromosomes = [ "ch" + str(x) for x in range(1, 23) ]
     chromosomes.extend(['chX', 'chY', 'chM'])
     #all of the choices look like this: choices_for_chromosome =  ( ('ch1', 'ch1' ), ) 
@@ -159,9 +142,6 @@ class SearchByGenomicLocationForm(GenericSearchForm):
     selected_chromosome = forms.ChoiceField(widget=styled_widget,
                                             choices= zip(chromosomes,chromosomes),
                                             label="Select a chromosome")
-
-    prev_search_selected_chromosome = forms.CharField(widget = forms.HiddenInput(),
-                                               required=False)
 
     #ensure ranges are within hard limits.  
     def clean(self):
@@ -201,10 +181,6 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
                                    widget=styled_widget,
                                    initial='jaspar',
                                    label = "Select a transcription factor library.")
-    prev_search_tf_library = forms.CharField(widget = forms.HiddenInput(), required = False)
-
-
-
 
     lut = None
     fpath = os.path.dirname(__file__) + '/lookup-tables' +\
@@ -249,12 +225,6 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
                                             label = "Select ENCODE transcription factor",
                                             required = False)
 
-    prev_search_trans_factor = forms.CharField(widget = forms.HiddenInput(),
-                                               required=False)
-    prev_search_encode_trans_factor = forms.CharField(widget = forms.HiddenInput(),
-                                               required=False)
-
-
 class SearchBySnpidWindowForm(GenericSearchForm):
     styled_widget = forms.TextInput(attrs={"class":"form-control",
                                            "title": "Search for data with a window "+\
@@ -268,9 +238,6 @@ class SearchBySnpidWindowForm(GenericSearchForm):
                                              "title": "Search for data within + and - this "+\
                                                       "number of bases of the position of " +\
                                                       "the snpid."})
-    prev_search_snpid = forms.CharField(widget = forms.HiddenInput(),
-                                        required = False)
-
     #TODO: figure out what the max_value on this should actually be.
     window_size = forms.IntegerField(widget = styled_widget,
                                      label = "Window size",
@@ -278,8 +245,6 @@ class SearchBySnpidWindowForm(GenericSearchForm):
                                      min_value = 0)
     window_size.error_messages = { 'required': 'Missing window size (required).'}
 
-    prev_search_window_size = forms.IntegerField(widget = forms.HiddenInput(),
-                                                required = False)
     def clean(self):
         cleaned_data = super(SearchBySnpidWindowForm, self).clean()
         gex = re.compile('(rs[0-9]+)')
@@ -305,9 +270,6 @@ class SearchByGeneNameForm(GenericSearchForm):
                                 label = "Gene Symbol",
                                 required = True)
 
-    prev_search_gene_name = forms.CharField(widget = forms.HiddenInput(), 
-                                            required = False)
-
     styled_widget = forms.NumberInput(attrs={"class":'form-control',
                                              'step':1,
                                              "title" : "Search for data within the " +\
@@ -321,6 +283,3 @@ class SearchByGeneNameForm(GenericSearchForm):
                                      initial = 1000, 
                                      min_value = 0)
     window_size.error_messages = { 'required': 'Missing window size (required).'}
-
-    prev_search_window_size = forms.IntegerField(widget = forms.HiddenInput(),
-                                                required = False)
