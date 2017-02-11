@@ -276,16 +276,6 @@
            } 
        } 
        console.log("completed plotting!");
-       //$( this ).addClass( "foo" );
-
-       /*
-       $("form").onsubmit = function(evt)  {
-        var event = evt || window.event;
-        alert("boo far");
-        alert(event.target.id); // myform
-        alert(event.explicitOriginalTarget.id); 
-       }*/
-
 
     //make the shown plot downloadable
     //start the plot downloading code.
@@ -362,8 +352,15 @@
 
       });
       //end of the plot downloading code.
+   
+
+    //submit forms asynchronously. 
+    setupAjaxyFormSubmissions();
 
 
+    });//end of document.ready stuff.
+
+    function setupAjaxyFormSubmissions(){
      //beginning of AJAXY search handling code.   
      //could be nicely refactored.
      $("#snpid_window_form").on('submit', function(event){
@@ -391,9 +388,12 @@
          hideControlsDuringSearch();
          create_search_post('search', 'trans-factor-search');
      });
+    }
 
 
-    });//end of document.ready stuff.
+
+
+
 
     function hideControlsDuringSearch(){
          $("div#form_errors").empty();
