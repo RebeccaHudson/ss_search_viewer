@@ -128,13 +128,6 @@ class GenericAjaxySearchView(View):
         #was setting search_params = form_data, but that's sending too much stuff in.
         search_params = self.handle_params_for_download(form_data)
         search_params.update(self.get_pvalues_from_form())
-        #give names to the pvalue fields that are expected by the API.
-        #if form_data['prev_search_pvalue_ref_cutoff'] is not None:
-        #       prev_search_params.update(
-        #        {'pvalue_ref'  : form_data['prev_search_pvalue_ref_cutoff']})
-        #if form_data['prev_search_pvalue_snp_cutoff'] is not None:
-        #       prev_search_params.update(
-        #        {'pvalue_snp'  : form_data['prev_search_pvalue_snp_cutoff']})
         return StreamingCSVDownloadHandler.streaming_csv_view(request, 
                                                                search_params, 
                                                                self.api_action_name)
