@@ -211,9 +211,21 @@
                 $("#id_trans_factor").removeAttr('disabled');
                }
          });
-         //cloneSVGSkeleton(plottingData);
-         /* end of document.ready stuff */
+    setupSearchDemos();
 
+    /* blank out the snpdis requested if the file upload button is clicked. */
+    $("#id_file_of_snpids").click(function(e)  { $("#id_raw_requested_snpids").val(""); }); 
+  
+    drawPlotsInline();
+
+    setupPlotDownloads();
+
+    //Event listeners to submit forms asynchronously. 
+    setupAjaxyFormSubmissions();
+
+    });//end of document.ready stuff.
+
+    function setupSearchDemos(){
         /* clickable examples for demo searches */
         $("#snpid-search-demo").click(function(e){ 
                                        $('#id_raw_requested_snpids').val(
@@ -248,10 +260,12 @@
                                 div_to_show_now.addClass('show-plot');
                                 window.scrollTo(0, 0); /* scroll to the top of the page */
                                }); 
+    }
 
-       /* blank out the snpdis requested if the file upload button is clicked. */
-       $("#id_file_of_snpids").click(function(e)  { $("#id_raw_requested_snpids").val(""); }); 
-  
+
+
+    //Draws plots in-line inside the table of search results.
+    function drawPlotsInline(){
        /* plotting data from each of the searched items.*/
        //moved into a function for calling when AJAX results are returned.
        var plottingData = [];
@@ -276,12 +290,75 @@
            } 
        } 
        console.log("completed plotting!");
+    }
 
-    //make the shown plot downloadable
-    //start the plot downloading code.
-    var btn = document.querySelector('button#save_plot');
-    var canvas =  document.querySelector('canvas');
-    
+
+
+    function setupPlotDownloads(){
+        //make the shown plot downloadable
+        //start the plot downloading code.
+        var btn = document.querySelector('button#save_plot');
+        var canvas =  document.querySelector('canvas');
+        
+
+         btn.addEventListener('click', function () {
+         var svg = document.querySelector('div.show-plot > svg');
+         svg = svg.cloneNode(true); //can I make a deep copy?
+         svg.setAttribute("id", "tempSVG");
+         // works OK
+         //appends   the definitions
+         var defs = d3.select(svg).append("defs").append("marker")
+                                     .attr("id","Triangle")
+                                     .attr("markerWidth","5")
+                                     .attr("markerHeight","3")
+                                     .attr("stroke", "blue")
+                                     .attr("orient", "auto")
+                                     .attr("viewBox", "0 0 10 10")
+                                     .attr('refX', '1')
+                                     .attr('refY', '5')
+                                     .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
+          var canvas = document.getElementById('canvas');
+          canvas.setAttribute('width',  $("div.show-plot svg").attr('width'));
+          //400 - 30 = 370
+          var ctx = canvas.getContext('2d');
+
+          // Reset the canvas to remove any plots drawn before this one 
+          //taken from :http://www.html5canvastutorials.com/advanced/html5-clear-canvas/ 
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+     
+          var data = (new XMLSerializer()).serializeToString(svg);
+          var DOMURL = window.URL || window.webkitURL || window;
+
+          var img = new Image();
+          console.log("just created new img.");
+          var svgBlob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
+          var url = DOMURL.createObjectURL(svgBlob);
+
+          img.onload = function () {
+            console.log("about to call drawImage");
+            ctx.drawImage(img, 0, -30);
+            DOMURL.revokeObjectURL(url);
+
+            //d3.selectAll('div.show-plot > svg > defs').remove();
+            //console.log("remove defs..");
+
+            var imgURI = canvas
+                .toDataURL('image/png')
+                .replace('image/png', 'image/octet-stream');
+
+            triggerDownload(imgURI);
+            console.log("returned from trigger download");
+          };
+      
+          img.src = url;
+
+          });
+          //end of the plot downloading code.
+    }
+
+
+
     function triggerDownload(imgURI) {
       console.log("triggering download.");
       var evt = new MouseEvent('click', {
@@ -298,67 +375,31 @@
 
       a.dispatchEvent(evt);
     }
-     btn.addEventListener('click', function () {
-     var svg = document.querySelector('div.show-plot > svg');
-     svg = svg.cloneNode(true); //can I make a deep copy?
-     svg.setAttribute("id", "tempSVG");
-     // works OK
-     //appends   the definitions
-     var defs = d3.select(svg).append("defs").append("marker")
-                                 .attr("id","Triangle")
-                                 .attr("markerWidth","5")
-                                 .attr("markerHeight","3")
-                                 .attr("stroke", "blue")
-                                 .attr("orient", "auto")
-                                 .attr("viewBox", "0 0 10 10")
-                                 .attr('refX', '1')
-                                 .attr('refY', '5')
-                                 .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
-      var canvas = document.getElementById('canvas');
-      canvas.setAttribute('width',  $("div.show-plot svg").attr('width'));
-      //400 - 30 = 370
-      var ctx = canvas.getContext('2d');
-
-      // Reset the canvas to remove any plots drawn before this one 
-      //taken from :http://www.html5canvastutorials.com/advanced/html5-clear-canvas/ 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
- 
-      var data = (new XMLSerializer()).serializeToString(svg);
-      var DOMURL = window.URL || window.webkitURL || window;
-
-      var img = new Image();
-      console.log("just created new img.");
-      var svgBlob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
-      var url = DOMURL.createObjectURL(svgBlob);
-
-      img.onload = function () {
-        console.log("about to call drawImage");
-        ctx.drawImage(img, 0, -30);
-        DOMURL.revokeObjectURL(url);
-
-        //d3.selectAll('div.show-plot > svg > defs').remove();
-        //console.log("remove defs..");
-
-        var imgURI = canvas
-            .toDataURL('image/png')
-            .replace('image/png', 'image/octet-stream');
-
-        triggerDownload(imgURI);
-        console.log("returned from trigger download");
-      };
-  
-      img.src = url;
-
-      });
-      //end of the plot downloading code.
-   
-
-    //submit forms asynchronously. 
-    setupAjaxyFormSubmissions();
 
 
-    });//end of document.ready stuff.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     function setupAjaxyFormSubmissions(){
      //beginning of AJAXY search handling code.   
@@ -389,20 +430,12 @@
          create_search_post('search', 'trans-factor-search');
      });
     }
-
-
-
-
-
-
     function hideControlsDuringSearch(){
          $("div#form_errors").empty();
          $("#search_results").remove();   
          $("#drop-in").empty();
     }
 
-
- 
     function showHidePrevNext(search_paging_info){
         if ( (search_paging_info != null) && (search_paging_info.show_next_btn) ){
           $("#ajaxyPagingButtons #next_button").attr("style", "display:inline;"); 
@@ -425,8 +458,7 @@
          var svg = document.querySelector('div.show-plot > svg');
          svg = svg.cloneNode(true); //can I make a deep copy?
          svg.setAttribute("id", "tempSVG");
-         // works OK
-         //appends   the definitions
+         //appends the definitions
          var defs = d3.select(svg).append("defs").append("marker")
                                      .attr("id","Triangle")
                                      .attr("markerWidth","5")
