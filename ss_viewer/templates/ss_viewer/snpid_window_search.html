@@ -32,32 +32,10 @@
   </tr>
 </tbody>
 </table>
-  {# Include the hidden fields #}
-  {% for hidden in snpid_window_form.hidden_fields %}
-  {{ hidden }}
-  {% endfor %}
-
       <div class="submit-buttons">
           <input type="submit" name="action" value="Search by Window around SNPid"  
                                                           class="btn btn-primary" />
-          {% if search_paging_info != None and active_tab == 'snpid-window'  %}
-
-            {% if search_paging_info.show_prev_btn == True %}
-                <input type="submit"  style="display: none;" name="action" value="Prev"  class="btn btn-info" /> 
-            {% endif %}
-
-            {% if search_paging_info.show_next_btn == True %}
-                <input type="submit"  style="display: none;" name="action" value="Next" class="btn btn-info" /> 
-            {% endif %}
-            
-          {% endif %}
        </div><!-- end div for submit buttons. -->
        <button id="snpid-window-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
-
-     {% if search_paging_info != None  and active_tab == 'snpid-window' %}
-       <input type="submit" name="action" 
-         value="Download Results" class="btn-xs btn-danger"
-         onclick="return confirm('Downloads can take a while,\n if the dataset is > 60000 rows,only the first 60,000 rows will be downloaded.')" />
-     {% endif %}
   </form>
 </div>
