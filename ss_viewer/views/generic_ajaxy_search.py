@@ -31,6 +31,9 @@ class GenericAjaxySearchView(View):
             print "This is a download; rework the post."
             st = request.POST.keys()[0]      
             request.POST = json.loads(st)
+        print "request.META" + repr(request.META)
+        print "request.POST: " + repr(request.POST)
+        print "request? " + repr(request)
  
         #print "The values: " + repr(request.POST.values())
         #get the 'Action' out of the post.
@@ -86,8 +89,17 @@ class GenericAjaxySearchView(View):
               
         context.update(shared_context)
         print "context keys : " + repr(context.keys())
+        #don't send the file back into the form..
+        print "context['form_data']: "  + repr(context['form_data'])
         #can I still get the info for the form? AS WELL AS adding a rendered template?
         #does the rendered templatel appear under the test_template key?
+
+
+        #don't pass back ALL of the form data that was sent in.
+        if 'file_of_snpids' in context['form_data'].keys() and context['form_data']['file_of_snpids'] is not None:
+           del context['form_data']['file_of_snpids'] 
+           del context['form_data']['prev_search_file_of_snpids'] 
+
 
         #setup a template for the search results portion of the page; 
         #  pass the context into this template, then render that template
@@ -113,7 +125,8 @@ class GenericAjaxySearchView(View):
         return context
 
     def handle_download(self, form_data, request):
-        search_params = form_data #self.handle_params_for_download(form_data)
+        #was setting search_params = form_data, but that's sending too much stuff in.
+        search_params = self.handle_params_for_download(form_data)
         search_params.update(self.get_pvalues_from_form())
         #give names to the pvalue fields that are expected by the API.
         #if form_data['prev_search_pvalue_ref_cutoff'] is not None:

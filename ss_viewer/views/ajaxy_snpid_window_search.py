@@ -28,8 +28,8 @@ class AjaxySnpidWindowSearchView(GenericAjaxySearchView):
     def handle_params_for_download(self, form_data):
         #don't do for ajaxy
         return \
-         { 'snpid'       : form_data['prev_search_snpid'], 
-           'window_size' : form_data['prev_search_window_size'], 
-           'pvalue_rank' : form_data['prev_search_pvalue_rank_cutoff']  }
+         { 'snpid'       : form_data['snpid'], 
+           'window_size' : form_data['window_size'], 
+           'pvalue_rank' : form_data['pvalue_rank_cutoff']  }
  
 
