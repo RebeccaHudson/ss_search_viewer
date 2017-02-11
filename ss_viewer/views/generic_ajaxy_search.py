@@ -22,41 +22,29 @@ class GenericAjaxySearchView(View):
         return redirect(reverse('ss_viewer:multi-search')) 
    
     def post(self, request, *args, **kwargs):
-        print "GenericAjaxySearchView is called..."
         search_form = None 
-        #print "request.POST contents: " + repr(request.POST)
-        #print "The keys: " + repr(request.POST.keys())
-        #print "first key" + repr(request.POST.keys()[0]) 
         if len(request.POST.keys()) == 1:
             print "This is a download; rework the post."
             st = request.POST.keys()[0]      
             request.POST = json.loads(st)
-        print "request.META" + repr(request.META)
-        print "request.POST: " + repr(request.POST)
-        print "request? " + repr(request)
  
-        #print "The values: " + repr(request.POST.values())
         #get the 'Action' out of the post.
         if request.POST['action'] in ['Prev', 'Next']:
             oneDict = request.POST.dict()
-            #just passing in stored values..
-            #oneDict = self.copy_hidden_fields_into_form_data(oneDict)
             search_form = self.form_class(oneDict)
         else: 
             search_form = self.form_class(request.POST, request.FILES)
 
         if not search_form.is_valid() \
           and not request.POST['action'] == 'Download Results':
-            #context = StandardFormset.dict_based_setup_formset_context(\
-            #                              {self.form_name_in_context:search_form})
             context = {}
             errs = search_form.errors
-            print "form errors! " + repr(errs)
             context['form_errors'] = \
                [ str(item) for one_error in errs.values() for item in one_error]
 
-            context =  StandardFormset.ajaxy_handle_invalid_form(context)
+            context =  StandardFormset.handle_invalid_form(context)
             #just sets the status message...
+
             return HttpResponse(json.dumps(context), 
                             content_type="application/json",
                             status=400) 
@@ -66,10 +54,9 @@ class GenericAjaxySearchView(View):
 
         if request.POST['action'] == 'Download Results':
             print "handling download!"
-            print "data from search form " + repr(self.search_form.cleaned_data)
+            #print "data from search form " + repr(self.search_form.cleaned_data)
             return self.handle_download(self.search_form.cleaned_data, request)
    
-        #don't get it out of the form data? We are not scraping the form data for this.
         search_request_params = Paging.get_paging_info_for_request(request, 
                                              form_data['page_of_results_shown']) 
 
@@ -88,40 +75,21 @@ class GenericAjaxySearchView(View):
                                                  search_request_params)
               
         context.update(shared_context)
-        print "context keys : " + repr(context.keys())
-        #don't send the file back into the form..
-        print "context['form_data']: "  + repr(context['form_data'])
-        #can I still get the info for the form? AS WELL AS adding a rendered template?
-        #does the rendered templatel appear under the test_template key?
-
+        #print "context keys : " + repr(context.keys())
 
         #don't pass back ALL of the form data that was sent in.
         if 'file_of_snpids' in context['form_data'].keys() and context['form_data']['file_of_snpids'] is not None:
            del context['form_data']['file_of_snpids'] 
-           del context['form_data']['prev_search_file_of_snpids'] 
 
-
-        #setup a template for the search results portion of the page; 
-        #  pass the context into this template, then render that template
-        # back to the AJAX request. Then use JS to append that to the DOM.
-        #return render(request, 'ss_viewer/multi-searchpage.html',  context)
-        #do search results come through without changing any logic?
         return HttpResponse(json.dumps(context), 
                             content_type="application/json") 
 
     def handle_paging_and_return_context(self, form_data,
                                                     search_request_params):
-        #may not need to actually use this anymore.
-        form_data = self.copy_valid_form_data_into_hidden_fields(form_data)
         form_data['page_of_results_shown'] =  \
                         search_request_params['page_of_results_to_display']
         self.search_form = self.form_class(form_data)
-        #Do not include the forms in the context with the results.
-        #context = StandardFormset.dict_based_setup_formset_context(
-        #                           {self.form_name_in_context:self.search_form})
-        #May have to PUSH THE json values into the form whose data was submitted.
         context = { 'form_data' : self.search_form.data }
-        #Where do we put the paging info into the 'search 
         return context
 
     def handle_download(self, form_data, request):
@@ -143,18 +111,18 @@ class GenericAjaxySearchView(View):
 
     #The next 3 methods are for copying data to and from hidden form fields to
     #maintain consistency between pages of search results and Downloads.
-    def get_list_of_fields_to_copy(self):
-        return [ onefield for onefield in self.form_class.base_fields.keys() \
-                if  not re.match("^prev_search", onefield) ]
+    #def get_list_of_fields_to_copy(self):
+    #    return [ onefield for onefield in self.form_class.base_fields.keys() \
+    #            if  not re.match("^prev_search", onefield) ]
 
-    def copy_valid_form_data_into_hidden_fields(self, form_data):
-        for form_field in self.get_list_of_fields_to_copy():
-            if form_field in form_data:
-                form_data['prev_search_' + form_field] = form_data[form_field]
-        return form_data
+    #def copy_valid_form_data_into_hidden_fields(self, form_data):
+    #    for form_field in self.get_list_of_fields_to_copy():
+    #        if form_field in form_data:
+    #            form_data['prev_search_' + form_field] = form_data[form_field]
+    #    return form_data
  
-    def copy_hidden_fields_into_form_data(self, form_data):
-        for form_field in self.get_list_of_fields_to_copy():
-            if 'prev_search_' + form_field in form_data:
-                form_data[form_field]  = form_data['prev_search_' + form_field]
-        return form_data
+    #def copy_hidden_fields_into_form_data(self, form_data):
+    #    for form_field in self.get_list_of_fields_to_copy():
+    #        if 'prev_search_' + form_field in form_data:
+    #            form_data[form_field]  = form_data['prev_search_' + form_field]
+    #    return form_data
