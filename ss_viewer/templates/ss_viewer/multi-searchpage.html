@@ -643,10 +643,8 @@
          console.log(form_data.getAll('pvalue_rank_cutoff'));
          console.log("getAll returns: " + form_data.getAll('pvalue_rank_cutoff'));
          
-
-         form_data['search_type'] = search_type;
-         form_data['action'] = action_name
-
+         form_data.append('search_type', search_type);
+         form_data.append('action',  action_name);
 
          var url_endpoint = 'ajaxy-' + search_type + '/';
 
