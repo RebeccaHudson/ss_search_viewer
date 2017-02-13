@@ -207,13 +207,19 @@ class StandardFormset:
                           'active_tab'     : 'none-yet'})
           return render(request, searchpage_template, context)
 
+     #@staticmethod
+     #def handle_invalid_form(request, context, status_message=None):
+     #     if status_message == None:
+     #         status_message =  "Invalid search. Try agian."
+     #     context.update({'status_message' :  status_message })
+     #     return render(request, 'ss_viewer/multi-searchpage.html', context) 
+
      @staticmethod
-     def handle_invalid_form(request, context, status_message=None):
+     def handle_invalid_form(context, status_message=None):
           if status_message == None:
               status_message =  "Invalid search. Try agian."
           context.update({'status_message' :  status_message })
-          return render(request, 'ss_viewer/multi-searchpage.html', context) 
-
+          return context
 
 class Paging:
     @staticmethod
@@ -255,8 +261,7 @@ class APIResponseHandler:
     @staticmethod 
     #meant to handle one page of results at a time.
     #start with just the first result
-    #TODO: remove 'for_rows_with_plots' from the name of this method
-    def get_plots_for_rows_with_plots(rows_to_display):
+    def get_plots(rows_to_display):
         plot_data = {} 
         field_names = ['motif', 'snpid', 'snpAllele'] 
         first_plot_id_str = None
@@ -336,7 +341,7 @@ class APIResponseHandler:
             response_data = mt.transform_motifs_to_transcription_factors(response_json['data'])
 
             #slyly avoiding nested dictionaries. 
-            plot_data = APIResponseHandler.get_plots_for_rows_with_plots(response_data)
+            plot_data = APIResponseHandler.get_plots(response_data)
 
             if plot_data is not None: #append the plot id strings to each row..
                 response_data = plot_data['response_data']
@@ -355,60 +360,6 @@ class APIResponseHandler:
                  'first_plot_id_str'  : first_plot_id_str }
     
 
-    @staticmethod
-    #THIS METHOD MAY NOT BE NEEDED...
-    #api_action should be 'search-by-tf' or 'search-by-gl'
-    #This code gets repeated between every search.
-    def handle_ajaxy_search(api_search_query, api_action, search_request_params):
-        response_data = None
-        plot_source = None
-        first_plot_id_str = None
-        api_response = None
-        search_paging_info = None
-        print "attempting AJAXY search"
-        try:
-            api_response = requests.post( APIUrls.setup_api_url(api_action),
-                                      json=api_search_query, 
-                                      timeout=300,
-                                      headers={'content-type':'application/json'})
-        except requests.exceptions.Timeout:
-             print "Request timed out !! for the following query" + str(api_search_query) 
-
-        if api_response is  None:
-             status_message = "API timed out. Request took too long."
-        elif api_response.status_code == 204:
-            status_message = 'No matching rows.'
-        elif api_response.status_code == 500:
-            status_message = 'API error; no data returned.'
-            if len(api_response.text) > 0 and len(api_response.text) < 200:
-                status_message += " More info: "+api_response.text.replace('"', "")
-
-        elif api_response.status_code == 400:
-            status_message = "Problem with search: " + api_response.text.replace('"', "")
-        else:
-            response_json = json.loads(api_response.text)
-            print "response json " + str(response_json['data'][0].keys())
-            mt = MotifTransformer()
-            response_data = mt.transform_motifs_to_transcription_factors(response_json['data'])
-
-            #slyly avoiding nested dictionaries. 
-            plot_data = APIResponseHandler.get_plots_for_rows_with_plots(response_data)
-
-            if plot_data is not None: #append the plot id strings to each row..
-                response_data = plot_data['response_data']
-                plot_source = plot_data['plot_data']          
-                first_plot_id_str = plot_data['first_plot_id_str']
-
-            status_message = APIResponseHandler.setup_hits_message(response_json['hitcount'], 
-                                       search_request_params['page_of_results_to_display'])
-
-            search_paging_info = Paging.get_paging_info_for_display(response_json['hitcount'],
-                                        search_request_params['page_of_results_to_display'])
-        return  {'status_message' : status_message, 
-                 'search_paging_info' : search_paging_info,
-                 'api_response'       : response_data,
-                 'plot_source'          : plot_source,
-                 'first_plot_id_str'  : first_plot_id_str }
 
 """An object that implements just the write method of the file-like
 interface.
