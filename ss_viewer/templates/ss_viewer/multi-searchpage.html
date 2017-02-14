@@ -54,8 +54,8 @@
    <div id="plots">
    {% include "ss_viewer/svg_skeleton.html" %}
    <!-- this should hide unless a plot is shown -->
-   <button id="save_plot" type="button" style="display:none;" class="btn btn-link">
-   Save Plot </button>
+   <!-- <button id="save_plot" type="button" style="display:none;" class="btn btn-link">
+   Save Plot </button> -->
    </div>
 </div>
  <canvas id="canvas" style="display:none;" width="800" height="370"></canvas>
@@ -137,7 +137,7 @@
   
     drawPlotsInline();
 
-    setupPlotDownloads();
+    //setupPlotDownloads();
     setupShowPlotButtons();
 
     //Event listeners to submit forms asynchronously. 
@@ -147,8 +147,11 @@
 
     });//end of document.ready stuff.
 
+
+    //does this get used?
+    // Seems to not be used.
     function setupShowPlotButtons(){
-        $("td.show_plots > button").click(function(e) {
+        $("td.show_plots > button[id^='show_plot']").click(function(e) {
                                 var plotstr_attr = e.target.attributes.getNamedItem('plotstr');
                                 var plot_str  = plotstr_attr.value;
                                 var currently_shown_plot = $("div.show-plot");
@@ -162,6 +165,10 @@
                                 window.scrollTo(0, 0); /* scroll to the top of the page */
                                }); 
     }
+
+
+
+
 
     //Draws plots in-line inside the table of search results.
     function drawPlotsInline(){
@@ -184,7 +191,7 @@
              //console.log("adding hidden class to " + targetSVGid);
              $("#"+targetSVGid).parent().addClass("hidden");
            }else {
-             $("#save_plot").attr('style', 'display: inline;');
+             //$("#save_plot").attr('style', 'display: inline;');
              $("#"+targetSVGid).parent().addClass("show-plot");
            } 
        } 
@@ -192,17 +199,10 @@
     }
 
 
-
-    function setupPlotDownloads(){
-        //make the shown plot downloadable
-        //start the plot downloading code.
-
-        //copy the SVG to dowload into a new DOM nodel
-        //append the required DEFs to it.
-        var btn = document.querySelector('button#save_plot');
-        var canvas =  document.querySelector('canvas');
-        
-         btn.addEventListener('click', function () {
+    //add this as an event listener for the inline plot downloads.
+    //for the 'download plot' button that's inline.
+    function handleInlinePlotDownload(){
+         console.log("hit the function to  handleInlinePlotDownload");
          var svg = document.querySelector('div.show-plot > svg');
          svg = svg.cloneNode(true); //makes a deep copy.
          svg.setAttribute("id", "tempSVG");
@@ -231,9 +231,8 @@
           var data = (new XMLSerializer()).serializeToString(svg);
           svgImage(data);
 
-          });//end of 'Download Plot' button click event listener.
-          //end of the plot downloading code.
-    }//end of setupPlotDownloads function
+    }//end of 'Download Plot' button click event listener.
+    //end of the plot downloading code.
 
 
 
@@ -332,85 +331,43 @@ function svgImage(xml) {
     }
 
 
-    function setupPlotDownloadsForSearchResults(){
-       var btn = document.querySelector('button#save_plot');
-       var canvas =  document.querySelector('canvas');
-
-         btn.addEventListener('click', function () {
-         var svg = document.querySelector('div.show-plot > svg');
-         svg = svg.cloneNode(true); //can I make a deep copy?
-         svg.setAttribute("id", "tempSVG");
-         //appends the definitions
-         var defs = d3.select(svg).append("defs").append("marker")
-                                     .attr("id","Triangle")
-                                     .attr("markerWidth","5")
-                                     .attr("markerHeight","3")
-                                     .attr("stroke", "blue")
-                                     .attr("orient", "auto")
-                                     .attr("viewBox", "0 0 10 10")
-                                     .attr('refX', '1')
-                                     .attr('refY', '5')
-                                     .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
-          var canvas = document.getElementById('canvas');
-          canvas.setAttribute('width',  $("div.show-plot svg").attr('width'));
-          //400 - 30 = 370
-          var ctx = canvas.getContext('2d');
-
-          // Reset the canvas to remove any plots drawn before this one 
-          //taken from :http://www.html5canvastutorials.com/advanced/html5-clear-canvas/ 
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-     
-          var data = (new XMLSerializer()).serializeToString(svg);
-          var DOMURL = window.URL || window.webkitURL || window;
-
-          var img = new Image();
-          console.log("just created new img.");
-          var svgBlob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
-          var url = DOMURL.createObjectURL(svgBlob);
-
-          img.onload = function () {
-            console.log("about to call drawImage");
-            ctx.drawImage(img, 0, -30);
-            DOMURL.revokeObjectURL(url);
-            var imgURI = canvas
-                .toDataURL('image/png')
-                .replace('image/png', 'image/octet-stream');
-
-            triggerDownload(imgURI);
-            console.log("returned from trigger download");
-          };
-      
-          img.src = url;
-
-          });
-    }//endable plot downloading code.
-
-
     function setupPlotsForSearchResults(){
+       //the two blocks below can be factored together.
+        $("td.show_plots > button[id^='show_plot']").click(function(e) {
+            var plot_button_id = e.target.attributes.getNamedItem('id').value;
+            var plot_str = plot_button_id.replace('show_plot_', '');
+            console.log("plot_str: " + plot_str);
+            /*  hiding the shown plot breaks if it's not there..*/
+            var currently_shown_plot = $("div.show-plot");
+            if (currently_shown_plot.length > 0){
+                currently_shown_plot.removeClass('show-plot');
+                currently_shown_plot.addClass('hidden'); 
+                var download_button_to_hide = currently_shown_plot
+                                             .parent()
+                                             .find('button[id^="download_plot"]');
+                download_button_to_hide.hide();
+            }
+            var id_of_plot_svg = 'target-'.concat(plot_str); 
+            var plot_selector = 'svg#'.concat(id_of_plot_svg);
+            console.log("show plot was clicked, id = " + id_of_plot_svg);
+            var div_to_show_now = $(plot_selector).parent();
+            console.log("div_to_show_now = ");
+            console.log( div_to_show_now );
+            var download_button =  div_to_show_now.parent().find('button[id^="download_plot"]');
+            download_button.show();
+            
+            div_to_show_now.removeClass('hidden');
+            div_to_show_now.addClass('show-plot');
+            $(plot_selector).attr('style', 'display: inline;');
+        }); 
 
-        $("td.show_plots > button").click(function(e) {
-                  //var plotstr_attr = e.target.attributes.getNamedItem('plotstr');
-                  var plot_button_id = e.target.attributes.getNamedItem('id').value;
-                  var plot_str = plot_button_id.replace('show_plot_', '');
-                  console.log("plot_str: " + plot_str);
-                  /*  hiding the shown plot breaks if it's not there..*/
-                  var currently_shown_plot = $("div.show-plot");
-                  if (currently_shown_plot.length > 0){
-                      currently_shown_plot.removeClass('show-plot');
-                      currently_shown_plot.addClass('hidden'); 
-                  }
-                  var id_of_plot_svg = 'target-'.concat(plot_str); 
-                  var plot_selector = 'svg#'.concat(id_of_plot_svg);
-                  console.log("show plot was clicked, id = " + id_of_plot_svg);
-                  var div_to_show_now = $(plot_selector).parent();
-                  console.log("div_to_show_now = ");
-                  console.log( div_to_show_now );
-                  div_to_show_now.removeClass('hidden');
-                  div_to_show_now.addClass('show-plot');
-                  $(plot_selector).attr('style', 'display: inline;');
-                 }); 
-
+        var download_plot_buttons = $("td.show_plots > button[id^='download_plot']");
+        download_plot_buttons.click(function(e) {
+                  handleInlinePlotDownload();
+         }); 
+        download_plot_buttons.hide(); //show when the corresponding 'show plot' is clicked.
+        console.log("hiding the download buttons.");
+ 
        var plottingData = [];
        $("td.plotting_data" ).each(function() {
            var data_for_one_plot = this.textContent;
@@ -488,7 +445,11 @@ function svgImage(xml) {
                   rows +=  ' class="btn btn-link" plotstr="' + 
                             + json.api_response[i].plot_id_str + '" ' +
                             'title="Show the plot for this data.">'; 
-                  rows += 'Show Plot</button></td>';
+                  rows += 'Show Plot</button><button id="download_plot_'
+                  rows +=  json.api_response[i].plot_id_str + '" ' +
+                            'title="Download the plot for this data.">' +
+                            'Download Plot</button></td>'; 
+                  //rows += 'Show Plot</button></td>';
                   rows += '<td id="plot_data_'  + json.api_response[i].plot_id_str +  '" style="display:none;"';
                   rows += ' class="plotting_data">' + json.api_response[i].json_for_plotting + '</td>';
                   rows += "</tr>";
@@ -523,9 +484,9 @@ function svgImage(xml) {
                    target.append(spinner.el);
                    console.log("appended spinner!");
               },
-              url: url_endpoint, //url: "ajaxy-snpid-window-search/",
+              url: url_endpoint, 
               type: "POST", 
-              data: form_data, //data: values , 
+              data: form_data,   
               processData: false,
               cache: false,
               contentType: false,
@@ -538,9 +499,10 @@ function svgImage(xml) {
                   if ( json.api_response != null){
                       show_search_results(json);
                   }
+
                   //save data about the search onto the page: 
                   //search type
-                    $("#type_of_shown_results").text(search_type);
+                  $("#type_of_shown_results").text(search_type);
 
                   //what about just grabbing the form data that is sent back?
                   console.log(json.form_data); //try to grab the values out of here.
@@ -549,10 +511,6 @@ function svgImage(xml) {
                   //search results shown.
                   
                    var values = {};
-                   /*for(var pair of form_data.entries()) {
-                      values[pair[0]] = pair[1]; //set the values into the JSON dict.
-                      console.log(pair[0]+ ', '+ pair[1]); 
-                   }*/
 
                   values = json.form_data; //does it work to just store the dict directly and re-copy it?
                   if (json.search_paging_info != null){ 
@@ -585,7 +543,6 @@ function svgImage(xml) {
                   $("div.spinner").remove();
               }
           });              
-
        }
 
        //search type should already be present.
@@ -654,111 +611,6 @@ function svgImage(xml) {
               }
           });              
        }
-      //define the FormData based on the currently shown form.
-      //Then copy the values into a dict 
-      //that dict will be used for paging; 
-      function create_post(action_name, search_type) {
-          if ( (action_name != 'Next') && 
-               (action_name != 'Prev') ){
-         //var formElement = document.querySelector('#form_snpid_search');
-         var formElement = document.querySelector('div.active form');
-         fd = new FormData(formElement); 
-         console.log(fd.getAll('pvalue_rank_cutoff'));
-         console.log("getAll returns: " + fd.getAll('pvalue_rank_cutoff'));
-         //can I still get data with a more general selector?
-for(var pair of formData.entries()) {
-   console.log(pair[0]+ ', '+ pair[1]); 
-}
-            /* var values;
-            var controls_to_scrape = $("div.active form .form-control[id^='id']");
-            var values = {};
-            for ( var i = 0; i < controls_to_scrape.length; i ++){
-                var one_id = controls_to_scrape[i].getAttribute('id');
-                one_id = one_id.replace('id_', '');
-                var one_value = controls_to_scrape[i].value.trim();
-                values[one_id] = one_value;
-                form_data[one_id] = one_value;
-                console.log("appending form data");
-
-            }
-            //if this otherwise works; add any Files and see if that works.
-            //not sure if this is needed.
-            */
-            form_data = fd;
-            form_data['search_type'] = search_type;
-            values = form_data; 
-          }
-          else{ //if it's for paging, use the values we copied down earlier...
-              var val_text = $("div#current_search_params").text();
-              values = jQuery.parseJSON(val_text);
-          } 
-          values['action'] = action_name;
-          var url_endpoint = 'ajaxy-' + search_type + '/';
-
-          console.log(form_data.getAll('pvalue_rank_cutoff'));
-          $("div#status_message").text("Working... ");
-          $("div#download_button").attr("style", "display:none;");
-
-          showHidePrevNext(null); 
-          //hides the search buttons while we are working...
-
-          console.log("about to send ajax to endpoint " +
-                      url_endpoint +  " with these values:");
-          console.log(values);
-          $.ajax({
-              beforeSend: function(xhr, settings) {
-                   if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                       xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                   }
-                   var target = $("body");
-                   var spinner = new Spinner().spin();
-                   target.append(spinner.el);
-              },
-              url: url_endpoint,
-              type: "POST", 
-              data: form_data,
-              processData: false,
-              cache: false,
-              contentType: false,
-             
-              success: function(json) {
-                  console.log("AJAX call reported success. Next line w/ response");
-                  console.log(json);
-                  if ( json.api_response != null){
-                      show_search_results(json);
-                  }
-                  if (json.search_paging_info != null){ 
-                      values.page_of_results_shown =
-                              json.search_paging_info.page_of_results_to_display;
-                      console.log("...setting page number of results shown to:" + values.page_of_results_shown);
-                  }
-                  $("#type_of_shown_results").text(search_type);
-                  var values_to_save_for_paging = JSON.stringify(values);
-                  $("div#current_search_params").text(values_to_save_for_paging);
-                  //this should contain a correct version of page_of_results_shown.
-                  $("div#status_message").text(json.status_message);
-
-              },
-              error: function(xhr, errmsg, err) {
-                  /* would put code down here to append error messages onto the search page.*/
-                  console.log(xhr.status + ": " + xhr.responseText);
-                  //MOVE THIS TO ITS OWN FUNCTION:
-                  var errorJSON = jQuery.parseJSON(xhr.responseText);
-                  var errlist = '<ul>';
-                  for ( var j = 0; j < errorJSON.form_errors.length; j++){
-                      errlist += '<li>' + errorJSON.form_errors[j] + '</li>';
-                  } 
-                  errlist += '</ul>';
-                  $("div#form_errors").append(errlist);
-                  $("div#status_message").text(errorJSON.status_message);
-                  showHidePrevNext(null); //hides the next and previous buttons.
-              },
-              complete: function(){
-                  $("div.spinner").remove();
-              }
-          });              
-
-          }//end of create_post function.
 
 
        //may be factored back into other create_post function; separate for now.
@@ -828,10 +680,5 @@ for(var pair of formData.entries()) {
       offset: [-2, 10],
       opacity: 0.1
     });
-
-
-
 </script>
 </body>
-
-
