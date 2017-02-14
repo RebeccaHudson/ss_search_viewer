@@ -15,6 +15,8 @@
    <script type="text/javascript" src="{% static 'ss_viewer/cloneTheSkeleton.js' %}"> </script>  
    <script type="text/javascript" src="{% static 'ss_viewer/plotIntoSVGSkeleton.js' %}"> </script> 
    <script type="text/javascript" src="{% static 'ss_viewer/spin.min.js' %}"> </script> 
+   <script type="text/javascript" src="{% static 'ss_viewer/setupSearchDemos.js' %}"> </script> 
+   <script type="text/javascript" src="{% static 'ss_viewer/setupCSRF.js' %}"> </script> 
 
 </head>
 <body>
@@ -104,87 +106,10 @@
              Next</button>
 </div>
 
-
-
-
-
-{% if search_paging_info != None %}<div>
-   {% if search_paging_info.show_prev_btn == True %}
-     <button type="button"
-             onclick='clickPrev();'>
-             Previous</button>
-   {% endif %}
-   {% if search_paging_info.show_next_btn == True %}
-     <button type="submit" 
-             onclick='clickNext();'>
-             Next</button>
-   {% endif %}
-</div>{% endif %} 
-
-
-  {% if api_response  %}
-  <table id="search_results" class="table table-striped table-condensed"> 
-    <thead>
-    <tr>
-
-        <td><a href="{% url 'ss_viewer:help-page' %}#snpid">SNPid                   </a>       </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#chromosome">Chromosome              </a>  </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#position">Position                </a>    </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#ref_allele">Reference Allele        </a>  </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#snp_allele">SNP Allele              </a>  </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#pval_rank" >p-value Rank            </a>  </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#log_lik_ref">Log Likelihood Reference</a> </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#log_lik_snp">Log Likelihood SNP</a> </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#log_lik_ratio">Log Likelihood Ratio   </a> </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#pval_ref">    p-value Reference       </a> </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#pval_snp">p-value SNP              </a>    </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#pval_diff">p-value Difference       </a>   </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#trans_factor">Transcription Factor </a>   </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#motif"> Motif                </a>         </td>
-        <td><a href="{% url 'ss_viewer:help-page' %}#has_plot">Show Plot</a>         </td>
-    </tr>
-    </thead>
-    <tbody>
-    {% for onerow in api_response %}
-    <tr>   
-        <td> {{ onerow.snpid }}</td>
-        <td> {{ onerow.chr }}</td>
-        <td> {{ onerow.pos }}</td> 
-        <td> {{ onerow.refAllele }}</td> 
-        <td> {{ onerow.snpAllele }}</td> 
-        <td> {{ onerow.pval_rank|stringformat:".3e"}} </td>
-        <td> {{ onerow.log_lik_ref|stringformat:".3e"}} </td>
-        <td> {{ onerow.log_lik_snp|stringformat:".3e"}} </td>  
-        <td> {{ onerow.log_lik_ratio|stringformat:".3e"}} </td>
-        <td> {{ onerow.pval_ref|stringformat:".3e" }} </td>
-        <td> {{ onerow.pval_snp|stringformat:".3e" }} </td>
-        <td> {{ onerow.pval_diff|stringformat:".3e" }}</td>  
-        <td> {{ onerow.trans_factor }}</td>
-        <td> {{ onerow.motif }} </td>
-        <!-- plots are now available for ALL data -->
-        <td class="show_plots"  >
-                  <button id="show_plot_{{onerow.plot_id_str}}" 
-                          type="button" class="btn btn-link" 
-                          plotstr="{{onerow.plot_id_str}}"
-                          title="Show the plot for this data."> 
-                  Show Plot</button></td> 
-       <!--  how to hide the hidden data -->
-       <td id="plot_data_{{onerow.plot_id_str}}" style="display:none;"
-       class="plotting_data" >{{ onerow.json_for_plotting }}</td>
-       </tr>
-    {%  endfor %}
-    <tbody>
-  </table>
-  {% endif %}
-
 <div id="drop-in"></div>
 
 </div> <!-- close the 'content' div -->
 </div> <!-- close the 'container' div -->
-
-
-    
-
 
 <!-- TODO: ensure this is handled in <head> and get it out of here. -->
 <script src="{% static 'ss_viewer/js/bootstrap.min.js' %}"></script>
@@ -219,34 +144,16 @@
     drawPlotsInline();
 
     setupPlotDownloads();
+    setupShowPlotButtons();
 
     //Event listeners to submit forms asynchronously. 
     setupAjaxyFormSubmissions();
 
+
+
     });//end of document.ready stuff.
 
-    function setupSearchDemos(){
-        /* clickable examples for demo searches */
-        $("#snpid-search-demo").click(function(e){ 
-                                       $('#id_raw_requested_snpids').val(
-                                             'rs539483321, rs576894892, rs553761389, rs757299236, rs770590115');
-                                        } );
-        $("#gl-search-demo").click(function(e){
-                                       $('#id_gl_start_pos').val(10000);
-                                       $('#id_gl_end_pos').val(143511163);
-                                       $('#id_selected_chromosome').val('ch5'); });
-        $("#tf-search-demo").click(function(e){
-                                      $('#id_trans_factor').val('NFYB'); 
-                                        $('#id_encode_trans_factor').attr('disabled', 'disabled');
-                                        $("#id_trans_factor").removeAttr('disabled');
-                                        $('#id_tf_library_0').prop('checked', true);
-                                        $('#id_tf_library_1').removeAttr('checked'); 
-                                        });
-
-        $("#snpid-window-search-demo").click(function(e){
-                                      $('#id_snpid').val('rs755632525'); });
-        $("#gene-name-search-demo").click(function(e){
-                                      $('#id_gene_name').val('ELOVL1'); });
+    function setupShowPlotButtons(){
         $("td.show_plots > button").click(function(e) {
                                 var plotstr_attr = e.target.attributes.getNamedItem('plotstr');
                                 var plot_str  = plotstr_attr.value;
@@ -261,8 +168,6 @@
                                 window.scrollTo(0, 0); /* scroll to the top of the page */
                                }); 
     }
-
-
 
     //Draws plots in-line inside the table of search results.
     function drawPlotsInline(){
@@ -297,17 +202,37 @@
     function setupPlotDownloads(){
         //make the shown plot downloadable
         //start the plot downloading code.
+
+        //what I'm trying: add another SVG to the SVG blob.
+        //that SVG is the defs SVG.
+
         var btn = document.querySelector('button#save_plot');
         var canvas =  document.querySelector('canvas');
         
 
          btn.addEventListener('click', function () {
          var svg = document.querySelector('div.show-plot > svg');
+         var defs_only_svg = document.querySelector('svg#defs');
+         defs_only_svg = defs_only_svg.cloneNode(true);
+
+         var svg_defs_data = (new XMLSerializer()).serializeToString(defs_only_svg);
          svg = svg.cloneNode(true); //can I make a deep copy?
          svg.setAttribute("id", "tempSVG");
          // works OK
          //appends   the definitions
-         var defs = d3.select(svg).append("defs").append("marker")
+         //insert("div",":first-child");g
+         /*var defs = d3.select(svg).append("defs").append("marker")
+                                     .attr("id","Triangle")
+                                     .attr("markerWidth","5")
+                                     .attr("markerHeight","3")
+                                     .attr("stroke", "blue")
+                                     .attr("orient", "auto")
+                                     .attr("viewBox", "0 0 10 10")
+                                     .attr('refX', '1')
+                                     .attr('refY', '5')
+                                     .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");*/
+          //not this one..
+           var defs = d3.select(svg).insert("defs", ":first-child").append("marker")
                                      .attr("id","Triangle")
                                      .attr("markerWidth","5")
                                      .attr("markerHeight","3")
@@ -317,6 +242,7 @@
                                      .attr('refX', '1')
                                      .attr('refY', '5')
                                      .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
+          
           var canvas = document.getElementById('canvas');
           canvas.setAttribute('width',  $("div.show-plot svg").attr('width'));
           //400 - 30 = 370
@@ -328,13 +254,20 @@
 
      
           var data = (new XMLSerializer()).serializeToString(svg);
+          svgImage(data);
+          return 3;
+          //data = svg_defs_data + data;
+          //console.log("svg: " + data);
+
           var DOMURL = window.URL || window.webkitURL || window;
 
           var img = new Image();
+
+          //console.log("svg source: " + data);
           console.log("just created new img.");
           var svgBlob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
           var url = DOMURL.createObjectURL(svgBlob);
-
+          console.log(svgBlob);
           img.onload = function () {
             console.log("about to call drawImage");
             ctx.drawImage(img, 0, -30);
@@ -358,7 +291,7 @@
     }
 
 
-
+    //now deprecated.
     function triggerDownload(imgURI) {
       console.log("triggering download.");
       var evt = new MouseEvent('click', {
@@ -376,7 +309,25 @@
       a.dispatchEvent(evt);
     }
 
-
+//adapted from: https://spin.atomicobject.com/2014/01/21/convert-svg-to-png/
+function svgImage(xml) {
+  var image = new Image();
+  image.src = 'data:image/svg+xml;base64,' + window.btoa(xml);
+  //window.btoa(unescape(encodeURIComponent(xml)))}
+  image.onload = function() {
+  var canvas = document.createElement('canvas');
+  canvas.width = image.width;
+  canvas.height = image.height;
+  var context = canvas.getContext('2d');
+  context.drawImage(image, 0, -30);
+  var fname = $('div.show-plot svg').attr('id').replace('target-', '');
+  var a = document.createElement('a');
+  a.download = fname + ".png";
+  a.href = canvas.toDataURL('image/png');
+  document.body.appendChild(a);
+  a.click();
+}
+}
 
 
 
@@ -516,20 +467,6 @@
                   var plot_button_id = e.target.attributes.getNamedItem('id').value;
                   var plot_str = plot_button_id.replace('show_plot_', '');
                   console.log("plot_str: " + plot_str);
-                      //var plot_str  = plotstr_attr.value;
-
-                  /* hides the currently shown plot */
-                  //console.dir(e.target);
-                  //var jtarget = $("td#plot_data_".concat(plot_str));
-                  //var json_to_plot = jtarget[0].textContent.trim();
-
-                  //plottingData = jQuery.parseJSON(json_to_plot); 
-                  //console.log("json to plot: " + plottingData);
-                  
-                  // makeAPlot(plottingData, "target-0"); 
-                  /* the code below would be useful for showing/hiding
-                     all of the plots prepared for this one page */ 
- 
                   /*  hiding the shown plot breaks if it's not there..*/
                   var currently_shown_plot = $("div.show-plot");
                   if (currently_shown_plot.length > 0){
@@ -1014,30 +951,7 @@ for(var pair of formData.entries()) {
       opacity: 0.1
     });
 
-    //handle CSRF token for AJAX requests.
-    // using jQuery
-    function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-    }
-    var csrftoken = getCookie('csrftoken');
-    /* if this works; define the getCookie function in an external file*/
-   
-   function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-    }
+
 
 </script>
 </body>
