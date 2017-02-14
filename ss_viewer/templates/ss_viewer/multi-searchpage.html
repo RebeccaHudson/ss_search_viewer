@@ -71,18 +71,12 @@
 {% endif %}
 </span>
 
+
 <div id="status_message"> {{ status_message }} </div>
 
 
-<!-- these will go away in favor of AJAXy stuff -->
+<!-- Errors will be reported here when they are returned from AJAX requests -->
 <div id="form_errors">
-{% if form_errors %}
-<ul>
-{% for one_error in form_errors %}
-<li> {{ one_error }} </li>
-{% endfor %}
-</ul>
-{% endif %}
 </div>
 
 <div id="download_button" style="display:none;" >
@@ -839,22 +833,6 @@ for(var pair of formData.entries()) {
           xhttp.send(JSON.stringify(values));
         }
 
-      //to be removed.
-      function clickNext(){
-           var active_search = $("span#type_of_shown_results")[0].innerText.trim();
-           if (active_search == 'snpid'){
-              $("div#snpid_search_form input[value='Next']").click();
-           } else if (active_search == 'snpid-window'){
-              $("div#snpid_window_form input[value='Next']").click();
-           } else if (active_search == 'gl-region'){
-              $("div#gl_region_search_form input[value='Next']").click();
-           } else if (active_search == 'gene-name'){
-              $("div#gene_name_form input[value='Next']").click();
-           } else if (active_search == 'tf'){
-              $("div#tf_search_form input[value='Next']").click();
-           }
-      }
-
       function clickNextAJAX(){
            var active_search = $("span#type_of_shown_results")[0].innerText.trim();
            console.log("clicked next AJAX active_search." + active_search);
@@ -882,21 +860,6 @@ for(var pair of formData.entries()) {
            console.log("clicked Donwload Results AJAX active_search." + active_search);
            create_download_post(active_search); //action name, search type
       }
-      function clickPrev(){
-           var active_search = $("span#type_of_shown_results")[0].innerText.trim();
-           if (active_search == 'snpid'){
-              $("div#snpid_search_form input[value='Prev']").click();
-           } else if (active_search == 'snpid-window'){
-              $("div#snpid_window_form input[value='Prev']").click();
-           } else if (active_search == 'gl-region'){
-              $("div#gl_region_search_form input[value='Prev']").click();
-           } else if (active_search == 'gene-name'){
-              $("div#gene_name_form input[value='Prev']").click();
-           } else if (active_search == 'tf'){
-              $("div#tf_search_form input[value='Prev']").click();
-           }
-      }
-
 
     $(".formcontrol").tooltip({
       position: "bottom left",
