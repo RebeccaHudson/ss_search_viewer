@@ -197,49 +197,30 @@
         //make the shown plot downloadable
         //start the plot downloading code.
 
-        //what I'm trying: add another SVG to the SVG blob.
-        //that SVG is the defs SVG.
-
+        //copy the SVG to dowload into a new DOM nodel
+        //append the required DEFs to it.
         var btn = document.querySelector('button#save_plot');
         var canvas =  document.querySelector('canvas');
         
-
          btn.addEventListener('click', function () {
          var svg = document.querySelector('div.show-plot > svg');
-         var defs_only_svg = document.querySelector('svg#defs');
-         defs_only_svg = defs_only_svg.cloneNode(true);
-
-         var svg_defs_data = (new XMLSerializer()).serializeToString(defs_only_svg);
-         svg = svg.cloneNode(true); //can I make a deep copy?
+         svg = svg.cloneNode(true); //makes a deep copy.
          svg.setAttribute("id", "tempSVG");
-         // works OK
-         //appends   the definitions
-         //insert("div",":first-child");g
-         /*var defs = d3.select(svg).append("defs").append("marker")
-                                     .attr("id","Triangle")
-                                     .attr("markerWidth","5")
-                                     .attr("markerHeight","3")
-                                     .attr("stroke", "blue")
-                                     .attr("orient", "auto")
-                                     .attr("viewBox", "0 0 10 10")
-                                     .attr('refX', '1')
-                                     .attr('refY', '5')
-                                     .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");*/
-          //not this one..
-           var defs = d3.select(svg).insert("defs", ":first-child").append("marker")
-                                     .attr("id","Triangle")
-                                     .attr("markerWidth","5")
-                                     .attr("markerHeight","3")
-                                     .attr("stroke", "blue")
-                                     .attr("orient", "auto")
-                                     .attr("viewBox", "0 0 10 10")
-                                     .attr('refX', '1')
-                                     .attr('refY', '5')
-                                     .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
+
+         var defs = d3.select(svg).insert("defs", ":first-child").append("marker")
+                                   .attr("id","Triangle")
+                                   .attr("markerWidth","5")
+                                   .attr("markerHeight","3")
+                                   .attr("stroke", "blue")
+                                   .attr("orient", "auto")
+                                   .attr("viewBox", "0 0 10 10")
+                                   .attr('refX', '1')
+                                   .attr('refY', '5')
+                                   .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
           
           var canvas = document.getElementById('canvas');
           canvas.setAttribute('width',  $("div.show-plot svg").attr('width'));
-          //400 - 30 = 370
+
           var ctx = canvas.getContext('2d');
 
           // Reset the canvas to remove any plots drawn before this one 
@@ -266,7 +247,10 @@ function svgImage(xml) {
   canvas.width = image.width;
   canvas.height = image.height;
   var context = canvas.getContext('2d');
+
+  //400 - 30 = 370
   context.drawImage(image, 0, -30);
+
   var fname = $('div.show-plot svg').attr('id').replace('target-', '');
   var a = document.createElement('a');
   a.download = fname + ".png";
@@ -389,10 +373,6 @@ function svgImage(xml) {
             console.log("about to call drawImage");
             ctx.drawImage(img, 0, -30);
             DOMURL.revokeObjectURL(url);
-
-            //d3.selectAll('div.show-plot > svg > defs').remove();
-            //console.log("remove defs..");
-
             var imgURI = canvas
                 .toDataURL('image/png')
                 .replace('image/png', 'image/octet-stream');
@@ -429,7 +409,6 @@ function svgImage(xml) {
                   div_to_show_now.removeClass('hidden');
                   div_to_show_now.addClass('show-plot');
                   $(plot_selector).attr('style', 'display: inline;');
-                  /*window.scrollTo(0, 0);  scroll to the top of the page */
                  }); 
 
        var plottingData = [];
@@ -437,7 +416,6 @@ function svgImage(xml) {
            var data_for_one_plot = this.textContent;
            onePlotData = jQuery.parseJSON(data_for_one_plot);
            plottingData.push(onePlotData);
-           //console.log("preparing for one plot.. " + data_for_one_plot ); 
        });
        cloneSVGSkeleton(plottingData);
        $("svg#target-0").hide();
@@ -493,7 +471,7 @@ function svgImage(xml) {
                   rows += "<tr>";
                   rows += "<td>" + json.api_response[i].snpid + "</td>";   
                   rows += "<td>" + json.api_response[i].chr + "</td>";   
-                  rows += "<td>" + json.api_response[i].pos + "</td>";   
+                  rows += "<td>" + json.api_response[i].pos.toLocaleString() + "</td>";   
                   rows += "<td>" + json.api_response[i].refAllele + "</td>";   
                   rows += "<td>" + json.api_response[i].snpAllele + "</td>";   
                   rows += "<td>" + json.api_response[i].pval_rank.toExponential(3) + "</td>";   
@@ -524,23 +502,17 @@ function svgImage(xml) {
        function create_search_post(action_name, search_type){
          var formElement = document.querySelector('div.active form');
          form_data = new FormData(formElement); 
-         console.log(form_data.getAll('pvalue_rank_cutoff'));
-         console.log("getAll returns: " + form_data.getAll('pvalue_rank_cutoff'));
          
          form_data.append('search_type', search_type);
          form_data.append('action',  action_name);
-
          var url_endpoint = 'ajaxy-' + search_type + '/';
-
-         console.log(form_data.getAll('pvalue_rank_cutoff'));  //is the form working?
 
          $("div#status_message").text("Working... ");
          $("div#download_button").attr("style", "display:none;");
+
          showHidePrevNext(null); 
          //hides the search buttons while we are working...
 
-          console.log("about to send ajax to endpoint " +
-                      url_endpoint +  " with these values:");
           $.ajax({
               beforeSend: function(xhr, settings) {
                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -619,8 +591,6 @@ function svgImage(xml) {
        //search type should already be present.
        //some of this can be factored out...
        function create_paging_post(action_name, search_type){
-         //ignore all the form stuff if paging.. 
-         //copy into a 'values'  div; do this after search so it can be updated?
          var val_text = $("div#current_search_params").text();
          var values = jQuery.parseJSON(val_text);
          values['action'] = action_name
@@ -662,7 +632,6 @@ function svgImage(xml) {
                               json.search_paging_info.page_of_results_to_display;
                       console.log("...setting page number of results shown to:" + values.page_of_results_shown);
                   }
-                  //$("#type_of_shown_results").text(search_type);//would this not have been set before?
                   var values_to_save_for_paging = JSON.stringify(values);
                   $("div#current_search_params").text(values_to_save_for_paging);
               },
@@ -744,11 +713,10 @@ for(var pair of formData.entries()) {
                    var target = $("body");
                    var spinner = new Spinner().spin();
                    target.append(spinner.el);
-                   console.log("appended spinner!");
               },
-              url: url_endpoint, //url: "ajaxy-snpid-window-search/",
+              url: url_endpoint,
               type: "POST", 
-              data: form_data, //data: values , 
+              data: form_data,
               processData: false,
               cache: false,
               contentType: false,
@@ -786,7 +754,6 @@ for(var pair of formData.entries()) {
                   showHidePrevNext(null); //hides the next and previous buttons.
               },
               complete: function(){
-                  console.log("complete is acctually happenning; do shared stuff if this triggers for success AND error.");
                   $("div.spinner").remove();
               }
           });              
@@ -820,7 +787,6 @@ for(var pair of formData.entries()) {
                   $("div#status_message").text(result_text);
               }
           };
-          //var download_url = "ajaxy-snpid-window-search/";
           xhttp.open("POST", url_endpoint);
           xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
           xhttp.setRequestHeader("X-CSRFToken", csrftoken);
@@ -833,31 +799,27 @@ for(var pair of formData.entries()) {
           xhttp.send(JSON.stringify(values));
         }
 
+      //TODO: collapse these 2 functions into one that takes an 'action' argument.
       function clickNextAJAX(){
            var active_search = $("span#type_of_shown_results")[0].innerText.trim();
-           console.log("clicked next AJAX active_search." + active_search);
            //copied out of the form's on_submit event handler  
            $("div#form_errors").empty();
            $("#search_results").remove();   
            $("#drop-in").empty();
-           //create_post('Next', active_search); //action name, search type
            create_paging_post('Next', active_search);
       }
 
       function clickPrevAJAX(){
            var active_search = $("span#type_of_shown_results")[0].innerText.trim();
-           console.log("clicked prev AJAX active_search." + active_search);
            //copied out of the form's on_submit event handler  
            $("div#form_errors").empty();
            $("#search_results").remove();   
            $("#drop-in").empty();
-           //create_post('Prev', active_search); //action name, search type
            create_paging_post('Prev', active_search);
       }
       //this may need to change.
       function clickDownloadResultsAJAX(){
            var active_search = $("span#type_of_shown_results")[0].innerText.trim();
-           console.log("clicked Donwload Results AJAX active_search." + active_search);
            create_download_post(active_search); //action name, search type
       }
 
