@@ -255,59 +255,12 @@
      
           var data = (new XMLSerializer()).serializeToString(svg);
           svgImage(data);
-          return 3;
-          //data = svg_defs_data + data;
-          //console.log("svg: " + data);
 
-          var DOMURL = window.URL || window.webkitURL || window;
-
-          var img = new Image();
-
-          //console.log("svg source: " + data);
-          console.log("just created new img.");
-          var svgBlob = new Blob([data], {type: 'image/svg+xml;charset=utf-8'});
-          var url = DOMURL.createObjectURL(svgBlob);
-          console.log(svgBlob);
-          img.onload = function () {
-            console.log("about to call drawImage");
-            ctx.drawImage(img, 0, -30);
-            DOMURL.revokeObjectURL(url);
-
-            //d3.selectAll('div.show-plot > svg > defs').remove();
-            //console.log("remove defs..");
-
-            var imgURI = canvas
-                .toDataURL('image/png')
-                .replace('image/png', 'image/octet-stream');
-
-            triggerDownload(imgURI);
-            console.log("returned from trigger download");
-          };
-      
-          img.src = url;
-
-          });
+          });//end of 'Download Plot' button click event listener.
           //end of the plot downloading code.
-    }
+    }//end of setupPlotDownloads function
 
 
-    //now deprecated.
-    function triggerDownload(imgURI) {
-      console.log("triggering download.");
-      var evt = new MouseEvent('click', {
-        view: window,
-        bubbles: false,
-        cancelable: true
-      });
-
-      var a = document.createElement('a');
-      var fname = $('div.show-plot svg').attr('id').replace('target-', '');
-      a.setAttribute('download', fname + '.png');
-      a.setAttribute('href', imgURI);
-      a.setAttribute('target', '_blank');
-
-      a.dispatchEvent(evt);
-    }
 
 //adapted from: https://spin.atomicobject.com/2014/01/21/convert-svg-to-png/
 function svgImage(xml) {
