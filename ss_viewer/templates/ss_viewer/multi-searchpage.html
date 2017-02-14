@@ -89,12 +89,12 @@
 
 <div id="ajaxyPagingButtons" >
      <button type="button"
-             onclick='clickPrevAJAX();'
+             onclick='pagingAJAX("Prev");'
              style="display:none;"
              id="prev_button">
              Previous</button>
      <button type="submit" 
-             onclick='clickNextAJAX();'
+             onclick='pagingAJAX("Next");'
              style="display:none;"
              id="next_button">
              Next</button>
@@ -137,37 +137,10 @@
   
     drawPlotsInline();
 
-    //setupPlotDownloads();
-    setupShowPlotButtons();
-
     //Event listeners to submit forms asynchronously. 
     setupAjaxyFormSubmissions();
 
-
-
     });//end of document.ready stuff.
-
-
-    //does this get used?
-    // Seems to not be used.
-    function setupShowPlotButtons(){
-        $("td.show_plots > button[id^='show_plot']").click(function(e) {
-                                var plotstr_attr = e.target.attributes.getNamedItem('plotstr');
-                                var plot_str  = plotstr_attr.value;
-                                var currently_shown_plot = $("div.show-plot");
-                                currently_shown_plot.removeClass('show-plot');
-                                currently_shown_plot.addClass('hidden'); 
-                                var id_of_plot_svg = 'target-'.concat(plot_str); 
-                                var plot_selector = 'svg#'.concat(id_of_plot_svg);
-                                var div_to_show_now = $(plot_selector).parent();
-                                div_to_show_now.removeClass('hidden');
-                                div_to_show_now.addClass('show-plot');
-                                window.scrollTo(0, 0); /* scroll to the top of the page */
-                               }); 
-    }
-
-
-
 
 
     //Draws plots in-line inside the table of search results.
@@ -258,28 +231,6 @@ function svgImage(xml) {
   a.click();
 }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     function setupAjaxyFormSubmissions(){
@@ -651,24 +602,15 @@ function svgImage(xml) {
           xhttp.send(JSON.stringify(values));
         }
 
-      //TODO: collapse these 2 functions into one that takes an 'action' argument.
-      function clickNextAJAX(){
-           var active_search = $("span#type_of_shown_results")[0].innerText.trim();
-           //copied out of the form's on_submit event handler  
-           $("div#form_errors").empty();
-           $("#search_results").remove();   
-           $("#drop-in").empty();
-           create_paging_post('Next', active_search);
+      function pagingAJAX(nextOrPrev){
+        var active_search = $("span#type_of_shown_results")[0].innerText.trim();
+        //copied out of the form's on_submit event handler  
+        $("div#form_errors").empty();
+        $("#search_results").remove();   
+        $("#drop-in").empty();
+        create_paging_post(nextOrPrev, active_search);
       }
 
-      function clickPrevAJAX(){
-           var active_search = $("span#type_of_shown_results")[0].innerText.trim();
-           //copied out of the form's on_submit event handler  
-           $("div#form_errors").empty();
-           $("#search_results").remove();   
-           $("#drop-in").empty();
-           create_paging_post('Prev', active_search);
-      }
       //this may need to change.
       function clickDownloadResultsAJAX(){
            var active_search = $("span#type_of_shown_results")[0].innerText.trim();
