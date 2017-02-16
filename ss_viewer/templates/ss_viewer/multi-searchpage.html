@@ -17,6 +17,8 @@
    <script type="text/javascript" src="{% static 'ss_viewer/spin.min.js' %}"> </script> 
    <script type="text/javascript" src="{% static 'ss_viewer/setupSearchDemos.js' %}"> </script> 
    <script type="text/javascript" src="{% static 'ss_viewer/setupCSRF.js' %}"> </script> 
+   <script type="text/javascript" src="{% static 'ss_viewer/js/dist/jszip.min.js' %}"></script>
+   <script type="text/javascript" src="{% static 'ss_viewer/js/FileSaver.min.js' %}"></script>
 
 </head>
 <body>
@@ -616,6 +618,252 @@ function svgImage(xml) {
            var active_search = $("span#type_of_shown_results")[0].innerText.trim();
            create_download_post(active_search); //action name, search type
       }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //Clones the node with the currently shown plot, 
+    //adds definitions for the Arrowhead markers.
+    //sets up an HTML <canvas> element, including appropriate width,
+    //blanks out the canvas with a 'clearRect', 
+    //serizlizes the SVG copy into a string of XML.
+    function setupBulkPlotDownload(svg){
+
+         //var svg = document.querySelector('div.show-plot > svg');
+         console.log("hit the function to setupBulkPlotDownload");
+         console.log("svg selector: " + svg );
+         svg = svg.cloneNode(true); //makes a deep copy.
+         svg.setAttribute("id", "tempSVG");
+
+         var defs = d3.select(svg).insert("defs", ":first-child").append("marker")
+                                   .attr("id","Triangle")
+                                   .attr("markerWidth","5")
+                                   .attr("markerHeight","3")
+                                   .attr("stroke", "blue")
+                                   .attr("orient", "auto")
+                                   .attr("viewBox", "0 0 10 10")
+                                   .attr('refX', '1')
+                                   .attr('refY', '5')
+                                   .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
+          
+          var canvas = document.getElementById('canvas');
+          canvas.setAttribute('width',  $("div.show-plot svg").attr('width'));
+          canvas.setAttribute('sytle',  'display:inline;');
+          var ctx = canvas.getContext('2d');
+
+          // Reset the canvas to remove any plots drawn before this one 
+          //taken from :http://www.html5canvastutorials.com/advanced/html5-clear-canvas/ 
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          var data = (new XMLSerializer()).serializeToString(svg);
+           
+          return data;
+          /*var img = new Image();
+          img.src = 'data:image/svg+xml;base64,' + window.btoa(xml);
+          ctx.drawImage(img, 0, -30);
+
+          //getImgFromXML(data, canvas, ctx);
+           
+          dataURL = canvas.toDataURL('image/png'); 
+          console.log("encoded dataURL in setupBulk" + dataURL);
+          //var encodedData = window.btoa(img);
+          return encodedData; */
+    }//end of 'Download Plot' button click event listener.
+
+
+      //xml is the SVG source, ctx is the context element.
+      function getImgFromXML(xml, canvas, ctx){ 
+          DOMURL = window.URL || window.webkitURL || window;
+          var img = new Image();
+          img.src = 'data:image/svg+xml;base64,' + window.btoa(xml);
+          //var svg = new Blob([xml], {type: 'image/svg+xml'});
+          //var url = DOMURL.createObjectURL(svg);
+          var dataURL;
+          img.onload = function() {
+            //var canvas = document.createElement('canvas');
+            //var context = canvas.getContext('2d');
+            ctx.drawImage(img, 0, -30);
+            dataURL = canvas.toDataURL('image/png'); 
+            console.log("dataurl inside of onload; " + dataURL);
+          }   
+          img.load();
+          //img.src = url;
+      }
+
+    //should return a file-like object that can be a successful argument to zip.file().
+    //adapted from: https://spin.atomicobject.com/2014/01/21/convert-svg-to-png/
+    function svgImageBulk(xml ) {
+    }
+
+    function zipper(){
+      var zip = new JSZip();
+      zip.file("Hello.txt", "Hello World\n");
+      var one_plot = setupBulkPlotDownload(zip);
+      console.log("is there source for a plot here? -> " + one_plot);
+      console.log("one plot as base64 " + one_plot);
+      one_plot = one_plot.replace("data:image/png;base64,", '');
+      console.log("one plot after trimming: ", one_plot);
+      zip.file('one_picture.png', one_plot,{base64: true});
+      zip.generateAsync({type:"blob"})
+        .then(function (blob) {
+            saveAs(blob, "hello.zip");
+            console.log("successful async...");
+        });
+      console.log("completing zipper function");
+      return one_plot;
+     }
+
+// bulk downloads; it's messy. trying suff from http://stackoverflow.com/questions/31384408/how-to-get-multiple-files-via-ajax-and-download-them-as-a-zip-file-via-javascrip 
+     function bd(){
+         var images = [];
+         var counter = 0;
+          
+         var targets = $('svg[id^="target"]');
+        
+         for (var i = 0; i< targets.length; i++) {
+            //convertImgToBase64URL(urls[i], function (base64Img, url) {
+            convertImgToBase64URL(targets[i], function (base64Img, url) {
+              var tag = "file-" + i;
+              var dataForOnePlot = base64Img.replace("data:image/png;base64,", '');
+              console.log("called back! for tag :"  + tag);
+              images.push({
+                data: dataForOnePlot,
+                tag: tag 
+              });
+              counter++;
+              console.log("incremented counter to :" + counter);
+              if (counter == targets.length) {
+                console.log("calling createArchive!");
+                createArchive(images);
+              }
+            });
+          }
+     }      
+
+
+function convertImgToBase64URL(svgSelector, callback){
+    var img = new Image();
+    var url = "imgtest";
+    var xml = setupBulkPlotDownload(svgSelector);
+    //console.log("xml for plot : " + xml);
+    //img.src = 'data:image/svg+xml;base64,' + window.btoa(xml);
+    img.onload = function(){
+      var canvas = document.createElement('canvas'),
+      ctx = canvas.getContext('2d'), dataURL;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      canvas.height = this.height;
+      canvas.width = this.width;
+      ctx.drawImage(img, 0, -30);
+      dataURL = canvas.toDataURL('image/png');
+      callback(dataURL, url);
+      //canvas = null;
+    };
+    img.src = 'data:image/svg+xml;base64,' + window.btoa(xml);
+    //img.src = url;
+}
+
+
+
+
+function createArchive(images){
+  // Use jszip
+  console.log("called created archive!");
+  console.log("length of images: " + images.length);
+  var zip = new JSZip();
+  //var img = zip.folder("images");
+  for (var i=0; i<images.length; i++) {
+    var  fname = 'onedog-' + i + '.png';
+    zip.file(fname, images[i].data, {base64: true});  
+  }
+  console.log("completed the for loop in createArchive");
+  zip.generateAsync({type:"blob"})
+     .then(function(blob){
+     saveAs(blob, "images.zip");
+     console.log("called to saveAs..");
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     $(".formcontrol").tooltip({
       position: "bottom left",
