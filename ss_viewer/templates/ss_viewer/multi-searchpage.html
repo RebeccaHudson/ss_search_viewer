@@ -679,10 +679,8 @@ function svgImage(xml) {
 
 
 
-
-
-
-    //Clones the node with the currently shown plot, 
+    //start code for bulk downloads
+    //Clones the node containing the plot to be added to the ZIP. 
     //adds definitions for the Arrowhead markers.
     //sets up an HTML <canvas> element, including appropriate width,
     //serizlizes the SVG copy into a string of XML.
@@ -705,44 +703,6 @@ function svgImage(xml) {
           return data;
     }
 
-
-      //xml is the SVG source, ctx is the context element.
-      function getImgFromXML(xml, canvas, ctx){ 
-          DOMURL = window.URL || window.webkitURL || window;
-          var img = new Image();
-          img.src = 'data:image/svg+xml;base64,' + window.btoa(xml);
-          var dataURL;
-          img.onload = function() {
-            //var canvas = document.createElement('canvas');
-            //var context = canvas.getContext('2d');
-            ctx.drawImage(img, 0, -30);
-            dataURL = canvas.toDataURL('image/png'); 
-            console.log("dataurl inside of onload; " + dataURL);
-          }   
-      }
-
-    //should return a file-like object that can be a successful argument to zip.file().
-    //adapted from: https://spin.atomicobject.com/2014/01/21/convert-svg-to-png/
-    function svgImageBulk(xml ) {
-    }
-
-    function zipper(){
-      var zip = new JSZip();
-      zip.file("Hello.txt", "Hello World\n");
-      var one_plot = setupBulkPlotDownload(zip);
-      console.log("is there source for a plot here? -> " + one_plot);
-      console.log("one plot as base64 " + one_plot);
-      one_plot = one_plot.replace("data:image/png;base64,", '');
-      console.log("one plot after trimming: ", one_plot);
-      zip.file('one_picture.png', one_plot,{base64: true});
-      zip.generateAsync({type:"blob"})
-        .then(function (blob) {
-            saveAs(blob, "hello.zip");
-            console.log("successful async...");
-        });
-      console.log("completing zipper function");
-      return one_plot;
-     }
 
 // bulk downloads; it's messy. trying suff from 
 //http://stackoverflow.com/questions/31384408/
@@ -792,9 +752,13 @@ function createArchive(images){
   console.log("called created archive!");
   console.log("length of images: " + images.length);
   var zip = new JSZip();
+  console.log("zip.files " + zip.files);
+  console.log(zip.files); 
+  var pix = zip.folder('plots');
   for (var i=0; i < images.length; i++) {
     var  fname =  images[i].tag + '.png';
-    zip.file(fname, images[i].data, {base64: true});  
+    //zip.file(fname, images[i].data, {base64: true});  
+    pix.file(fname, images[i].data, {base64: true});  
   }
   console.log("completed the for loop in createArchive");
   zip.generateAsync({type:"blob"})
@@ -802,26 +766,7 @@ function createArchive(images){
      saveAs(blob, "images.zip");
   });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//end code for bulk downloads
 
 
 
