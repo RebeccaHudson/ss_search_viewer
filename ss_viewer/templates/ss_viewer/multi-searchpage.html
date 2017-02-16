@@ -707,11 +707,14 @@ function svgImage(xml) {
 // bulk downloads; it's messy. trying suff from 
 //http://stackoverflow.com/questions/31384408/
 //     how-to-get-multiple-files-via-ajax-and-download-them-as-a-zip-file-via-javascrip 
+//TODO: rename function to bulkPlotDownload
+//TODO: add a button for this.
   function bd(){
          var images = [];
          var counter = 0;
          var targets = $('svg[id^="target"]');
-         for (var i = 0; i< targets.length; i++) {
+         //starting at 1 excludes target-0, the SVG skeleton.
+         for (var i = 1; i< targets.length; i++) {
             convertImgToBase64URL(targets[i], function (base64Img, fname_for_plot) {
               var dataForOnePlot = base64Img.replace("data:image/png;base64,", '');
               images.push({
@@ -719,7 +722,7 @@ function svgImage(xml) {
                  tag: fname_for_plot
               });
               counter++;
-              if (counter == targets.length) {
+              if (counter == (targets.length-1)) {
                 createArchive(images);
               }
             });
