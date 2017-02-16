@@ -36,6 +36,21 @@ class GenericSearchForm(forms.Form):
                                            label = "P-value Reference cutoff",
                                            required = False)
     
+    use_these_choices = ( ("lt", "<"), ("gt", ">"))
+    #"class":"form-control", 
+    styled_widget = forms.Select(attrs={ "title" : "Select the cutoff direction.",
+                                        "style" : "float:left; margin-top:5px;"  })
+    pvalue_snp_direction  = forms.ChoiceField(widget=styled_widget,
+                                     choices = use_these_choices, 
+                                     required = False,
+                                     label = "Select cutoff direction for pvalue SNP.")
+
+    pvalue_ref_direction  = forms.ChoiceField(widget=styled_widget,
+                                     choices = use_these_choices, 
+                                     required = False,
+                                     label = "Select cutoff direction for pvalue reference.")
+
+
     def clean(self):
         cleaned_data = super(GenericSearchForm, self).clean()
         if cleaned_data.get('pvalue_rank_cutoff') is None:
@@ -244,6 +259,8 @@ class SearchBySnpidWindowForm(GenericSearchForm):
                                      initial = 1000, 
                                      min_value = 0)
     window_size.error_messages = { 'required': 'Missing window size (required).'}
+
+
 
     def clean(self):
         cleaned_data = super(SearchBySnpidWindowForm, self).clean()
