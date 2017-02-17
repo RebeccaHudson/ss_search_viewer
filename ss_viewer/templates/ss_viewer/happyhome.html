@@ -10,19 +10,25 @@
 
     <!-- does adding a link to the bootstrap JS make glyphicons appear? -->
 </head>
-<body  style="background-color: #DCDCDC;" >
+<!-- <body  style="background-color: #DCDCDC;" >-->
+<body>
 <!--<nav class="navbar navbar-default navbar-fixed-top">-->
-<div class="container-fluid">
+<div class="container">
   <div id="content">
       {% include "ss_viewer/navbar.html" with active='home' %}  
-     <img height="240" src="{% static 'ss_viewer/atsnp-logo.png' %}" />
-     <p>On the front page, it would be helpful to explain the title of the
-      database and state that it works exclusively for humans.</p>
-<!-- todo; remove in-line styles from homepage -->
-<div style="box-shadow: 1px 1px 1px 1px #888888;">
-<p>
 
-               <p><span class="glyphicon glyphicon-home"></span></p>
+<!-- todo; remove in-line styles from homepage -->
+<div style="box-shadow: 1px 1px 1px 1px #888888;
+            padding: 1em;
+            margin-bottom: 1em;">
+     <!-- styles the image to resize based on the size of the window-->
+     <img height="230" 
+          src="{% static 'ss_viewer/atsnp-logo.png' %}"
+          style="margin-bottom: 3px;
+          max-width: 100%;
+            height: auto;
+            width: auto;"  />
+<p>
     @SNP DB provides statistical evaluation of impact of SNPs on transcription
     factor-DNA interactions based on position weight matrices (PWM).
     The current version is built on SNPs from dbSNP Build 144 for the
@@ -56,8 +62,12 @@
 </p>          
 </div>
 
-<div style="box-shadow: 1px 1px 1px 1px #888888;"> 
-<span>News and Updates</span>
+<div style="box-shadow: 1px 1px 1px 1px #888888;
+            padding: 1em;
+            margin-bottom:1em;"> 
+<p>
+   <span style="font-weight:bold; font-size: 1.2em;" >News and Updates</span>
+</p>
 <p>
    @SNP DB human version 1.0.0 has been released on July 20, 2016.
 </p>
@@ -73,8 +83,10 @@
 </div>
 
 
-<div style="box-shadow: 1px 1px 1px 1px #888888;">
-  <span>Contact</span>
+<div style="box-shadow: 1px 1px 1px 1px #888888;
+            padding: 1em;
+            margin-bottom: 1em;">
+  <p><span style="font-weight:bold; font-size: 1.2em;">Contact</span></p>
   <p>
   If you have any questions or experience technical difficulties,
   please feel free to contact us at keles@stat.wisc.edu.
