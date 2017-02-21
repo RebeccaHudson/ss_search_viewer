@@ -27,10 +27,6 @@ urlpatterns = [
          views.main.home_page,
          name = 'index'), 
 
-  url (r'^dynamic-svg/(?P<plot_id_string>.+)$',
-       views.main.dynamic_svg,
-       name = 'dynamic-svg'),
-
   url  (r'^svg-test/$', 
        views.main.test_svg_plots,
        name = 'svg-test'),
