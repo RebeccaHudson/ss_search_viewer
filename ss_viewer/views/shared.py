@@ -248,7 +248,7 @@ class Paging:
 class APIResponseHandler:
     @staticmethod  
     def setup_hits_message(hitcount, page_of_results_to_display):
-        return 'Got ' + str(hitcount) + ' rows back from API.' +\
+        return 'Got ' + str(hitcount) + ' matching (SNP,TF) pairs.' +\
                ' Showing page: ' + str(page_of_results_to_display)
      
     @staticmethod 
@@ -319,7 +319,7 @@ class APIResponseHandler:
         if api_response is  None:
              status_message = "API timed out. Request took too long."
         elif api_response.status_code == 204:
-            status_message = 'No matching rows.'
+            status_message = 'No results match the query.'
         elif api_response.status_code == 500:
             status_message = 'API error; no data returned.'
             if len(api_response.text) > 0 and len(api_response.text) < 200:
@@ -418,7 +418,6 @@ class StreamingCSVDownloadHandler:
         # Generate a sequence of rows. The range is based on the maximum number of
         # rows that can be handled by a single sheet in most spreadsheet
         # applications.
-        #rows = (["Row {}".format(idx), str(idx)] for idx in range(65536))
         rows = StreamingCSVDownloadHandler.return_rows_from_api(api_search_query, api_action)
         pseudo_buffer = Echo()
         writer = csv.writer(pseudo_buffer)
