@@ -207,17 +207,10 @@ class StandardFormset:
                           'active_tab'     : 'none-yet'})
           return render(request, searchpage_template, context)
 
-     #@staticmethod
-     #def handle_invalid_form(request, context, status_message=None):
-     #     if status_message == None:
-     #         status_message =  "Invalid search. Try agian."
-     #     context.update({'status_message' :  status_message })
-     #     return render(request, 'ss_viewer/multi-searchpage.html', context) 
-
      @staticmethod
      def handle_invalid_form(context, status_message=None):
           if status_message == None:
-              status_message =  "Invalid search. Try agian."
+              status_message =  "Invalid search. Try again."
           context.update({'status_message' :  status_message })
           return context
 
