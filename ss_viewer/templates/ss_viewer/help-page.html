@@ -16,8 +16,10 @@ table.example td, th {
 border: 1px solid black;
 padding: 0px 20px 0px 20px; }
 
-
-
+hgroup {
+  font-weight: bold;
+  color: blue;
+}
 
 table.doc-table { 
  border: 1px solid black;
@@ -60,7 +62,7 @@ h6 {
 h5 {
    margin-bottom: 2px;
 }
-li {
+section li {
    margin-top: 1em;
 }
 .disc {
@@ -82,17 +84,20 @@ ul.refs { padding: 0px; }
 <body>
 <!--<nav class="navbar navbar-default navbar-fixed-top">-->
 <div class="container">
-
   <div id="content">
       {% include "ss_viewer/navbar.html" with active='help' %}
       <h3>atSNP Search Help</h3>
-      <ol><li> Understanding motif libraries</li>
-          <li> at-SNP in-silico statistical method </li>
-          <!-- in-silico should be italicized -->
+      <ol>
+          <li><a href="#part-1">Understanding motif libraries</a></li>
+          <li><a href="#part-2">at-SNP <i>in-silico</i> statistical method</a></li>
+          <li><a href="#part-3">Interpreting Search Output</a></li>
+          <li><a href="#part-4">Reading a Composite Logo Plot</a></li>
+          <li><a href="#part-5">atSNP DB Infrastructure</a></li>
+          <li><a href="#part-6">References</a></li>
       </ol>
       <ol>
-      <section>
-        <hgroup><li>Understanding motif libraries</li></hgroup>
+      <section>  <!-- start of part 1 -->
+        <hgroup><li><a name="part-1">Understanding motif libraries</a></li></hgroup>
         <p> Motif libraries provide transcription factor binding nucleotide profiles 
         from a set of transcription factor binding sites. The binding profiles are
         represented with position weight matrices (PWMs). PWMs are used for
@@ -112,7 +117,8 @@ ul.refs { padding: 0px; }
                    <h5> <span class="underline">Example<span></h5>
                     JASPAR library contains a position frequency matrix for a transcription factor RUNX1
                     and its sequence logo as below. Its summary is presented here 
-                    (link: http://jaspar2014.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0002.2&rm=present&collection=CORE).
+                    (link: <a href="http://jaspar2014.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0002.2&rm=present&collection=CORE">
+                            http://jaspar2014.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0002.2&rm=present&collection=CORE</a>.)
                    </p>
                    <p>
                    <figure>
@@ -142,16 +148,20 @@ T  [ 521  814  656 1936   53 1716   13   93 1339 1325 1053 ]</pre>
 
           <li> ENCODE Library </li>
           <section>
-          ENCODE library features systematic discovery and characterization of regulatory motifs in ENCODE transcription factor binding experiments available at http://compbio.mit.edu/encode-motifs/. They collected known motifs from the literature (TRANSFAC, JASPAR Homo Sapiens, and UniPROBE). Further, they discovered motifs de novo on hundreds of transcription factor binding experiments in human ENCODE using established tools such as MDscan , MEME, Trawler, and AlignACE (Kheradpour et al., 2014). All known and discovered motifs are grouped as in the table at http://compbio.mit.edu/encode-motifs/. The names of ENCODE motifs contain their information on which literature reports the known motifs or which tool was used to obtain de novo motifs.
+          ENCODE library features systematic discovery and characterization of regulatory motifs in ENCODE transcription factor binding experiments available at <a href="http://compbio.mit.edu/encode-motifs/">http://compbio.mit.edu/encode-motifs/</a>. They collected known motifs from the literature (TRANSFAC, JASPAR Homo Sapiens, and UniPROBE). Further, they discovered motifs <i>de novo </i>on hundreds of transcription factor binding experiments in human ENCODE using established tools such as MDscan , MEME, Trawler, and AlignACE (Kheradpour et al., 2014). All known and discovered motifs are grouped as in the table at <a href="http://compbio.mit.edu/encode-motifs/">http://compbio.mit.edu/encode-motifs/</a>. The names of ENCODE motifs contain their information on which literature reports the known motifs or which tool was used to obtain <i>de novo</i> motifs.
            </section>
-        <p>
-        <figure>
-         <!-- filenames for images do not match up to captioned figure numbers! -->
-         <img src="{% static 'ss_viewer/docs/image04.png' %}" id="figure-02"/>
-         <figcaption>Figure 2 Sequence logo of GATA_known12 motif</figcaption>
-        </figure>
 
-        <figure>
+           <section> <!-- begin exapmle section -->
+            <h5> <span class="underline">Example<span></h5>
+            <p>ENCODE library provides 22 known motifs and 6 discovered motifs for transcription factor GATA, which are available at <a href="http://compbio.mit.edu/encode-motifs/tf.html?GATA">http://compbio.mit.edu/encode-motifs/tf.html?GATA</a>. Here, we present one known GATA motif (GATA_known12) and one discovered GATA motif (GATA_disc1). GATA_known12 is from JASPAR Homo Sapiens and GATA_disc1 is obtained from ENCODE Snyder Lab GATA TF experiments with MDscan tool.</p>
+            <p>
+            <figure>
+             <!-- filenames for images do not match up to captioned figure numbers! -->
+             <img src="{% static 'ss_viewer/docs/image04.png' %}" id="figure-02"/>
+             <figcaption>Figure 2 Sequence logo of GATA_known12 motif</figcaption>
+            </figure>
+
+            <figure>
 <pre>>GATA_known12    GATA2_2    GATA2_jaspar_MA0036.1
 A    [0.245    0.000    0.981    0.000    0.472]
 C    [0.245    0.094    0.000    0.000    0.132]
@@ -212,13 +222,13 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
 
          
          <section> <!-- start of part 2 -->
-           <hgroup><li>at-SNP <i>in-silico</i> statistical method </li></hgroup>
-              <section><h5> <span class="underline"> atSNP overview</span> </h5>
+           <hgroup><li><a name="part-2">at-SNP <i>in-silico</i> statistical method</a></li></hgroup>
+              <section><h5> <span class="underline"><b> atSNP overview</b></span> </h5>
                 <figure>
                    <img height="340" src="{% static 'ss_viewer/docs/image06.png' %}" id="figure-04"/>
                    <figcaption>Figure 4 atSNP flowchart</figcaption>
                 </figure>
-                <p> atSNP takes input as SNP information/genomic subsequences and a PWM for a transcription factor. atSNP uses first order Markov model and importance sampling technique to test the goodness of match between the PWM and the subsequences overlapping the SNP position on both reference and SNP alleles and the impact of SNP on the change in the goodness of match. The testing results are summarized with a table and a graphical output called a composite logo plot. To learn more about the outputs, visit “Interpreting search output” and “Reading composite logo plot”.  </p>
+                <p> atSNP takes input as SNP information/genomic subsequences and a PWM for a transcription factor. atSNP uses first order Markov model and importance sampling technique to test the goodness of match between the PWM and the subsequences overlapping the SNP position on both reference and SNP alleles and the impact of SNP on the change in the goodness of match. The testing results are summarized with a table and a graphical output called a composite logo plot. To learn more about the outputs, visit <a href="#part-3">"Interpreting search output”</a> and <a href="#part-4">“Reading composite logo plot”</a>.</p>
 
                 <figure>
                    <img height="150" src="{% static 'ss_viewer/docs/image05.png' %}" id="table-01"/>
@@ -230,7 +240,7 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
               </section> <!-- end of atSNP overview section -->
 
               <section> <!-- start of atSNP Procedure section  -->
-               <h5><span class="underline"> atSNP Procedure</span> </h5>
+               <h5><span class="underline"><b>atSNP Procedure</b></span> </h5>
                <ul>
                  <li><b>Step 1: affinity score                                 </b> </li>
                    <p> Use the PWM of each motif as the product multinomial parameters and compute log likelihoods for all subsequences of the motif length overlapping the SNP location. Find the best matches with the highest log likelihood on both SNP and reference alleles. The scores are used for statistical testing. </p>
@@ -251,12 +261,14 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>
                <p>
 The motif length is 5 and sequences of length 9 centered at the SNP position are extracted from both reference and SNP genomes:
                </p>
+               <p>
                <table><tbody>
                 <tr> <td style="padding-right: 8px;" >Reference allele:</td>
                      <td  class="sequence" >AAGA<span class="red">C</span>AAGC</td></tr>
                 <tr> <td style="padding-right: 8px;">SNP allele:       </td>
                      <td  class="sequence"  >AAGA<span class="red">T</span>AAGC</td></tr>
                </tbody></table>
+               </p>
                <p> Next, we compute log likelihoods of all subsequences of length 5 spanning the SNP position and find the best match, which gives the largest log likelihood. The second subsequences on the forward strand have the largest log likelihood on both reference and SNP alleles (Tables 2-3). </p>
                  <p>
                 <figure>
@@ -290,7 +302,7 @@ The motif length is 5 and sequences of length 9 centered at the SNP position are
                 </figure>
                  </p><!-- end paragraph of figures -->
                  <li><b>Step 2: p-value for the affinity score                 </b> </li>
-                 <p>The p-value for the affinity score on the reference allele (pref) is the probability that a random sequence has the affinity score larger than the best match score on the reference allele. atSNP simulates random sequences from a first order Markov model and estimates the p-value as the frequency of getting larger affinity scores. Similarly, the p-value for the affinity score on the SNP allele (psnp) is estimated as the frequency of getting random scores larger than the best match score on the SNP allele.</p>
+                 <p>The p-value for the affinity score on the reference allele (p<sub>ref</sub>) is the probability that a random sequence has the affinity score larger than the best match score on the reference allele. atSNP simulates random sequences from a first order Markov model and estimates the p-value as the frequency of getting larger affinity scores. Similarly, the p-value for the affinity score on the SNP allele (p<sub>snp</sub>) is estimated as the frequency of getting random scores larger than the best match score on the SNP allele.</p>
                    <p>
                    <h5> <span class="underline">Example (Continued)<span></h5>
  From Step 1, the log likelihood score for the reference allele is <span class="red">-25.30</span>, and the log likelihood score for the SNP allele is <span class="red">-2.28</span>. The p-value for the reference allele is the probability that a random sequence has the affinity scores larger than or equal to <span class="red">-25.30</span>, which is our target region (Figure 7). For such a small p-value, naive Monte-Carlo generates small number of scores in the target region (Figure 8), thus requires a large number of simulations. Alternatively, in atSNP, the importance sampling generates many more scores in the target region (Figure 9). The p-value for the reference allele is then estimated by the weighted frequency as p<sub>ref</sub>=<span class="red">0.499</span>. Importance sampling significantly reduces the required number of simulations. Similar to the reference allele, p<sub>SNP</sub> is estimated as <span class="red">0.009</span>. 
@@ -324,6 +336,7 @@ The motif length is 5 and sequences of length 9 centered at the SNP position are
 The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02</span>. With the importance sampling, the p-value for the log rank ratio is estimated as p<sub>rank</sub>=<span class="red">0.005</span>.</p>
 
               <section> <!-- begin Reference section -->
+                <p>
                 <h6><span class="underline">Reference</span></h6>
                  <ul class="refs">
                     <li><cite>Zuo, Chandler, Shin, Sunyoung, and Keleş, Sündüz. atSNP: transcription factor binding affinity testing for regulatory SNP detection. Bioinformatics (2015): 31, 3353-3355
@@ -331,12 +344,13 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
                  </ul>
                </section> <!-- end of Reference section (inside procedure section)  -->
                </ul>
+               </p>
            </section><!-- end of atSNP Procedure section  -->
          </section> <!-- end of part 2 -- >
 
 
          <section> <!-- start of part 3 -->
-           <hgroup><li>Interpreting Search Output</li></hgroup>
+           <hgroup><li><a name="part-3">Interpreting Search Output</a></li></hgroup>
            <p>atSNP search outputs are grouped into four general categories: SNP information, motif information, atSNP scores, and atSNP p-values. Downloaded csv file provides additional information on the impact of SNP and the matches on both alleles. Specific details are summarized in the following tables.</p>
           <section>  <!--begin section full of tables --> 
            <p>            
@@ -344,7 +358,8 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
             <thead><tr><th colspan="2">SNP information</th></tr></thead>
             <tbody>
             <tr>
-              <td style="width:18em;"> RS ID (Reference SNP ID number         </td> 
+              <td style="width:18em;"> RS ID (<b>R</b>eference<b>S</b>NP      
+                   <b>ID</b> number                                           </td> 
               <td> Identification tag assigned by NCBI to a group of SNPs that 
                    map to an identical location<sup>1</sup>                   </td> 
             </tr>
@@ -368,6 +383,11 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
               <td> SNP nucleotide                                             </td> 
             </tr></tbody>
             </table> 
+            <ol>
+            <li><a href="http://www.ncbi.nlm.nih.gov/books/NBK44417/#Content.what_is_a_reference_snp_or__rs_i">
+                     http://www.ncbi.nlm.nih.gov/books/NBK44417/#Content.what_is_a_reference_snp_or__rs_i</a></li>
+            <li><a href="https://bioconductor.org/packages/release/data/annotation/manuals/SNPlocs.Hsapiens.dbSNP144.GRCh38/man/SNPlocs.Hsapiens.dbSNP144.GRCh38.pdf">https://bioconductor.org/packages/release/data/annotation/manuals/SNPlocs.Hsapiens.dbSNP144.GRCh38/man/SNPlocs.Hsapiens.dbSNP144.GRCh38.pdf</a></li>
+            <ol>
             </p>
             <p>
             <table class="doc-table">                                  
@@ -607,7 +627,7 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>
          </section><!-- end of part 3 -->  
 
          <section> <!-- start of part 4 -->
-           <hgroup><li>Reading a Composite Logo Plot</li></hgroup>
+           <hgroup><a name="part-4"><li>Reading a Composite Logo Plot</a></li></hgroup>
            <p> atSNP DB provides a composite logo plot to visualize significant impacts of SNPs on transcription factor binding. Users can easily see whether SNPs enhance/disrupt the transcription factor binding and how significant the changes are. Examples below will help users to interpret the logo plot and understand the perturbation in the regulatory element.</p> 
             <section> <!-- begin examples section -->
               <h5> <span class="underline">Examples<span></h5> 
@@ -627,7 +647,7 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>
          </section> <!-- end of part 4 -->
 
          <section> <!-- start of part 5 -->
-           <hgroup><li>atSNP DB Infrastructure</li></hgroup>
+           <hgroup><li><a name="part-5">atSNP DB Infrastructure</a></li></hgroup>
            <figure>
              <img height="530" src="{% static 'ss_viewer/docs/image10.png' %}" id="figure-12" />
            </figure>
@@ -635,7 +655,7 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>
          </section> <!-- end of part 5 -->
 
         <section> <!-- start of part 6 -->
-           <hgroup><li>References</li></hgroup>
+           <hgroup><li><a name="part-6">References</a></li></hgroup>
            <p>
            <ul class="refs">
              <li><cite>Zuo, Chandler, Shin, Sunyoung, and Keleş, Sündüz. atSNP: transcription factor binding affinity testing for regulatory SNP detection. Bioinformatics (2015): 31, 3353-3355.
@@ -648,100 +668,10 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>
 
         </ol><!-- end of ordered list of main help items -->
 
-
-
-        <a name="snpid"><h4>SNPid</h4> </a>
-        <p>SNPid</p>
-
-        <a name="chromosome"><h4>Chromosome</h4></a>
-        <p>Chromosome </p> 
-
-        <a name="position"><h4>Position</h4> </a>
-        <p> The nucleotide position of the SNP.</p>
-
-   
-        <a name="ref_allele" ><h4>Reference Allele</h4></a>
-        <p> Reference allele nucleotide.</p>
-
-
-        <a name="snp_allele"> <h4>SNP Allele</h4></a>
-        <p> SNP allele nucleotide. </p>
-
-
-
-        <a name="pval_rank"><h4>p-value Rank</h4></a>
-        <p>   
-       This is the field that is restricted by the search input called "P-value cutoff". <br />
-        P-values for the log rank ratio between the reference and the SNP alleles.
-       </p>
-
-
-
-
-        <a name="log_lik_ref"><h4>Log Likelihood Reference</h4></a>
-        <p>The log-likelihood score for the reference allele.</p>
-
-
-
-        <a name="log_lik_snp"><h4>Log Likelihood SNP</h4></a>
-        <p>The log-likelihood score for the SNP allele.</p>
-
-
-        <a name="log_lik_ratio"><h4>Log Likelihood Ratio</h4></a>
-        <p>The log-likelihood ratio. </p>
-
-        <a name="pval_ref"><h4>p-value Reference</h4></a>
-        <p>P-values for scores on the reference allele.</p>
-
-
-        <a name="pval_snp"><h4 >p-value SNP</h4></a>
-        <p>P-values for scores on the SNP allele.</p>
-
-
-        <a name="pval_diff"><h4>p-value Difference</h4></a>
-        <p>
-        P-values for the difference in scores between the reference and the SNP alleles.
-        </p>
-
-
-        <a name="trans_factor"> <h4>Transcription Factor</h4></a>
-        <p>Transcription factor name.</p>
-
-
-        <a name="motif"><h4>Motif</h4></a>
-        <p>Motif name.</p>
-
-
-        <a name="has_plot"><h4>Plot Available</h4></a>
-        <p>
-          Indicates if composite logo plot is available or not (only composite logo plots with pval_rank<0.05 are available).
-        By clicking “Show plot”, the page scrolls back up to the composite logo plot of the SNP-motif pair. atSNP database has all composite logo plots with a significance change on the matches at level 0.05. Composite logo plots of SNP-motif pairs with no significant changes at level 0.05 are not available on the web. User interested in plotting them can create plots with atSNP R package available at <a href="https://github.com/keleslab/atSNP">https://github.com/keleslab/atSNP</a>. We provide two examples below to help users quickly understand how to read the plot.
-        </p>
-
-        <p>
-            Plots shown are in SVG format. 
-            In order to download a plot, right-click on the plot and click "Save Image As", or the equivalent on your browser.
-        </p>
-
-        <div>
-            <p> 
-            <div>
-               <img height="320" src="{% static 'ss_viewer/example_rs572373948.png' %}"/>
-            </div>
-           </p>
-           <p>
-            <div >
-               <img height="320" src="{% static 'ss_viewer/example_rs199894601.png' %}"/>
-            </div>
-           </p>
-        </div>
-
-        <a href="{% url 'ss_viewer:multi-search' %}">Back to Search</a>
-
-     </div>
-  </div>
+     </div> <!-- end of content div -->
+  </div>    <!-- end of container div -->
 
   </body>
-  <!--/nav>  is this closing nav tag really needed? -->
+
   </html>
 
