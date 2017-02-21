@@ -202,14 +202,15 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
              '/lut_tfs_by_jaspar_motif.pkl'
     with open(fpath, 'r') as f:
         lut = pickle.load(f)
-    tf_choices = tuple(lut.items())
-    tf_choices = sorted(tf_choices, key=lambda x:(x[1], x[0]))
+ 
     use_these_choices = []
 
     for c in set(lut.values()):
         use_these_choices.append((c, c)) 
 
-    use_these_choices = sorted(tuple(use_these_choices))
+
+    #lowercase the transcription factor name before alphabetizing.
+    use_these_choices = sorted(tuple(use_these_choices), key=lambda x:(x[1].lower()))
   
     styled_widget = forms.Select(attrs={"class":"form-control",
                                         "title" : "Select the transcription factor here."})
@@ -229,9 +230,6 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
     with open(fpath, 'r') as f:
         encode_lut = pickle.load(f)
 
-    encode_tf_choices = tuple(encode_lut.items())
-    encode_tf_choices = sorted(encode_tf_choices, key=lambda x:(x[1], x[0]))
-    
     use_these_encode_choices = [ (c, c) for c in set(encode_lut.values() ) ]
     use_these_encode_choices = sorted(tuple(use_these_encode_choices))
 
