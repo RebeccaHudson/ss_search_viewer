@@ -20,7 +20,11 @@
    <script type="text/javascript" src="{% static 'ss_viewer/js/dist/jszip.min.js' %}"></script>
    <script type="text/javascript" src="{% static 'ss_viewer/js/FileSaver.min.js' %}"></script>
    <script type="text/javascript" src="{% static 'ss_viewer/setupBulkPlotDownloads.js' %}"></script>
-
+   <script type="text/javascript" src="{% static 'ss_viewer/ajaxyPosts.js' %}"></script>
+   <!-- ajaxy posts contains code for creating AJAXy posts for searches, paging, and CSV downloads -->
+   <script type="text/javascript" src="{% static 'ss_viewer/searchControl.js' %}"></script>
+   <!-- searchControl.js contains code for setting up the AJAXy form submitssions,
+           paging, hiding/showing controls -->
 </head>
 <body>
 <!-- <div class="container-fluid"> was there a good reason not to just
@@ -111,6 +115,7 @@
 </div>
 
 <div id="drop-in"></div>
+<!-- this div is where search results are 'dropped in' -->
 
 </div> <!-- close the 'content' div -->
 </div> <!-- close the 'container' div -->
@@ -243,55 +248,6 @@ function svgImage(xml) {
 }
 
 
-    function setupAjaxyFormSubmissions(){
-     //beginning of AJAXY search handling code.   
-     //could be nicely refactored.
-     $("#snpid_window_form").on('submit', function(event){
-         event.preventDefault();
-         hideControlsDuringSearch();
-         create_search_post('search', 'snpid-window-search');
-     });
-     $("#snpid_search_form").on('submit', function(event){
-         event.preventDefault();  //works fine here?
-         hideControlsDuringSearch();
-         create_search_post('search', 'snpid-search');
-     });
-     $("#gl_region_search_form").on('submit', function(event){
-         event.preventDefault();  //works fine here?
-         hideControlsDuringSearch();
-         create_search_post('search', 'gl-region-search');
-     });
-     $("#gene_name_form").on('submit', function(event){
-         event.preventDefault();
-         hideControlsDuringSearch();
-         create_search_post('search', 'gene-name-search');
-     });
-     $("#tf_search_form").on('submit', function(event){
-         event.preventDefault();
-         hideControlsDuringSearch();
-         create_search_post('search', 'trans-factor-search');
-     });
-    }
-    function hideControlsDuringSearch(){
-         $("div#form_errors").empty();
-         $("#search_results").remove();   
-         $("#drop-in").empty();
-    }
-
-    function showHidePrevNext(search_paging_info){
-        if ( (search_paging_info != null) && (search_paging_info.show_next_btn) ){
-          $("#ajaxyPagingButtons #next_button").attr("style", "display:inline;"); 
-        }else{
-          $("#ajaxyPagingButtons #next_button").attr("style", "display:none;"); 
-        }
-        if ( (search_paging_info != null) && (search_paging_info.show_prev_btn) ){
-          $("#ajaxyPagingButtons #prev_button").attr("style", "display:inline;"); 
-        }else{ 
-          $("#ajaxyPagingButtons #prev_button").attr("style", "display:none;"); 
-        }
-    }
-
-
     function setupPlotsForSearchResults(){
        //the two blocks below can be factored together.
         $("td.show_plots > button[id^='show_plot']").click(function(e) {
@@ -419,216 +375,6 @@ function svgImage(xml) {
               $("#drop-in table tbody").append(rows);
               setupPlotsForSearchResults(); //copied (should be fully moved) out of document.ready
           }//end of show_search_results function.
-
-
-       //TODO: determine if search type is a needed parameter for these.
-       function create_search_post(action_name, search_type){
-         var formElement = document.querySelector('div.active form');
-         form_data = new FormData(formElement); 
-         
-         form_data.append('search_type', search_type);
-         form_data.append('action',  action_name);
-         var url_endpoint = 'ajaxy-' + search_type + '/';
-
-         $("div#status_message").text("Working... ");
-         $("div#download_button").attr("style", "display:none;");
-         $("div#download_page_of_plots").hide();
-
-         showHidePrevNext(null); 
-         //hides the search buttons while we are working...
-
-          $.ajax({
-              beforeSend: function(xhr, settings) {
-                   if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                       xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                   }
-                   var target = $("body");
-                   var spinner = new Spinner().spin();
-                   target.append(spinner.el);
-                   console.log("appended spinner!");
-              },
-              url: url_endpoint, 
-              type: "POST", 
-              data: form_data,   
-              processData: false,
-              cache: false,
-              contentType: false,
-             
-              success: function(json) {
-                  console.log("AJAX call reported success. Next line w/ response");
-                  console.log(json);
-                  $("div#status_message").text(json.status_message);
-
-                  if ( json.api_response != null){
-                      show_search_results(json);
-                  }
-
-                  //save data about the search onto the page: 
-                  //search type
-                  $("#type_of_shown_results").text(search_type);
-
-                  //what about just grabbing the form data that is sent back?
-                  console.log(json.form_data); //try to grab the values out of here.
-
-                  //JSON dict containing search params that correspond to any 
-                  //search results shown.
-                  
-                   var values = {};
-
-                  values = json.form_data; //does it work to just store the dict directly and re-copy it?
-                  if (json.search_paging_info != null){ 
-                      values.page_of_results_shown =
-                              json.search_paging_info.page_of_results_to_display;
-                      console.log("...setting page number of results shown to:" + values.page_of_results_shown);
-                  }
-                  //this should contain a correct version of page_of_results_shown.
-                  var values_to_save_for_paging = JSON.stringify(values);
-                  console.log("values to persist after successful search: " + values_to_save_for_paging);
-                  $("div#current_search_params").text(values_to_save_for_paging);
-
-              },
-              error: function(xhr, errmsg, err) {
-                  /* would put code down here to append error messages onto the search page.*/
-                  console.log(xhr.status + ": " + xhr.responseText);
-                  //MOVE THIS TO ITS OWN FUNCTION:
-                  var errorJSON = jQuery.parseJSON(xhr.responseText);
-                  var errlist = '<ul>';
-                  for ( var j = 0; j < errorJSON.form_errors.length; j++){
-                      errlist += '<li>' + errorJSON.form_errors[j] + '</li>';
-                  } 
-                  errlist += '</ul>';
-                  $("div#form_errors").append(errlist);
-                  $("div#status_message").text(errorJSON.status_message);
-                  showHidePrevNext(null); //hides the next and previous buttons.
-              },
-              complete: function(){
-                  console.log("complete is acctually happenning; do shared stuff if this triggers for success AND error.");
-                  $("div.spinner").remove();
-              }
-          });              
-       }
-
-       //search type should already be present.
-       //some of this can be factored out...
-       function create_paging_post(action_name, search_type){
-         var val_text = $("div#current_search_params").text();
-         var values = jQuery.parseJSON(val_text);
-         values['action'] = action_name
-         var url_endpoint = 'ajaxy-' + search_type + '/';
-         $("div#status_message").text("Working... ");
-         $("div#download_button").attr("style", "display:none;");
-         showHidePrevNext(null); 
-         //hides the search buttons while we are working...
-
-          console.log("about to send ajax to endpoint " +
-                      url_endpoint +  " with these values:");
-          console.log(values);
-          $.ajax({
-              beforeSend: function(xhr, settings) {
-                   if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                       xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                   }
-                   var target = $("body");
-                   var spinner = new Spinner().spin();
-                   target.append(spinner.el);
-                   console.log("appended spinner!");
-              },
-              url: url_endpoint, //url: "ajaxy-snpid-window-search/",
-              type: "POST", 
-              data: values , 
-             
-              success: function(json) {
-                  console.log("PAGING: AJAX call reported success. Next line w/ response");
-                  console.log(json);
-
-                  //this should contain a correct version of page_of_results_shown.
-                  $("div#status_message").text(json.status_message);
-
-                  if ( json.api_response != null){
-                      show_search_results(json);
-                  }
-                  if (json.search_paging_info != null){ 
-                      values.page_of_results_shown =
-                              json.search_paging_info.page_of_results_to_display;
-                      console.log("...setting page number of results shown to:" + values.page_of_results_shown);
-                  }
-                  var values_to_save_for_paging = JSON.stringify(values);
-                  $("div#current_search_params").text(values_to_save_for_paging);
-              },
-              error: function(xhr, errmsg, err) {
-                  console.log(xhr.status + ": " + xhr.responseText);
-                  //MOVE THIS TO ITS OWN FUNCTION: can be shared 
-                  var errorJSON = jQuery.parseJSON(xhr.responseText);
-                  var errlist = '<ul>';
-                  for ( var j = 0; j < errorJSON.form_errors.length; j++){
-                      errlist += '<li>' + errorJSON.form_errors[j] + '</li>';
-                  } 
-                  errlist += '</ul>';
-                  $("div#form_errors").append(errlist);
-                  $("div#status_message").text(errorJSON.status_message);
-                  showHidePrevNext(null); //hides the next and previous buttons.
-              },
-              complete: function(){
-                  console.log("complete is acctually happenning; do shared stuff if this triggers for success AND error.");
-                  $("div.spinner").remove();
-              }
-          });              
-       }
-
-
-       //may be factored back into other create_post function; separate for now.
-
-      //SOURCE:
-      //http://stackoverflow.com/questions/28165424/download-file-via-jquery-ajax-post
-      function create_download_post(search_type) {
-          var val_text = $("div#current_search_params").text();
-          values = jQuery.parseJSON(val_text);
-          values['action'] = 'Download Results';
-          var result_text = $("div#status_message").text();
-          $("div#status_message").text("Working... ");
-
-          var url_endpoint = 'ajaxy-' + search_type + '/';
-
-          xhttp = new XMLHttpRequest();
-          xhttp.onreadystatechange = function() {
-              var a;
-              if (xhttp.readyState === 4 && xhttp.status === 200) {
-                  a = document.createElement('a');
-                  a.href = window.URL.createObjectURL(xhttp.response);
-                  a.download = "search-results-download.csv";
-                  a.style.display = 'none';
-                  document.body.appendChild(a);
-                  a.click();
-                  $("div#status_message").text(result_text);
-              }
-          };
-          xhttp.open("POST", url_endpoint);
-          xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-          xhttp.setRequestHeader("X-CSRFToken", csrftoken);
-         
-          console.log("values for submitting for download; "+ values);
-
-          // You should set responseType as blob for binary responses
-          xhttp.responseType = 'blob';
-          xhttp.withCredentials = true;
-          xhttp.send(JSON.stringify(values));
-        }
-
-      function pagingAJAX(nextOrPrev){
-        var active_search = $("span#type_of_shown_results")[0].innerText.trim();
-        //copied out of the form's on_submit event handler  
-        $("div#form_errors").empty();
-        $("#search_results").remove();   
-        $("#drop-in").empty();
-        create_paging_post(nextOrPrev, active_search);
-      }
-
-      //this may need to change.
-      function clickDownloadResultsAJAX(){
-           var active_search = $("span#type_of_shown_results")[0].innerText.trim();
-           create_download_post(active_search); //action name, search type
-      }
-
 
     $(".formcontrol").tooltip({
       position: "bottom left",
