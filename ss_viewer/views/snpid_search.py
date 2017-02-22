@@ -12,10 +12,11 @@ class SnpidSearchView(GenericSearchView):
         api_search_query.update(self.get_pvalues_from_form())
         return api_search_query
 
+    #TODO: remove this one...
     def handle_params_for_download(self, form_data):
        snpid_list = [one_snpid.strip() for one_snpid in 
-                    form_data['prev_search_raw_requested_snpids'].split(",")]
+                    form_data['raw_requested_snpids'].split(",")]
        return \
-        {'pvalue_rank' : form_data['prev_search_pvalue_rank_cutoff'], 
+        {'pvalue_rank' : form_data['pvalue_rank_cutoff'], 
          'snpid_list'  : snpid_list } 
 

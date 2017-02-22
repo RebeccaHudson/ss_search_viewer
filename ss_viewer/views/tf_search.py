@@ -29,16 +29,16 @@ class TranscriptionFactorSearchView(GenericSearchView):
     #TODO: properly handle ENCODE data.
     def handle_params_for_download(self, form_data):
         motif_value = None
-        if form_data['prev_search_tf_library'] == 'encode': 
-            motif_value = form_data['prev_search_encode_trans_factor'] 
+        if form_data['tf_library'] == 'encode': 
+            motif_value = form_data['encode_trans_factor'] 
         else:   
             #JASPAR
             tft = TFTransformer()
             motif_value = tft.lookup_motifs_by_tf(
-                                  form_data['prev_search_trans_factor']),
+                                  form_data['trans_factor']),
             print "motif value for download " + repr(motif_value)
             motif_value = motif_value[0]
         return \
           {'motif'      : motif_value,
-           'pvalue_rank': form_data['prev_search_pvalue_rank_cutoff'],
-           'tf_library' : form_data['prev_search_tf_library']         }
+           'pvalue_rank': form_data['pvalue_rank_cutoff'],
+           'tf_library' : form_data['tf_library']         }

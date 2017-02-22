@@ -14,6 +14,6 @@ class GeneNameSearchView(GenericSearchView):
      
     def handle_params_for_download(self, form_data):
         return \
-        { 'gene_name'   :  form_data['prev_search_gene_name'],
-          'pvalue_rank' :  form_data['prev_search_pvalue_rank_cutoff'],
-          'window_size' :  form_data['prev_search_window_size']  }
+        { 'gene_name'   :  form_data['gene_name'],
+          'pvalue_rank' :  form_data['pvalue_rank_cutoff'],
+          'window_size' :  form_data['window_size']  }
