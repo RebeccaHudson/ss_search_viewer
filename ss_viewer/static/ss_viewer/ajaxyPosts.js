@@ -5,7 +5,8 @@ function create_search_post(action_name, search_type){
  
  form_data.append('search_type', search_type);
  form_data.append('action',  action_name);
- var url_endpoint = 'ajaxy-' + search_type + '/';
+ // var url_endpoint = 'ajaxy-' + search_type + '/';
+ var url_endpoint = search_type + '/';
 
  $("div#status_message").text("Working... ");
  $("div#download_button").attr("style", "display:none;");

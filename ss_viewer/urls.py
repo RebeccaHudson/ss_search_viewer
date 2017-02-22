@@ -45,7 +45,7 @@ urlpatterns = [
       views.gl_search.GenomicLocationSearchView.as_view(),
       name='gl-region-search'),
 
-  url(r'^trans-factor-search/$',
+  url(r'trans-factor-search/$',
       views.tf_search.TranscriptionFactorSearchView.as_view(),
       name='trans-factor-search'),
 
