@@ -1,58 +1,66 @@
 {% load staticfiles %}
-<html>
-  <head>
-    <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
-     <meta charset="utf-8">
-    <title>Detail for {{ id_str }} </title>
-  </head>
+<head>
+  <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <body>
-    <!-- No Navigation away from detail page. You are supposed to close it.-->
-    <div class="container">
-      <div id="content">
+  <title>atSNP Search</title>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
+  <link href="{% static 'ss_viewer/plot-styles.css' %}" rel="stylesheet"> 
+  
+   <script src="http://d3js.org/d3.v3.min.js"></script> <!-- this should be saved statically into the project -->
+   
+   <script type="text/javascript" src="{% static 'ss_viewer/plotIntoSVGSkeleton.js' %}"> </script> 
+   <!-- ajaxy posts contains code for creating AJAXy posts for searches, paging, and CSV downloads -->
+   <!-- searchControl.js contains code for setting up the AJAXy form submitssions,
+           paging, hiding/showing controls -->
+   <script type="text/javascript" src="{% static 'ss_viewer/plots.js' %}"></script>
+   <!-- plots.js contains all code for drawing plots  -->
+</head>
+<body>
+<!-- <div class="container-fluid"> was there a good reason not to just
+                                   have this as 'container'?   -->
+<div class="container">
+<div id="content">
          <h3 style="text-decoration:underline;"> Details </h3>
          <p>This is where the info goes</p>
          <p>id string: {{ id_str }}    </p>
          <p> full api response {{ api_response }}  </p>
          <p> plot data: {{ api_response.json_for_plotting }} </p>
-         <table>
-         <tr> <thead>Details for {{ id_str }}</thead></tr>
-         <tbody>
-         <tr> <td> snp_end            </td> <td>{{ api_response.snp_end             }} </td></tr>
-         <tr> <td> log_lik_ref        </td> <td>{{ api_response.log_lik_ref         }} </td></tr>
-         <tr> <td> motif              </td> <td>{{ api_response.motif               }} </td></tr>
-         <tr> <td> pos                </td> <td>{{ api_response.pos                 }} </td></tr>
-         <tr> <td>snpAllele           </td> <td>{{ api_response.snpAllele           }} </td></tr>
-         <tr> <td>snp_aug_match_seq   </td> <td>{{ api_response.snp_aug_match_seq   }} </td></tr>
-         <tr> <td>ref_strand          </td> <td>{{ api_response.ref_strand          }} </td></tr>
-         <tr> <td>snp_ start          </td> <td>{{ api_response.snp_start           }} </td></tr>
-         <tr> <td>snp_extra_pwm_off   </td> <td>{{ api_response.snp_extra_pwm_off   }} </td></tr>
-         <tr> <td>pval_cond_snp       </td> <td>{{ api_response.pval_cond_snp       }} </td></tr>
-         <tr> <td>pval_rank           </td> <td>{{ api_response.pval_rank           }} </td></tr>
-         <tr> <td>log_lik_ratio       </td> <td>{{ api_response.log_lik_ratio       }} </td></tr>
-         <tr> <td>ref_start           </td> <td>{{ api_response.ref_start           }} </td></tr>
-         <tr> <td>chr                 </td> <td>{{ api_response.chr                 }} </td></tr>
-         <tr> <td>snp_strand          </td> <td>{{ api_response.snp_strand          }} </td></tr>
-         <tr> <td>pval_diff           </td> <td>{{ api_response.pval_diff           }} </td></tr>
-         <tr> <td>log_enhance_odds    </td> <td>{{ api_response.log_enhance_odds    }} </td></tr>
-         <tr> <td>log_lik_snp         </td> <td>{{ api_response.log_lik_snp         }} </td></tr>
-         <tr> <td>motif_len           </td> <td>{{ api_response.motif_len           }} </td></tr>
-         <tr> <td>pval_cond_ref       </td> <td>{{ api_response.pval_cond_ref       }} </td></tr>
-         <tr> <td>refAllele           </td> <td>{{ api_response.refAllele           }} </td></tr>
-         <tr> <td>ref_extra_pwm_offset</td> <td>{{ api_response.ref_extra_pwm_offset}} </td></tr>
-         <tr> <td>ref_end             </td> <td>{{ api_response.ref_end             }} </td></tr>
-         <tr> <td>pval_ref            </td> <td>{{ api_response.pval_ref            }} </td></tr>
-         <tr> <td>log_reduce_odds     </td> <td>{{ api_response.log_reduce_odds     }} </td></tr>
-         <tr> <td>snpid               </td> <td>{{ api_response.snpid               }} </td></tr>
-         <tr> <td>trans_factor        </td> <td>{{ api_response.trans_factor        }} </td></tr>
-         <tr> <td>ref_aug_match_seq   </td> <td>{{ api_response.ref_aug_match_seq   }} </td></tr>
-         <tr> <td>pval_snp            </td> <td>{{ api_response.pval_snp            }} </td></tr>
-         </tbody>
-         </table>
-         <div id="plot_data" style="display:none;">
-         </div> <!-- end plot data div -->
-      </div> <!-- end content div -->
-    </div>   <!-- end container div -->
-  </body>
-</html>
+<!--  this is the way that we will be displaying the plot -->
+<div class="side plot">
+   <div id="plots">
+   {% include "ss_viewer/svg_skeleton.html" %}
+   <!-- this should hide unless a plot is shown -->
+   <!-- <button id="save_plot" type="button" style="display:none;" class="btn btn-link">
+   Save Plot </button> -->
+   </div>
+</div>
+ <canvas id="canvas" style="display:none;" width="800" height="370"></canvas>
 
+<div id="plot_data">
+  {{ api_response.json_for_plotting }} 
+</div>
+
+
+<div id="drop-in"></div>
+<!-- this div is where search results are 'dropped in' -->
+
+</div> <!-- close the 'content' div -->
+</div> <!-- close the 'container' div -->
+
+<!-- TODO: ensure this is handled in <head> and get it out of here. -->
+<script src="{% static 'ss_viewer/js/bootstrap.min.js' %}"></script>
+
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        console.log("I'm a kitty!");
+        var data_for_one_plot = $("#plot_data")[0].textContent;
+        onePlotData = jQuery.parseJSON(data_for_one_plot);
+        makeAPlot(onePlotData, 'target-0');
+        console.log("I'm stuck in this box!");
+    });//end of document.ready stuff.
+</script>
+</body>
