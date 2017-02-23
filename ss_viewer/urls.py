@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from . import views
 from .views import main #this is apparently the key?
+from .views import single_detail
 from .views import gl_search
 from .views import snpid_search
 from .views import shared
@@ -40,6 +41,10 @@ urlpatterns = [
   url(r'^multi-search/$', 
        views.shared.StandardFormset.show_multisearch_page,
        name='multi-search'),
+
+  url(r'detail/(?P<id_str>\w+_\w+_\w+)/$',
+       views.single_detail.one_row_detail,
+       name = 'detail'),
 
   url(r'gl-region-search/$', 
       views.gl_search.GenomicLocationSearchView.as_view(),
