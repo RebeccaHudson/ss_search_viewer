@@ -10,7 +10,8 @@ function create_search_post(action_name, search_type){
 
  $("div#status_message").text("Working... ");
  $("div#download_button").attr("style", "display:none;");
- $("div#download_page_of_plots").hide();
+ $("#download_page_of_plots").hide();
+ $("#download_plots_for_checked_rows").hide();
 
  showHidePrevNext(null); 
  //hides the search buttons while we are working...
