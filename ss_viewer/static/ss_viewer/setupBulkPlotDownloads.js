@@ -71,10 +71,7 @@ function checkedRowPlotDownload(){
              checkedTargets.push(targets[i]); 
           }
        }
-       
-
        console.log("checkedTargets.length " + checkedTargets.length);
-       //for (var i = 1; i< targets.length; i++) {
        for (var i = 0; i < checkedTargets.length; i++) {
           console.log("adding one plot to the bulk download " + checkedTargets[i]);
           convertImgToBase64URL(checkedTargets[i], function (base64Img, fname_for_plot) {
@@ -84,7 +81,6 @@ function checkedRowPlotDownload(){
                tag: fname_for_plot
             });
             counter++;
-            //if (counter == (targets.length-1)) {
             if (counter == (checkedTargets.length)) {
               createArchive(images);
             }
