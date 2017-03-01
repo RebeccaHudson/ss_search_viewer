@@ -129,6 +129,14 @@ svg {
     </svg>
 </div>
 
+<div id="halfplot-ref">
+   {% include 'ss_viewer/half_plot_svg_skeleton.html' %}
+</div>
+
+<div id="halfplot-SNP">
+   {% include 'ss_viewer/half_plot_snp_svg_skeleton.html' %}
+</div>
+
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
         //if jquery is being updated, note: 
@@ -145,6 +153,13 @@ svg {
         makeAPlot(plottingData, "target-0");
         $("button#show_plot").click(function(e) {
          });
+
+        makeAHalfPlot(plottingData, "target-refhalf-0"); //should specify REF in the name.
+        makeAHalfPlotSNP(plottingData, "target-snphalf-0");
+        console.log("at least returned from makeHalfAPlot");
+        
+        //this is where to add the makeAHalfPlot call.
+        //makeAHalfPlot (ref)  
 
       //  d3.select("svg")  //.append("svg:svg")
       //  .attr("width", 300)
