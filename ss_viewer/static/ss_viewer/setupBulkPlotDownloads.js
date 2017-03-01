@@ -50,7 +50,7 @@ function bulkPlotDownload(){
 function checkedRowPlotDownload(){
        var images = [];
        var counter = 0;
-       var targets = $('svg[id^="target"]');
+       var targets = $('svg[id^="target"].target');
        //add some logic that results in only checked rows being added. 
        //get the parent element of each target.
        // check that parent element for a checkbox; 
