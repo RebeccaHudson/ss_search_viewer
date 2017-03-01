@@ -11,10 +11,13 @@
        });
        cloneSVGSkeleton(plottingData);
        $("svg#target-0").hide();
+       $("svg#target-refhalf-0").hide();
+       $("svg#target-snphalf-0").hide();
        for ( var n = 0; n < plottingData.length; n++){
            var targetSVGid = "target-" + plottingData[n].plot_id_str;
            //console.log("creating plot for id : " + targetSVGid);
            makeAPlot(plottingData[n], targetSVGid);
+           makeAPlot(plottingData[n], 'target-refhalf-' +  plottingData[n].plot_id_str);
            if ( n > 0 ){
              //console.log("adding hidden class to " + targetSVGid);
              $("#"+targetSVGid).parent().addClass("hidden");
@@ -85,6 +88,21 @@ function svgImage(xml) {
 }
 
 
+//move and show the plot halves.
+//based on setupPlotsForSearchResults
+    function showHalfPlotsForSearchResults(){
+      var halfPlotColumns = $("td.ref-plot");
+      for ( var i = 0; i < halfPlotColumns.length; i++){
+          var idOfPlotToGrab = halfPlotColumns[i].attr('id').replace('target-refhalf-', '');
+           
+      }
+    //get into each row.
+    }
+
+
+
+
+
     function setupPlotsForSearchResults(){
        //the two blocks below can be factored together.
         $("td.show_plots > button[id^='show_plot']").click(function(e) {
@@ -130,10 +148,17 @@ function svgImage(xml) {
        });
        cloneSVGSkeleton(plottingData);
        $("svg#target-0").hide();
+       $("svg#target-refhalf-0").hide();
+       $("svg#target-snphalf-0").hide();
        for ( var n = 0; n < plottingData.length; n++){
            var targetSVGid = "target-" + plottingData[n].plot_id_str;
+           var halfPlotId = 'target-refhalf-' +  plottingData[n].plot_id_str; //change to halfRefPlot
+           var halfSnpPlotId = 'target-snphalf-' +  plottingData[n].plot_id_str;
+
            //console.log("creating plot for id : " + targetSVGid);
            makeAPlot(plottingData[n], targetSVGid);
+           makeAHalfPlot(plottingData[n], halfPlotId );
+           makeAHalfPlotSNP(plottingData[n], halfSnpPlotId );
            if ( n > 0 ){
              //console.log("adding hidden class to " + targetSVGid);
              $("#"+targetSVGid).parent().addClass("hidden");
@@ -142,9 +167,26 @@ function svgImage(xml) {
              $("#"+targetSVGid).parent().addClass("show-plot");
            } 
            var plotToMove = $("#"+targetSVGid).parent().detach();
+           var halfPlotToMove = $("#" + halfPlotId).parent().detach();
+           var halfSnpPlotToMove = $("#" + halfSnpPlotId).parent().detach();
+
            var idOfPlotTarget = "#" + targetSVGid.replace('target-', 'show_plot_');
+           var idOfHalfPlotTarget = "#ref-plot-" + plottingData[n].plot_id_str;
+           var idOfHalfSnpPlotTarget = "#snp-plot-" + plottingData[n].plot_id_str;
+
            var putPlotHere = $(idOfPlotTarget).parent();
+           var putHalfPlotHere = $(idOfHalfPlotTarget);
+           var putHalfSnpPlotHere = $(idOfHalfSnpPlotTarget);
+
+           //console.log("trying to put half-plot " + putHalfPlotHere);
+           console.log(putHalfPlotHere);
            plotToMove.appendTo(putPlotHere);
+
+           halfPlotToMove.appendTo(putHalfPlotHere);
+           halfSnpPlotToMove.appendTo(putHalfSnpPlotHere);
+
+           halfPlotToMove.find('svg').show();
+           halfSnpPlotToMove.find('svg').show();
        } 
        console.log("completed plotting!");
       }

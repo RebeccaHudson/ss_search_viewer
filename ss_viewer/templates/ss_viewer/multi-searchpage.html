@@ -62,6 +62,8 @@
 <div class="side plot">
    <div id="plots">
    {% include "ss_viewer/svg_skeleton.html" %}
+   {% include "ss_viewer/half_plot_svg_skeleton.html" %}
+   {% include "ss_viewer/half_plot_snp_svg_skeleton.html" %}
    <!-- this should hide unless a plot is shown -->
    <!-- <button id="save_plot" type="button" style="display:none;" class="btn btn-link">
    Save Plot </button> -->
@@ -182,6 +184,8 @@
               <td>SNPid                    </td>    \ 
               <td>Chromosome               </td>    \ 
               <td>Position                 </td>    \ 
+              <td>Reference Plot           </td>    \ 
+              <td>SNP Plot                 </td>    \
               <td>Reference Allele         </td>    \ 
               <td>SNP Allele               </td>    \ 
               <td>p-value Rank             </td>    \ 
@@ -207,6 +211,8 @@
               rows += "<td>" + json.api_response[i].snpid + "</td>";   
               rows += "<td>" + json.api_response[i].chr + "</td>";   
               rows += "<td>" + json.api_response[i].pos.toLocaleString() + "</td>";   
+              rows += "<td class=\"ref-plot\" id=\"ref-plot-" + json.api_response[i].plot_id_str +"\"></td>";
+              rows += "<td class=\"snp-plot\" id=\"snp-plot-" + json.api_response[i].plot_id_str +"\"></td>";
               rows += "<td>" + json.api_response[i].refAllele + "</td>";   
               rows += "<td>" + json.api_response[i].snpAllele + "</td>";   
               rows += "<td>" + json.api_response[i].pval_rank.toExponential(3) + "</td>";   
@@ -227,7 +233,7 @@
               rows +=  json.api_response[i].plot_id_str + '" ' +
                         'title="Download the plot for this data.">' +
                         'Download Plot</button></td>'; 
-              //rows += 'Show Plot</button></td>';
+              rows += 'Show Plot</button></td>';
               rows += '<td id="plot_data_'  + json.api_response[i].plot_id_str +  '" style="display:none;"';
               rows += ' class="plotting_data">' + json.api_response[i].json_for_plotting + '</td>';
               rows += '<td> <a href=' 

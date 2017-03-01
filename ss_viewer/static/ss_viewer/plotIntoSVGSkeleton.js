@@ -56,8 +56,6 @@
         d3.select("svg#" + idOfTargetSVG + " g#line2margin text").text(refStrand);
         d3.select("svg#" + idOfTargetSVG + " g#line3margin text").text(snpStrand);
 
-
-      
         //Draw the scaled motifs (aka "PWM"s)
         //The line1 and line4 motifs will be the same motif, but possibly with
         //different offsets and different strand directions.
