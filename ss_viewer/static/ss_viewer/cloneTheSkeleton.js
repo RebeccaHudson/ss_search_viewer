@@ -1,6 +1,7 @@
 //d3 and jquery should already be included and available.
 
-//plottingData
+//TODO: plottingData is only passed in here to get at its length
+//      change this such that only its length needs to be passed.
 function cloneSVGSkeleton(plottingData){
     var nPlots = plottingData.length;
     var nodeToClone = $("svg.target").parent().first();
