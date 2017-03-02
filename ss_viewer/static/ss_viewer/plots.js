@@ -13,54 +13,56 @@
        $("svg#target-0").hide();
        $("svg#target-refhalf-0").hide();
        $("svg#target-snphalf-0").hide();
-       for ( var n = 0; n < plottingData.length; n++){
-           var targetSVGid = "target-" + plottingData[n].plot_id_str;
-           //console.log("creating plot for id : " + targetSVGid);
-           makeAPlot(plottingData[n], targetSVGid);
-           makeAPlot(plottingData[n], 'target-refhalf-' +  plottingData[n].plot_id_str);
-           if ( n > 0 ){
-             //console.log("adding hidden class to " + targetSVGid);
-             $("#"+targetSVGid).parent().addClass("hidden");
-           }else {
-             //$("#save_plot").attr('style', 'display: inline;');
-             $("#"+targetSVGid).parent().addClass("show-plot");
-           } 
-       } 
+       //for ( var n = 0; n < plottingData.length; n++){
+       //    //var targetSVGid = "target-" + plottingData[n].plot_id_str;
+       //    //console.log("creating plot for id : " + targetSVGid);
+       //    //makeAPlot(plottingData[n], targetSVGid);
+       //    //makeAPlot(plottingData[n], 'target-refhalf-' +  plottingData[n].plot_id_str);
+       //    if ( n > 0 ){
+       //      //console.log("adding hidden class to " + targetSVGid);
+       //      $("#"+targetSVGid).parent().addClass("hidden");
+       //    }else {
+       //      //$("#save_plot").attr('style', 'display: inline;');
+       //      $("#"+targetSVGid).parent().addClass("show-plot");
+       //    } 
+       //} 
        console.log("completed plotting!");
     }
 
+
+    //this is happenning elsewhere now. can probably be deleted.
     //add this as an event listener for the inline plot downloads.
     //for the 'download plot' button that's inline.
-    function handleInlinePlotDownload(){
-         console.log("hit the function to  handleInlinePlotDownload");
-         var svg = document.querySelector('div.show-plot > svg');
-         svg = svg.cloneNode(true); //makes a deep copy.
-         svg.setAttribute("id", "tempSVG");
+    //function handleInlinePlotDownload(){
+    //     console.log("hit the function to  handleInlinePlotDownload");
+    //     var svg = document.querySelector('div.show-plot > svg');
+    //     svg = svg.cloneNode(true); //makes a deep copy.
+    //     svg.setAttribute("id", "tempSVG");
 
-         var defs = d3.select(svg).insert("defs", ":first-child").append("marker")
-                                   .attr("id","Triangle")
-                                   .attr("markerWidth","5")
-                                   .attr("markerHeight","3")
-                                   .attr("stroke", "blue")
-                                   .attr("orient", "auto")
-                                   .attr("viewBox", "0 0 10 10")
-                                   .attr('refX', '1')
-                                   .attr('refY', '5')
-                                   .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
-          
-          var canvas = document.getElementById('canvas');
-          canvas.setAttribute('width',  $("div.show-plot svg").attr('width'));
+    //     var defs = d3.select(svg).insert("defs", ":first-child").append("marker")
+    //                               .attr("id","Triangle")
+    //                               .attr("markerWidth","5")
+    //                               .attr("markerHeight","3")
+    //                               .attr("stroke", "blue")
+    //                               .attr("orient", "auto")
+    //                               .attr("viewBox", "0 0 10 10")
+    //                               .attr('refX', '1')
+    //                               .attr('refY', '5')
+    //                               .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
+    //      
+    //      var canvas = document.getElementById('canvas');
+    //      canvas.setAttribute('width',  $("div.show-plot svg").attr('width'));
 
-          var ctx = canvas.getContext('2d');
+    //      var ctx = canvas.getContext('2d');
 
-          // Reset the canvas to remove any plots drawn before this one 
-          //taken from :http://www.html5canvastutorials.com/advanced/html5-clear-canvas/ 
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //      // Reset the canvas to remove any plots drawn before this one 
+    //      //taken from :http://www.html5canvastutorials.com/advanced/html5-clear-canvas/ 
+    //      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-     
-          var data = (new XMLSerializer()).serializeToString(svg);
-          svgImage(data);
-    }//end of 'Download Plot' button click event listener.
+    // 
+    //      var data = (new XMLSerializer()).serializeToString(svg);
+    //      svgImage(data);
+    //}//end of 'Download Plot' button click event listener.
     //end of the plot downloading code.
 
 
@@ -88,57 +90,44 @@ function svgImage(xml) {
 }
 
 
-//move and show the plot halves.
-//based on setupPlotsForSearchResults
-    function showHalfPlotsForSearchResults(){
-      var halfPlotColumns = $("td.ref-plot");
-      for ( var i = 0; i < halfPlotColumns.length; i++){
-          var idOfPlotToGrab = halfPlotColumns[i].attr('id').replace('target-refhalf-', '');
-           
-      }
-    //get into each row.
-    }
-
-
-
-
-
     function setupPlotsForSearchResults(){
        //the two blocks below can be factored together.
-        $("td.show_plots > button[id^='show_plot']").click(function(e) {
-            var plot_button_id = e.target.attributes.getNamedItem('id').value;
-            var plot_str = plot_button_id.replace('show_plot_', '');
-            console.log("plot_str: " + plot_str);
-            /*  hiding the shown plot breaks if it's not there..*/
-            var currently_shown_plot = $("div.show-plot");
-            if (currently_shown_plot.length > 0){
-                currently_shown_plot.removeClass('show-plot');
-                currently_shown_plot.addClass('hidden'); 
-                var download_button_to_hide = currently_shown_plot
-                                             .parent()
-                                             .find('button[id^="download_plot"]');
-                download_button_to_hide.hide();
-            }
-            var id_of_plot_svg = 'target-'.concat(plot_str); 
-            var plot_selector = 'svg#'.concat(id_of_plot_svg);
-            console.log("show plot was clicked, id = " + id_of_plot_svg);
-            var div_to_show_now = $(plot_selector).parent();
-            console.log("div_to_show_now = ");
-            console.log( div_to_show_now );
-            var download_button =  div_to_show_now.parent().find('button[id^="download_plot"]');
-            download_button.show();
-            
-            div_to_show_now.removeClass('hidden');
-            div_to_show_now.addClass('show-plot');
-            $(plot_selector).attr('style', 'display: inline;');
-        }); 
+       
+       //  
+       // $("td.show_plots > button[id^='show_plot']").click(function(e) {
+       //     var plot_button_id = e.target.attributes.getNamedItem('id').value;
+       //     var plot_str = plot_button_id.replace('show_plot_', '');
+       //     console.log("plot_str: " + plot_str);
+       //     /*  hiding the shown plot breaks if it's not there..*/
+       //     var currently_shown_plot = $("div.show-plot");
+       //     if (currently_shown_plot.length > 0){
+       //         currently_shown_plot.removeClass('show-plot');
+       //         currently_shown_plot.addClass('hidden'); 
+       //         var download_button_to_hide = currently_shown_plot
+       //                                      .parent()
+       //                                      .find('button[id^="download_plot"]');
+       //         download_button_to_hide.hide();
+       //     }
+       //     var id_of_plot_svg = 'target-'.concat(plot_str); 
+       //     var plot_selector = 'svg#'.concat(id_of_plot_svg);
+       //     console.log("show plot was clicked, id = " + id_of_plot_svg);
+       //     var div_to_show_now = $(plot_selector).parent();
+       //     console.log("div_to_show_now = ");
+       //     console.log( div_to_show_now );
+       //     var download_button =  div_to_show_now.parent().find('button[id^="download_plot"]');
+       //     download_button.show();
+       //     
+       //     div_to_show_now.removeClass('hidden');
+       //     div_to_show_now.addClass('show-plot');
+       //     $(plot_selector).attr('style', 'display: inline;');
+       // }); 
 
-        var download_plot_buttons = $("td.show_plots > button[id^='download_plot']");
-        download_plot_buttons.click(function(e) {
-                  handleInlinePlotDownload();
-         }); 
-        download_plot_buttons.hide(); //show when the corresponding 'show plot' is clicked.
-        console.log("hiding the download buttons.");
+       // var download_plot_buttons = $("td.show_plots > button[id^='download_plot']");
+       // download_plot_buttons.click(function(e) {
+       //           handleInlinePlotDownload();
+       //  }); 
+       // download_plot_buttons.hide(); //show when the corresponding 'show plot' is clicked.
+       // console.log("hiding the download buttons.");
  
        var plottingData = [];
        $("td.plotting_data" ).each(function() {
