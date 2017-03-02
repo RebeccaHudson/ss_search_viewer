@@ -1,7 +1,7 @@
 //Draws plots in-line inside the table of search results.
+// this is called on document.ready()
+//  consider changing name:    setupPlotsBeforeSearch
 function drawPlotsInline(){
-   /* plotting data from each of the searched items.*/
-   //moved into a function for calling when AJAX results are returned.
    var plottingData = [];
    $("td.plotting_data" ).each(function() {
        var data_for_one_plot = this.textContent;
@@ -9,7 +9,10 @@ function drawPlotsInline(){
        plottingData.push(onePlotData);
        //console.log("preparing for one plot.. " + data_for_one_plot ); 
    });
-   cloneSVGSkeleton(plottingData);
+   cloneSVGSkeleton(plottingData);  
+   //the only thing cloneSVGSkeleton does with plottingData is get its length.
+ 
+   //hide all 3 of the original skeleton plots.
    $("svg#target-0").hide();
    $("svg#target-refhalf-0").hide();
    $("svg#target-snphalf-0").hide();
@@ -38,9 +41,8 @@ function svgImage(xml) {
   }
 }
 
-
+//this happens when search results are returned.
 function setupPlotsForSearchResults(){
-   //the two blocks below can be factored together.
    var plottingData = [];
    $("td.plotting_data" ).each(function() {
        var data_for_one_plot = this.textContent;
@@ -48,40 +50,33 @@ function setupPlotsForSearchResults(){
        plottingData.push(onePlotData);
    });
    cloneSVGSkeleton(plottingData);
-   $("svg#target-0").hide();
-   $("svg#target-refhalf-0").hide();
-   $("svg#target-snphalf-0").hide();
    for ( var n = 0; n < plottingData.length; n++){
        var targetSVGid = "target-" + plottingData[n].plot_id_str;
        var halfPlotId = 'target-refhalf-' +  plottingData[n].plot_id_str; //change to halfRefPlot
        var halfSnpPlotId = 'target-snphalf-' +  plottingData[n].plot_id_str;
 
-       //console.log("creating plot for id : " + targetSVGid);
        makeAPlot(plottingData[n], targetSVGid);
        makeAHalfPlot(plottingData[n], halfPlotId );
        makeAHalfPlotSNP(plottingData[n], halfSnpPlotId );
        if ( n > 0 ){
-         //console.log("adding hidden class to " + targetSVGid);
          $("#"+targetSVGid).parent().addClass("hidden");
        }else {
          $("#save_plot").attr('style', 'display: inline;');
          $("#"+targetSVGid).parent().addClass("show-plot");
        } 
-       var plotToMove = $("#"+targetSVGid).parent().detach();
+
+       //try: not moving the main plot into an 'inline' position.
+       //     see if checkedRow plot downloads can still be made to work.
        var halfPlotToMove = $("#" + halfPlotId).parent().detach();
        var halfSnpPlotToMove = $("#" + halfSnpPlotId).parent().detach();
 
-       var idOfPlotTarget = "#" + targetSVGid.replace('target-', 'show_plot_');
+       //how does the bulk download find this plot in order to download it?
+
        var idOfHalfPlotTarget = "#ref-plot-" + plottingData[n].plot_id_str;
        var idOfHalfSnpPlotTarget = "#snp-plot-" + plottingData[n].plot_id_str;
 
-       var putPlotHere = $(idOfPlotTarget).parent();
        var putHalfPlotHere = $(idOfHalfPlotTarget);
        var putHalfSnpPlotHere = $(idOfHalfSnpPlotTarget);
-
-       //console.log("trying to put half-plot " + putHalfPlotHere);
-       console.log(putHalfPlotHere);
-       plotToMove.appendTo(putPlotHere);
 
        halfPlotToMove.appendTo(putHalfPlotHere);
        halfSnpPlotToMove.appendTo(putHalfSnpPlotHere);
