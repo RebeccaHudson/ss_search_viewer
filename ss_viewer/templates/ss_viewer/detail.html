@@ -19,8 +19,7 @@
 <body>
 <div class="container">
 <div id="content">
-         <h3 style="text-decoration:underline;"> Details </h3>
-         <p> id string: {{ id_str }}  </p>
+         <h5 style="text-decoration:underline;"> Details </h5>
          <table>
          <tr> <thead>Details for {{ id_str }}</thead></tr>
          <tbody>
@@ -28,32 +27,31 @@
          <!--  <tr> <td>snp_aug_match_seq   </td> <td>{{ api_response.snp_aug_match_seq   }} </td></tr>--> 
          <!--  <tr> <td>snp_extra_pwm_off   </td> <td>{{ api_response.snp_extra_pwm_off   }} </td></tr>-->
          <!--  <tr> <td>ref_extra_pwm_offset</td> <td>{{ api_response.ref_extra_pwm_offset}} </td></tr>-->
-         <tr> <td>chr                 </td> <td>{{ api_response.chr }}                            </td></tr>
-         <tr> <td>pos                 </td> <td>{{ api_response.pos }}                            </td></tr>
-         <tr> <td>snpid               </td> <td>{{ api_response.snpid }}                          </td></tr>
-         <tr> <td>trans_factor        </td> <td>{{ api_response.trans_factor }}                   </td></tr>
-         <tr> <td>motif               </td> <td>{{ api_response.motif }}                          </td></tr>
-         <tr> <td>motif_len           </td> <td>{{ api_response.motif_len }}                      </td></tr>
-         <tr> <td>pval_rank           </td> <td>{{ api_response.pval_rank|floatformat:3 }}        </td></tr>
-         <tr> <td>snp_start           </td> <td>{{ api_response.snp_start }}                      </td></tr>
-         <tr> <td>snp_end             </td> <td>{{ api_response.snp_end }}                        </td></tr>
-         <tr> <td>ref_start           </td> <td>{{ api_response.ref_start }}                      </td></tr>
-         <tr> <td>ref_end             </td> <td>{{ api_response.ref_end }}                        </td></tr>
-         <tr> <td>log_lik_ref         </td> <td>{{ api_response.log_lik_ref |floatformat:3 }}     </td></tr>
-         <tr> <td>log_lik_ratio       </td> <td>{{ api_response.log_lik_ratio|floatformat:3 }}    </td></tr>
-         <tr> <td>log_enhance_odds    </td> <td>{{ api_response.log_enhance_odds|floatformat:3 }} </td></tr>
-         <tr> <td>log_reduce_odds     </td> <td>{{ api_response.log_reduce_odds |floatformat:3 }} </td></tr>
-         <tr> <td>log_lik_snp         </td> <td>{{ api_response.log_lik_snp| floatformat:3  }}      </td></tr>
-         <tr> <td>ref_aug_match_seq   </td> <td>{{ api_response.ref_aug_match_seq  }}             </td></tr>
-         <tr> <td>snp_strand          </td> <td>{{ api_response.snp_strand }}                     </td></tr>
-         <tr> <td>ref_strand          </td> <td>{{ api_response.ref_strand }}                     </td></tr>
-         <tr> <td>pval_ref            </td> <td>{{ api_response.pval_ref|floatformat:3 }}         </td></tr>
-         <tr> <td>pval_snp            </td> <td>{{ api_response.pval_snp|floatformat:3 }}         </td></tr>
-         <tr> <td>pval_cond_ref       </td> <td>{{ api_response.pval_cond_ref|floatformat:3}}     </td></tr>
-         <tr> <td>pval_cond_snp       </td> <td>{{ api_response.pval_cond_snp|floatformat:3}}     </td></tr>
-         <tr> <td>pval_diff           </td> <td>{{ api_response.pval_diff|floatformat:3 }}        </td></tr>
-         <tr> <td>refAllele           </td> <td>{{ api_response.refAllele }}                      </td></tr>
-         <tr> <td>snpAllele           </td> <td>{{ api_response.snpAllele }}                      </td></tr>
+         <tr> <td>Chromosome                  </td> <td>{{ api_response.chr }}                            </td></tr>
+         <tr> <td>Position                    </td> <td>{{ api_response.pos }}                            </td></tr>
+         <tr> <td>SNPid                       </td> <td>{{ api_response.snpid }}                          </td></tr>
+         <tr> <td>Transcription Factor        </td> <td>{{ api_response.trans_factor }}                   </td></tr>
+         <tr> <td>Motif                       </td> <td>{{ api_response.motif }}                          </td></tr>
+         <tr> <td>Motif Length                </td> <td>{{ api_response.motif_len }}                      </td></tr>
+         <tr> <td>Pvalue Rank                 </td> <td>{{ api_response.pval_rank|floatformat:3 }}        </td></tr>
+         <tr> <td>SNP Start                   </td> <td>{{ api_response.snp_start }}                      </td></tr>
+         <tr> <td>SNP End                     </td> <td>{{ api_response.snp_end }}                        </td></tr>
+         <tr> <td>Refrence Start              </td> <td>{{ api_response.ref_start }}                      </td></tr>
+         <tr> <td>Reference End               </td> <td>{{ api_response.ref_end }}                        </td></tr>
+         <tr> <td>Log Likelihood Reference    </td> <td>{{ api_response.log_lik_ref |floatformat:3 }}     </td></tr>
+         <tr> <td>Log Likelihood Ratio        </td> <td>{{ api_response.log_lik_ratio|floatformat:3 }}    </td></tr>
+         <tr> <td>Log Enhance Odds            </td> <td>{{ api_response.log_enhance_odds|floatformat:3 }} </td></tr>
+         <tr> <td>Log Reduce Odds             </td> <td>{{ api_response.log_reduce_odds |floatformat:3 }} </td></tr>
+         <tr> <td>Log Likelihood SNP          </td> <td>{{ api_response.log_lik_snp| floatformat:3  }}    </td></tr>
+         <tr> <td>SNP Strand                  </td> <td>{{ api_response.snp_strand }}                     </td></tr>
+         <tr> <td>Reference Strand            </td> <td>{{ api_response.ref_strand }}                     </td></tr>
+         <tr> <td>Pvalue Reference            </td> <td>{{ api_response.pval_ref|floatformat:3 }}         </td></tr>
+         <tr> <td>Pvalue SNP                  </td> <td>{{ api_response.pval_snp|floatformat:3 }}         </td></tr>
+         <tr> <td>Pvalue Conditional Reference</td> <td>{{ api_response.pval_cond_ref|floatformat:3}}     </td></tr>
+         <tr> <td>Pvalue Conditional SNP      </td> <td>{{ api_response.pval_cond_snp|floatformat:3}}     </td></tr>
+         <tr> <td>Pvalue Difference           </td> <td>{{ api_response.pval_diff|floatformat:3 }}        </td></tr>
+         <tr> <td>Reference Allele            </td> <td>{{ api_response.refAllele }}                      </td></tr>
+         <tr> <td>SNP Allele                  </td> <td>{{ api_response.snpAllele }}                      </td></tr>
          </tbody>
          </table>
 
