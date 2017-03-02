@@ -182,22 +182,16 @@
           <thead>                                                         \   
           <tr>                                      \ 
               <td>SNPid                    </td>    \ 
-              <td>Chromosome               </td>    \ 
-              <td>Position                 </td>    \ 
+              <td>Chromosome, Position     </td>    \ 
               <td>Reference Plot           </td>    \ 
               <td>SNP Plot                 </td>    \
-              <td>Reference Allele         </td>    \ 
-              <td>SNP Allele               </td>    \ 
+              <td style="display:none;">Reference Allele         </td>    \ 
+              <td style="display:none;">SNP Allele               </td>    \ 
               <td>p-value Rank             </td>    \ 
-              <td>Log Likelihood Reference </td>    \ 
-              <td>Log Likelihood SNP       </td>    \ 
-              <td>Log Likelihood Ratio     </td>    \ 
               <td>p-value Reference        </td>    \ 
               <td>p-value SNP              </td>    \ 
-              <td>p-value Difference       </td>    \ 
               <td>Transcription Factor     </td>    \ 
-              <td>Motif                    </td>    \ 
-              <td>Show Plot                </td>    \ 
+              <td style="display:none;">Motif                    </td>    \ 
               <td>Details                  </td>    \
               <td>Add to                            \
                   Bulk Download            </td>    \
@@ -209,22 +203,16 @@
           for (var i = 0; i < json.api_response.length; i ++){
               rows += "<tr>";
               rows += "<td>" + json.api_response[i].snpid + "</td>";   
-              rows += "<td>" + json.api_response[i].chr + "</td>";   
-              rows += "<td>" + json.api_response[i].pos.toLocaleString() + "</td>";   
+              rows += "<td>" + json.api_response[i].chr + ",&nbsp" + json.api_response[i].pos.toLocaleString() + "</td>";   
               rows += "<td class=\"ref-plot\" id=\"ref-plot-" + json.api_response[i].plot_id_str +"\"></td>";
               rows += "<td class=\"snp-plot\" id=\"snp-plot-" + json.api_response[i].plot_id_str +"\"></td>";
-              rows += "<td>" + json.api_response[i].refAllele + "</td>";   
-              rows += "<td>" + json.api_response[i].snpAllele + "</td>";   
+              rows += '<td style="display:none;">' + json.api_response[i].refAllele + "</td>";   
+              rows += '<td style="display:none;">' + json.api_response[i].snpAllele + "</td>";   
               rows += "<td>" + json.api_response[i].pval_rank.toExponential(3) + "</td>";   
-              rows += "<td>" + json.api_response[i].log_lik_ref.toExponential(3) + "</td>";   
-              rows += "<td>" + json.api_response[i].log_lik_snp.toExponential(3) + "</td>";   
-              rows += "<td>" + json.api_response[i].log_lik_ratio.toExponential(3) + "</td>";   
               rows += "<td>" + json.api_response[i].pval_ref.toExponential(3) + "</td>";   
               rows += "<td>" + json.api_response[i].pval_snp.toExponential(3) + "</td>";   
-              rows += "<td>" + json.api_response[i].pval_diff.toExponential(3) + "</td>";   
               rows += "<td>" + json.api_response[i].trans_factor + "</td>";   
-              rows += "<td>" + json.api_response[i].motif + "</td>";   
-              rows += '<td class="show_plots"></td>';
+              rows += '<td style="display:none;">' + json.api_response[i].motif + "</td>";   
               rows += '<td id="plot_data_'  + json.api_response[i].plot_id_str +  '" style="display:none;"';
               rows += ' class="plotting_data">' + json.api_response[i].json_for_plotting + '</td>';
               rows += '<td> <a href=' 
@@ -234,7 +222,7 @@
               rows += "</tr>";
           }
           $("#drop-in table tbody").append(rows);
-          setupPlotsForSearchResults(); //copied (should be fully moved) out of document.ready
+          setupPlotsForSearchResults(); 
       }//end of show_search_results function.
 
     $(".formcontrol").tooltip({
