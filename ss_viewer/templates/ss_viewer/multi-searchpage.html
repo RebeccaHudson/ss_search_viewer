@@ -224,16 +224,7 @@
               rows += "<td>" + json.api_response[i].pval_diff.toExponential(3) + "</td>";   
               rows += "<td>" + json.api_response[i].trans_factor + "</td>";   
               rows += "<td>" + json.api_response[i].motif + "</td>";   
-              rows += '<td class="show_plots"> <button id="show_plot_' 
-                       + json.api_response[i].plot_id_str + '" type="button"';
-              rows +=  ' class="btn btn-link" plotstr="' + 
-                        + json.api_response[i].plot_id_str + '" ' +
-                        'title="Show the plot for this data.">'; 
-              rows += 'Show Plot</button><button id="download_plot_'
-              rows +=  json.api_response[i].plot_id_str + '" ' +
-                        'title="Download the plot for this data.">' +
-                        'Download Plot</button></td>'; 
-              rows += 'Show Plot</button></td>';
+              rows += '<td class="show_plots"></td>';
               rows += '<td id="plot_data_'  + json.api_response[i].plot_id_str +  '" style="display:none;"';
               rows += ' class="plotting_data">' + json.api_response[i].json_for_plotting + '</td>';
               rows += '<td> <a href=' 
