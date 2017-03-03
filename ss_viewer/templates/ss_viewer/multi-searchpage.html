@@ -179,7 +179,7 @@
           <thead>                                                         \   
           <tr>                                      \ 
               <td>SNPid                    </td>    \ 
-              <td>Chromosome, Position     </td>    \ 
+              <td>Chromosome:Position      </td>    \ 
               <td>Reference Plot           </td>    \ 
               <td>SNP Plot                 </td>    \
               <td style="display:none;">Reference Allele         </td>    \ 
@@ -200,7 +200,7 @@
           for (var i = 0; i < json.api_response.length; i ++){
               rows += "<tr>";
               rows += "<td>" + json.api_response[i].snpid + "</td>";   
-              rows += "<td>" + json.api_response[i].chr + ",&nbsp" + json.api_response[i].pos.toLocaleString() + "</td>";   
+              rows += "<td>" + json.api_response[i].chr + ":" + json.api_response[i].pos.toLocaleString() + "</td>";   
               rows += "<td class=\"ref-plot\" id=\"ref-plot-" + json.api_response[i].plot_id_str +"\"></td>";
               rows += "<td class=\"snp-plot\" id=\"snp-plot-" + json.api_response[i].plot_id_str +"\"></td>";
               rows += '<td style="display:none;">' + json.api_response[i].refAllele + "</td>";   
