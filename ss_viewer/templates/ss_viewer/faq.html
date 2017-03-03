@@ -1,0 +1,122 @@
+{% load staticfiles %}
+<html>
+<head>
+ <meta charset="utf-8">
+<title>atSNP Search Help</title>
+    <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
+<style type="text/css">
+  hgroup {
+    font-weight: bold;
+    color: blue;
+  }
+</style>
+</head>
+
+<body>
+<!--<nav class="navbar navbar-default navbar-fixed-top">-->
+<div class="container">
+  <div id="content">
+      {% include "ss_viewer/navbar.html" with active='faq' %}
+<h3>FAQ</h3>
+
+
+<p>
+<section>
+Q1. Is atSNP DB exclusively for human?
+<ul>
+<li>A1. Our current release is on homo sapiens. We plan to augment the database to mouse in the next release, which can be useful for mouse genome researchers.</li>
+</ul>
+</section>
+</p>
+
+
+
+<p>
+<section>
+Q2. Which db SNP version was used for atSNP?
+<ul>
+<li>A2. atSNP DB is based on dbSNP build 144 for human genome 38. Summary on the dbSNP build 144 can be found here (link: http://www.ncbi.nlm.nih.gov/SNP/snp_summary.cgi?view+summary=view+summary&build_id=144).</li>
+</ul>
+</section>
+</p>
+
+<p>
+<section>
+Q3. How does atSNP DB handle SNPs with indels, and others?
+<ul>
+<li>A3. dbSNP classifies genetic variation in eight types. Click here for the types of variation (link: What classes of genetic variation are included in dbSNP? in http://www.ncbi.nlm.nih.gov/books/NBK44447/). The current atSNP DB only considers the major single nucleotide variation class . The class takes 88.8% of all genetic variation, specifically 132,946,852 SNPs out of 149,735,377.</li>
+</ul>
+</section>
+</p>
+
+<p>
+<section>
+Q4. When reference genome has more than one nucleotide on the SNP position, which one do you pick as the nucleotide on the reference genome?
+<ul>
+<li>A4. atSNP DB considers all multiple nucleotides as a reference and provides atSNP statistics and p-values.</li>
+</ul>
+</section>
+</p>
+
+<p>
+<section>
+Q5. Which motif libraries were used for atSNP?
+<ul>
+<li>A5. We used JASPAR vertebrate library and known and discovered motifs for the ENCODE TF ChIP-seq datasets, which are available at http://jaspar2014.genereg.net/ and http://compbio.mit.edu/encode-motifs/ respectively. For users who want to learn more about the libraries, visit the websites or click here (link: Understanding motif libraries in Documentation).</li>
+</ul>
+</section>
+</p>
+
+<p>
+<section>
+Q6. Can I have summary statistics of atSNP DB?
+<ul>
+<li>A6. Yes, we have quick summary statistics. We investigated 132,946,852 SNPs and considered 2,270 PWMs. We have evaluated total 307,602,574,340 SNP-PWM combinations.</li>
+</ul>
+</section>
+</p>
+
+
+<p>
+<section>
+Q7. Are downloads available?
+<ul>
+<li>A7. The current release allows downloading the results up to the first 60,000 rows in the format of csv. This helps users statistically investigate impact of SNPs on transcription factor binding and goodness of match between motif and SNP/Reference alleles. We plan to make bulk downloads available in the next release.</li>
+</ul>
+</section>
+</p>
+
+<p>
+<section>
+Q8. How can I interpret logo plots?
+<ul>
+<li>A8. The plots are called composite logo plots and this helps users to easily see where the matches occur, how different the matches between both alleles are and how significant they are. Please click here (link: Composite logo plot under Documentation menu) for the interpretation.</li>
+</ul>
+</section>
+</p>
+
+<p>
+<section>
+Q9. How do I cite atSNP DB?
+<ul>
+<li>A9. Zuo, Chandler, Shin, Sunyoung, and Keleş, Sündüz. atSNP: transcription factor binding affinity testing for regulatory SNP detection. Bioinformatics (2015): 31, 3353-3355.
+Shin, Sunyoung, Hudson, Rebecca, Harrison, Christopher, Craven, Mark, and Keleş, Sündüz. atSNP DB: a web resource for quantifying impact of dbSNP SNPs on transcription factor binding. (2016). In preparation.</li>
+</ul>
+</section>
+</p>
+
+<p>
+<section>
+Q10. Why are not all of logo plots shown? (not needed if we create on demand plot on fly.)
+<ul>
+<li> A10. Answer to question 10.</li>
+</ul>
+</section>
+</p>
+     </div> <!-- end of content div -->
+  </div>    <!-- end of container div -->
+
+  </body>
+
+</html>
