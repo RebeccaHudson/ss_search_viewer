@@ -54,7 +54,61 @@
          <tr> <td>SNP Allele                  </td> <td>{{ api_response.snpAllele }}                      </td></tr>
          </tbody>
          </table>
-
+         <table>                                  
+            <thead><tr><th colspan="2">SNP Information</th></tr></thead>
+            <tbody>
+              <tr> <td>rsID                    </td> 
+                   <td>{{ api_response.snpid }}</td> 
+              </tr>
+              <tr> <td>Coordinate          </td> 
+                   <td>{{ api_response.chr }}:{{ api_response.pos }}</td>
+              </tr>
+              <tr> <td>Reference/SNP allele         </td> 
+                   <td>{{ api_response.refAllele }}/
+                       {{ api_response.snpAllele }} </td>
+              </tr>
+            </tbody>
+         </table>
+         <table>                                  
+            <thead><tr><th colspan="2">Motif Information</th></tr></thead>
+            <tbody>
+              <tr><td>Motif               </td> <td>{{ api_response.motif }}       </td>  </tr>
+              <tr><td>Transcription Factor</td> <td>{{ api_response.trans_factor }}</td>  </tr>
+            </tbody>
+         </table>
+         <table>                                  
+            <thead><tr><th colspan="2">atSNP Results</th></tr></thead>
+            <tbody>
+              <tr><td>            </td>
+                  <td>Log likelihood                                   </td>
+                  <td>p-values                                         </td>
+              </tr>
+              <tr><td>Rank        </td>
+                  <td>                                                 </td> 
+                  <td>{{ api_response.pval_rank|floatformat:3 }}       </td> 
+              </tr>
+              <tr><td>Reference   </td> 
+                  <td>{{ api_response.log_lik_ref |floatformat:3 }}    </td>
+                  <td>{{ api_response.pval_ref|floatformat:3 }}        </td>
+              </tr>
+              <tr><td>SNP         </td>
+                  <td>{{ api_response.log_lik_snp| floatformat:3  }}   </td> 
+                  <td>{{ api_response.pval_snp| floatformat:3  }}      </td> 
+              </tr>
+              <tr><td>Ratio       </td>
+                  <td>{{ api_response.log_lik_ratio| floatformat:3 }}  </td> 
+                  <td>{{ api_response.pval_diff| floatformat:3 }}      </td> 
+              </tr>
+              <tr><td>Enhance odds</td>
+                  <td>{{ api_response.log_enhance_odds| floatformat:3 }}</td> 
+                  <td>{{ api_response.pval_cond_ref| floatformat:3 }}   </td> 
+              </tr>
+              <tr><td>Reduce odds </td>
+                  <td>{{ api_response.log_reduce_odds| floatformat:3 }}</td> 
+                  <td>{{ api_response.pval_cond_snp| floatformat:3 }}   </td> 
+              </tr>
+            </tbody>
+         </table>
 <!--  this is the way that we will be displaying the plot -->
 <div>
   <button title="Download this plot." id="download_detail_plot" 
