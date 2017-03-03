@@ -31,15 +31,19 @@
 
         <li {% if active == 'help' %}class="active"{%endif%} >
             <a href="{% url 'ss_viewer:help-page'  %}">
-            <span class="glyphicon glyphicon-question-sign"></span>
+            <span class="glyphicon glyphicon-info-sign"></span>
             Help</a></li>
 
-        <li {% if active == 'about' %}class="active"{%endif%} >
+        <!--  TODO: Finish deprecating the whole about page.
+         <li {% if active == 'about' %}class="active"{%endif%} >
          <a href="{% url 'ss_viewer:about-page'  %}">
          <span class="glyphicon glyphicon-info-sign"></span>
-         About</a></li>
+         About</a></li> -->
 
-        <li><a href="#">FAQ(missing)</a></li>
+        <li {% if active == 'faq' %}class="active"{%endif%} >
+         <a href="{% url 'ss_viewer:about-page'  %}">
+         <span class="glyphicon glyphicon-question-sign"></span>
+         FAQ</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
