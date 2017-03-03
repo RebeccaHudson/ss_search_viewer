@@ -4,7 +4,7 @@
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>atSNP Search</title>
+  <title>Detail View for {{ id_str }}</title>
   <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
   <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
@@ -15,45 +15,25 @@
   <script type="text/javascript" src="{% static 'ss_viewer/plotIntoSVGSkeleton.js' %}"> </script> 
   <script type="text/javascript" src="{% static 'ss_viewer/plots.js' %}"></script>
    <!-- plots.js contains all code for drawing plots  -->
+  <style type="text/css">
+  th {
+    text-align:center;
+  }
+  th, td {
+      padding: 0px 20px 0px 20px;
+      border: 1px solid black;
+  }
+  table {
+    border: 1px solid black;
+  }
+  
+  </style>
 </head>
 <body>
 <div class="container">
 <div id="content">
-         <h5 style="text-decoration:underline;"> Details </h5>
-         <table>
-         <tr> <thead>Details for {{ id_str }}</thead></tr>
-         <tbody>
-         <!-- the following commented-out rows display data that's only used for plotting -->
-         <!--  <tr> <td>snp_aug_match_seq   </td> <td>{{ api_response.snp_aug_match_seq   }} </td></tr>--> 
-         <!--  <tr> <td>snp_extra_pwm_off   </td> <td>{{ api_response.snp_extra_pwm_off   }} </td></tr>-->
-         <!--  <tr> <td>ref_extra_pwm_offset</td> <td>{{ api_response.ref_extra_pwm_offset}} </td></tr>-->
-         <tr> <td>Chromosome                  </td> <td>{{ api_response.chr }}                            </td></tr>
-         <tr> <td>Position                    </td> <td>{{ api_response.pos }}                            </td></tr>
-         <tr> <td>SNPid                       </td> <td>{{ api_response.snpid }}                          </td></tr>
-         <tr> <td>Transcription Factor        </td> <td>{{ api_response.trans_factor }}                   </td></tr>
-         <tr> <td>Motif                       </td> <td>{{ api_response.motif }}                          </td></tr>
-         <tr> <td>Motif Length                </td> <td>{{ api_response.motif_len }}                      </td></tr>
-         <tr> <td>Pvalue Rank                 </td> <td>{{ api_response.pval_rank|floatformat:3 }}        </td></tr>
-         <tr> <td>SNP Start                   </td> <td>{{ api_response.snp_start }}                      </td></tr>
-         <tr> <td>SNP End                     </td> <td>{{ api_response.snp_end }}                        </td></tr>
-         <tr> <td>Refrence Start              </td> <td>{{ api_response.ref_start }}                      </td></tr>
-         <tr> <td>Reference End               </td> <td>{{ api_response.ref_end }}                        </td></tr>
-         <tr> <td>Log Likelihood Reference    </td> <td>{{ api_response.log_lik_ref |floatformat:3 }}     </td></tr>
-         <tr> <td>Log Likelihood Ratio        </td> <td>{{ api_response.log_lik_ratio|floatformat:3 }}    </td></tr>
-         <tr> <td>Log Enhance Odds            </td> <td>{{ api_response.log_enhance_odds|floatformat:3 }} </td></tr>
-         <tr> <td>Log Reduce Odds             </td> <td>{{ api_response.log_reduce_odds |floatformat:3 }} </td></tr>
-         <tr> <td>Log Likelihood SNP          </td> <td>{{ api_response.log_lik_snp| floatformat:3  }}    </td></tr>
-         <tr> <td>SNP Strand                  </td> <td>{{ api_response.snp_strand }}                     </td></tr>
-         <tr> <td>Reference Strand            </td> <td>{{ api_response.ref_strand }}                     </td></tr>
-         <tr> <td>Pvalue Reference            </td> <td>{{ api_response.pval_ref|floatformat:3 }}         </td></tr>
-         <tr> <td>Pvalue SNP                  </td> <td>{{ api_response.pval_snp|floatformat:3 }}         </td></tr>
-         <tr> <td>Pvalue Conditional Reference</td> <td>{{ api_response.pval_cond_ref|floatformat:3}}     </td></tr>
-         <tr> <td>Pvalue Conditional SNP      </td> <td>{{ api_response.pval_cond_snp|floatformat:3}}     </td></tr>
-         <tr> <td>Pvalue Difference           </td> <td>{{ api_response.pval_diff|floatformat:3 }}        </td></tr>
-         <tr> <td>Reference Allele            </td> <td>{{ api_response.refAllele }}                      </td></tr>
-         <tr> <td>SNP Allele                  </td> <td>{{ api_response.snpAllele }}                      </td></tr>
-         </tbody>
-         </table>
+         <h3 style="text-decoration:underline;"> Details </h3>
+         <p>
          <table>                                  
             <thead><tr><th colspan="2">SNP Information</th></tr></thead>
             <tbody>
@@ -69,6 +49,8 @@
               </tr>
             </tbody>
          </table>
+         </p>
+         <p>
          <table>                                  
             <thead><tr><th colspan="2">Motif Information</th></tr></thead>
             <tbody>
@@ -76,12 +58,14 @@
               <tr><td>Transcription Factor</td> <td>{{ api_response.trans_factor }}</td>  </tr>
             </tbody>
          </table>
+         </p> 
+         <p>
          <table>                                  
-            <thead><tr><th colspan="2">atSNP Results</th></tr></thead>
+            <thead><tr><th colspan="3">atSNP Results</th></tr></thead>
             <tbody>
               <tr><td>            </td>
-                  <td>Log likelihood                                   </td>
-                  <td>p-values                                         </td>
+                  <th>Log likelihood                                   </th>
+                  <th>p-values                                         </th>
               </tr>
               <tr><td>Rank        </td>
                   <td>                                                 </td> 
@@ -109,6 +93,7 @@
               </tr>
             </tbody>
          </table>
+         </p>
 <!--  this is the way that we will be displaying the plot -->
 <div>
   <button title="Download this plot." id="download_detail_plot" 
@@ -116,10 +101,7 @@
   Download Plot</button>
 </div>
    <div id="plots">
-   {% include "ss_viewer/svg_skeleton.html" %}
-   <!-- this should hide unless a plot is shown -->
-   <!-- <button id="save_plot" type="button" style="display:none;" class="btn btn-link">
-   Save Plot </button> -->
+     {% include "ss_viewer/svg_skeleton.html" %}
    </div>
  <canvas id="canvas" style="display:none;" width="800" height="370"></canvas>
 
@@ -198,3 +180,40 @@
     }
 </script>
 </body>
+
+         <!-- 
+         <table>
+         <tr> <thead>Details for {{ id_str }}</thead></tr>
+         <tbody>
+         -->
+         <!-- the following commented-out rows display data that's only used for plotting -->
+         <!--  <tr> <td>snp_aug_match_seq   </td> <td>{{ api_response.snp_aug_match_seq   }} </td></tr>--> 
+         <!--  <tr> <td>snp_extra_pwm_off   </td> <td>{{ api_response.snp_extra_pwm_off   }} </td></tr>-->
+         <!--  <tr> <td>ref_extra_pwm_offset</td> <td>{{ api_response.ref_extra_pwm_offset}} </td></tr>-->
+        <!--  <tr> <td>Chromosome                  </td> <td>{{ api_response.chr }}                            </td></tr>
+         <tr> <td>Position                    </td> <td>{{ api_response.pos }}                            </td></tr>
+         <tr> <td>SNPid                       </td> <td>{{ api_response.snpid }}                          </td></tr>
+         <tr> <td>Transcription Factor        </td> <td>{{ api_response.trans_factor }}                   </td></tr>
+         <tr> <td>Motif                       </td> <td>{{ api_response.motif }}                          </td></tr>
+         <tr> <td>Motif Length                </td> <td>{{ api_response.motif_len }}                      </td></tr>
+         <tr> <td>Pvalue Rank                 </td> <td>{{ api_response.pval_rank|floatformat:3 }}        </td></tr>
+         <tr> <td>SNP Start                   </td> <td>{{ api_response.snp_start }}                      </td></tr>
+         <tr> <td>SNP End                     </td> <td>{{ api_response.snp_end }}                        </td></tr>
+         <tr> <td>Refrence Start              </td> <td>{{ api_response.ref_start }}                      </td></tr>
+         <tr> <td>Reference End               </td> <td>{{ api_response.ref_end }}                        </td></tr>
+         <tr> <td>Log Likelihood Reference    </td> <td>{{ api_response.log_lik_ref |floatformat:3 }}     </td></tr>
+         <tr> <td>Log Likelihood Ratio        </td> <td>{{ api_response.log_lik_ratio|floatformat:3 }}    </td></tr>
+         <tr> <td>Log Enhance Odds            </td> <td>{{ api_response.log_enhance_odds|floatformat:3 }} </td></tr>
+         <tr> <td>Log Reduce Odds             </td> <td>{{ api_response.log_reduce_odds |floatformat:3 }} </td></tr>
+         <tr> <td>Log Likelihood SNP          </td> <td>{{ api_response.log_lik_snp| floatformat:3  }}    </td></tr>
+         <tr> <td>SNP Strand                  </td> <td>{{ api_response.snp_strand }}                     </td></tr>
+         <tr> <td>Reference Strand            </td> <td>{{ api_response.ref_strand }}                     </td></tr>
+         <tr> <td>Pvalue Reference            </td> <td>{{ api_response.pval_ref|floatformat:3 }}         </td></tr>
+         <tr> <td>Pvalue SNP                  </td> <td>{{ api_response.pval_snp|floatformat:3 }}         </td></tr>
+         <tr> <td>Pvalue Conditional Reference</td> <td>{{ api_response.pval_cond_ref|floatformat:3}}     </td></tr>
+         <tr> <td>Pvalue Conditional SNP      </td> <td>{{ api_response.pval_cond_snp|floatformat:3}}     </td></tr>
+         <tr> <td>Pvalue Difference           </td> <td>{{ api_response.pval_diff|floatformat:3 }}        </td></tr>
+         <tr> <td>Reference Allele            </td> <td>{{ api_response.refAllele }}                      </td></tr>
+         <tr> <td>SNP Allele                  </td> <td>{{ api_response.snpAllele }}                      </td></tr>
+         </tbody>
+         </table> -->
