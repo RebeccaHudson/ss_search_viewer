@@ -33,6 +33,10 @@ urlpatterns = [
   url (r'^about/$', 
        views.main.about_page,
        name = 'about-page'),
+
+  url (r'^faq/$', 
+       views.main.faq_page,
+       name = 'faq-page'),
   
   url(r'^home/$',
        views.main.home_page,

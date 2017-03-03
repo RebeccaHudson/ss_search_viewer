@@ -68,6 +68,11 @@ def about_page(request):
     context = {}
     return render(request, about_page_template, context) 
 
+def faq_page(request):
+    faq_page_template = 'ss_viewer/faq.html'
+    context = {}
+    return render(request, faq_page_template, context) 
+
 def home_page(request):
     home_page_template = 'ss_viewer/happyhome.html'
     context = {}
