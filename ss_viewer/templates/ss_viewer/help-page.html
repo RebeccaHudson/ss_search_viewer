@@ -84,13 +84,14 @@ section {
 <!-- begin style content from : 
 https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_accordion_animate 
 -->
-button.accordion {
+div.accordion {
     background-color: #eee;
     color: #444;
     cursor: pointer;
     padding: 18px;
     width: 100%;
     border: none;
+    border-bottom: 1px solid black;
 
     text-align: left;
     outline: none;
@@ -98,7 +99,7 @@ button.accordion {
     transition: 0.6s;
 }
 
-button.accordion.active, button.accordion:hover {
+div.accordion.active, button.accordion:hover {
     background-color: #ddd;
 }
 div.panel {
@@ -119,6 +120,7 @@ div.panel {
   <div id="content">
       {% include "ss_viewer/navbar.html" with active='help' %}
       <h3>atSNP Search Help</h3>
+      <p style="size:10px;">(click sections to expand)</p>
       <!-- 
       <ol>
           <li><a href="#part-1">Understanding motif libraries</a></li>
@@ -130,9 +132,9 @@ div.panel {
       </ol> -->
       <!-- <ol> -->
       <section>  <!-- start of part 1 -->
-        <button class="accordion">
-            <hgroup><a name="part-1"><h4>1.&nbsp;Understanding motif libraries</h4></hgroup>
-        </button>
+        <div class="accordion">
+            <hgroup><a name="part-1"><h4>1.&nbsp;Understanding motif libraries</h4></a></hgroup>
+        </div>
         <div class="panel">
         <p> Motif libraries provide transcription factor binding nucleotide profiles 
         from a set of transcription factor binding sites. The binding profiles are
@@ -261,9 +263,9 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
          
        <section> <!-- start of part 2 -->
 
-        <button class="accordion">
+        <div class="accordion">
            <hgroup><a name="part-2"><h4>2.&nbsp;at-SNP <i>in-silico</i> statistical method</h4></a></hgroup>
-        </button>
+        </div>
         <div class="panel">
               <section><h5> <span class="underline"><b> atSNP overview</b></span> </h5>
                 <figure>
@@ -395,9 +397,9 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
 
          <section> <!-- start of part 3 -->
 
-        <button class="accordion">
+        <div class="accordion">
            <hgroup><a name="part-3"><h4>3.&nbsp;Interpreting Search Output</h4></a></hgroup>
-        </button>
+        </div>
         <div class="panel">
            <p>atSNP search outputs are grouped into four general categories: SNP information, motif information, atSNP scores, and atSNP p-values. Downloaded csv file provides additional information on the impact of SNP and the matches on both alleles. Specific details are summarized in the following tables.</p>
           <section>  <!--begin section full of tables --> 
@@ -630,9 +632,9 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>
          </section><!-- end of part 3 -->  
 
          <section> <!-- start of part 4 -->
-         <button class="accordion">
+         <div class="accordion">
            <hgroup><a name="part-4"><h4>4.&nbsp;Reading a Composite Logo Plot</h4></a></hgroup>
-         </button>
+         </div>
          <div class="panel">
            <p> atSNP DB provides a composite logo plot to visualize significant impacts of SNPs on transcription factor binding. Users can easily see whether SNPs enhance/disrupt the transcription factor binding and how significant the changes are. Examples below will help users to interpret the logo plot and understand the perturbation in the regulatory element.</p> 
             <section> <!-- begin examples section -->
@@ -655,9 +657,9 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>
 
 
          <section> <!-- start of part 5 -->
-           <button class="accordion"> 
+           <div class="accordion"> 
            <hgroup><a name="part-5"><h4>5.&nbsp;atSNP DB Infrastructure</h4></a></hgroup>
-           </button>
+           </div>
            <div class="panel">
            <figure>
              <img height="530" src="{% static 'ss_viewer/docs/image10.png' %}" id="figure-12" />
@@ -667,9 +669,9 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>
          </section> <!-- end of part 5 -->
 
         <section> <!-- start of part 6 -->
-           <button class="accordion">
+           <div class="accordion">
            <hgroup><a name="part-6"><h4>6.&nbsp;References</h4></a></hgroup>
-           </button>
+           </div>
            <div class="panel">
            <p>
            <ul class="refs">
