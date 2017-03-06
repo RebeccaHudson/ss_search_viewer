@@ -3,6 +3,7 @@
 <head>
  <meta charset="utf-8">
 <title>atSNP Search Help</title>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
     <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
 <style type="text/css">
@@ -124,7 +125,6 @@ div.panel {
       {% include "ss_viewer/navbar.html" with active='help' %}
       <h3>atSNP Search Help</h3>
       <p style="size:10px;">(click sections to expand)</p>
-      <!-- 
       <ol>
           <li><a href="#part-1">Understanding motif libraries</a></li>
           <li><a href="#part-2">at-SNP <i>in-silico</i> statistical method</a></li>
@@ -132,7 +132,7 @@ div.panel {
           <li><a href="#part-4">Reading a Composite Logo Plot</a></li>
           <li><a href="#part-5">atSNP DB Infrastructure</a></li>
           <li><a href="#part-6">References</a></li>
-      </ol> -->
+      </ol>
       <!-- <ol> -->
       <section>  <!-- start of part 1 -->
         <div class="accordion">
@@ -407,7 +407,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
            <p>atSNP search outputs are grouped into four general categories: SNP information, motif information, atSNP scores, and atSNP p-values. Downloaded csv file provides additional information on the impact of SNP and the matches on both alleles. Specific details are summarized in the following tables.</p>
           <section>  <!--begin section full of tables --> 
            <p>            
-            <table class="doc-table">
+            <table class="doc-table" id="snpTable">
             <thead><tr><th colspan="2">SNP information</th></tr></thead>
             <tbody>
             <tr>
@@ -443,7 +443,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
             <ol>
             </p>
             <p>
-            <table class="doc-table">                                  
+            <table class="doc-table" id="motifTable">                                  
             <thead><tr><th colspan="2">Motif information</th></tr></thead>
             <tbody>
               <tr>
@@ -459,7 +459,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
             </table>                                                                    
             </p>
             <p>
-            <table class="doc-table" >
+            <table class="doc-table" id="scoresTable" >
               <thead><tr><th colspan="2">atSNP Scores</th></tr></thead>
               <tbody>
                 <tr>
@@ -482,7 +482,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
             </p>
 
             <p>
-            <table class="doc-table" >
+            <table class="doc-table" id="pvalueTable">
             <thead><tr><th colspan="2">atSNP p-values</th></tr></thead>
             <tbody>
             <tr>
@@ -694,6 +694,46 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>
 
   </body>
       <script>
+
+      if (!(location.hash === '')){
+          console.log("there's hash in here! :" +  location.hash);
+
+          var selector = location.hash.replace('#', '');
+          var tableToScrollTo = null;
+
+          //if there's a colon, split on the colon...
+          if ( selector.indexOf(':') == -1 ){
+              selector = "a[name='" + selector + "']";
+          }else{
+              var parts = selector.split(':');
+              selector = "a[name='" + parts[0] + "']";
+              tableToScrollTo = parts[1];
+              console.log("going to try to scroll to : " + tableToScrollTo);
+          } 
+
+          //motifTable
+          var headerlink = $(selector)[0];
+          var accdiv = headerlink.parentElement.parentElement;
+          console.log("got a selector for the accordion div");
+          console.log(accdiv);
+          accdiv.classList.toggle('active');
+          var panel = accdiv.nextElementSibling;
+          if (panel.style.maxHeight){
+            panel.style.maxHeight = null;
+          } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+          } 
+
+         /*http://stackoverflow.com/questions/18103534/scroll-to-specific-div-on-page-load
+           Adapted from example found on S.O.*/ 
+         if ( ! ( tableToScrollTo === null) ){
+             // Handler for .ready() called.
+             $('html, body').animate({
+                 scrollTop: $('#' + tableToScrollTo).offset().top
+             }, 'slow'); 
+         }
+      }
+
       var acc = document.getElementsByClassName("accordion");
       var i;
 

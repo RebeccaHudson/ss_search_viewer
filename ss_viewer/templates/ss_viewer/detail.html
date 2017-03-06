@@ -20,7 +20,7 @@
     text-align:center;
   }
   th, td {
-      padding: 0px 20px 0px 20px;
+      padding: 5px 20px 5px 20px;
       border: 1px solid black;
   }
   table {
@@ -35,7 +35,16 @@
          <h3 style="text-decoration:underline;"> Details </h3>
          <p>
          <table>                                  
-            <thead><tr><th colspan="2">SNP Information</th></tr></thead>
+            <thead>
+             <tr>
+               <th colspan="2">SNP Information
+                  <sup>
+                   <a href="{% url 'ss_viewer:help-page' %}#part-3:snpTable">
+                   ?</a>
+                 </sup>
+                </th>
+              </tr>
+            </thead>
             <tbody>
               <tr> <td>rsID                    </td> 
                    <td>{{ api_response.snpid }}</td> 
@@ -51,8 +60,17 @@
          </table>
          </p>
          <p>
-         <table>                                  
-            <thead><tr><th colspan="2">Motif Information</th></tr></thead>
+         <table >                                  
+            <thead>
+             <tr>
+               <th colspan="2">Motif Information
+                 <sup>
+                   <a href="{% url 'ss_viewer:help-page' %}#part-3:motifTable">
+                   ?</a>
+                 </sup>
+               </th>
+              </tr>
+             </thead>
             <tbody>
               <tr><td>Motif               </td> <td>{{ api_response.motif }}       </td>  </tr>
               <tr><td>Transcription Factor</td> <td>{{ api_response.trans_factor }}</td>  </tr>
@@ -61,11 +79,26 @@
          </p> 
          <p>
          <table>                                  
-            <thead><tr><th colspan="3">atSNP Results</th></tr></thead>
+            <thead>
+              <tr>
+                <th colspan="3">atSNP Results
+
+               </th>
+             </tr></thead>
             <tbody>
               <tr><td>            </td>
-                  <th>Log likelihood                                   </th>
-                  <th>p-values                                         </th>
+                  <th>Log likelihood 
+                    <sup>
+                     <a href="{% url 'ss_viewer:help-page' %}#part-3:scoresTable">
+                      ?</a>
+                    </sup>
+                  </th>
+                  <th>p-values  
+                    <sup>
+                     <a href="{% url 'ss_viewer:help-page' %}#part-3:pvalueTable">
+                      ?</a>
+                    </sup>
+                  </th>
               </tr>
               <tr><td>Rank        </td>
                   <td>                                                 </td> 
