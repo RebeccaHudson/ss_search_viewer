@@ -77,7 +77,39 @@ ul.refs { padding: 0px; }
 .refs li { margin-top: 2px; }
 .sequence {  font-size: 16px; 
              font-family: monospace; }
+section { 
+    margin-left: 2em;
+}
 
+<!-- begin style content from : 
+https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_accordion_animate 
+-->
+button.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.6s;
+}
+
+button.accordion.active, button.accordion:hover {
+    background-color: #ddd;
+}
+div.panel {
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+<!-- begin style content from source cited above -->
 </style>
 </head>
 
@@ -87,6 +119,7 @@ ul.refs { padding: 0px; }
   <div id="content">
       {% include "ss_viewer/navbar.html" with active='help' %}
       <h3>atSNP Search Help</h3>
+      <!-- 
       <ol>
           <li><a href="#part-1">Understanding motif libraries</a></li>
           <li><a href="#part-2">at-SNP <i>in-silico</i> statistical method</a></li>
@@ -94,10 +127,13 @@ ul.refs { padding: 0px; }
           <li><a href="#part-4">Reading a Composite Logo Plot</a></li>
           <li><a href="#part-5">atSNP DB Infrastructure</a></li>
           <li><a href="#part-6">References</a></li>
-      </ol>
-      <ol>
+      </ol> -->
+      <!-- <ol> -->
       <section>  <!-- start of part 1 -->
-        <hgroup><li><a name="part-1">Understanding motif libraries</a></li></hgroup>
+        <button class="accordion">
+            <hgroup><a name="part-1"><h4>1.&nbsp;Understanding motif libraries</h4></hgroup>
+        </button>
+        <div class="panel">
         <p> Motif libraries provide transcription factor binding nucleotide profiles 
         from a set of transcription factor binding sites. The binding profiles are
         represented with position weight matrices (PWMs). PWMs are used for
@@ -217,12 +253,18 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
 </ul>
           </section>
           </ul> <!-- end of list containing info on JASPAR and ENCODE libraries -->
+
+         </div> <!-- end of first accordion panel -->
         </section> <!-- end of part 1 -->
 
 
          
-         <section> <!-- start of part 2 -->
-           <hgroup><li><a name="part-2">at-SNP <i>in-silico</i> statistical method</a></li></hgroup>
+       <section> <!-- start of part 2 -->
+
+        <button class="accordion">
+           <hgroup><a name="part-2"><h4>2.&nbsp;at-SNP <i>in-silico</i> statistical method</h4></a></hgroup>
+        </button>
+        <div class="panel">
               <section><h5> <span class="underline"><b> atSNP overview</b></span> </h5>
                 <figure>
                    <img height="340" src="{% static 'ss_viewer/docs/image06.png' %}" id="figure-04"/>
@@ -346,11 +388,17 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
                </ul>
                </p>
            </section><!-- end of atSNP Procedure section  -->
-         </section> <!-- end of part 2 -- >
+         </div> <!-- end of accordion panel for part 2 -->
+         </section> <!-- end of part 2 -->
+
 
 
          <section> <!-- start of part 3 -->
-           <hgroup><li><a name="part-3">Interpreting Search Output</a></li></hgroup>
+
+        <button class="accordion">
+           <hgroup><a name="part-3"><h4>3.&nbsp;Interpreting Search Output</h4></a></hgroup>
+        </button>
+        <div class="panel">
            <p>atSNP search outputs are grouped into four general categories: SNP information, motif information, atSNP scores, and atSNP p-values. Downloaded csv file provides additional information on the impact of SNP and the matches on both alleles. Specific details are summarized in the following tables.</p>
           <section>  <!--begin section full of tables --> 
            <p>            
@@ -578,10 +626,14 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>
                downloaded file additionally provides the second table. 
             </p> 
            </section> <!-- end of example section -->
+         </div> <!-- end of accordion panel for section 3 -->
          </section><!-- end of part 3 -->  
 
          <section> <!-- start of part 4 -->
-           <hgroup><a name="part-4"><li>Reading a Composite Logo Plot</a></li></hgroup>
+         <button class="accordion">
+           <hgroup><a name="part-4"><h4>4.&nbsp;Reading a Composite Logo Plot</h4></a></hgroup>
+         </button>
+         <div class="panel">
            <p> atSNP DB provides a composite logo plot to visualize significant impacts of SNPs on transcription factor binding. Users can easily see whether SNPs enhance/disrupt the transcription factor binding and how significant the changes are. Examples below will help users to interpret the logo plot and understand the perturbation in the regulatory element.</p> 
             <section> <!-- begin examples section -->
               <h5> <span class="underline">Examples<span></h5> 
@@ -598,18 +650,27 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>
              </figure>
              <p>The SNP, rs199894601, is highly likely to create a binding of transcription factor RUNX1 on the genome. The best match position on the SNP allele is different from that on the reference allele. Specifically, the best matches occur on different strand and genomic position (bp). The composite logo plot illustrates this with the comparison between the best matches of RUNX1 JASPAR PWM on the reference and SNP alleles. Among subsequences of length 11 overlapping the SNP position on the SNP allele, a subsequence starting from 3 bases before the SNP on the reverse strand has the highest log likelihood score. The subsequence is referred to as “best match with the SNP genome” and depicted on the third row with the corresponding PWM on the fourth row. Similarly, we can find “best match with the reference genome” and depict it on the second row with the corresponding PWM on the first row.</p>
             </section>           <!-- end examples section -->
+           </div> <!-- end of accordion panel for part 4-->
          </section> <!-- end of part 4 -->
 
+
          <section> <!-- start of part 5 -->
-           <hgroup><li><a name="part-5">atSNP DB Infrastructure</a></li></hgroup>
+           <button class="accordion"> 
+           <hgroup><a name="part-5"><h4>5.&nbsp;atSNP DB Infrastructure</h4></a></hgroup>
+           </button>
+           <div class="panel">
            <figure>
              <img height="530" src="{% static 'ss_viewer/docs/image10.png' %}" id="figure-12" />
            </figure>
            <p> atSNP DB is scale out systems architecture for three hundred billion records. As demand/storage/performance increase, we add additional boxes. Elastic search, a NoSQL database, utilizes a distributed scale out system design for scalable workloads at scale while distributing searches and indexes. API proxies requests from web page to database.</p>
+           </div> <!-- end of accordion panel for part 5 -->
          </section> <!-- end of part 5 -->
 
         <section> <!-- start of part 6 -->
-           <hgroup><li><a name="part-6">References</a></li></hgroup>
+           <button class="accordion">
+           <hgroup><a name="part-6"><h4>6.&nbsp;References</h4></a></hgroup>
+           </button>
+           <div class="panel">
            <p>
            <ul class="refs">
              <li><cite>Zuo, Chandler, Shin, Sunyoung, and Keleş, Sündüz. atSNP: transcription factor binding affinity testing for regulatory SNP detection. Bioinformatics (2015): 31, 3353-3355.
@@ -618,14 +679,30 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>
              </cite> </li>
            </ul>
            </p>
+          </div> <!-- end of accordion panel for part 6 -->
         </section> <!-- end of part 6 -->
 
-        </ol><!-- end of ordered list of main help items -->
+        <!-- </ol> --><!-- end of ordered list of main help items -->
 
      </div> <!-- end of content div -->
   </div>    <!-- end of container div -->
 
   </body>
+      <script>
+      var acc = document.getElementsByClassName("accordion");
+      var i;
 
-  </html>
+      for (i = 0; i < acc.length; i++) {
+        acc[i].onclick = function() {
+          this.classList.toggle("active");
+          var panel = this.nextElementSibling;
+          if (panel.style.maxHeight){
+            panel.style.maxHeight = null;
+          } else {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+          } 
+        }
+      }
+      </script>
+</html>
 
