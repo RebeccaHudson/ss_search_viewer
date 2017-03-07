@@ -48,7 +48,7 @@ def one_row_detail(request, id_str):
   response_json = json.loads(api_response.text)
 
   #setup the plot.
-  print "response json: " + repr(response_json)
+  #print "response json: " + repr(response_json)
   #the plot data gets put onto the data that's passed in.
   APIResponseHandler.get_plots([response_json])
 
