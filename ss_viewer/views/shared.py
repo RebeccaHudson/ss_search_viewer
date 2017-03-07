@@ -59,6 +59,11 @@ class TFTransformer:
         return one_or_more_motif_values
 
 
+
+
+
+
+
 #can pull this out of the API when it's available
 #TODO: factor this method out and consider making an API call to the 'motifs' data type.
 class MotifPlottingData:
@@ -436,3 +441,42 @@ class APIUrls:
         url = host_w_port + "/" + url_args  + "/"
         return url
  
+class ExternalResourceUrls:
+    @staticmethod
+    def dbsnp_link(snpid):
+        link = 'https://www.ncbi.nlm.nih.gov/projects/SNP/' \
+                + 'snp_ref.cgi?rs=' + snpid; 
+        return link 
+
+    #takes the raw stirng values
+    @staticmethod
+    def ucsc_link(chromosome, position):
+        chromosome = chromosome.replace('ch', 'chr') 
+        position = int(position)
+        posWindowStart = str(position - 10000)
+        if posWindowStart < 0:
+            posWindowStart = 0
+        posWindowEnd = str(position + 10000)             
+        linkBits = \
+           ['http://genome.ucsc.edu/cgi-bin/hgTracks?org=Human',
+            '&db=hg38&position=', chromosome, ':', posWindowStart,'-',
+             posWindowEnd ]
+        ucsc_link = ''.join(linkBits)
+        return ucsc_link  
+ 
+    @staticmethod
+    def factorbook_link(t_factor):
+        factorbookJaspar = \
+           ["ELK1","RELA","TBP","BRCA1","CTCF","GABPA","REST","ESR1","ARID3A",
+            "NFIC","CREB1","CEBPB","E2F4","E2F6","ELF1","FOS","FOSL1","FOSL2",
+            "HNF4G","HSF1","JUN","JUND","MAFF","MAFK","MEF2C","NFYB","NR2C2",
+            "NRF1","POU2F2","PRDM1","RFX5","SP2","TCF7L2","USF2","ZBTB33",
+            "ZNF263","E2F1","EBF1","EGR1","ELK4","FOXA1","GATA2","GATA3",
+            "HNF4A","IRF1","MAX","MEF2A","NFYA","PAX5","SP1","SRF","STAT1",
+            "STAT3","USF1","RRA","FOXP2","SREBF1","SREBF2","THAP1","NR3C1"]
+        #TODO: add the ENCODE transcription factors.
+
+        #check if t_factor is in that there list. 
+        if t_factor in factorbookJaspar:
+            return 'http://www.factorbook.org/human/chipseq/tf/' + t_factor 
+        return None  #handle this in the view.
