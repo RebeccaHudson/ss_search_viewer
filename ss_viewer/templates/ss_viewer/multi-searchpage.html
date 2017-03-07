@@ -27,11 +27,8 @@
            paging, hiding/showing controls -->
    <script type="text/javascript" src="{% static 'ss_viewer/plots.js' %}"></script>
    <!-- plots.js contains all code for drawing plots  -->
-   <script type="text/javascript" src="{% static 'ss_viewer/outside-links.js' %}"></script>
 </head>
 <body>
-<!-- <div class="container-fluid"> was there a good reason not to just
-                                   have this as 'container'?   -->
 <div class="container">
 <div id="content">
 {% include "ss_viewer/navbar.html" with active='searches' %}
@@ -200,8 +197,15 @@
           var rows = "";
           for (var i = 0; i < json.api_response.length; i ++){
               rows += "<tr>";
-              rows += "<td>" + dbSNPLink(json.api_response[i].snpid) + "</td>";   
-              rows += "<td>" + json.api_response[i].chr + ":" + json.api_response[i].pos.toLocaleString() + "</td>";   
+              rows += "<td>" + 
+                      '<a href="' + json.api_response[i].dbsnp_link + '" target="_blank">' + 
+                        json.api_response[i].snpid + '</a>' + 
+                      "</td>";   
+              rows += "<td>" +
+                          '<a href="' + json.api_response[i].ucsc_link + '" target="_blank">' +
+                          json.api_response[i].chr + ":"  + 
+                          json.api_response[i].pos.toLocaleString() + '</a>' +
+                      "</td>";   
               rows += "<td class=\"ref-plot\" id=\"ref-plot-" + json.api_response[i].plot_id_str +"\"></td>";
               rows += "<td class=\"snp-plot\" id=\"snp-plot-" + json.api_response[i].plot_id_str +"\"></td>";
               rows += '<td style="display:none;">' + json.api_response[i].refAllele + "</td>";   
@@ -209,7 +213,19 @@
               rows += "<td>" + json.api_response[i].pval_rank.toExponential(3) + "</td>";   
               rows += "<td>" + json.api_response[i].pval_ref.toExponential(3) + "</td>";   
               rows += "<td>" + json.api_response[i].pval_snp.toExponential(3) + "</td>";   
-              rows += "<td>" + factorbookLink(json.api_response[i].trans_factor) + "</td>";   
+              console.log("json.api_response[i].factorbook_link"+json.api_response[i].factorbook_link);         
+
+              rows += "<td>";
+
+              if ( ! ( json.api_response[i].factorbook_link === null ) ){
+                rows += '<a href="' + 
+                        json.api_response[i].factorbook_link +
+                        '" target="_blank">';
+              } 
+              rows += json.api_response[i].trans_factor;
+              if (!(json.api_response[i].factorbook_link === null)){ rows += '</a>'; }
+
+              rows += "</td>";   
               rows += '<td style="display:none;">' + json.api_response[i].motif + "</td>";   
               rows += '<td id="plot_data_'  + json.api_response[i].plot_id_str +  '" style="display:none;"';
               rows += ' class="plotting_data">' + json.api_response[i].json_for_plotting + '</td>';
