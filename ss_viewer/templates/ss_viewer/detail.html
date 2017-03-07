@@ -14,6 +14,7 @@
   
   <script type="text/javascript" src="{% static 'ss_viewer/plotIntoSVGSkeleton.js' %}"> </script> 
   <script type="text/javascript" src="{% static 'ss_viewer/plots.js' %}"></script>
+  <script type="text/javascript" src="{% static 'ss_viewer/outside-links.js' %}"></script>
    <!-- plots.js contains all code for drawing plots  -->
   <style type="text/css">
   th {
@@ -30,6 +31,10 @@
   </style>
 </head>
 <body>
+
+
+
+
 <div class="container">
 <div id="content">
          <h3 style="text-decoration:underline;"> Details </h3>
@@ -47,10 +52,21 @@
             </thead>
             <tbody>
               <tr> <td>rsID                    </td> 
-                   <td>{{ api_response.snpid }}</td> 
+                   <td>
+                    <a href='https://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs={{ api_response.snpid }}'>
+                          {{ api_response.snpid }}
+                    </a> 
+                    </td> 
               </tr>
-              <tr> <td>Coordinate          </td> 
-                   <td>{{ api_response.chr }}:{{ api_response.pos }}</td>
+              <tr> <td>Coordinate  
+                       <!-- <sub><span style="font-size:8px;">
+                         Link to UCSC Genome Browser
+                       </span></sub> -->
+                   </td> 
+                   <td><a href="{{ ucsc_link }}">
+                       {{ api_response.chr }}:{{ api_response.pos }}
+                       </a>
+                   </td>
               </tr>
               <tr> <td>Reference/SNP allele         </td> 
                    <td>{{ api_response.refAllele }} /
@@ -211,6 +227,12 @@
               a.click();
           }
     }
+/*
+http://genome.ucsc.edu/cgi-bin/hgTracks?org=Human&db=hg38&position=chrXX:YY-ZZ 
+XX: chromosome, YY: position-10,000, ZZ: position+10,000
+(e.g. http://genome.ucsc.edu/cgi-bin/hgTracks?org=Human&db=hg38&position=chr11:5236957-5256957)
+*/
+
 </script>
 </body>
 

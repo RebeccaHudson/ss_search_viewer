@@ -54,5 +54,19 @@ def one_row_detail(request, id_str):
   mt = MotifTransformer() 
   response_data = mt.transform_motifs_to_transcription_factors([response_json])
   context['api_response'] = response_json #drhhrepr(dir(api_response))
-
+  #NOTE: in our data, it's ch1, chY or ch11. For UCSC, it's chr12, chrY
+  chromo = response_json['chr'].replace('ch', 'chr')
+  print "the chromosome is represented as  chN:" 
+  position = int(response_json['pos'])
+  posWindowStart = str(position - 10000)
+  if posWindowStart < 0:
+      posWidowStart = 0
+  posWindowEnd = str(position + 10000)
+  
+  #http://genome.ucsc.edu/cgi-bin/hgTracks?org=Human&db=hg38&position=chrXX:YY-ZZ 
+  #XX: chromosome, YY: position-10,000, ZZ: position+10,000
+  linkBits = ['http://genome.ucsc.edu/cgi-bin/hgTracks?org=Human', \
+              '&db=hg38&position=', chromo, ':', posWindowStart,   \
+              '-' , posWindowEnd ]                                  
+  context['ucsc_link'] = ''.join(linkBits)
   return render(request, detail_page_template, context) 
