@@ -297,7 +297,7 @@ class APIResponseHandler:
                  'plot_data': plot_data , 
                  'first_plot_id_str': first_plot_id_str}
  
-
+    
 
 
 
@@ -337,7 +337,9 @@ class APIResponseHandler:
             #print "response json " + str(response_json['data'][0].keys())
             mt = MotifTransformer()
             response_data = mt.transform_motifs_to_transcription_factors(response_json['data'])
-
+            
+            response_data = \
+              ExternalResourceUrls.add_links_to_search_results(response_data)
             #slyly avoiding nested dictionaries. 
             plot_data = APIResponseHandler.get_plots(response_data)
 
@@ -480,3 +482,16 @@ class ExternalResourceUrls:
         if t_factor in factorbookJaspar:
             return 'http://www.factorbook.org/human/chipseq/tf/' + t_factor 
         return None  #handle this in the view.
+
+
+    @staticmethod
+    #use motif transformer code as a pattern
+    def add_links_to_search_results(results):
+        for one_row in results:
+            one_row['dbsnp_link'] = \
+               ExternalResourceUrls.dbsnp_link(one_row['snpid'])
+            one_row['ucsc_link'] =  \
+               ExternalResourceUrls.ucsc_link(one_row['chr'], one_row['pos'])
+            one_row['factorbook_link'] = \
+               ExternalResourceUrls.factorbook_link(one_row['trans_factor'])
+        return results
