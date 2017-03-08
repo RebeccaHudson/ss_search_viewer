@@ -114,6 +114,46 @@ div.panel {
     transition: max-height 0.2s ease-out;
 }
 
+
+
+
+
+.pwmlabels td{ padding: 8px; }
+.pwmlabels { 
+  position: relative;
+  float: left;
+ }
+.matrix {
+    position: relative;
+}
+body {
+    padding: 20px;    
+}
+.matrix:before, .matrix:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    border: 1px solid #000;
+    width: 6px;
+    height: 100%;
+}
+.matrix:before {
+    left: -6px;
+    border-right: 0px;
+}
+.matrix:after {
+    right: -6px;
+    border-left: 0px;
+}
+.matrix td {
+    padding: 8px;    
+    text-align: right;
+}
+
+
+
+
+
 /* end style content from source cited above */ 
 </style>
 </head>
@@ -169,11 +209,40 @@ div.panel {
                    Figure 1 Sequence logo of MA0002.2 motif for transcription factor RUNX1
                    </figcaption>
                    </figure>
+
         <figure>
-<pre>A  [ 287  234  123   57    0   87    0   17   10  131  500 ]
-C  [ 496  485 1072    0   75  127    0   42  400  463  158 ]
-G  [ 696  467  149    7 1872   70 1987 1848  251   81  289 ]
-T  [ 521  814  656 1936   53 1716   13   93 1339 1325 1053 ]</pre>
+<div class="pwm" align="center" style="width:610px;">
+<table class="pwmlabels">
+<tr> <td>  A</td> </tr>              
+<tr> <td>  C</td> </tr>              
+<tr> <td>  G</td> </tr>              
+<tr> <td>  T</td> </tr>
+</table>
+<table class="matrix">
+  <tr>
+     <td>287  </td><td>234   </td><td>123  </td><td>57   </td>
+     <td>0    </td><td>87    </td><td>0    </td><td>17   </td>
+     <td>10   </td><td>131   </td><td>500  </td>
+  </tr> 
+  </tr> 
+<tr>
+    <td>496</td><td>485</td><td>1072</td><td>0</td>
+    <td>75 </td><td>127</td><td>0   </td><td>42</td>  
+    <td>400</td><td>463</td><td>158 </td> 
+</tr>
+
+  <tr>             
+     <td>696  </td><td>467</td><td>149 </td><td>7   </td>
+     <td>1872 </td><td>70 </td><td>1987</td><td>1848</td>
+     <td>251  </td><td>81 </td><td>289 </td>
+  </tr>                                                                                                 
+  <tr>  
+     <td>521 </td><td>814 </td><td>656 </td><td>1936</td> 
+     <td>53  </td><td>1716</td><td>13  </td><td>93  </td>
+     <td>1339</td><td>1325</td><td>1053</td>
+  </tr>
+</table>  
+ </div>
         <figcaption>PFM of MA0002.2 motif for transcription factor RUNX1</figcaption>
         </figure>
            </p>
@@ -203,6 +272,34 @@ T  [ 521  814  656 1936   53 1716   13   93 1339 1325 1053 ]</pre>
              <figcaption>Figure 2 Sequence logo of GATA_known12 motif</figcaption>
             </figure>
 
+
+            <figure>
+
+<span align="center" > <!-- set a margin-left on this span if it needs to hover over
+                            the columns of the matrix -->
+>GATA_known12    GATA2_2    GATA2_jaspar_MA0036.1
+</span> 
+<div class="pwm" align="center" style="width:340px;">
+<table class="pwmlabels">
+<tr> <td>  A</td> </tr>              
+<tr> <td>  C</td> </tr>              
+<tr> <td>  G</td> </tr>              
+<tr> <td>  T</td> </tr>
+</table>
+<table class="matrix">
+<tr>  <td>0.245</td><td>0.000</td><td> 0.981</td><td> 0.000</td><td>0.472</td>
+</tr>                                                                         
+<tr>  <td>0.245</td><td>0.094</td><td> 0.000</td><td> 0.000</td><td>0.132</td>
+</tr>
+<tr>  <td>0.340</td><td>0.906</td><td> 0.019</td><td> 0.000</td><td>0.283</td>
+</tr>
+<tr>  <td>0.170</td><td>0.000</td><td> 0.000</td><td> 1.000</td><td>0.113</td>
+</tr>
+</table>
+</div>
+<figcaption>PWM of GATA_known12 motif</figcaption>
+</figure>
+<!-- previous version, just in case..
             <figure>
 <pre>>GATA_known12    GATA2_2    GATA2_jaspar_MA0036.1
 A    [0.245    0.000    0.981    0.000    0.472]
@@ -210,14 +307,46 @@ C    [0.245    0.094    0.000    0.000    0.132]
 G    [0.340    0.906    0.019    0.000    0.283]
 T    [0.170    0.000    0.000    1.000    0.113]</pre>
          <figcaption>PWM of GATA_known12 motif</figcaption>
-         </figure>
+         </figure> -->
 
          <figure>
            <img src="{% static 'ss_viewer/docs/image03.png' %}" height="200px" id="figure-03"/>
            <figcaption>Figure 3 Sequence logo of GATA_disc1 motif</figcaption>
           </figure>
 
-         <figure>
+
+
+<figure>
+<span align="center" > <!-- set a margin-left on this span if it needs to hover over
+                            the columns of the matrix -->
+>GATA_disc1 GATA1_K562b_encode-Snyder_seq_hsa_r1:MDscan#1#Intergenic
+</span> 
+<div class="pwm" align="center" style="width:650px;">
+<table class="pwmlabels">
+  <tr><td>A</td></tr>              
+  <tr><td>C</td></tr>              
+  <tr><td>G</td></tr>              
+  <tr><td>T</td></tr>
+</table>
+<table class="matrix">
+<tr>  <td>0.323</td><td>0.138</td><td>0.667</td><td>0.000</td><td>1.000</td>     
+      <td>0.000</td><td>0.878</td><td>0.974</td><td>0.000</td><td>0.243</td>  
+</tr>                                                                        
+<tr>  <td>0.185</td><td>0.476</td><td>0.101</td><td>0.000</td><td>0.000</td>     
+      <td>0.000</td><td>0.000</td><td>0.026</td><td>0.053</td><td>0.249</td>  
+</tr>                                                                        
+<tr>  <td>0.360</td><td>0.323</td><td>0.000</td><td>1.000</td><td>0.000</td>     
+      <td>0.000</td><td>0.000</td><td>0.000</td><td>0.947</td><td>0.508</td>  
+</tr>                                                                        
+<tr>  <td>0.132</td><td>0.063</td><td>0.233</td><td>0.000</td><td>0.000</td> 
+      <td>1.000</td><td>0.122</td><td>0.000</td><td>0.000</td><td>0.000</td>  
+</tr>
+</table>
+</div>
+<figcaption>PWM of GATA_disc1 motif</figcaption>
+</figure>
+<!-- beginning of original version of this matrix -->
+<!-- <figure>
 <pre>
 >GATA_disc1 GATA1_K562b_encode-Snyder_seq_hsa_r1:MDscan#1#Intergenic
 A    [0.323    0.138    0.667    0.000    1.000    0.000    0.878    0.974    0.000    0.243]
@@ -225,9 +354,10 @@ C    [0.185    0.476    0.101    0.000    0.000    0.000    0.000    0.026    0.
 G    [0.360    0.323    0.000    1.000    0.000    0.000    0.000    0.000    0.947    0.508]
 T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.000    0.000]
 </pre>
-           <figcaption>PWM of GATA_disc1 motif</figcaption>
-         </figure>
-          </p>
+<figcaption>PWM of GATA_disc1 motif</figcaption>
+</figure> -->
+<!-- end of original version of this matrix -->
+</p>
             
           <section>
           <h6><span class="underline">Reference</span></h6>
@@ -299,12 +429,33 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
                    <img src="{% static 'ss_viewer/docs/image04.png' %}" height="200px"  id="figure-05"/>
                    <figcaption> Figure 5 Sequence logo of GATA_known12 motif </figcaption> 
                 </figure>
-                <figure>
-<pre>A        [0.245        0.000        0.981        0.000        0.472]
+<!-- begin original version of matrix -->
+<!-- <figure>
+<pre>A   [0.245        0.000        0.981        0.000        0.472]
 C        [0.245        0.094        0.000        0.000        0.132]
 G        [0.340        0.906        0.019        0.000        0.283]
 T        [0.170        0.000        0.000        1.000        0.113].</pre>
-               </figure>
+</figure> -->
+<!-- end oritinal version of matrix -->
+<figure>
+<div class="pwm" align="center" style="width:400px;">
+<table class="pwmlabels">
+  <tr><td>A</td></tr>              
+  <tr><td>C</td></tr>              
+  <tr><td>G</td></tr>              
+  <tr><td>T</td></tr>
+</table>
+<table class="matrix">
+  <tr><td>0.245</td><td>0.000</td><td>0.981</td><td>0.000</td><td>0.472</td></tr> 
+  <tr><td>0.245</td><td>0.094</td><td>0.000</td><td>0.000</td><td>0.132</td></tr>
+  <tr><td>0.340</td><td>0.906</td><td>0.019</td><td>0.000</td><td>0.283</td></tr>
+  <tr><td>0.170</td><td>0.000</td><td>0.000</td><td>1.000</td><td>0.113</td></tr>
+</table>
+</div>
+</figure>
+
+
+
                </p>
                <p>
 The motif length is 5 and sequences of length 9 centered at the SNP position are extracted from both reference and SNP genomes:
@@ -569,10 +720,28 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
                 <img src="{% static 'ss_viewer/docs/image04.png' %}" height="200px"  id="figure-10"/>
                 <figcaption>Figure 10 Sequence logo of GATA_known12 motif</figcaption> 
              </figure>
-<pre>A        [0.245        0.000        0.981        0.000        0.472]
+<!-- begin original version of matrix -->
+<!-- <pre>A        [0.245        0.000        0.981        0.000        0.472]
 C        [0.245        0.094        0.000        0.000        0.132]
 G        [0.340        0.906        0.019        0.000        0.283]
-T        [0.170        0.000        0.000        1.000        0.113].</pre> 
+T        [0.170        0.000        0.000        1.000        0.113].</pre>  -->
+<!-- end original version of matrix -->
+<div class="pwm" align="center" style="width:400px;">
+  <table class="pwmlabels">
+    <tr><td>A</td></tr>              
+    <tr><td>C</td></tr>              
+    <tr><td>G</td></tr>              
+    <tr><td>T</td></tr>
+  </table>
+  <table class="matrix">
+    <tr><td>0.245</td><td>0.000</td><td>0.981</td><td>0.000</td><td>0.472</td></tr> 
+    <tr><td>0.245</td><td>0.094</td><td>0.000</td><td>0.000</td><td>0.132</td></tr>
+    <tr><td>0.340</td><td>0.906</td><td>0.019</td><td>0.000</td><td>0.283</td></tr>
+    <tr><td>0.170</td><td>0.000</td><td>0.000</td><td>1.000</td><td>0.113</td></tr>
+  </table>
+</div>
+
+
              </p>
              <p>
                 <table class="doc-table" style="font-size:10px;">
