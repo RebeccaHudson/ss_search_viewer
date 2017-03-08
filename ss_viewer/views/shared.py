@@ -6,6 +6,7 @@ import json
 import pickle
 import requests
 import csv
+import re
 from tempfile import NamedTemporaryFile
 from ss_viewer.forms import SearchBySnpidForm  #replaces ScoresSearchForm
 from ss_viewer.forms import SearchByGenomicLocationForm
@@ -483,6 +484,15 @@ class ExternalResourceUrls:
             return 'http://www.factorbook.org/human/chipseq/tf/' + t_factor 
         return None  #handle this in the view.
 
+    @staticmethod
+    #checks if it's a JASPAR motif with a regular expression. 
+    #If motif is not a JASPAR motif, then this functio returns None.
+    def jaspar_motif_link(motif):
+        if re.match('MA(\d)+\.\d', motif):
+            linkBits = ['http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?',
+                        'ID=', motif, '&rm=present&collection=CORE']
+            return ''.join(linkBits) 
+        return None
 
     @staticmethod
     #use motif transformer code as a pattern
@@ -494,4 +504,6 @@ class ExternalResourceUrls:
                ExternalResourceUrls.ucsc_link(one_row['chr'], one_row['pos'])
             one_row['factorbook_link'] = \
                ExternalResourceUrls.factorbook_link(one_row['trans_factor'])
+            one_row['jaspar_motif_link'] = \
+               ExternalResourceUrls.jaspar_motif_link(one_row['motif'])
         return results

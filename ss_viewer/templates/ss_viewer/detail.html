@@ -88,7 +88,10 @@
              </thead>
             <tbody>
               <tr><td>Motif                           </td> 
-                  <td>{{ api_response.motif }}        </td>  
+                  <td>{% if jaspar_motif_link %}<a href="{{ jaspar_motif_link }}">{% endif %}
+                     {{ api_response.motif }}        
+                      {% if jaspar_motif_link %}</a>{% endif %}
+                  </td>
               </tr>
               <tr><td>Transcription Factor            </td> 
                   <td>{% if factorbook_link %}<a href="{{ factorbook_link }}">{% endif %}

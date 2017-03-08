@@ -17,7 +17,6 @@ from ss_viewer.views.shared import MotifTransformer
 from ss_viewer.views.shared import TFTransformer
 from ss_viewer.views.shared import APIUrls 
 from ss_viewer.views.shared import APIResponseHandler 
-from ss_viewer.views.shared import StandardFormset
 #TODO: clean up the imports
 
 
@@ -56,12 +55,18 @@ def one_row_detail(request, id_str):
   response_data = mt.transform_motifs_to_transcription_factors([response_json])
 
   context['api_response'] = response_json
-  context['ucsc_link'] =       \
+
+  context['ucsc_link'] =         \
      ExternalResourceUrls.ucsc_link(response_json['chr'], response_json['pos'])
-  context['factorbook_link'] = \
+
+  context['factorbook_link'] =   \
      ExternalResourceUrls.factorbook_link(response_json['trans_factor'])
+
   #factorbook_link will be None if it's unavailable.
-  context['dbsnp_link'] =      \
+  context['dbsnp_link'] =        \
      ExternalResourceUrls.dbsnp_link(response_json['snpid'])
+
+  context['jaspar_motif_link'] = \
+     ExternalResourceUrls.jaspar_motif_link(response_json['motif'])
 
   return render(request, detail_page_template, context) 
