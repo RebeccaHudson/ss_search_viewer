@@ -226,8 +226,6 @@
               if (!(json.api_response[i].factorbook_link === null)){ rows += '</a>'; }
 
               rows += "</td>";   
-              //TODO: remove the motif from the main search results output.
-              rows += '<td style="display:none;">' + json.api_response[i].motif + "</td>";   
 
               rows += '<td id="plot_data_'  + json.api_response[i].plot_id_str +  '" style="display:none;"';
               rows += ' class="plotting_data">' + json.api_response[i].json_for_plotting + '</td>';

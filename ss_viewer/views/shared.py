@@ -504,6 +504,6 @@ class ExternalResourceUrls:
                ExternalResourceUrls.ucsc_link(one_row['chr'], one_row['pos'])
             one_row['factorbook_link'] = \
                ExternalResourceUrls.factorbook_link(one_row['trans_factor'])
-            one_row['jaspar_motif_link'] = \
-               ExternalResourceUrls.jaspar_motif_link(one_row['motif'])
+            #JASPAR motif link is not added; it's only shown on the detail page.
         return results
+
