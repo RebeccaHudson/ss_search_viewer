@@ -78,6 +78,7 @@ class GenericSearchView(View):
         #print "context keys : " + repr(context.keys())
 
         #don't pass back ALL of the form data that was sent in.
+        #This is only triggered by a whole file full of SNPids.
         if 'file_of_snpids' in context['form_data'].keys() and context['form_data']['file_of_snpids'] is not None:
            del context['form_data']['file_of_snpids'] 
 
