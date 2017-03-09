@@ -31,6 +31,7 @@ function hideControlsDuringSearch(){
      $("div#form_errors").empty();
      $("#search_results").remove();   
      $("#drop-in").empty();
+     clearOutPlots();
      //$("div#plots").empty(); //does this work? no.
 }
 
@@ -53,14 +54,19 @@ function pagingAJAX(nextOrPrev){
    $("div#form_errors").empty();
    $("#search_results").remove();   
    $("#drop-in").empty();
+   clearOutPlots();
+   create_paging_post(nextOrPrev, active_search);
+}
+
+function clearOutPlots(){
    var plotsForPage = ['svg[id^="target"]', 
                       '[id!="target-0"]',
                       '[id!="target-snphalf-0"]',
                       '[id!="target-refhalf-0"]'];
    var plotSelector = plotsForPage.join(''); //don't remove the skeletons!
    $(plotSelector).remove();
-   create_paging_post(nextOrPrev, active_search);
 }
+
 
 //add event listener for Download button
 function clickDownloadResultsAJAX(){
