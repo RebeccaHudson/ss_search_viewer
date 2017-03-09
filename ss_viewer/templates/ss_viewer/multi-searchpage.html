@@ -27,6 +27,22 @@
            paging, hiding/showing controls -->
    <script type="text/javascript" src="{% static 'ss_viewer/plots.js' %}"></script>
    <!-- plots.js contains all code for drawing plots  -->
+
+   <style type="text/css">
+      #download-exp {
+           display:none;  
+           padding:10px; 
+           margin-left:100px; 
+           position:absolute;
+           right: -240px;
+           top: 240px;
+           width:300px; 
+           border:1px solid black;
+      }
+
+   </style>
+
+
 </head>
 <body>
 <div class="container">
@@ -59,9 +75,30 @@
 <!--  this is the way that we will be displaying the plot -->
 <div class="side plot">
    <div id="plots">
-   <div id="download-exp" float="right" style="display:none; padding:10px; margin-left:100px; width:300px; border:1px solid black;">
-     the downloads?
-     <p> Numeric data for the search results shown here can be downloaded in CSV
+   
+
+   {% include "ss_viewer/svg_skeleton.html" %}
+   {% include "ss_viewer/half_plot_svg_skeleton.html" %}
+   {% include "ss_viewer/half_plot_snp_svg_skeleton.html" %}
+   </div>
+
+</div>
+ <canvas id="canvas" style="display:none;" width="800" height="370"></canvas>
+
+<!-- this div will contain the search params to submit for paging -->
+<div id='current_search_params' style="display:none;">
+</div>
+
+
+<span id='type_of_shown_results' style="display:none;" >
+{% if active_tab  %}
+  {{ active_tab }} 
+{% endif %}
+</span>
+
+   <!-- begin downloads div -->
+   <div id="download-exp" >
+         <p> Numeric data for the search results shown here can be downloaded in CSV
          format. 
         <div id="download_button" style="display:none;" >
             <input type="submit" name="action"
@@ -81,27 +118,9 @@
                    class="btn-xs"
                    onclick="checkedRowPlotDownload();" />
         </div>
-
      </p>
    </div>
-   {% include "ss_viewer/svg_skeleton.html" %}
-   {% include "ss_viewer/half_plot_svg_skeleton.html" %}
-   {% include "ss_viewer/half_plot_snp_svg_skeleton.html" %}
-   </div>
-</div>
- <canvas id="canvas" style="display:none;" width="800" height="370"></canvas>
-
-<!-- this div will contain the search params to submit for paging -->
-<div id='current_search_params' style="display:none;">
-</div>
-
-
-<span id='type_of_shown_results' style="display:none;" >
-{% if active_tab  %}
-  {{ active_tab }} 
-{% endif %}
-</span>
-
+   <!-- end downloads div -->
 
 <div id="status_message"> {{ status_message }} </div>
 
@@ -112,12 +131,15 @@
 
 <!-- block of download buttons! -->
 
-<div id="download_page_of_plots" style="display:none;">
+<!-- This isn't a discrete function anymore -->
+<!-- TODO: deprecate the code below completely -->
+<!-- <div id="download_page_of_plots" style="display:none;">
     <input type="submit" name="bulkPlotDownload"
            value="Download This Page of Plots"
            class="btn-xs"
            onclick="bulkPlotDownload();" />
-</div>
+</div> -->
+<!-- end of block of download button code to deprecate4 -->
 
 
 
@@ -134,6 +156,7 @@
              id="next_button">
              Next</button>
 </div>
+
 
 
 <div id="drop-in">
