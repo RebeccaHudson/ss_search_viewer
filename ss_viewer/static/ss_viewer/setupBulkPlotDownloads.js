@@ -65,7 +65,7 @@ function checkedRowPlotDownload(){
           var checky = $("input#" + idToUse); 
           console.log("id being checked ... " + idToUse);
           checky = checky[0]; 
-          console.log("checky : " + checky + " checky.checked: " + checky.checked);
+          console.log("checky : " + checky );//+ " checky.checked: " + checky.checked);
           if ( checky.checked == true ){
              console.log("checkedTargets added one" + idToUse);
              checkedTargets.push(targets[i]); 
@@ -87,6 +87,12 @@ function checkedRowPlotDownload(){
           });
         }
 }      
+
+//true to check all boxes; false to uncheck all boxes.
+function hitAllPlotCheckboxes(trueOrFalse){
+   var checkboxes = $('input[type="checkbox"]').prop('checked', trueOrFalse);   
+}
+
 
 
 
