@@ -30,10 +30,6 @@ urlpatterns = [
        views.main.help_page,
        name = 'help-page'),
 
-  url (r'^about/$', 
-       views.main.about_page,
-       name = 'about-page'),
-
   url (r'^faq/$', 
        views.main.faq_page,
        name = 'faq-page'),

@@ -37,11 +37,6 @@ def help_page(request):
     context = {}
     return render(request, help_page_template, context) 
 
-def about_page(request):
-    about_page_template = 'ss_viewer/about-page.html'
-    context = {}
-    return render(request, about_page_template, context) 
-
 def faq_page(request):
     faq_page_template = 'ss_viewer/faq.html'
     context = {}
