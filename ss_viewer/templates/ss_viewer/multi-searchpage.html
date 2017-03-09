@@ -35,8 +35,8 @@
            margin-left:100px; 
            position:absolute;
            right: -240px;
-           top: 240px;
-           width:300px; 
+           top: 150px;
+           width: 350px; 
            border:1px solid black;
       }
 
@@ -98,27 +98,43 @@
 
    <!-- begin downloads div -->
    <div id="download-exp" >
-         <p> Numeric data for the search results shown here can be downloaded in CSV
-         format. 
-        <div id="download_button" style="display:none;" >
-            <input type="submit" name="action"
-                   value="Download Results"
-                   class="btn-xs btn-danger"
-                   onclick="clickDownloadResultsAJAX();" />
+         <div>
+           <p> Numeric data for the search results shown here can be downloaded in CSV
+             format. 
+            <div id="download_button" style="display:none;" >
+              <input type="submit" name="action"
+                     value="Download Results"
+                     class="btn-xs btn-danger"
+                     onclick="clickDownloadResultsAJAX();" />
+            </div>
+           </p>
+         </div>
+         <div>
+            <p> 
+              A ZIP archive of PNG images for plots of the data on this page can be 
+              downloaded. To include plots in this download, check the boxes in the
+              rightmost column of the search results. Shortcuts to checking or unchecking
+              all of these boxes are available below the plot Download Button.<br />
+              <span style="font-size:10px;">
+                (Single plots can also be downloaded from the Details view for each row of data.)
+              </span>
+              <div id="download_plots_for_checked_rows" style="display:none;">
+                  <!-- TODO: put an alert indicating there's no darn rows checked -->
+                  <input type="submit" name="checkedRowPlotDownload"
+                         value="Download Plots for Checked Rows"
+                         class="btn-xs"
+                         onclick="checkedRowPlotDownload();" />
+              </div>
+           </p>
+                  <input type="submit" name="checkAllBoxes"
+                         value="Add All Plots on Page to Download"
+                         class="btn-xs btn-link"
+                         onclick="hitAllPlotCheckboxes(true);" />
+                  <input type="submit" name="uncheckAllBoxes"
+                         value="Remove All Plots on Page From Download"
+                         class="btn-xs btn-link"
+                         onclick="hitAllPlotCheckboxes(false);" />
         </div>
-     </p>
-     <p> 
-        A ZIP archive of PNG images for plots of the data on this page can be 
-        downloaded. To include plots in this download, check the boxes in the
-        rightmost column of the search results.
-        <div id="download_plots_for_checked_rows" style="display:none;">
-            <!-- TODO: put an alert indicating there's no darn rows checked -->
-            <input type="submit" name="checkedRowPlotDownload"
-                   value="Download Plots for Checked Rows"
-                   class="btn-xs"
-                   onclick="checkedRowPlotDownload();" />
-        </div>
-     </p>
    </div>
    <!-- end downloads div -->
 
