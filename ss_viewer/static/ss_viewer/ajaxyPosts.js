@@ -10,8 +10,10 @@ function create_search_post(action_name, search_type){
 
  $("div#status_message").text("Working... ");
  $("div#download_button").attr("style", "display:none;");
- $("#download_page_of_plots").hide();
- $("#download_plots_for_checked_rows").hide();
+ $("#download_page_of_plots").hide();   //remove this
+ $("#download_plots_for_checked_rows").hide();  //remove this
+ $("#download-exp").hide(); 
+ //TODO: no need to explicitly show and hide the child dowload buttons.
 
  showHidePrevNext(null); 
  //hides the search buttons while we are working...
@@ -96,6 +98,8 @@ function create_paging_post(action_name, search_type){
  var url_endpoint = 'ajaxy-' + search_type + '/';
  $("div#status_message").text("Working... ");
  $("div#download_button").attr("style", "display:none;");
+ $("#download-exp").hide(); //TODO: no need to individually hide child 
+                            //elements of the download-exp(lanation) box.
  showHidePrevNext(null); 
  //hides the search buttons while we are working...
 
