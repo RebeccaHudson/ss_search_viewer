@@ -31,6 +31,7 @@ function hideControlsDuringSearch(){
      $("div#form_errors").empty();
      $("#search_results").remove();   
      $("#drop-in").empty();
+     //$("div#plots").empty(); //does this work? no.
 }
 
 function showHidePrevNext(search_paging_info){
@@ -52,6 +53,12 @@ function pagingAJAX(nextOrPrev){
    $("div#form_errors").empty();
    $("#search_results").remove();   
    $("#drop-in").empty();
+   var plotsForPage = ['svg[id^="target"]', 
+                      '[id!="target-0"]',
+                      '[id!="target-snphalf-0"]',
+                      '[id!="target-refhalf-0"]'];
+   var plotSelector = plotsForPage.join(''); //don't remove the skeletons!
+   $(plotSelector).remove();
    create_paging_post(nextOrPrev, active_search);
 }
 
