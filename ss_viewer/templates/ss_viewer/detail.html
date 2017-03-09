@@ -27,17 +27,28 @@
     border: 1px solid black;
   }
   
+  td.template { 
+      padding: 10px;
+      border: 0px; 
+  }
+
+  table.template { 
+      border: 0px;
+  }
+
   </style>
 </head>
 <body>
 
 
 
-
 <div class="container">
 <div id="content">
          <h3 style="text-decoration:underline;"> Details </h3>
-         <p>
+         <!-- <p> -->
+         <table class="template">
+         <tr>
+         <td class="template">
          <table>                                  
             <thead>
              <tr>
@@ -73,9 +84,13 @@
               </tr>
             </tbody>
          </table>
-         </p>
-         <p>
-         <table >                                  
+         <!-- </p> -->
+         </td> 
+         
+         
+         <!-- <p> -->
+         <td class="template">
+         <table>                                  
             <thead>
              <tr>
                <th colspan="2">Motif Information
@@ -101,8 +116,15 @@
              </tr>
             </tbody>
          </table>
-         </p> 
+         </td>
+         </tr>
+         </table>
+         <!-- /div was here -->
+         <!-- end the div for putting SNP and motif information side-by-side -->
+         <!-- </p>  -->
          <p>
+         <div style="margin-left:10px;"> <!-- can this put the atSNP results table in the middle? -->
+         <!-- <p> -->
          <table>                                  
             <thead>
               <tr>
@@ -150,6 +172,8 @@
               </tr>
             </tbody>
          </table>
+         <!--</p> -->
+         </div>
          </p>
 <!--  this is the way that we will be displaying the plot -->
 <div>
