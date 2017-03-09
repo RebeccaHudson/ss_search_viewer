@@ -1,23 +1,9 @@
-from django.core.urlresolvers import reverse
 from django.shortcuts import render
-from django.shortcuts import redirect
-from django.http import HttpResponse
-from django.conf import settings
-import pickle
 import requests
 import json
-import re
-import os
-from ss_viewer.forms import SearchBySnpidForm  #replaces ScoresSearchForm
-from ss_viewer.forms import SearchByGenomicLocationForm
-from ss_viewer.forms import SearchByTranscriptionFactorForm
-import django.forms
-from django.core.files.uploadedfile import SimpleUploadedFile
 from ss_viewer.views.shared import MotifTransformer
-from ss_viewer.views.shared import TFTransformer
 from ss_viewer.views.shared import APIUrls 
 from ss_viewer.views.shared import APIResponseHandler 
-#TODO: clean up the imports
 
 
 #TODO: pull the motif data out of the API, not this static file
