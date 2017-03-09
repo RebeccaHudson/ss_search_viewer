@@ -1,37 +1,11 @@
-from django.core.urlresolvers import reverse
 from django.shortcuts import render
-from django.shortcuts import redirect
 from django.http import HttpResponse
-from django.conf import settings
-import pickle
-import requests
 import json
-import re
 import os
-from ss_viewer.forms import SearchBySnpidForm  #replaces ScoresSearchForm
-from ss_viewer.forms import SearchByGenomicLocationForm
-from ss_viewer.forms import SearchByTranscriptionFactorForm
-import django.forms
-from django.core.files.uploadedfile import SimpleUploadedFile
-from ss_viewer.views.shared import MotifTransformer
-from ss_viewer.views.shared import TFTransformer
-from ss_viewer.views.shared import APIUrls 
-from ss_viewer.views.shared import StandardFormset
-
-
-#TODO: pull the motif data out of the API, not this static file
 from ss_viewer.views.shared import MotifPlottingData
 
-from django.core.exceptions import ValidationError
-from tempfile import NamedTemporaryFile 
-import csv
-import zipfile
-
-
-#from .plots import MakePlots #tempfile writer can stay hiedden
 def index(request):
   return HttpResponse("Try another url, like :ss_viewer/multi-search.")
-
 
 def test_svg_plots(request):
     name_of_template  =  'ss_viewer/show_test_plot.html' 
