@@ -43,6 +43,7 @@ function svgImage(xml) {
 
 //this happens when search results are returned.
 function setupPlotsForSearchResults(){
+   console.log("setupPlotsForSearchResults  ... logging here.");
    var plottingData = [];
    $("td.plotting_data" ).each(function() {
        var data_for_one_plot = this.textContent;
@@ -56,7 +57,8 @@ function setupPlotsForSearchResults(){
        var halfSnpPlotId = 'target-snphalf-' +  plottingData[n].plot_id_str;
 
        makeAPlot(plottingData[n], targetSVGid);
-       makeAHalfPlot(plottingData[n], halfPlotId );
+       makeAScaledDownHalfPlot(plottingData[n], halfPlotId ); 
+       //was just makeAHalfPlot before; now working on scaling changes.
        makeAHalfPlotSNP(plottingData[n], halfSnpPlotId );
        if ( n > 0 ){
          $("#"+targetSVGid).parent().addClass("hidden");

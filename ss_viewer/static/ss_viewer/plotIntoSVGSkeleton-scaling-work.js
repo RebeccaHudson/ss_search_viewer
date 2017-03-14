@@ -1,3 +1,5 @@
+
+
 //setup shared between all plots:
     var margin = {top: 20, right: 20, bottom: 30, left: 40},
         width = 500 - margin.left - margin.right,
@@ -159,30 +161,36 @@
 
 
 
-    //draw a half of a plot.
+
+    //CURRENTLY UNDERGOING THIS:modify this so it produces a plot with a fixed width.
+    //                          draw a half of a plot.
     function makeAHalfPlot(plotToMake, idOfTargetSVG){
 
-        //var motifName = plotToMake.motif;
-        //OTHERHALF:  var snpSeq = plotToMake.snp_aug_match_seq.split("");
         var refSeq = plotToMake.ref_aug_match_seq.split("");
         var refStrand = plotToMake.ref_strand;//Plus or -
-        //OTHERHALF:  var snpStrand = plotToMake.snp_strand;
-
-        //how many places to offset the PWM from the SNP & reference sequences.
-        //OTHERHALF:  var snpPWMOffset = plotToMake.snp_extra_pwm_off;
         var refPWMOffset = plotToMake.ref_extra_pwm_off;
 
         var randomMotif = plotToMake.motif_data;
         var maxColumnCount = d3.max([refSeq.length, 
                                      randomMotif.forward.length + refPWMOffset  ]);
 
+        //columnWidth is 35 by default.
+        //side margin
+        var  sideMargin = 10;
+        var  fixedWidth = 420;
+
+        columnWidthScaled = (fixedWidth - margin.left - margin.right) / maxColumnCount;
+        unscaledLetterHeight =  columnWidthScaled * 1.3 ; 
+
         // Expand the SVG to fit the widest row.
-        var svgWidth = maxColumnCount * columnWidth + 
-                       margin.left + margin.right + 50;
-        if (svgWidth < 460) { svgWidth = 460; }
+        //var svgWidth = maxColumnCount * columnWidthScaled + 
+        //               margin.left + margin.right + 50;
+        var svgWidth = fixedWidth; 
+
+        //don't extend arbitrarially.
+        //if (svgWidth < 460) { svgWidth = 460; }
         //force width to ensure the main plot label fits
         d3.select("svg#"+idOfTargetSVG).attr("width", svgWidth);
-
 
         //make a range of integers that will be the values for the ordinal X scale.
         var ordinalXRange = [];  //list of integers 0 thru max columns required. 
@@ -191,14 +199,7 @@
         //draw the 'strand' data next to where the SNP and reference sequences will appear
         //ref strand on line 2, SNP strand on line 3 (this is the + and -s)
         d3.select("svg#" + idOfTargetSVG + " g#line2margin text").text(refStrand);
-        //OTHERHALF:  d3.select("svg#" + idOfTargetSVG + " g#line3margin text").text(snpStrand);
 
-
-      
-        //Draw the scaled motifs (aka "PWM"s)
-        //The line1 and line4 motifs will be the same motif, but possibly with
-        //different offsets and different strand directions.
- 
         //draw the line 1 motif.
         //Reference strand determines the direction the line 1 motif is displayed.
         var targetGroup = d3.select("svg#" + idOfTargetSVG + " g#line1data");
@@ -207,7 +208,7 @@
         var unshiftedMotifLength;
         var xScale = d3.scale
                        .ordinal()
-                       .rangeRoundBands([0, maxColumnCount*columnWidth], .1);
+                       .rangeRoundBands([0, maxColumnCount*columnWidthScaled], .1);
 
         if ( refStrand == '+' ){ dataForMotif = [].concat(randomMotif.forward); }
         else { dataForMotif = [].concat(randomMotif.reverse); }
@@ -221,51 +222,15 @@
  
         targetForLine = d3.select("svg#" + idOfTargetSVG + " g#line1data");
         drawMarkerLine(targetForLine, refPWMOffset, unshiftedMotifLength, 
-                                                  xScale, 55, refStrand); 
-
-        //OTHERHALF:
-        //draw the line 4 motif.
-        //SNP strand determines the direction the line 4 motif is displayed
-        // targetGroup = d3.select("svg#"+ idOfTargetSVG + " g#line4data");
-        // if ( snpStrand == '+' ) { dataForMotif = [].concat(randomMotif.forward); }
-        // else{ dataForMotif = [].concat(randomMotif.reverse);}
-        // 
-        // unshiftedMotifLength = dataForMotif.length;
-        // //determine how long the line should be
-
-        // dataForMotif = applyOffsetToMotifData(dataForMotif, snpPWMOffset);
-        // setupScalesDomainsForOneMotif(xScale, y, ordinalXRange, snpSeq);
-        // //can the above call be omitted?
-        // drawOneMotif(dataForMotif, targetGroup, xScale, y, ordinalXRange);
- 
-        // targetForLine = d3.select("svg#" + idOfTargetSVG + " g#line4data");
-        // drawMarkerLine(targetForLine, snpPWMOffset, unshiftedMotifLength, 
-        //                                           xScale, 55, snpStrand); 
-        //   //The [].concat(arrayWithData) is used to make a deep copy of 
-        //   //the motif's forward and reverse data before feeding it into the 
-        //   //code that unshifts the array as many spaces as indicated by the 
-        //   //'extra SNP/ref PWM offset'
-
-
-        //draw the unscaled SNP sequence and the ref sequence.
-        //OTHERHALF: columnCount = snpSeq.length; //TODO: is this needed? are we not using maxColumnCount?
-        //OTHERHALF:setupScalesDomainsForOneMotif(xScale, y, ordinalXRange, snpSeq);
-
+                                                   xScale, 55, refStrand); 
         //draw the reference sequence on line 2.
         var refSeqTargetSelector = d3.select("svg#" + idOfTargetSVG + " g#line2data");
-        drawUnscaledSequence(refSeqTargetSelector, refSeq, xScale);
-        drawHorizontalAxis(refSeqTargetSelector, xScale, refSeq, maxColumnCount);
+        drawUnscaledSequenceScaled(refSeqTargetSelector, refSeq, xScale, unscaledLetterHeight);
 
-        //draw the SNP sequence on line 3
-        //OTHERHALF:  var snpSeqTargetSelector = d3.select("svg#" + idOfTargetSVG + " g#line3data");
-        //OTHERHALF:  drawUnscaledSequence(snpSeqTargetSelector, snpSeq, xScale);
-        //OTHERHALF:  drawHorizontalAxis(snpSeqTargetSelector, xScale, snpSeq, maxColumnCount);
+        drawScaledHorizontalAxis(refSeqTargetSelector, xScale, refSeq, maxColumnCount, columnWidthScaled);
 
         var highlightPosition = findSNPLocationForHalfPlot(plotToMake);
-        //highlights are not included in half-plots.; this is where that code was removed.
-        applyHighlight(highlightPosition, idOfTargetSVG, xScale);
-
-        //lables are not included in half-plots.; this is where that code was removed.
+        applyScaledHighlight(highlightPosition, idOfTargetSVG, xScale, columnWidthScaled);
 
 }//end function to plot one SVG composite logo plot in an already-existing SVG.
 
@@ -283,6 +248,21 @@ function applyHighlight(highlightPosition, idOfTargetSVG, xScale){
                    .attr("width", function(){ return columnWidth; } )
                    .style("fill", "#d3d3d3");
         }
+}
+
+//This appears to work.
+function applyScaledHighlight(highlightPosition, idOfTargetSVG, xScale, columnWidthScaled){
+    if (highlightPosition >= 0) {
+      var highlight = d3.select("svg#" + idOfTargetSVG + " #highlight");
+      var highlightHeight = columnWidthScaled * 4.2;
+      highlight.attr("x", function(){ 
+                               var happyX = xScale(highlightPosition) - 2; 
+                               return  happyX; })
+               .attr("y", "10")
+               .attr("height", highlightHeight ) //"105")
+               .attr("width", function(){ return columnWidthScaled; } )
+               .style("fill", "#d3d3d3");
+    }
 }
 
 
@@ -412,14 +392,14 @@ function drawMarkerLine(targetForLine, pwmOffset, unshiftedMotifLength, xScale, 
                        .attr('stroke', 'blue') 
                        .text(leftLabelText)
                        .attr('x', xLeft - 13) 
-                       .attr('y', y + 11);
+                       .attr('y', y + 12);
 
          targetForLine.append('text') 
                        .attr("font-size", 12)  
                        .attr('stroke', 'blue') 
                        .text(rightLabelText)
                        .attr('x', xRight + 10) 
-                       .attr('y', y + 11);
+                       .attr('y', y + 12);
 }
 
 
@@ -459,6 +439,7 @@ function findSNPLocation(snpDirection, refDirection, snpSeq, refSeq){
 
 //lots of hardcoded numbers; get away from these if it's possible.
 function drawUnscaledSequence(sequenceTargetSelector, sequenceData, xScale){
+
     var seqColumn = sequenceTargetSelector.selectAll(".sequence-column")
            .data(sequenceData)   //one column per datum
            .enter()
@@ -486,6 +467,34 @@ function drawUnscaledSequence(sequenceTargetSelector, sequenceData, xScale){
               .attr("y", function() { return 60;  } );
 }
                           
+//lots of hardcoded numbers; get away from these if it's possible.
+function drawUnscaledSequenceScaled(sequenceTargetSelector, sequenceData, xScale, letterHeight){
+    var seqColumn = sequenceTargetSelector.selectAll(".sequence-column")
+           .data(sequenceData)   //one column per datum
+           .enter()
+           .append("g")
+           .attr("transform", function(d, i) {
+                           return "translate(" + (xScale(i) + (xScale.rangeBand() / 2 )) + ",0)"; })
+           .attr("class", "sequence-column");
+
+    seqColumn.selectAll("text")
+              .data(function(d){ 
+                         return d;  //snpSeq should be bound already.
+                         //make this letter appear as text in this element..
+                    })
+              .enter()
+              .append("text")
+              .text(function(d) { return d; } )
+              .attr("class", function(d) { //can also just explictly define the font-family attr.
+                                 return "letter-"+ d;  })
+              .style("text-anchor", "middle")
+              .style("font-family", "console")
+              .style("font-weight", "normal")
+              .attr("textLength", xScale.rangeBand() ) 
+              .attr("lengthAdjust", "spacingAndGlyphs")
+              .attr("font-size", letterHeight)  //make this more dynamic
+              .attr("y", function() { return letterHeight + 10;  } );
+}
           
 
 //shift the whole motif N columns to the right
@@ -567,6 +576,40 @@ function drawHorizontalAxis(svgSelector, xScale, sequence, maxColumnCount){
     //   .call(xAxis); 
 }
 
+
+//trying to draw under 'sequence'; have to re-define a scale for use with 
+//the axis that matches the ones on the plots.
+function drawScaledHorizontalAxis(svgSelector, xScale, sequence, maxColumnCount, columnWidth){
+    //make a new axis generator when a new x scale is needed is appropriate.
+    var xAxis = d3.svg.axis()
+        .scale(xScale)
+        .orient("bottom");   
+    //this is experimental
+    
+    var axisScaleAdjustment = sequence.length / 2;
+    var axisTranslateForward = Math.floor(maxColumnCount*.1);
+    //console.log("axisTranslateForward " + axisTranslateForward);
+    //try to eliminate the padding
+    var axisScale = d3.scale.ordinal()
+                      .rangeRoundBands([0, sequence.length*columnWidth], .1);
+                      //.rangeRoundBands([0, sequence.length*columnWidth-axisScaleAdjustment], .1);
+
+    axisScale.domain( sequence.map( function(d, i) { return i + 1; } ));  
+
+    var altXAxis = d3.svg.axis().scale(axisScale).orient("bottom");
+
+    //height is defined way up...
+    console.log("columnWidth " +   columnWidth);
+    
+    var height =  columnWidth * 1.35;
+    //try defining height like it's defined in the calling method. 
+    var offset = height + 11 ; //This should not change per motif.
+    console.log("offset used for now:" + offset);
+    svgSelector.append("g")
+       .attr("class", "x axis")
+       .attr("transform", "translate(" + axisTranslateForward + "," + offset + ")") 
+       .call(altXAxis);
+}
 
 function drawHorizontalAxisNoTicks(svgSelector, xScale){
     //make a new axis generator when a new x scale is needed is appropriate.
