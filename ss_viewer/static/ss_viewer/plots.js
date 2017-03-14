@@ -59,7 +59,7 @@ function setupPlotsForSearchResults(){
        makeAPlot(plottingData[n], targetSVGid);
        makeAScaledDownHalfPlot(plottingData[n], halfPlotId ); 
        //was just makeAHalfPlot before; now working on scaling changes.
-       makeAHalfPlotSNP(plottingData[n], halfSnpPlotId );
+       makeAScaledDownHalfPlotSNP(plottingData[n], halfSnpPlotId );
        if ( n > 0 ){
          $("#"+targetSVGid).parent().addClass("hidden");
        }else {

@@ -22,7 +22,88 @@
 //    //don't call this unless there's already an SVG on the page!
 //    sequencelogoFont();
 //
+    function makeAScaledDownHalfPlotSNP(plotToMake, idOfTargetSVG){
 
+        var snpSeq = plotToMake.snp_aug_match_seq.split("");
+        var snpStrand = plotToMake.snp_strand;
+
+        //how many places to offset the PWM from the SNP & reference sequences.
+        var snpPWMOffset = plotToMake.snp_extra_pwm_off;
+
+        var randomMotif = plotToMake.motif_data;
+        var maxColumnCount = d3.max([snpSeq.length, 
+                                     randomMotif.forward.length + snpPWMOffset  ]);
+
+        var sideMargin = 10; 
+        var fixedWidth = 300;
+   
+        var columnWidthScaled = (fixedWidth - margin.left - margin.right) / maxColumnCount;
+        unscaledLetterHeight = columnWidthScaled * 1.3;
+
+        // Expand the SVG to fit the widest row.
+        //var svgWidth = maxColumnCount * columnWidth + 
+        //               margin.left + margin.right + 50;
+        //if (svgWidth < 460) { svgWidth = 460; }
+        //force width to ensure the main plot label fits
+        var svgWidth = fixedWidth;
+        var svgHeight = svgWidth / 2.5;
+        d3.select("svg#"+idOfTargetSVG).attr("width", svgWidth);
+        d3.select("svg#"+idOfTargetSVG).attr("height", svgHeight);
+
+
+        //make a range of integers that will be the values for the ordinal X scale.
+        var ordinalXRange = [];  //list of integers 0 thru max columns required. 
+        for (i = 0; i < maxColumnCount; i++){ ordinalXRange[i] = i; }
+
+        //draw the 'strand' data next to where the SNP and reference sequences will appear
+        //ref strand on line 2, SNP strand on line 3 (this is the + and -s)
+        d3.select("svg#" + idOfTargetSVG + " g#line3margin text").text(snpStrand);
+
+        //draw the line 4 motif.
+        //SNP strand determines the direction the line 4 motif is displayed
+        
+        var targetForLine;
+        var dataForMotif;
+        var unshiftedMotifLength;
+        var xScale = d3.scale
+                       .ordinal()
+                       .rangeRoundBands([0, maxColumnCount*columnWidthScaled], .1);
+
+         targetGroup = d3.select("svg#"+ idOfTargetSVG + " g#line4data");
+
+         if ( snpStrand == '+' ) { dataForMotif = [].concat(randomMotif.forward); }
+         else{ dataForMotif = [].concat(randomMotif.reverse);}
+         
+         unshiftedMotifLength = dataForMotif.length;
+         //determine how long the line should be
+
+         dataForMotif = applyOffsetToMotifData(dataForMotif, snpPWMOffset);
+         setupScalesDomainsForOneMotif(xScale, y, ordinalXRange, snpSeq);
+         //can the above call be omitted?
+         drawOneMotif(dataForMotif, targetGroup, xScale, y, ordinalXRange);
+
+ 
+         targetForLine = d3.select("svg#" + idOfTargetSVG + " g#line4data");
+         drawMarkerLine(targetForLine, snpPWMOffset, unshiftedMotifLength, 
+                                                   xScale, 55, snpStrand); 
+
+        //draw the unscaled SNP sequence and the ref sequence.
+        columnCount = snpSeq.length; //TODO: is this needed? are we not using maxColumnCount?
+        setupScalesDomainsForOneMotif(xScale, y, ordinalXRange, snpSeq);
+
+        //draw the SNP sequence on line 3
+        var snpSeqTargetSelector = d3.select("svg#" + idOfTargetSVG + " g#line3data");
+        drawUnscaledSequenceScaled(snpSeqTargetSelector, snpSeq, xScale, unscaledLetterHeight);
+        drawScaledHorizontalAxis(snpSeqTargetSelector, xScale, snpSeq, maxColumnCount, columnWidthScaled);
+         
+        var highlightPosition = findSNPLocationForHalfPlot(plotToMake);
+        console.log("highlight position"  + highlightPosition);
+        //highlights are not included in half-plots.; this is where that code was removed.
+        applyScaledHighlight(highlightPosition, idOfTargetSVG, xScale, columnWidthScaled);
+        if (columnWidthScaled < 20){
+            targetForLine.attr('transform', function(){ return 'translate(0, 40)'; } );
+        }
+}//end function to plot one SVG composite logo plot in an already-existing SVG.
 
 
 
@@ -52,7 +133,7 @@
         //var svgWidth = maxColumnCount * columnWidthScaled + 
         //               margin.left + margin.right + 50;
         var svgWidth = fixedWidth; 
-        var svgHeight = svgWidth / 2.5; 
+        var svgHeight = svgWidth / 2.5;// - margin.top - margin.bottom; 
 
         //don't extend arbitrarially.
         //if (svgWidth < 460) { svgWidth = 460; }
