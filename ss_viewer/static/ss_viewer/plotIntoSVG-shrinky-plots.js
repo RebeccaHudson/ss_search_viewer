@@ -299,6 +299,16 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         //labelShift = labelShift - 20;
         //d3.select("svg#"+ idOfTargetSVG + " g.ref-label")
         //  .attr('transform', 'translate('+labelShift+', 8)');
+        //
+        //Need to adjust the translation of the bottom half of the plot. 
+        var line4 = d3.select("svg#" + idOfTargetSVG + " g#line4data"); 
+        var downshift;
+        if (columnWidthScaled < 20){ 
+          downshift = 150;
+        }else{ 
+          downshift = 160; }
+        line4.attr('transform', function(){ return 'translate(0, ' + downshift  + ')'; } );  
+        console.log("shift down of bottom row: " + downshift);
 }//end of function to draw fixed-width full composite logo plot
 
 
@@ -317,6 +327,11 @@ function applyScaledHighlight(highlightPosition, idOfTargetSVG, xScale, columnWi
       
       //for 1/2 a plot: var highlightHeight = 1.45 * columnWidthScaled + 75; 
       var highlightHeight = 10 * columnWidthScaled; 
+      var yNudge = 10;
+      if (columnWidthScaled < 20){
+           highlightHeight += 100;
+           yNudge = 5;
+      }
 
       var yShift = 10 - (columnWidthScaled * 0.2);
       var nudge = 0;
@@ -326,7 +341,7 @@ function applyScaledHighlight(highlightPosition, idOfTargetSVG, xScale, columnWi
       highlight.attr("x", function(){ 
                                var happyX = xScale(highlightPosition) - 2; 
                                return  happyX + nudge; })
-               .attr("y", yShift)               //.attr("y", "10")
+               .attr("y", yShift + yNudge)         //.attr("y", "10")
                .attr("height", highlightHeight ) //"105")
                .attr("width", function(){ return columnWidthScaled; } )
                .style("fill", "#d3d3d3");
