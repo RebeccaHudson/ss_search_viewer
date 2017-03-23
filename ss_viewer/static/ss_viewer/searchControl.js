@@ -62,7 +62,8 @@ function clearOutPlots(){
    var plotsForPage = ['svg[id^="target"]', 
                       '[id!="target-0"]',
                       '[id!="target-snphalf-0"]',
-                      '[id!="target-refhalf-0"]'];
+                      '[id!="target-refhalf-0"]', 
+                      '[id!="target-stacked-plot-0"]'];
    var plotSelector = plotsForPage.join(''); //don't remove the skeletons!
    $(plotSelector).remove();
 }

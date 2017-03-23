@@ -84,11 +84,10 @@
 <!--  this is the way that we will be displaying the plot -->
 <div class="side plot">
    <div id="plots">
-   
-
    {% include "ss_viewer/svg_skeleton.html" %}
    {% include "ss_viewer/half_plot_svg_skeleton.html" %}
    {% include "ss_viewer/half_plot_snp_svg_skeleton.html" %}
+   {% include "ss_viewer/fixed_width_cl_plot.html" %}
    </div>
 
 </div>
@@ -250,6 +249,7 @@
               <td>p-value SNP                         </td>    \ 
               <td>Transcription Factor                </td>    \ 
               <td>Details                             </td>    \
+              <td>Full Composite Logo Plot            </td>    \ 
               <td>Best Match to the Reference Genome  </td>    \ 
               <td>Best Match to the SNP Genome        </td>    \
               <td>Add to Download                     </td>    \
@@ -291,6 +291,7 @@
               rows += '<td> <a href=' 
                              + '"{% url 'ss_viewer:detail' id_str='x_x_x' %}'.replace('x_x_x', '') 
                              +  json.api_response[i].plot_id_str + '" target="_blank">Details</a></td>';
+              rows += "<td class=\"stacked-plot\" id=\"stacked-plot-" + json.api_response[i].plot_id_str +"\"></td>";
               rows += "<td class=\"ref-plot\" id=\"ref-plot-" + json.api_response[i].plot_id_str +"\"></td>";
               rows += "<td class=\"snp-plot\" id=\"snp-plot-" + json.api_response[i].plot_id_str +"\"></td>";
               rows += '<td> <input type="checkbox" id="' + json.api_response[i].plot_id_str + '" ></td>';

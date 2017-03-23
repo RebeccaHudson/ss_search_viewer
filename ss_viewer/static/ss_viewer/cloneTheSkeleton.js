@@ -8,7 +8,9 @@ function cloneSVGSkeleton(plottingData){
     //add a half-plot nodeToClone
     var halfPlotToCloneRefHalf = $("svg#target-refhalf-0").parent().first(); 
     var halfPlotToCloneSnpHalf = $("svg#target-snphalf-0").parent().first(); 
-    //
+    var fixedWidthStackToClone = $("svg#target-stacked-plot-0").parent().first();  //coming up blank
+    console.log("fixedWidthStackToClone "+ fixedWidthStackToClone.length);//now is shown. no longer blank
+    //console.log(fixedWidthStackToClone);
     //start the count at 1, there's already 1 plot on the page.
     for ( i = 0 ; i < nPlots; i++){
         var cloned = nodeToClone.clone(true); 
@@ -16,15 +18,18 @@ function cloneSVGSkeleton(plottingData){
         //
         var clonedRefHalf =  halfPlotToCloneRefHalf.clone(true);
         var clonedSnpHalf =  halfPlotToCloneSnpHalf.clone(true);
-        //
+        var clonedFullScaled = fixedWidthStackToClone.clone(true);
+              
+ 
         var plot_id_to_use = plottingData[i].plot_id_str;
         //console.log("creating an empty plot for " + plot_id_to_use);
-        //cloned.children().first().attr("id","target-"+i);
         cloned.children().first().attr("id", "target-"+plot_id_to_use);
         clonedRefHalf.children().first().attr("id", 
                                               "target-refhalf-"+plot_id_to_use);
         clonedSnpHalf.children().first().attr("id",
                                               "target-snphalf-"+plot_id_to_use);
+        clonedFullScaled.children().first().attr("id",
+                                                 "target-stacked-plot-"+plot_id_to_use);
         //console.log("cloned element " + cloned);   
         //put all of the plots into the same placeholder stack for now.
         //TODO: consider appending these to the correct place in the table
@@ -33,5 +38,6 @@ function cloneSVGSkeleton(plottingData){
         cloned.appendTo(d3.select("div#plots"));
         clonedRefHalf.appendTo(d3.select("div#plots"));
         clonedSnpHalf.appendTo(d3.select("div#plots"));
+        clonedFullScaled.appendTo(d3.select("div#plots"));
     }
 }

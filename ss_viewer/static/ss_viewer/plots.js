@@ -16,6 +16,7 @@ function drawPlotsInline(){
    $("svg#target-0").hide();
    $("svg#target-refhalf-0").hide();
    $("svg#target-snphalf-0").hide();
+   $("svg#target-stacked-plot-0").hide();
 }
 
 //adapted from: https://spin.atomicobject.com/2014/01/21/convert-svg-to-png/
@@ -51,15 +52,23 @@ function setupPlotsForSearchResults(){
        plottingData.push(onePlotData);
    });
    cloneSVGSkeleton(plottingData);
+   //how many SVGs got cloned?  
+   var stackedPlotClones = $('#target-stacked-plot-');
+   console.log("stackedPlotClones length : " +  stackedPlotClones.length);
+   //there should be matches for target-stacked-plot at this point.
    for ( var n = 0; n < plottingData.length; n++){
        var targetSVGid = "target-" + plottingData[n].plot_id_str;
        var halfPlotId = 'target-refhalf-' +  plottingData[n].plot_id_str; //change to halfRefPlot
        var halfSnpPlotId = 'target-snphalf-' +  plottingData[n].plot_id_str;
+       var fullStackPlotId = 'target-stacked-plot-' + plottingData[n].plot_id_str;
 
        makeAPlot(plottingData[n], targetSVGid);
        makeAScaledDownHalfPlot(plottingData[n], halfPlotId ); 
        //was just makeAHalfPlot before; now working on scaling changes.
        makeAScaledDownHalfPlotSNP(plottingData[n], halfSnpPlotId );
+       //put the guts of makeAScaledDownHalfPlot and makeAScaledDownHalfPlotSNP
+       drawFixedWidthCompositePlot(plottingData[n], fullStackPlotId);
+       //
        if ( n > 0 ){
          $("#"+targetSVGid).parent().addClass("hidden");
        }else {
@@ -71,20 +80,26 @@ function setupPlotsForSearchResults(){
        //     see if checkedRow plot downloads can still be made to work.
        var halfPlotToMove = $("#" + halfPlotId).parent().detach();
        var halfSnpPlotToMove = $("#" + halfSnpPlotId).parent().detach();
-
+       var fullStackPlotToMove = $("#" + fullStackPlotId).parent().detach();
+       console.log("moving full stack plot : " );
+       console.log( fullStackPlotToMove);
        //how does the bulk download find this plot in order to download it?
 
        var idOfHalfPlotTarget = "#ref-plot-" + plottingData[n].plot_id_str;
        var idOfHalfSnpPlotTarget = "#snp-plot-" + plottingData[n].plot_id_str;
+       var idOfFullStackPlotTarget = "#stacked-plot-" + plottingData[n].plot_id_str;
 
        var putHalfPlotHere = $(idOfHalfPlotTarget);
        var putHalfSnpPlotHere = $(idOfHalfSnpPlotTarget);
+       var putFullStackPlotHere = $(idOfFullStackPlotTarget);
 
        halfPlotToMove.appendTo(putHalfPlotHere);
        halfSnpPlotToMove.appendTo(putHalfSnpPlotHere);
+       fullStackPlotToMove.appendTo(putFullStackPlotHere);
 
        halfPlotToMove.find('svg').show();
        halfSnpPlotToMove.find('svg').show();
+       fullStackPlotToMove.find('svg').show();
    } 
    console.log("completed plotting!");
   }
