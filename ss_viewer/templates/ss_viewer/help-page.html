@@ -165,39 +165,28 @@ body {
       {% include "ss_viewer/navbar.html" with active='help' %}
       <h3>atSNP Search Help</h3>
       <p style="size:10px;">(click sections to expand)</p>
-      <!-- 
-      <ol>
-          <li><a href="#part-1">Understanding motif libraries</a></li>
-          <li><a href="#part-2">at-SNP <i>in-silico</i> statistical method</a></li>
-          <li><a href="#part-3">Interpreting Search Output</a></li>
-          <li><a href="#part-4">Reading a Composite Logo Plot</a></li>
-          <li><a href="#part-5">atSNP DB Infrastructure</a></li>
-          <li><a href="#part-6">References</a></li>
-      </ol> -->
-      <!-- <ol> -->
-      <section>  <!-- start of part 1 -->
+     <section>  <!-- start of part 1 -->
         <div class="accordion">
             <hgroup><a name="part-1"><h4>1.&nbsp;Understanding motif libraries</h4></a></hgroup>
         </div>
         <div class="panel">
-        <p> Motif libraries provide transcription factor binding nucleotide profiles 
-        from a set of transcription factor binding sites. The binding profiles are
-        represented with position weight matrices (PWMs). PWMs are used for
-        probabilistic description of the patterns in genomic sequences. </p>
+        <p> Motif libraries provide nucleotide patters that transcription factors recoginze well. 
+        from a set of transcription factor binding sites. The binding profiles are represented 
+        with position weight matrices (PWMs). PWMs are used for probabilistic description of the 
+        patterns in genomic sequences. The PWM is visualized as a sequence logo, where letter 
+        heights are scaled based on their information content.
+        </p>
         <ul class="disc">
-          <li> JASPAR 2014 library </li>
+          <li> JASPAR 2014 Core Vertabrata </li>
           <section><p>JASPAR (http://jaspar2014.genereg.net/) is the largest open-access database of 
-                   matrix-based nucleotide profiles describing the binding preference of transcription
-                   factors from multiple species (Mathelier et al., 2013). atSNP uses JASPAR 2014 CORE 
-                   Vertebrata to evaluate impact of SNPs on transcription factor binding. They provide
+                   matrix-based nucleotide profiles describing the binding preferences of transcription
+                   factors from multiple species (Mathelier et al., 2013). JASPAR 2014 Core Vertabrata provide
                    position frequency matrices for 205 non-redundant profiles and their summaries. The
-                   position frequency matrix is easily converted to the position weight matrix by dividing 
-                   nucleotide frequencies by their total frequency. The PWM is visualized as a sequence
-                   logo, where logo heights are scaled based on their information content. JASPR library 
-                   provides a summary page for each motif.</p>
+                   position frequency matrix is converted into the position weight matrix, which carries the 
+                   same information.                     </p>
                    <p>
                    <h5> <span class="underline">Example<span></h5>
-                    JASPAR library contains a position frequency matrix for a transcription factor RUNX1
+                    The JASPAR library contains a position frequency matrix for a transcription factor RUNX1
                     and its sequence logo as below. Its summary is presented here 
                     (link: <a href="http://jaspar2014.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0002.2&rm=present&collection=CORE">
                             http://jaspar2014.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0002.2&rm=present&collection=CORE</a>.)
@@ -247,20 +236,12 @@ body {
         </figure>
            </p>
           </section>
-          <section>
-          <h6><span class="underline">Reference</span></h6>
-          <cite>Mathelier, A., Zhao, X., Zhang, A. W., Parcy, F., Worsley-Hunt, 
-                R., Arenillas, D. J., Buchman, S., Chen, C.-y., Chou, A., Ienasescu,
-                H., Lim, J., Shyr, C., Tan, G., Zhou, M., Lenhard, B., Sandelin, A. 
-               and Wasserman, W. W. 
-              “JASPAR 2014: an extensively expanded and updated open-access database of transcription factor binding profiles.” Nucleic Acids Research, 2013
-          </cite>
-          </section>
 
           <li> ENCODE Library </li>
           <section>
-          ENCODE library features systematic discovery and characterization of regulatory motifs in ENCODE transcription factor binding experiments available at <a href="http://compbio.mit.edu/encode-motifs/">http://compbio.mit.edu/encode-motifs/</a>. They collected known motifs from the literature (TRANSFAC, JASPAR Homo Sapiens, and UniPROBE). Further, they discovered motifs <i>de novo </i>on hundreds of transcription factor binding experiments in human ENCODE using established tools such as MDscan , MEME, Trawler, and AlignACE (Kheradpour et al., 2014). All known and discovered motifs are grouped as in the table at <a href="http://compbio.mit.edu/encode-motifs/">http://compbio.mit.edu/encode-motifs/</a>. The names of ENCODE motifs contain their information on which literature reports the known motifs or which tool was used to obtain <i>de novo</i> motifs.
-           </section>
+          The ENCODE library features systematic discovery and characterization of regulatory motifs in ENCODE transcription factor binding experiments. (Kheradpour et al., 2014) These PWSs are available at <a href="http://compbio.mit.edu/encode-motifs/">http://compbio.mit.edu/encode-motifs/</a>. They collected known motifs from the literature (TRANSFAC, JASPAR Homo Sapiens, and UniPROBE). Further, they discovered <i>de novo </i> motifs from hundreds of transcription factor binding experiments performed by ENCODE (encodeproject.org). These motifs were discovered using established tools such as MDscan , MEME, Trawler, and AlignACE . All known and discovered motifs are grouped as in the table at <a href="http://compbio.mit.edu/encode-motifs/">http://compbio.mit.edu/encode-motifs/</a>. 
+For known ENCODE motifs, the name indicates the literature which initially reported the motif. For <i>de novo</i> motifs, the name contains information about the experimets in which it was discovered. This information includes the name of the lab, and the names of any motif discovery tools used. 
+</section>
 
            <section> <!-- begin exapmle section -->
             <h5> <span class="underline">Example<span></h5>
@@ -362,6 +343,12 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
           <section>
           <h6><span class="underline">Reference</span></h6>
 <ul class="refs">
+<li><cite>Mathelier, A., Zhao, X., Zhang, A. W., Parcy, F., Worsley-Hunt, 
+    R., Arenillas, D. J., Buchman, S., Chen, C.-y., Chou, A., Ienasescu,
+    H., Lim, J., Shyr, C., Tan, G., Zhou, M., Lenhard, B., Sandelin, A. 
+   and Wasserman, W. W. 
+  “JASPAR 2014: an extensively expanded and updated open-access database of transcription factor binding profiles.” Nucleic Acids Research, 2013
+</cite></li>
 <li><cite>  Kheradpour, Pouya, and Manolis Kellis. "Systematic discovery and characterization of regulatory motifs in ENCODE TF binding experiments." Nucleic Acids Research 42.5 (2014): 2976-2987.
 </cite></li><li><cite>
 </cite></li><li><cite>  Matys,V., Fricke,E., Geffers,R., Gossling,E., Haubrock,M., Hehl,R., Hornischer,K., Karas,D., Kel,A.E., Kel-Margoulis,O.V. et al. (2003) TRANSFAC(R): transcriptional regulation, from patterns to profiles. Nucleic Acids Res., 31, 374–378.
@@ -401,12 +388,13 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
            <hgroup><a name="part-2"><h4>2.&nbsp;at-SNP <i>in-silico</i> statistical method</h4></a></hgroup>
         </div>
         <div class="panel">
-              <section><h5> <span class="underline"><b> atSNP overview</b></span> </h5>
+              <section><h4> <b>OVERVIEW</b> </h4>
                 <figure>
                    <img height="340" src="{% static 'ss_viewer/docs/image06.png' %}" id="figure-04"/>
                    <figcaption>Figure 4 atSNP flowchart</figcaption>
                 </figure>
-                <p> atSNP takes input as SNP information/genomic subsequences and a PWM for a transcription factor. atSNP uses first order Markov model and importance sampling technique to test the goodness of match between the PWM and the subsequences overlapping the SNP position on both reference and SNP alleles and the impact of SNP on the change in the goodness of match. The testing results are summarized with a table and a graphical output called a composite logo plot. To learn more about the outputs, visit <a href="#part-3">"Interpreting search output”</a> and <a href="#part-4">“Reading composite logo plot”</a>.</p>
+                <p> atSNP takes as input SNP information/genomic subsequences and a PWM for a transcription factor. atSNP uses a first order Markov model and an importance sampling technique to test the statistical significance of the best match between the PWM and the subsequences overlapping the SNP position on both reference and SNP alleles. And, most importantly, tests the impact of SNPs on the change in the goodness of the match. The testing results are summarized with a table and a graphical output called a composite logo plot. To learn more about the outputs, visit <a onclick="openAndScroll(true);" href="#part-3:part-3">"Interpreting search output”</a> and <a onclick="openAndScroll(true);" href="#part-4:part-4">“Reading composite logo plot”</a>.</p>
+
 
                 <figure>
                    <img height="150" src="{% static 'ss_viewer/docs/image05.png' %}" id="table-01"/>
@@ -418,7 +406,7 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
               </section> <!-- end of atSNP overview section -->
 
               <section> <!-- start of atSNP Procedure section  -->
-               <h5><span class="underline"><b>atSNP Procedure</b></span> </h5>
+               <h4><b>PROCEDURE</b></h4>
                <ul>
                  <li><b>Step 1: affinity score                                 </b> </li>
                    <p> Use the PWM of each motif as the product multinomial parameters and compute log likelihoods for all subsequences of the motif length overlapping the SNP location. Find the best matches with the highest log likelihood on both SNP and reference alleles. The scores are used for statistical testing. </p>
@@ -552,7 +540,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
 
          <section> <!-- start of part 3 -->
 
-        <div class="accordion">
+        <div id="part-3" class="accordion">
            <hgroup><a name="part-3"><h4>3.&nbsp;Interpreting Search Output</h4></a></hgroup>
         </div>
         <div class="panel">
@@ -805,7 +793,7 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>  -->
          </section><!-- end of part 3 -->  
 
          <section> <!-- start of part 4 -->
-         <div class="accordion">
+         <div id="part-4" class="accordion">
            <hgroup><a name="part-4"><h4>4.&nbsp;Reading a Composite Logo Plot</h4></a></hgroup>
          </div>
          <div class="panel">
@@ -864,60 +852,82 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>  -->
 
   </body>
       <script>
+      function openAndScroll(internal){
+              console.log("location:");
+              console.log(location);
+              console.log("event: ");
+              console.log(event);
+              var hashToUse;
+              if ( ! ( event === undefined )){ 
+                  console.log("event.srcElement.hash");
+                  console.log(event.srcElement.hash);
+                  hashToUse =  event.srcElement.hash;
+              }else{ 
+                  hashToUse = location.hash;  
+              }
+ 
+              //if (!(location.hash === '')){
+              if (!(hashToUse === '')){
+                  console.log("there's hash in here! :" +  hashToUse);
 
-      if (!(location.hash === '')){
-          console.log("there's hash in here! :" +  location.hash);
+                  var selector = hashToUse.replace('#', '');
+                  var tableToScrollTo = null;
 
-          var selector = location.hash.replace('#', '');
-          var tableToScrollTo = null;
+                  //if there's a colon, split on the colon...
+                  if ( selector.indexOf(':') == -1 ){
+                      selector = "a[name='" + selector + "']";
+                  }else{
+                      var parts = selector.split(':');
+                      selector = "a[name='" + parts[0] + "']";
+                      tableToScrollTo = parts[1];
+                      console.log("going to try to scroll to : " + tableToScrollTo);
+                  } 
 
-          //if there's a colon, split on the colon...
-          if ( selector.indexOf(':') == -1 ){
-              selector = "a[name='" + selector + "']";
-          }else{
-              var parts = selector.split(':');
-              selector = "a[name='" + parts[0] + "']";
-              tableToScrollTo = parts[1];
-              console.log("going to try to scroll to : " + tableToScrollTo);
-          } 
+                  //motifTable
+                  var headerlink = $(selector)[0];
+                  var accdiv = headerlink.parentElement.parentElement;
+                  console.log("got a selector for the accordion div");
+                  console.log(accdiv);
+                  accdiv.classList.toggle('active');
+                  var panel = accdiv.nextElementSibling;
+                  if ((panel.style.maxHeight)&&(internal === false)){   //where to check if it's internal or not.
+                    panel.style.maxHeight = null;
+                  } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                  } 
 
-          //motifTable
-          var headerlink = $(selector)[0];
-          var accdiv = headerlink.parentElement.parentElement;
-          console.log("got a selector for the accordion div");
-          console.log(accdiv);
-          accdiv.classList.toggle('active');
-          var panel = accdiv.nextElementSibling;
-          if (panel.style.maxHeight){
-            panel.style.maxHeight = null;
-          } else {
-            panel.style.maxHeight = panel.scrollHeight + "px";
-          } 
+                 /*http://stackoverflow.com/questions/18103534/scroll-to-specific-div-on-page-load
+                   Adapted from example found on S.O.*/ 
+                 if ( ! ( tableToScrollTo === null) ){
+                     console.log("tableToScrollTo");
+                     console.log($("#" + tableToScrollTo) );
+                     console.log("tableToScrollTo.offset()");
+                     console.log($("#" + tableToScrollTo).offset() );
+                     // Handler for .ready() called.
+                     $('html, body').animate({
+                         scrollTop: $('#' + tableToScrollTo).offset().top
+                     }, 'slow'); 
+                 }
+              }
+       console.log("completed running openAndScroll");
+       }//end function openAndScroll.
+       openAndScroll(false); 
+       console.log("running openAndScroll for docuemnt.ready");
+              var acc = document.getElementsByClassName("accordion");
+              var i;
 
-         /*http://stackoverflow.com/questions/18103534/scroll-to-specific-div-on-page-load
-           Adapted from example found on S.O.*/ 
-         if ( ! ( tableToScrollTo === null) ){
-             // Handler for .ready() called.
-             $('html, body').animate({
-                 scrollTop: $('#' + tableToScrollTo).offset().top
-             }, 'slow'); 
-         }
-      }
-
-      var acc = document.getElementsByClassName("accordion");
-      var i;
-
-      for (i = 0; i < acc.length; i++) {
-        acc[i].onclick = function() {
-          this.classList.toggle("active");
-          var panel = this.nextElementSibling;
-          if (panel.style.maxHeight){
-            panel.style.maxHeight = null;
-          } else {
-            panel.style.maxHeight = panel.scrollHeight + "px";
-          } 
-        }
-      }
+              for (i = 0; i < acc.length; i++) {
+                acc[i].onclick = function() {
+                  this.classList.toggle("active");
+                  var panel = this.nextElementSibling;
+                  if (panel.style.maxHeight){
+                    panel.style.maxHeight = null;
+                  } else {
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                  } 
+                }
+              }
+       
       </script>
 </html>
 
