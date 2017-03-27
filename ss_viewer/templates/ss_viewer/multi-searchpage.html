@@ -238,6 +238,8 @@
         $("#download_page_of_plots").attr("style", "display: inline;");
         $("#download_plots_for_checked_rows").attr("style", "display: inline;");
 
+        // <td>Best Match to the Reference Genome  </td>    \ 
+        // <td>Best Match to the SNP Genome        </td>    \
         //removed table-striped from the search results..
         var content = `<table id="search_results" class="table table-condensed"> \
           <thead>                                                         \   
@@ -249,9 +251,7 @@
               <td>p-value SNP                         </td>    \ 
               <td>Transcription Factor                </td>    \ 
               <td>Details                             </td>    \
-              <td>Full Composite Logo Plot            </td>    \ 
-              <td>Best Match to the Reference Genome  </td>    \ 
-              <td>Best Match to the SNP Genome        </td>    \
+              <td>Composite Logo Plot                 </td>    \ 
               <td>Add to Download                     </td>    \
           </tr>                                     \ 
           </thead>                                  \ 
@@ -292,8 +292,8 @@
                              + '"{% url 'ss_viewer:detail' id_str='x_x_x' %}'.replace('x_x_x', '') 
                              +  json.api_response[i].plot_id_str + '" target="_blank">Details</a></td>';
               rows += "<td class=\"stacked-plot\" id=\"stacked-plot-" + json.api_response[i].plot_id_str +"\"></td>";
-              rows += "<td class=\"ref-plot\" id=\"ref-plot-" + json.api_response[i].plot_id_str +"\"></td>";
-              rows += "<td class=\"snp-plot\" id=\"snp-plot-" + json.api_response[i].plot_id_str +"\"></td>";
+              //rows += "<td class=\"ref-plot\" id=\"ref-plot-" + json.api_response[i].plot_id_str +"\"></td>";
+              //rows += "<td class=\"snp-plot\" id=\"snp-plot-" + json.api_response[i].plot_id_str +"\"></td>";
               rows += '<td> <input type="checkbox" id="' + json.api_response[i].plot_id_str + '" ></td>';
               rows += "</tr>";
           }

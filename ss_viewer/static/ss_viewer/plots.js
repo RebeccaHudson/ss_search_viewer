@@ -58,14 +58,14 @@ function setupPlotsForSearchResults(){
    //there should be matches for target-stacked-plot at this point.
    for ( var n = 0; n < plottingData.length; n++){
        var targetSVGid = "target-" + plottingData[n].plot_id_str;
-       var halfPlotId = 'target-refhalf-' +  plottingData[n].plot_id_str; //change to halfRefPlot
-       var halfSnpPlotId = 'target-snphalf-' +  plottingData[n].plot_id_str;
+       //var halfPlotId = 'target-refhalf-' +  plottingData[n].plot_id_str; //change to halfRefPlot
+       //var halfSnpPlotId = 'target-snphalf-' +  plottingData[n].plot_id_str;
        var fullStackPlotId = 'target-stacked-plot-' + plottingData[n].plot_id_str;
 
        makeAPlot(plottingData[n], targetSVGid);
-       makeAScaledDownHalfPlot(plottingData[n], halfPlotId ); 
+       //makeAScaledDownHalfPlot(plottingData[n], halfPlotId ); 
        //was just makeAHalfPlot before; now working on scaling changes.
-       makeAScaledDownHalfPlotSNP(plottingData[n], halfSnpPlotId );
+       //makeAScaledDownHalfPlotSNP(plottingData[n], halfSnpPlotId );
        //put the guts of makeAScaledDownHalfPlot and makeAScaledDownHalfPlotSNP
        drawFixedWidthCompositePlot(plottingData[n], fullStackPlotId);
        //
@@ -78,27 +78,27 @@ function setupPlotsForSearchResults(){
 
        //try: not moving the main plot into an 'inline' position.
        //     see if checkedRow plot downloads can still be made to work.
-       var halfPlotToMove = $("#" + halfPlotId).parent().detach();
-       var halfSnpPlotToMove = $("#" + halfSnpPlotId).parent().detach();
+       //var halfPlotToMove = $("#" + halfPlotId).parent().detach();
+       //var halfSnpPlotToMove = $("#" + halfSnpPlotId).parent().detach();
        var fullStackPlotToMove = $("#" + fullStackPlotId).parent().detach();
        console.log("moving full stack plot : " );
        console.log( fullStackPlotToMove);
        //how does the bulk download find this plot in order to download it?
 
-       var idOfHalfPlotTarget = "#ref-plot-" + plottingData[n].plot_id_str;
-       var idOfHalfSnpPlotTarget = "#snp-plot-" + plottingData[n].plot_id_str;
+       //var idOfHalfPlotTarget = "#ref-plot-" + plottingData[n].plot_id_str;
+       //var idOfHalfSnpPlotTarget = "#snp-plot-" + plottingData[n].plot_id_str;
        var idOfFullStackPlotTarget = "#stacked-plot-" + plottingData[n].plot_id_str;
 
-       var putHalfPlotHere = $(idOfHalfPlotTarget);
-       var putHalfSnpPlotHere = $(idOfHalfSnpPlotTarget);
+       //var putHalfPlotHere = $(idOfHalfPlotTarget);
+       //var putHalfSnpPlotHere = $(idOfHalfSnpPlotTarget);
        var putFullStackPlotHere = $(idOfFullStackPlotTarget);
 
-       halfPlotToMove.appendTo(putHalfPlotHere);
-       halfSnpPlotToMove.appendTo(putHalfSnpPlotHere);
+       //halfPlotToMove.appendTo(putHalfPlotHere);
+       //halfSnpPlotToMove.appendTo(putHalfSnpPlotHere);
        fullStackPlotToMove.appendTo(putFullStackPlotHere);
 
-       halfPlotToMove.find('svg').show();
-       halfSnpPlotToMove.find('svg').show();
+       //halfPlotToMove.find('svg').show();
+       //halfSnpPlotToMove.find('svg').show();
        fullStackPlotToMove.find('svg').show();
    } 
    console.log("completed plotting!");
