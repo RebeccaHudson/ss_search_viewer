@@ -36,8 +36,9 @@ class GenericSearchForm(forms.Form):
                                            label = "P-value Reference cutoff",
                                            required = False)
     
-    use_these_choices = ( ("lt", "<"), ("gt", ">"))
+    use_these_choices = ( ("lt", "<"), ("gte", u"\u2265"))
     #"class":"form-control", 
+    
     styled_widget = forms.Select(attrs={ "title" : "Select the cutoff direction.",
                                         "style" : "float:left; margin-top:5px;"  })
     pvalue_snp_direction  = forms.ChoiceField(widget=styled_widget,
