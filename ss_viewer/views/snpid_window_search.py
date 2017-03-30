@@ -11,14 +11,12 @@ class SnpidWindowSearchView(GenericSearchView):
     def setup_api_search_query(self, form_data, request):
         requested_snpid = form_data['snpid']
 
-        pvalue_snp_direction = form_data['pvalue_snp_direction']
-        
         api_search_query =  {'snpid'       : requested_snpid, 
-                             'window_size' : form_data['window_size'],
-                             'pvalue_snp_direction' : pvalue_snp_direction  }
+                             'window_size' : form_data['window_size']}
         api_search_query.update(self.get_pvalues_from_form())
         return api_search_query
 
+    #does this get used anymore?
     def handle_params_for_download(self, form_data):
         #don't do for ajaxy
         return \
