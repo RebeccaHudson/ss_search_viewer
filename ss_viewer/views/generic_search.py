@@ -61,6 +61,12 @@ class GenericSearchView(View):
                                              form_data['page_of_results_shown']) 
 
         api_search_query = self.setup_api_search_query(form_data, request)
+
+
+        #TODO: take the call to api_search_query.update(self.get_pvalues_from_form())
+        #      out of individual search types.
+        api_search_query.update( self.get_pvalue_directions_from_form() ) 
+
         api_search_query.update(
                {'from_result' :  search_request_params['search_result_offset']})
 
@@ -100,6 +106,17 @@ class GenericSearchView(View):
         return StreamingCSVDownloadHandler.streaming_csv_view(request, 
                                                                search_params, 
                                                                self.api_action_name)
+    def get_pvalue_directions_from_form(self):
+        pvalue_directions = {}
+        form_data = self.search_form.cleaned_data
+        if 'pvalue_snp_direction' in form_data:
+            pvalue_directions.update({'pvalue_snp_direction'  : 
+                                       form_data['pvalue_snp_direction']})
+        if 'pvalue_ref_direction' in form_data:
+            pvalue_directions.update({'pvalue_ref_direction' : 
+                                        form_data['pvalue_ref_direction']})
+        return pvalue_directions
+
     def get_pvalues_from_form(self):
         pvalues_for_search = {}
         pvalue_dict = PValueDictFromForm.get_pvalues_from_form(self.search_form) 
