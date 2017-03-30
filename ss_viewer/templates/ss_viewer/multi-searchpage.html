@@ -244,17 +244,48 @@
         var content = `<table id="search_results" class="table table-condensed"> \
           <thead>                                                         \   
           <tr>                                               \ 
-              <td>SNPid                               </td>    \ 
-              <td>Chromosome:Position                 </td>    \ 
-              <td>p-value Rank                        </td>    \ 
-              <td>p-value Reference                   </td>    \ 
-              <td>p-value SNP                         </td>    \ 
-              <td>Transcription Factor                </td>    \ 
+              <td>
+              SNPid<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">?
+                                            </a></sup></td>    \ 
+              <td>Chromosome:Position
+               <sup>
+               <a target="_blank"
+                href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">
+                ?</a></sup> 
+                                                      </td>    \ 
+              <td>p-value Rank                         
+               <sup>
+               <a target="_blank"
+                href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">
+                ?</a></sup>                           </td>    \
+              <td>p-value Reference                   
+               <sup>
+               <a target="_blank"
+                href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">
+                ?</a></sup> 
+                                                      </td>    \ 
+              <td>p-value SNP                          
+               <sup>
+               <a target="_blank"
+                href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">
+                ?</a></sup> 
+                                                      </td>    \
+              <td>Transcription Factor                
+               <sup>
+               <a target="_blank"
+                href="{% url 'ss_viewer:help-page'%}#part-3:motifTable">
+                ?</a></sup> 
+                                                      </td>    \ 
               <td>Details                             </td>    \
-              <td>Composite Logo Plot                 </td>    \ 
+              <td>Composite Logo Plot                 
+               <sup>
+               <a target="_blank"
+                href="{% url 'ss_viewer:help-page'%}#part-4:part-4">
+                ?</a></sup> 
+                                                      </td>    \ 
               <td>Add to Download                     </td>    \
-          </tr>                                     \ 
-          </thead>                                  \ 
+          </tr>                                                \ 
+          </thead>                                             \ 
           <tbody>`;                                
           $("#drop-in").append(content);
           $('#download-exp').show();
