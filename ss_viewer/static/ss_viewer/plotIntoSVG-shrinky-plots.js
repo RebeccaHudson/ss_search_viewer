@@ -158,6 +158,46 @@
 //
 //}//end function to plot one SVG composite logo plot in an already-existing SVG.
 
+//unshiftedMotifLength either Ref or SNP
+//pwmOffset -> either ref or SNP
+//xScale is the same xScale that's being used elsewhere.
+function drawMarkerLineCompress(targetForLine, pwmOffset, unshiftedMotifLength, xScale, y, strand){
+          var direction; //left to right (5' to 3')    right to left (3' to 5')
+          s = pwmOffset + unshiftedMotifLength;
+          var xLeft = xScale.rangeBand() * (pwmOffset + 1/2 + (pwmOffset * .1));
+          var xRight = xScale.rangeBand() * (s - 1/3 + (s * .1)); 
+          var leftLabelText; var rightLabelText;
+          if (strand == '+' ) { xBegin = xLeft;  xEnd =  xRight; 
+                                leftLabelText = "5'";    
+                                rightLabelText = "3'"; }
+                      else    { xBegin = xRight; xEnd =  xLeft;  
+                                leftLabelText = "3'";  
+                                rightLabelText = "5'";    }   
+          targetForLine.append("line")
+                     .attr("x1", xBegin) 
+                     .attr("y1", y)  //y1 == y2,    x1 and x2 are determined by the motif data.
+                     .attr("x2", xEnd) 
+                     .attr("y2", y)
+                     .attr("stroke-width", 2)
+                     .attr("stroke", "blue")
+                     .attr("marker-end", "url(#Triangle)");
+
+         targetForLine.append('text') 
+                       .attr("font-size", 12)  
+                       .attr('stroke', 'blue') 
+                       .text(leftLabelText)
+                       .attr('x', xLeft - 15) 
+                       .attr('y', y - 5);
+
+         targetForLine.append('text') 
+                       .attr("font-size", 12)  
+                       .attr('stroke', 'blue') 
+                       .text(rightLabelText)
+                       .attr('x', xRight + 12) 
+                       .attr('y', y - 5) ;
+}
+
+
 
 
 
@@ -182,15 +222,17 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         var  fixedWidth = 300;
 
         var columnWidthScaled = (fixedWidth - margin.left - margin.right) / maxColumnCount;
-        var unscaledLetterHeight = columnWidthScaled * 1.3;
-
+        //var unscaledLetterHeight = columnWidthScaled * 1.3;
+        // SHRINK shrinking the height of the plots...
+        var unscaledLetterHeight = columnWidthScaled * 0.9;
         // Expand the SVG to fit the widest row.
         //var svgWidth = maxColumnCount * columnWidthScaled + 
         //               margin.left + margin.right + 50;
         var svgWidth = fixedWidth; 
         var svgHeight = svgWidth / 2.5;
-        svgHeight = svgHeight * 1.9; //accomodate 2 plots stacked up instead.
-
+        
+        svgHeight = svgHeight * 1.6; //accomodate 2 plots stacked up instead.
+        //SHRINK
 
         //don't extend arbitrarially.
         //if (svgWidth < 460) { svgWidth = 460; }
@@ -230,7 +272,7 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         drawOneMotif(dataForMotif, targetGroup, xScale, y, ordinalXRange);
  
         targetForLine = d3.select("svg#" + idOfTargetSVG + " g#line1data");
-        drawMarkerLine(targetForLine, refPWMOffset, unshiftedMotifLength, 
+        drawMarkerLineCompress(targetForLine, refPWMOffset, unshiftedMotifLength, 
                                                    xScale, 55, refStrand); 
         console.log("made it to line 2 for one stacked plot");
         //draw the reference sequence on line 2.
@@ -267,7 +309,7 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
          drawOneMotif(dataForMotif, targetGroup, xScale, y, ordinalXRange);
  
          targetForLine = d3.select("svg#" + idOfTargetSVG + " g#line4data");
-         drawMarkerLine(targetForLine, snpPWMOffset, unshiftedMotifLength, 
+         drawMarkerLineCompress(targetForLine, snpPWMOffset, unshiftedMotifLength, 
                                                    xScale, 55, snpStrand); 
 
         //draw the unscaled SNP sequence and the ref sequence.
@@ -292,9 +334,12 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         //end code for SNP half of plot.
         
         //adjust the label positions..
-        //var labelShift = (svgWidth)/2 - 10;
-        //d3.select("svg#" + idOfTargetSVG + " g.snp-label")
-        //  .attr('transform', 'translate('+labelShift+', 18)');
+        var labelXShift = 40;//(svgWidth)/2 - 10;  width is fixed now, so this should always have the same Xoffset.
+        //var labelYShift = 17 + (10 - columnWidthScaled / 2) ;
+        
+        var labelYShift = 1.129 * columnWidthScaled - 10.76;
+        d3.select("svg#" + idOfTargetSVG + " g.snp-label")
+          .attr('transform', 'translate('+labelXShift+', ' + labelYShift  + ' )');
 
         //labelShift = labelShift - 20;
         //d3.select("svg#"+ idOfTargetSVG + " g.ref-label")
@@ -304,9 +349,9 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         var line4 = d3.select("svg#" + idOfTargetSVG + " g#line4data"); 
         var downshift;
         if (columnWidthScaled < 20){ 
-          downshift = 150;
+          downshift = 125;
         }else{ 
-          downshift = 160; }
+          downshift = 130; }
         line4.attr('transform', function(){ return 'translate(0, ' + downshift  + ')'; } );  
         console.log("shift down of bottom row: " + downshift);
 }//end of function to draw fixed-width full composite logo plot
@@ -352,6 +397,7 @@ function applyScaledHighlight(highlightPosition, idOfTargetSVG, xScale, columnWi
 
                          
 //lots of hardcoded numbers; get away from these if it's possible.
+//SHRINK
 function drawUnscaledSequenceScaled(sequenceTargetSelector, sequenceData, xScale, letterHeight){
     var seqColumn = sequenceTargetSelector.selectAll(".sequence-column")
            .data(sequenceData)   //one column per datum
@@ -408,7 +454,11 @@ function drawScaledHorizontalAxis(svgSelector, xScale, sequence, maxColumnCount,
     
     var height =  columnWidth * 1.35;
     //try defining height like it's defined in the calling method. 
-    var offset = height + 11 ; //This should not change per motif.
+    //SHRINK
+    //var offset = height + 11 ; //This should not change per motif.
+    var offset = height + height * 0.2; //This should not change per motif.
+    //y = -1.851851852·10-2 x2 + 1.611111111 x + 7  haha http://www.xuru.org/rt/PR.asp#Manually
+    var offset = (-1.851851/100)*Math.pow(columnWidth,2) + 1.6211111*columnWidth + 5;
 
     var label_font_size = 12;
     if ( columnWidth < 20 ){  label_font_size = 10; }
