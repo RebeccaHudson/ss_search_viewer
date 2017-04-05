@@ -29,6 +29,9 @@
    <script type="text/javascript" src="{% static 'ss_viewer/plots.js' %}"></script>
    <!-- plots.js contains all code for drawing plots  -->
 
+   <!-- <script type="text/javascript" src="{% static 'ss_viewer/table-fixed-header.js' %}"></script> -->
+
+
    <style type="text/css">
       #download-exp {
            display:none;  
@@ -44,11 +47,86 @@
          vertical-align: middle;
          border-left: .5px solid rgba(128, 128, 128, 0.76);
          padding: 2px;
+         padding-left:0.5em;
+         padding-right:0.5em;
       } 
       #drop-in table{
          border: .5px solid grey;
       }
-    
+
+
+/* begin stuff from http://jsfiddle.net/dPixie/byB9d/3/ */ 
+section {
+    position: relative;
+    border: 1px solid #000;
+    padding-top: 22px;
+    background: #500;
+    box-sizing: content-box;
+}
+
+.scroll { 
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 700px;
+}
+
+table.fixed-header { 
+   table-layout:fixed;
+   border-spacing: 0;
+   width: 100%; 
+}
+
+.fixed-header td + td {
+   border-left:1px solid #eee;
+}
+
+.fixed-header td, th {
+  border-bottom:1px solid #eee;
+  background: #ddd;
+  color: #000;
+  /*padding: 10px 5px;*/
+  /*padding: 0px 5px 0px 5px;*/
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left:1em;
+  padding-right:1em;
+}
+
+table.fixed-header th.thead {
+  height: 0;
+  line-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  color: transparent;
+  border: none;
+  visibility: collapse; /*  hide the th element, but show the contained div*/
+  /*white-space: nowrap;*/
+}
+
+.fixed-header th div{
+  position: absolute;
+  background: transparent;
+  color: #fff;
+  padding: 4px 2px;
+  top: 0;
+  margin-left: -5px;
+  line-height: normal;
+  border-left: 1px solid #800;
+  visibility: visible;
+}
+.fixed-header th:first-child div{
+  border: none;
+}
+
+svg { width: 290px; }
+
+#hide { visibility: collapse; }
+
+/* end stuff from http://jsfiddle.net/dPixie/byB9d/3/ */ 
+
+
+/* end stuff from http://jsfiddle.net/dPixie/byB9d/3/ */ 
+
    </style>
 
 
@@ -182,10 +260,10 @@
 </div>
 
 
-
-<div id="drop-in">
+<section> <!-- from https://jsfiddle.net/dPixie/byB9d/3/ -->
+<div id="drop-in" class="scroll">
 </div>
-
+</section>
 <!-- this div is where search results are 'dropped in' -->
 
 </div> <!-- close the 'content' div -->
@@ -238,55 +316,59 @@
         $("#download_page_of_plots").attr("style", "display: inline;");
         $("#download_plots_for_checked_rows").attr("style", "display: inline;");
 
-        // <td>Best Match to the Reference Genome  </td>    \ 
-        // <td>Best Match to the SNP Genome        </td>    \
-        //removed table-striped from the search results..
-        var content = `<table id="search_results" class="table table-condensed"> \
+        var content = `<table id="search_results" class="table table-condensed fixed-header"> \
           <thead>                                                         \   
-          <tr>                                               \ 
-              <td>
-              SNPid<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">?
-                                            </a></sup></td>    \ 
-              <td>Chromosome:Position
-               <sup>
-               <a target="_blank"
-                href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">
-                ?</a></sup> 
-                                                      </td>    \ 
-              <td>p-value Rank                         
-               <sup>
-               <a target="_blank"
-                href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">
-                ?</a></sup>                           </td>    \
-              <td>p-value Reference                   
-               <sup>
-               <a target="_blank"
-                href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">
-                ?</a></sup> 
-                                                      </td>    \ 
-              <td>p-value SNP                          
-               <sup>
-               <a target="_blank"
-                href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">
-                ?</a></sup> 
-                                                      </td>    \
-              <td>Transcription Factor                
-               <sup>
-               <a target="_blank"
-                href="{% url 'ss_viewer:help-page'%}#part-3:motifTable">
-                ?</a></sup> 
-                                                      </td>    \ 
-              <td>Details                             </td>    \
-              <td>Composite Logo Plot                 
-               <sup>
-               <a target="_blank"
-                href="{% url 'ss_viewer:help-page'%}#part-4:part-4">
-                ?</a></sup> 
-                                                      </td>    \ 
-              <td>Add to Download                     </td>    \
+          <tr class="header" id="hide">                                   \ 
+              <th class="thead" style="line-height:0;width:7em;">SNPid
+               <div><span style="margin-left:1em;">SNPid</span>
+                    <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">?</a></sup>  
+               </div>
+                                                     </th>    \ 
+              <th  class="thead" style="line-height:0; width:12em;">Chromosome:Position
+                <div>Chromosome:Position<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">?</a></sup>
+                </div>  
+                                                     </th>     \ 
+              <th class="thead" style="line-height:0; width: 8em;">pvalue - Rank
+               <div>p-value Rank<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+               </div>   
+                                                     </th>     \
+              <th class="thead" style="line-height:0; width:10em;">pvalue - Reference
+                <div>p-value Reference<sup> <a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+                </div>
+                                                     </th>     \ 
+              <th class="thead" style="line-height:0; width:8em;">p-value  SNP
+                <div>p-value SNP<sup>
+                   <a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup> 
+                </div>
+                                                     </th>     \
+              <th class="thead" style="line-height:0; width:11em;">Transcription  Factor 
+                <div>Transcription Factor<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:motifTable">?</a></sup> 
+                </div>
+                                                      </th>    \ 
+              <th class="thead" style="line-height:0; width:5em;">Det ails<div>Details</div>      </th>    \
+              <th class="thead" style="line-height:0; width:300px; ">Composite Logo Plot<div><span style="margin-left:6em;">Composite Logo Plot</span>
+                   <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-4:part-4"> ?</a></sup> 
+               </div>
+                                                      </th>    \ 
+              <th class="thead" style="line-height:0; width:9em;">Add&nbsp;to&nbsp;Download
+                <div>Add to Download</div>                   
+                                                      </th>    \
           </tr>                                                \ 
+
           </thead>                                             \ 
-          <tbody>`;                                
+          <tbody>
+          <!--<tr class="hideme">                                  \ 
+              <td>SNPid X                            </td>     \
+              <td>Chromosome:Position X              </td>     \ 
+              <td> p-value Rank X                    </td>     \
+              <td> p-value Reference X               </td>     \ 
+              <td>p-value SNP X                      </td>     \
+              <td>Transcription Factor X             </td>     \ 
+              <td>Details                            </td>     \
+              <td> Composite Logo Plot X             </td>     \ 
+              <td>Add to Download                    </td>     \
+          </tr>                                                \ --> 
+         </tbody>`;                                
           $("#drop-in").append(content);
           $('#download-exp').show();
           var rows = "";
@@ -323,12 +405,14 @@
                              + '"{% url 'ss_viewer:detail' id_str='x_x_x' %}'.replace('x_x_x', '') 
                              +  json.api_response[i].plot_id_str + '" target="_blank">Details</a></td>';
               rows += "<td class=\"stacked-plot\" id=\"stacked-plot-" + json.api_response[i].plot_id_str +"\"></td>";
-              //rows += "<td class=\"ref-plot\" id=\"ref-plot-" + json.api_response[i].plot_id_str +"\"></td>";
-              //rows += "<td class=\"snp-plot\" id=\"snp-plot-" + json.api_response[i].plot_id_str +"\"></td>";
               rows += '<td> <input type="checkbox" id="' + json.api_response[i].plot_id_str + '" ></td>';
               rows += "</tr>";
           }
           $("#drop-in table tbody").append(rows);
+
+          //$('.table-fixed-header').fixedHeader();
+          //console.log("setup the fixed, scrollable header");          
+
           setupPlotsForSearchResults(); 
           console.log("we setup the search results plots.. " );
 
