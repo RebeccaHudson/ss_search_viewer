@@ -46,9 +46,9 @@
       #drop-in td {
          vertical-align: middle;
          border-left: .5px solid rgba(128, 128, 128, 0.76);
-         padding: 2px;
+         /*padding: 2px;
          padding-left:0.5em;
-         padding-right:0.5em;
+         padding-right:0.5em;*/
       } 
       #drop-in table{
          border: .5px solid grey;
@@ -56,78 +56,79 @@
 
 
 /* begin stuff from http://jsfiddle.net/dPixie/byB9d/3/ */ 
-section {
-    position: relative;
-    border: 1px solid #000;
-    padding-top: 22px;
-    background: #500;
-    box-sizing: content-box;
+
+div.scroll { 
+    clear: both;
+    border: 1px solid #963;
+    height: 500px;
+    overflow: hidden;
+    width: 1316px;
+    display: block; }
+
+div.scroll table.fixed-header { 
+   width: 1300px;
+   float: left;
 }
 
-.scroll { 
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 700px;
+thead.fixed-header tr { 
+   display: block;
+   position: relative;
 }
 
-table.fixed-header { 
-   table-layout:fixed;
-   border-spacing: 0;
-   width: 100%; 
+thead.fixed-header { 
+  display: table-header-group;
+  vertical-align: middle;
 }
 
-.fixed-header td + td {
-   border-left:1px solid #eee;
+table.fixed-header thead.fixed-header th { 
+  /*width: 200px;  */
+  border-left: 1px solid black;
+  text-align: left;
+  display: table-cell; 
+  padding-left: 0px;
+  padding-right: 0px;
+}
+  
+
+
+table.fixed-header tbody.scroll-content {
+  display: block;
+  height: 525px;
+  overflow: auto;
+  width: 1300px;
 }
 
-.fixed-header td, th {
-  border-bottom:1px solid #eee;
-  background: #ddd;
-  color: #000;
-  /*padding: 10px 5px;*/
-  /*padding: 0px 5px 0px 5px;*/
-  padding-top: 0px;
-  padding-bottom: 0px;
-  padding-left:1em;
-  padding-right:1em;
+tbody.scroll-content tr {
+  display: table-row;
 }
 
-table.fixed-header th.thead {
-  height: 0;
-  line-height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
-  color: transparent;
-  border: none;
-  visibility: collapse; /*  hide the th element, but show the contained div*/
-  /*white-space: nowrap;*/
+table.fixed-header tbody.scroll-content td {
+   /*padding: 2px 3px 3px 4px;*/
+   display: table-cell;
+   padding-left: 0px;
+   padding-right: 0px; 
+   /*width: 200px;*/
 }
 
-.fixed-header th div{
-  position: absolute;
-  background: transparent;
-  color: #fff;
-  padding: 4px 2px;
-  top: 0;
-  margin-left: -5px;
-  line-height: normal;
-  border-left: 1px solid #800;
-  visibility: visible;
-}
-.fixed-header th:first-child div{
-  border: none;
+table.fixed-header thead.fixed-header span {
+  display: block;
+  width: 100%;
 }
 
 svg { width: 290px; }
 
-#hide { visibility: collapse; }
+/* unfix column widths at your own peril */
+.snpid { width: 110px; }
+.coordinate { width: 200px; }
+.pval_rank { width: 100px; }
+.pval_ref { width: 120px; }
+.pval_snp { width: 100px; }
+.trans_factor { width: 150px; }
+.details { width: 80px; }
+.cl_plot { width: 300px; }
+.add_to_download { width: 100px; }
 
-/* end stuff from http://jsfiddle.net/dPixie/byB9d/3/ */ 
-
-
-/* end stuff from http://jsfiddle.net/dPixie/byB9d/3/ */ 
-
-   </style>
+</style>
 
 
 </head>
@@ -260,11 +261,8 @@ svg { width: 290px; }
 </div>
 
 
-<section> <!-- from https://jsfiddle.net/dPixie/byB9d/3/ -->
 <div id="drop-in" class="scroll">
 </div>
-</section>
-<!-- this div is where search results are 'dropped in' -->
 
 </div> <!-- close the 'content' div -->
 </div> <!-- close the 'container' div -->
@@ -317,78 +315,50 @@ svg { width: 290px; }
         $("#download_plots_for_checked_rows").attr("style", "display: inline;");
 
         var content = `<table id="search_results" class="table table-condensed fixed-header"> \
-          <thead>                                                         \   
+          <thead class="fixed-header">                                                         \   
           <tr class="header" id="hide">                                   \ 
-              <th class="thead" style="line-height:0;width:7em;">SNPid
-               <div><span style="margin-left:1em;">SNPid</span>
+               <th class="snpid"><span>SNPid
                     <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">?</a></sup>  
-               </div>
-                                                     </th>    \ 
-              <th  class="thead" style="line-height:0; width:12em;">Chromosome:Position
-                <div>Chromosome:Position<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">?</a></sup>
-                </div>  
-                                                     </th>     \ 
-              <th class="thead" style="line-height:0; width: 8em;">pvalue - Rank
-               <div>p-value Rank<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
-               </div>   
-                                                     </th>     \
-              <th class="thead" style="line-height:0; width:10em;">pvalue - Reference
-                <div>p-value Reference<sup> <a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
-                </div>
-                                                     </th>     \ 
-              <th class="thead" style="line-height:0; width:8em;">p-value  SNP
-                <div>p-value SNP<sup>
-                   <a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup> 
-                </div>
-                                                     </th>     \
-              <th class="thead" style="line-height:0; width:11em;">Transcription  Factor 
-                <div>Transcription Factor<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:motifTable">?</a></sup> 
-                </div>
-                                                      </th>    \ 
-              <th class="thead" style="line-height:0; width:5em;">Det ails<div>Details</div>      </th>    \
-              <th class="thead" style="line-height:0; width:300px; ">Composite Logo Plot<div><span style="margin-left:6em;">Composite Logo Plot</span>
+                                                   </span>  </th>     \ 
+               <th class="coordinate"><span>Chromosome:Position<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">?</a></sup>
+                                                   </span>  </th>     \ 
+               <th class="pval_rank" ><span>p-value Rank<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+                                                   </span>  </th>     \
+               <th class="pval_ref"><span>p-value Reference<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+                                                   </span>  </th>     \ 
+               <th class="pval_snp"><span>p-value SNP<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup> 
+                                                   </span>  </th>     \
+               <th class="trans_factor"><span>Transcription Factor<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:motifTable">?</a></sup> 
+                                                   </span>  </th>      \ 
+               <th class="details"><span>Details                   </span>  </th>      \
+               <th class="cl_plot"><span>Composite Logo Plot
                    <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-4:part-4"> ?</a></sup> 
-               </div>
-                                                      </th>    \ 
-              <th class="thead" style="line-height:0; width:9em;">Add&nbsp;to&nbsp;Download
-                <div>Add to Download</div>                   
-                                                      </th>    \
+                                                    </span>  </th>    \ 
+               <th class="add_to_download"><span>Add to Download            </span>  </th>    \
           </tr>                                                \ 
-
           </thead>                                             \ 
-          <tbody>
-          <!--<tr class="hideme">                                  \ 
-              <td>SNPid X                            </td>     \
-              <td>Chromosome:Position X              </td>     \ 
-              <td> p-value Rank X                    </td>     \
-              <td> p-value Reference X               </td>     \ 
-              <td>p-value SNP X                      </td>     \
-              <td>Transcription Factor X             </td>     \ 
-              <td>Details                            </td>     \
-              <td> Composite Logo Plot X             </td>     \ 
-              <td>Add to Download                    </td>     \
-          </tr>                                                \ --> 
+          <tbody class="scroll-content">
          </tbody>`;                                
           $("#drop-in").append(content);
           $('#download-exp').show();
           var rows = "";
           for (var i = 0; i < json.api_response.length; i ++){
               rows += "<tr>";
-              rows += "<td>" + 
+              rows += "<td class='snpid' >" + 
                       '<a href="' + json.api_response[i].dbsnp_link + '" target="_blank">' + 
                         json.api_response[i].snpid + '</a>' + 
                       "</td>";   
-              rows += "<td>" +
+              rows += "<td class='coordinate'>" +
                           '<a href="' + json.api_response[i].ucsc_link + '" target="_blank">' +
                           json.api_response[i].chr + ":"  + 
                           json.api_response[i].pos.toLocaleString() + '</a>' +
                       "</td>";   
 
-              rows += "<td>" + json.api_response[i].pval_rank.toExponential(3) + "</td>";   
-              rows += "<td>" + json.api_response[i].pval_ref.toExponential(3) + "</td>";   
-              rows += "<td>" + json.api_response[i].pval_snp.toExponential(3) + "</td>";   
+              rows += "<td class='pval_rank'>" + json.api_response[i].pval_rank.toExponential(3) + "</td>";   
+              rows += "<td class='pval_ref'>" + json.api_response[i].pval_ref.toExponential(3) + "</td>";   
+              rows += "<td class='pval_snp'>" + json.api_response[i].pval_snp.toExponential(3) + "</td>";   
 
-              rows += "<td>";
+              rows += "<td class='trans_factor'>";
               if ( ! ( json.api_response[i].factorbook_link === null ) ){
                 rows += '<a href="' + 
                         json.api_response[i].factorbook_link +
@@ -401,11 +371,11 @@ svg { width: 290px; }
 
               rows += '<td id="plot_data_'  + json.api_response[i].plot_id_str +  '" style="display:none;"';
               rows += ' class="plotting_data">' + json.api_response[i].json_for_plotting + '</td>';
-              rows += '<td> <a href=' 
+              rows += '<td class="details"> <a href=' 
                              + '"{% url 'ss_viewer:detail' id_str='x_x_x' %}'.replace('x_x_x', '') 
                              +  json.api_response[i].plot_id_str + '" target="_blank">Details</a></td>';
-              rows += "<td class=\"stacked-plot\" id=\"stacked-plot-" + json.api_response[i].plot_id_str +"\"></td>";
-              rows += '<td> <input type="checkbox" id="' + json.api_response[i].plot_id_str + '" ></td>';
+              rows += "<td class=\"stacked-plot cl_plot\" id=\"stacked-plot-" + json.api_response[i].plot_id_str +"\"></td>";
+              rows += '<td class="add_to_download"> <input type="checkbox" id="' + json.api_response[i].plot_id_str + '" ></td>';
               rows += "</tr>";
           }
           $("#drop-in table tbody").append(rows);
