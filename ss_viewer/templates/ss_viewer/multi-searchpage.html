@@ -59,20 +59,20 @@
 
 div.scroll { 
     clear: both;
-    border: 1px solid #963;
     height: 500px;
     overflow: hidden;
     width: 1316px;
     display: block; }
 
 div.scroll table.fixed-header { 
-   width: 1300px;
+   width: 1172px;
    float: left;
 }
 
 thead.fixed-header tr { 
    display: block;
    position: relative;
+   border-bottom: 1px solid gray;
 }
 
 thead.fixed-header { 
@@ -83,19 +83,23 @@ thead.fixed-header {
 table.fixed-header thead.fixed-header th { 
   /*width: 200px;  */
   border-left: 1px solid black;
+  border-bottom: 0px;
   text-align: left;
   display: table-cell; 
   padding-left: 0px;
-  padding-right: 0px;
-}
-  
+  padding-right: 0px; }
+
+table.fixed-header thead.fixed-header th + th { 
+ border-left: 1px solid black; 
+ border-bottom: 0px;
+ /*border-right: 1px solid black;*/ }
 
 
 table.fixed-header tbody.scroll-content {
   display: block;
   height: 525px;
   overflow: auto;
-  width: 1300px;
+  width: 1170px;
 }
 
 tbody.scroll-content tr {
@@ -107,26 +111,29 @@ table.fixed-header tbody.scroll-content td {
    display: table-cell;
    padding-left: 0px;
    padding-right: 0px; 
+   border-bottom: 1px solid gray;
+   border-top: 0px;
    /*width: 200px;*/
 }
 
 table.fixed-header thead.fixed-header span {
   display: block;
+  text-align: center;
   width: 100%;
 }
 
 svg { width: 290px; }
 
 /* unfix column widths at your own peril */
-.snpid { width: 110px; }
-.coordinate { width: 200px; }
-.pval_rank { width: 100px; }
+.snpid { width: 85px; }
+.coordinate { width: 150px; }
+.pval_rank { width: 90px; }
 .pval_ref { width: 120px; }
-.pval_snp { width: 100px; }
-.trans_factor { width: 150px; }
-.details { width: 80px; }
+.pval_snp { width: 90px; }
+.trans_factor { width: 140px; }
+.details { width: 60px; }
 .cl_plot { width: 300px; }
-.add_to_download { width: 100px; }
+.add_to_download { width: 105px; }
 
 </style>
 
@@ -263,6 +270,7 @@ svg { width: 290px; }
 
 <div id="drop-in" class="scroll">
 </div>
+<br />
 
 </div> <!-- close the 'content' div -->
 </div> <!-- close the 'container' div -->
