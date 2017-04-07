@@ -139,7 +139,19 @@ svg { width: 290px; }
 
 #flex { display : flex; }
 #search { flex: 0 0 55%; }
-#infobox { flex: 1; }
+#infobox { 
+   flex: 1; 
+}
+
+p.explain-search { display: none; }
+
+div.explain#search-exp { 
+  height: 100px;
+} 
+
+/* the SNPid list is open by default */
+ #snpid_search_form-explain { display: block; }
+
 </style>
 
 
@@ -176,14 +188,35 @@ svg { width: 290px; }
    <!-- begin downloads div -->
    <div id="infobox">
    <div class="explain" id="search-exp"> <!-- contains information about each search type when its tab is active -->
-     <p>
-      Enough content to make it worth putting a box here; that is, enough so that some space is taken up.
+     <p class="explain-search" id="snpid_search_form-explain">
+       Please type SNPids of interest in the box or upload a text file 
+       containing a list of SNPids.
+       Significant motif matches reaching the p-value cutoff will be returned.
      </p>
-     <p> 
-      Signup now open for the official 'Mars' Candy brand mission to Mars.
+     <p class="explain-search" id="snpid_window_form-explain">
+       Please type a SNPid of interest and a window size (number of base pairs)
+       around the SNP.
+       atSNP grabs all SNPs located in teh region and finds SNP-motif 
+       combinations reaching the p-value cutoff. 
      </p>
-     <p>
-       Be nice to the peacocks! Do not chase, feed or otherwise harass them.
+     <p class="explain-search" id="gl_region_search_form-explain"> 
+       Please specify a genomic region of interest by typing its start and
+       end position, and selecting the chromosome.
+       The region starts at 0 or 1 (?). atSNP grabs all SNPs located in the
+       region and finds SNP-motif combinatinos reaching the p-value cutoff.
+     </p>
+     <p class="explain-search" id="gene_name_form-explain">
+       Please type a gene symbol name and a window size to which you want to 
+       extend a region of interest around the gene.
+       atSNP grabs all SNPs located in the region and finds SNP-motif 
+       combinations reaching the p-value cutoff. 
+     </p>
+     <p class="explain-search" id="tf_search_form-explain">
+       Please select a transcription factor library to use, then select a 
+       transcription factor of interest. JASPAR and encode information is
+       available <a href="{% url 'ss_viewer:help-page' %}#part-1:part-1">
+       here</a>. atSNP shows all SNPs having a statistically significant impact
+       on the binding of the transcription factor at the p-value cutoff.
      </p>
    </div> <!-- end of 'search-exp' div -->
    <div class="explain" id="download-exp" >
@@ -241,12 +274,11 @@ svg { width: 290px; }
    </div>
 
 </div>
- <canvas id="canvas" style="display:none;" width="800" height="370"></canvas>
+<canvas id="canvas" style="display:none;" width="800" height="370"></canvas>
 
 <!-- this div will contain the search params to submit for paging -->
 <div id='current_search_params' style="display:none;">
 </div>
-
 
 <span id='type_of_shown_results' style="display:none;" >
 {% if active_tab  %}
@@ -254,13 +286,12 @@ svg { width: 290px; }
 {% endif %}
 </span>
 
-
 <div id="status_message"> {{ status_message }} </div>
-
 
 <!-- Errors will be reported here when they are returned from AJAX requests -->
 <div id="form_errors">
 </div>
+
 
 <!-- block of download buttons! -->
 
@@ -427,6 +458,16 @@ svg { width: 290px; }
       position: "bottom left",
       offset: [-2, 10],
       opacity: 0.1
+    });
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        var target = $(e.target).attr("href");
+        //based on what the value of target is. 
+        //make a selector from 'target'.  
+        //hide all of the other ones; 
+        $("p.explain-search").hide();  
+        $(target + '-explain').show();
+        console.log("just triggered display of explaination for " + target);
     });
 </script>
 </body>
