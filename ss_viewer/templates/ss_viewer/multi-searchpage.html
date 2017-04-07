@@ -33,16 +33,18 @@
 
 
    <style type="text/css">
+
+      div.explain {
+           padding:10px; 
+           margin-left:5px;
+           margin-top: 0px;
+           border:1px dashed lightgray;
+      }
+
       #download-exp {
            display:none;  
-           padding:10px; 
-           margin-left:100px; 
-           position:absolute;
-           right: -50px;
-           top: 150px;
-           width: 350px; 
-           border:1px solid black;
       }
+
       #drop-in td {
          vertical-align: middle;
          border-left: .5px solid rgba(128, 128, 128, 0.76);
@@ -135,6 +137,9 @@ svg { width: 290px; }
 .cl_plot { width: 300px; }
 .add_to_download { width: 105px; }
 
+#flex { display : flex; }
+#search { flex: 0 0 55%; }
+#infobox { flex: 1; }
 </style>
 
 
@@ -144,54 +149,44 @@ svg { width: 290px; }
 <div id="content">
 {% include "ss_viewer/navbar.html" with active='searches' %}
 
-<div class="side"> 
+<div id="flex">
+  <div id="search" class="side"> 
 
-<ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-  <li  {%if active_tab == 'snpid' or active_tab == 'none-yet'%}class="active"{%endif%}><a href="#snpid_search_form" data-toggle="tab"  >SNPid List</a></li>
-  <li {%if active_tab == 'snpid-window'%}class="active"{%endif%}><a href="#snpid_window_form" data-toggle="tab" >SNPid Window</a></li>
-  <li {%if active_tab == 'gl-region' %}
-      class="active"
-      {% endif %}><a href="#gl_region_search_form" data-toggle="tab">Genomic Location</a></li>
-  <li {%if active_tab == 'gene-name'%}class="active"{%endif%}><a href="#gene_name_form" data-toggle="tab" >Gene</a></li>
-  <li {%if active_tab == 'tf'%}class="active"{%endif%}><a href="#tf_search_form" data-toggle="tab" >Transcription Factor</a></li>
-</ul>
-
-
-<div id="tabbed-forms" class="tab-content">
-{% include "ss_viewer/gl_search.html" %} 
-{% include "ss_viewer/snpid_search.html" %}
-{% include "ss_viewer/trans_factor_search.html" %}
-{% include "ss_viewer/snpid_window_search.html" %}
-{% include "ss_viewer/gene_name_search.html" %}
- <!-- if the nav tab ends here, you can independently scroll the search results -->
-</div> <!-- close the 'side' div -->
-</div> <!-- close the 'tabbed forms' div -->
-
-<!--  this is the way that we will be displaying the plot -->
-<div class="side plot">
-   <div id="plots">
-   {% include "ss_viewer/svg_skeleton.html" %}
-   {% include "ss_viewer/half_plot_svg_skeleton.html" %}
-   {% include "ss_viewer/half_plot_snp_svg_skeleton.html" %}
-   {% include "ss_viewer/fixed_width_cl_plot.html" %}
-   </div>
-
-</div>
- <canvas id="canvas" style="display:none;" width="800" height="370"></canvas>
-
-<!-- this div will contain the search params to submit for paging -->
-<div id='current_search_params' style="display:none;">
-</div>
+  <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+    <li  {%if active_tab == 'snpid' or active_tab == 'none-yet'%}class="active"{%endif%}><a href="#snpid_search_form" data-toggle="tab"  >SNPid List</a></li>
+    <li {%if active_tab == 'snpid-window'%}class="active"{%endif%}><a href="#snpid_window_form" data-toggle="tab" >SNPid Window</a></li>
+    <li {%if active_tab == 'gl-region' %}
+        class="active"
+        {% endif %}><a href="#gl_region_search_form" data-toggle="tab">Genomic Location</a></li>
+    <li {%if active_tab == 'gene-name'%}class="active"{%endif%}><a href="#gene_name_form" data-toggle="tab" >Gene</a></li>
+    <li {%if active_tab == 'tf'%}class="active"{%endif%}><a href="#tf_search_form" data-toggle="tab" >Transcription Factor</a></li>
+  </ul>
 
 
-<span id='type_of_shown_results' style="display:none;" >
-{% if active_tab  %}
-  {{ active_tab }} 
-{% endif %}
-</span>
+  <div id="tabbed-forms" class="tab-content">
+  {% include "ss_viewer/gl_search.html" %} 
+  {% include "ss_viewer/snpid_search.html" %}
+  {% include "ss_viewer/trans_factor_search.html" %}
+  {% include "ss_viewer/snpid_window_search.html" %}
+  {% include "ss_viewer/gene_name_search.html" %}
+   <!-- if the nav tab ends here, you can independently scroll the search results -->
+  </div> <!-- close the 'tabbed forms' div -->
+  </div> <!-- close the 'side' div -->
 
    <!-- begin downloads div -->
-   <div id="download-exp" >
+   <div id="infobox">
+   <div class="explain" id="search-exp"> <!-- contains information about each search type when its tab is active -->
+     <p>
+      Enough content to make it worth putting a box here; that is, enough so that some space is taken up.
+     </p>
+     <p> 
+      Signup now open for the official 'Mars' Candy brand mission to Mars.
+     </p>
+     <p>
+       Be nice to the peacocks! Do not chase, feed or otherwise harass them.
+     </p>
+   </div> <!-- end of 'search-exp' div -->
+   <div class="explain" id="download-exp" >
          <div>
            <p> Numeric data for the search results shown here can be downloaded in CSV
              format. 
@@ -231,6 +226,34 @@ svg { width: 290px; }
         </div>
    </div>
    <!-- end downloads div -->
+  </div> <!-- end the 'info box' div -->
+<!-- end 'flex' div -->
+</div>
+
+
+<!--  this is the way that we will be displaying the plot -->
+<div class="side plot">
+   <div id="plots">
+   {% include "ss_viewer/svg_skeleton.html" %}
+   {% include "ss_viewer/half_plot_svg_skeleton.html" %}
+   {% include "ss_viewer/half_plot_snp_svg_skeleton.html" %}
+   {% include "ss_viewer/fixed_width_cl_plot.html" %}
+   </div>
+
+</div>
+ <canvas id="canvas" style="display:none;" width="800" height="370"></canvas>
+
+<!-- this div will contain the search params to submit for paging -->
+<div id='current_search_params' style="display:none;">
+</div>
+
+
+<span id='type_of_shown_results' style="display:none;" >
+{% if active_tab  %}
+  {{ active_tab }} 
+{% endif %}
+</span>
+
 
 <div id="status_message"> {{ status_message }} </div>
 
