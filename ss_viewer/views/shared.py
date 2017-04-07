@@ -274,6 +274,7 @@ class APIResponseHandler:
         api_response = None
         search_paging_info = None
         print "attempting search"
+        api_search_query.update({"page_size": settings.API_HOST_INFO['result_page_size']})
         try:
             api_response = requests.post( APIUrls.setup_api_url(api_action),
                                       json=api_search_query, 
