@@ -102,7 +102,8 @@ class GenericSearchView(View):
     def handle_download(self, form_data, request):
         #was setting search_params = form_data, but that's sending too much stuff in.
         search_params = self.handle_params_for_download(form_data)
-        search_params.update(self.get_pvalues_from_form())
+        search_params.update( self.get_pvalues_from_form())
+        search_params.update( self.get_pvalue_directions_from_form() ) 
         return StreamingCSVDownloadHandler.streaming_csv_view(request, 
                                                                search_params, 
                                                                self.api_action_name)
