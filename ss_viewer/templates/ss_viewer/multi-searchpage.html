@@ -61,7 +61,7 @@
 
 div.scroll { 
     clear: both;
-    height: 600px;
+    height: 550px;
     overflow: hidden;
     width: 1316px;
     display: block; }
@@ -152,6 +152,13 @@ div.explain#search-exp {
 /* the SNPid list is open by default */
  #snpid_search_form-explain { display: block; }
 
+#ajaxyPagingButtons {
+  margin-right: auto;
+  margin-left: auto;
+  width: 250px;
+}
+
+
 </style>
 
 
@@ -196,7 +203,7 @@ div.explain#search-exp {
      <p class="explain-search" id="snpid_window_form-explain">
        Please type a SNPid of interest and a window size (number of base pairs)
        around the SNP.
-       atSNP grabs all SNPs located in teh region and finds SNP-motif 
+       atSNP grabs all SNPs located in the region and finds SNP-motif 
        combinations reaching the p-value cutoff. 
      </p>
      <p class="explain-search" id="gl_region_search_form-explain"> 
@@ -308,23 +315,26 @@ div.explain#search-exp {
 
 
 
-<div id="ajaxyPagingButtons" >
-     <button type="button"
-             onclick='pagingAJAX("Prev");'
-             style="display:none;"
-             id="prev_button">
-             Previous</button>
-     <button type="submit" 
-             onclick='pagingAJAX("Next");'
-             style="display:none;"
-             id="next_button">
-             Next</button>
-</div>
 
 
 <div id="drop-in" class="scroll">
 </div>
 <br />
+
+<div id="ajaxyPagingButtons" >
+     <button type="button"
+             onclick='pagingAJAX("Prev");'
+             style="display:none;"
+             id="prev_button">
+             <span class="glyphicon glyphicon-chevron-left"></span>
+             Previous</button>
+     <button type="submit" 
+             onclick='pagingAJAX("Next");'
+             style="display:none;"
+             id="next_button">Next
+             <span class="glyphicon glyphicon-chevron-right"></span>
+             </button>
+</div>
 
 </div> <!-- close the 'content' div -->
 </div> <!-- close the 'container' div -->
