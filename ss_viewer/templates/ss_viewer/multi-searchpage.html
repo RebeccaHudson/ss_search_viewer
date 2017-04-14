@@ -137,17 +137,14 @@ svg { width: 290px; }
 .cl_plot { width: 300px; }
 .add_to_download { width: 105px; }
 
-#flex { display : flex; }
-#search { /*flex: 0 0 55%; make it FLUSH!*/ }
-#infobox { 
-   flex: 1; 
+#flex { 
+  display : flex; 
+  width: 1164px;
 }
-
+#search { /*flex: 0 0 55%; make it FLUSH!*/ }
+#infobox { flex: 1; } 
 p.explain-search { display: none; }
-
-div.explain#search-exp { 
-  height: 100px;
-} 
+div.explain#search-exp { height: 100px; } 
 
 /* the SNPid list is open by default */
  #snpid_search_form-explain { display: block; }
@@ -156,9 +153,11 @@ div.explain#search-exp {
   margin-right: auto;
   margin-left: auto;
   width: 250px;
+  margin-bottom: 45px;
 }
 
-
+#tabbed-forms { margin-right: 2px; }
+#tabs         {/* width: 616px;*/ }
 </style>
 
 
