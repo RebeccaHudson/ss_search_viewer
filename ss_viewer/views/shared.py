@@ -337,9 +337,8 @@ class StreamingCSVDownloadHandler:
 
     @staticmethod
     def fields_for_csv():
-        return  ['chr', 'pos', 'snpid', 'trans_factor', 'motif', 'motif_len',
-                 'pval_rank', 'snp_start', 'snp_end', 'ref_start', 'ref_end',
-                 'log_lik_ref', 'log_lik_ratio', 'log_enhance_odds',
+        return  ['chr', 'pos', 'snpid', 'trans_factor', 'motif', 
+                 'pval_rank','log_lik_ref', 'log_lik_ratio', 'log_enhance_odds',
                  'log_reduce_odds', 'log_lik_snp', 'snp_strand', 'ref_strand',
                  'pval_ref', 'pval_snp', 'pval_cond_ref', 'pval_cond_snp',
                  'pval_diff', 'refAllele', 'snpAllele']
