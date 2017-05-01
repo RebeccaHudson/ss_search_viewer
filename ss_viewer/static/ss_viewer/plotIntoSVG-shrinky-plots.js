@@ -120,7 +120,8 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
 
         drawScaledHorizontalAxis(refSeqTargetSelector, xScale, refSeq, maxColumnCount, columnWidthScaled);
 
-        var highlightPosition = findSNPLocationForHalfPlot(plotToMake);
+
+        var highlightPosition = findSNPLocation(plotToMake);
         applyScaledHighlight(highlightPosition, idOfTargetSVG, xScale, columnWidthScaled);
         //end of the reference end.
 
@@ -159,8 +160,8 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         var snpSeqTargetSelector = d3.select("svg#" + idOfTargetSVG + " g#line3data");
         drawUnscaledSequenceScaled(snpSeqTargetSelector, snpSeq, xScale, unscaledLetterHeight);
         drawScaledHorizontalAxis(snpSeqTargetSelector, xScale, snpSeq, maxColumnCount, columnWidthScaled);
-         
-        var highlightPosition = findSNPLocationForHalfPlot(plotToMake);
+
+        var highlightPosition = findSNPLocation(plotToMake);
         //console.log("highlight position"  + highlightPosition);
         applyScaledHighlight(highlightPosition, idOfTargetSVG, xScale, columnWidthScaled);
         if (columnWidthScaled < 20){
