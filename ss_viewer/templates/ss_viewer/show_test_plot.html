@@ -1,12 +1,15 @@
 {% load staticfiles %}
 <head>
-  <title> test the showing of a plot... </title>
+  <title> Test plotting code </title>
     <!-- <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet"> -->
     <link href="{% static 'ss_viewer/plot-styles.css' %}" rel="stylesheet">
     <script src="{% static 'ss_viewer/js/jquery-2.2.4.js' %}"></script>
     <script src="{% static 'ss_viewer/js/bootstrap.min.js' %}"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
-    <script type="text/javascript" src="{% static 'ss_viewer/plotIntoSVGSkeleton-scaling-work.js' %}"> </script> 
+    <script type="text/javascript" src="{% static 'ss_viewer/cloneTheSkeleton.js' %}"> </script> 
+    <!-- remove this one? --><script type="text/javascript" src="{% static 'ss_viewer/plotIntoSVGSkeleton-scaling-work.js' %}"> </script> 
+    <script type="text/javascript" src="{% static 'ss_viewer/plotIntoSVG-shrinky-plots.js' %}"> </script> 
+    <script type="text/javascript" src="{% static 'ss_viewer/plots.js' %}"> </script> 
 </head>
 <body>
 
@@ -20,158 +23,65 @@ http://stackoverflow.com/questions/28226677/save-inline-svg-as-jpeg-png-svg -->
   Save Plot
 </button>
 
-<span> plot data: </span>
-<p id="plot_data">{{ happy_data }}</p>
+<p id="normal_plot_data">{{ normal_test_plot }}</p>
+<p id="shorter_plot_data">{{ shorter_test_plot }}</p>
 
-<span> motif data:  </span>
-<p id="motif_data">{{ motif_data }}</p>
-<!--<a href ="dynamic_svg_data">
-    <img src="dynamic_svg_data" alt="img1">
-</a> -->
+<!-- used for plot download -->
 <canvas id="canvas" style="display:none;" 
-        height="400" width="900"></canvas>
+        height="370" width="800"></canvas>
 
-<svg width="0" height="0" id="defs">
-    <!-- Arrowhead marker below was shamelessly plagirized from: 
-     https://developer.mozilla.org/en-US/docs/Web/SVG/Element/marker -->
-    <defs>  
-      <marker id="Triangle" viewBox="0 0 10 10" refX="1" refY="5"
-          markerWidth="5" markerHeight="3" fill="blue" stroke="blue" orient="auto">
-        <path d="M 0 0 L 10 5 L 0 10 z" />
-      </marker>
-    </defs>
-    <!-- This SVG is for defining the arrowhead symbols used in the plots; it
-         is not (and does not need to be) copied for each plot -->
-</svg>
-
-<div id="plot" class="side">
-<svg class="target" id="target-0" width="900" height="400">
-<style type="text/css">
-.axis path, .axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-svg {
-  background-color: white;
-}
-.letter-A
-{
-  fill: green;
-  font-weight: bold;
-}
-.letter-C {
-    fill: blue;
-    font-weight: bold;
-}
-.letter-T {
-    fill: red;
-    font-weight: bold;
-}
-.letter-G {
-    fill: orange; 
-    font-weight: bold;
-}
-#legend {
-    font-size: 20px;
-}
-</style>
-    <g class="plot-label">
-     <!-- how to add defs programatically to the SVG source -->
-      <text style="center" font-size="20" font-weight="bold" 
-            transform="translate(70, 70)" font-family="Arial">
-          Plot Label
-      </text>
-    </g>
-        <g id="legend" transform="translate(10)"  >
-            <g id="line1margin" transform="translate(0, 150)" >
-                <text style="center">Ref</text>
-            </g>
-            <g id="line2margin" transform="translate(0, 200)" >
-                <text style="center">+/-</text>
-            </g>
-
-            <!-- added a gap between lines 2 and 3 -->
-            <g id="line3margin" transform="translate(0, 300)" >
-                <text style="center">+/-</text>
-            </g>
-            <g id="line4margin" transform="translate(0, 360)">
-                <text style="center">SNP</text>
-            </g>
-        </g>
-        <g id="logoplots" transform="translate(100)" >
-            <rect id="highlight" />
-            <g id="line1data" transform="translate(0, 100)" >
-                <g class="ref-label">
-                    <text style="center" font-family="Arial" font-size="15"
-                          font-weight="bold">
-                       Best Match to the Reference Genome
-                    </text>
-                </g>
-            </g>
-            <!-- Setting the x and y on a group does not make sense, use the 
-                 group's transform attribute and apply a translate(x, y) -->
-            <!-- Notice how each of these groups gets the translation of the parent
-                 group applied to it, as well as the one specified for itself. -->
-            <g id="line2data" transform="translate(0, 150)" >
-            </g>
-            <g id="line3data" transform="translate(0, 250)" >
-                <g class="snp-label">
-                    <text style="center" font-family="Arial" font-size="15" 
-                          font-weight="bold">
-                        Best Match to the SNP Genome
-                    </text>
-                </g>
-            </g>
-        <g id="line4data" transform="translate(0, 320)"  >
-        </g>
-        </g>
-    </svg>
+<!--  this is the way that we will be displaying the plot -->
+<!-- TODO: are the 'side plot' classes needed? -->
+<div class="side plot">
+   <div id="plots">
+   {% include "ss_viewer/svg_skeleton.html" %}
+   {% include "ss_viewer/fixed_width_cl_plot.html" %}
+   </div>
 </div>
 
-<div id="halfplot-ref">
-   {% include 'ss_viewer/half_plot_svg_skeleton.html' %}
-</div>
 
-<div id="halfplot-SNP">
-   {% include 'ss_viewer/half_plot_snp_svg_skeleton.html' %}
-</div>
+
+
 
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
         //if jquery is being updated, note: 
         //As of jQuery 3.0, $.parseJSON is deprecated. To parse JSON 
         //strings use the native JSON.parse method instead.
-        var plottingJSON = $("p#plot_data")[0].textContent;
-        var plottingData = jQuery.parseJSON(plottingJSON);
-        var motifJSON = $("p#motif_data")[0].textContent; 
-        var motif = jQuery.parseJSON(motifJSON);
-        plottingData['motif_data'] = motif;
-        console.log(plottingData);  //should now contain the motif_data
-        //console.log(motif);
-        //makeAPlot(plottingData, "target-0", motif);
-        makeAPlot(plottingData, "target-0");
-        $("button#show_plot").click(function(e) {
-         });
 
-        makeAHalfPlot(plottingData, "target-refhalf-0"); //should specify REF in the name.
-        makeAHalfPlotSNP(plottingData, "target-snphalf-0");
-        console.log("at least returned from makeHalfAPlot");
+        //test the whole infrastrucutre.
+        // var plot_data_ids = ['normal_plot_data', 'shorter_plot_data'];
+        var plottingData = [];
         
-        //this is where to add the makeAHalfPlot call.
-        //makeAHalfPlot (ref)  
+        //normal plot test.
+        var plottingJSON = $("p#normal_plot_data")[0].textContent; 
+        var onePlottingData = jQuery.parseJSON(plottingJSON);
 
-      //  d3.select("svg")  //.append("svg:svg")
-      //  .attr("width", 300)
-      //  .attr("height", 200)
-      //  .style("background-color", "WhiteSmoke")
-      //  .append("svg:rect")
-      //  .attr("fill", "aliceblue")
-      //  .attr("stroke", "cadetblue")
-      //  .attr("width", 60)
-      //  .attr("height", 40)
-      //  .attr("x", 50)
-      //  .attr("y", 50);
+        plottingData.push(onePlottingData);
+       
+        console.log("completed setting up data for normal test plot");
+        //smaller plot test.
+        plottingJSON = $("p#shorter_plot_data")[0].textContent; 
+        onePlottingData = jQuery.parseJSON(plottingJSON);
+        plottingData.push(onePlottingData);
+           
+        console.log("prepared to plot!");
+        cloneSVGSkeleton(plottingData);
+      
+        //try to make the called code here more testable. this could be replaced. 
+        var stackedPlotClones = $('#target-stacked-plot-');
+        for ( var n = 0; n < plottingData.length; n++){
+          var targetSVGid = "target-" + plottingData[n].plot_id_str;
+          var fullStackPlotId = 'target-stacked-plot-' + plottingData[n].plot_id_str;
+          makeAPlot(plottingData[n], targetSVGid);
+          drawFixedWidthCompositePlot(plottingData[n], fullStackPlotId);
+        }
+ 
+        //how to use setupPlotsForSearchResults ? 
+        $("svg#target-0").hide();
+        $("svg#target-stacked-plot-0").hide();
+
+
 var btn = document.querySelector('button#save_plot');
 var svg = document.querySelector('svg#target-0');
 var canvas = document.querySelector('canvas');
