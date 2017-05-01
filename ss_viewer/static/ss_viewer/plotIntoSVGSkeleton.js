@@ -124,7 +124,9 @@
 
 
         //highlight the location of the SNP and Refernce alleles on the plot.
-        var highlightPosition = findSNPLocation(snpStrand, refStrand, snpSeq, refSeq);
+        //var highlightPosition = findSNPLocation(snpStrand, refStrand, snpSeq, refSeq);
+        var highlightPosition = findSNPLocation(plotToMake);
+
         //if there's a problem calculating where to put the hightlight, omit it altogether.
         if (highlightPosition >= 0) {
           var highlight = d3.select("svg#" + idOfTargetSVG + " #highlight");
@@ -173,13 +175,6 @@ function applyHighlight(highlightPosition, idOfTargetSVG, xScale){
         }
 }
 
-function findSNPLocationForHalfPlot(plotToMake){
-        var snpSeq = plotToMake.snp_aug_match_seq.split("");
-        var refSeq = plotToMake.ref_aug_match_seq.split("");
-        var refStrand = plotToMake.ref_strand;//Plus or -
-        var snpStrand = plotToMake.snp_strand;
-        return findSNPLocation(snpStrand, refStrand, snpSeq, refSeq);
-}
 
 //unshiftedMotifLength either Ref or SNP
 //pwmOffset -> either ref or SNP
@@ -223,9 +218,16 @@ function drawMarkerLine(targetForLine, pwmOffset, unshiftedMotifLength, xScale, 
 
 
 
-
 //The snp_location field is null in many records; it also takes up space.
-function findSNPLocation(snpDirection, refDirection, snpSeq, refSeq){
+function findSNPLocation(plotToMake){
+//TODO: complete factoring out intermediate function
+//function findSNPLocation(snpDirection, refDirection, snpSeq, refSeq){
+//return findSNPLocation(snpStrand, refStrand, snpSeq, refSeq);
+  var snpSeq = plotToMake.snp_aug_match_seq.split("");
+  var refSeq = plotToMake.ref_aug_match_seq.split("");
+  var refDirection = plotToMake.ref_strand;//Plus or -
+  var snpDirection = plotToMake.snp_strand;
+
   var comparison;
   if ( snpDirection == refDirection ){
       comparison = (function(base1, base2){
