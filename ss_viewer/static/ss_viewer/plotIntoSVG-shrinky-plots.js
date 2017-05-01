@@ -197,10 +197,6 @@ function drawMarkerLineCompress(targetForLine, pwmOffset, unshiftedMotifLength, 
                        .attr('y', y - 5) ;
 }
 
-
-
-
-
 function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         //start with the reference end of the plot
         console.log("getting a full-stack plot for target" + idOfTargetSVG);
@@ -222,6 +218,9 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         var  fixedWidth = 300;
 
         var columnWidthScaled = (fixedWidth - margin.left - margin.right) / maxColumnCount;
+
+        if (columnWidthScaled > 29) { columnWidthScaled = 29; } //is this reasonable?
+
         //var unscaledLetterHeight = columnWidthScaled * 1.3;
         // SHRINK shrinking the height of the plots...
         var unscaledLetterHeight = columnWidthScaled * 0.9;
@@ -338,6 +337,10 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         //var labelYShift = 17 + (10 - columnWidthScaled / 2) ;
         
         var labelYShift = 1.129 * columnWidthScaled - 10.76;
+        if (columnWidthScaled == 29){
+            labelYShift -=  6;
+        }
+        console.log("label Y shift : " + labelYShift);
         d3.select("svg#" + idOfTargetSVG + " g.snp-label")
           .attr('transform', 'translate('+labelXShift+', ' + labelYShift  + ' )');
 
