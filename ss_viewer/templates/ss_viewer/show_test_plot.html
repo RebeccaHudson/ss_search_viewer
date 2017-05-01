@@ -40,9 +40,6 @@ http://stackoverflow.com/questions/28226677/save-inline-svg-as-jpeg-png-svg -->
 </div>
 
 
-
-
-
 <script type="text/javascript">
     jQuery(document).ready(function ($) {
         //if jquery is being updated, note: 
@@ -50,22 +47,14 @@ http://stackoverflow.com/questions/28226677/save-inline-svg-as-jpeg-png-svg -->
         //strings use the native JSON.parse method instead.
 
         //test the whole infrastrucutre.
-        // var plot_data_ids = ['normal_plot_data', 'shorter_plot_data'];
+        var plot_data_ids = ['normal_plot_data', 'shorter_plot_data'];
         var plottingData = [];
-        
-        //normal plot test.
-        var plottingJSON = $("p#normal_plot_data")[0].textContent; 
-        var onePlottingData = jQuery.parseJSON(plottingJSON);
-
-        plottingData.push(onePlottingData);
-       
-        console.log("completed setting up data for normal test plot");
-        //smaller plot test.
-        plottingJSON = $("p#shorter_plot_data")[0].textContent; 
-        onePlottingData = jQuery.parseJSON(plottingJSON);
-        plottingData.push(onePlottingData);
-           
-        console.log("prepared to plot!");
+        for (var i = 0; i < plot_data_ids.length; i++){
+            var plottingJSON = $("p#" + plot_data_ids[i])[0].textContent; 
+            var onePlottingData = jQuery.parseJSON(plottingJSON);
+            plottingData.push(onePlottingData);
+            console.log("completed setting up data for " + plot_data_ids[i] );
+        }       
         cloneSVGSkeleton(plottingData);
       
         //try to make the called code here more testable. this could be replaced. 
@@ -86,7 +75,7 @@ var btn = document.querySelector('button#save_plot');
 var svg = document.querySelector('svg#target-0');
 var canvas = document.querySelector('canvas');
 
-
+//this should be included from elsewhere.
 function svgImage(xml) {
   var image = new Image();
   image.src = 'data:image/svg+xml;base64,' + window.btoa(xml);
@@ -106,6 +95,7 @@ function svgImage(xml) {
 }}
 
 
+//this should also be inculded from elsewhere.
 function triggerDownload (imgURI) {
   var evt = new MouseEvent('click', {
     view: window,
@@ -167,40 +157,3 @@ btn.addEventListener('click', function () {
 
 </body>
 </html>
-
-<!-- 
-        /* this seems to work OK 
-        d3.select("#generate")
-             .on("click", writeDownloadLink);
- 
-        function writeDownloadLink(){
-           var html = d3.select("svg#target-0")
-            .attr("title", "test2")
-            .attr("version", 1.1)
-            .attr("xmlns", "http://www.w3.org/2000/svg")
-            .node().parentNode.innerHTML;
-
-             console.log("svg html" + html);
-
-
-           d3.select("body").append("div")
-          .attr("id", "download")
-          .style("top", "20px")
-          .style("left", "0px")
-          .html("Right-click on this preview and choose Save as<br />Left-Click to dismiss<br />")
-          .append("img")
-          .attr("src", "data:image/svg+xml;base64,"+ btoa(html));
-
-           d3.select("#download")
-          .on("click", function(){
-              if(event.button == 0){
-                  d3.select(this).transition()
-                      .style("opacity", 0)
-                      .remove();
-              }
-          })
-          .transition()
-          .duration(500)
-          .style("opacity", 1);
-               };
-*/ -->
