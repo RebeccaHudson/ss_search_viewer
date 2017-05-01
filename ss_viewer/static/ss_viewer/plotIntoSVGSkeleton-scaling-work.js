@@ -330,13 +330,9 @@ function applyScaledHighlight(highlightPosition, idOfTargetSVG, xScale, columnWi
         var snpSeqTargetSelector = d3.select("svg#" + idOfTargetSVG + " g#line3data");
         drawUnscaledSequence(snpSeqTargetSelector, snpSeq, xScale);
         drawHorizontalAxis(snpSeqTargetSelector, xScale, snpSeq, maxColumnCount);
-
-        //highlights are not included in half-plots.; this is where that code was removed.
-        //lables are not included in half-plots.; this is where that code was removed.
          
         var highlightPosition = findSNPLocationForHalfPlot(plotToMake);
         console.log("highlight position"  + highlightPosition);
-        //highlights are not included in half-plots.; this is where that code was removed.
         applyHighlight(highlightPosition, idOfTargetSVG, xScale);
 }//end function to plot one SVG composite logo plot in an already-existing SVG.
 

@@ -162,7 +162,6 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
          
         var highlightPosition = findSNPLocationForHalfPlot(plotToMake);
         //console.log("highlight position"  + highlightPosition);
-        //highlights are not included in half-plots.; this is where that code was removed.
         applyScaledHighlight(highlightPosition, idOfTargetSVG, xScale, columnWidthScaled);
         if (columnWidthScaled < 20){
             targetForLine.attr('transform', function(){ return 'translate(0, 40)'; } );
