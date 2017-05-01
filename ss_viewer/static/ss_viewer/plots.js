@@ -43,6 +43,7 @@ function svgImage(xml) {
 }
 
 //this happens when search results are returned.
+//this should recieve 'plottingData' as a parameter to make it more testable.
 function setupPlotsForSearchResults(){
    console.log("setupPlotsForSearchResults  ... logging here.");
    var plottingData = [];
