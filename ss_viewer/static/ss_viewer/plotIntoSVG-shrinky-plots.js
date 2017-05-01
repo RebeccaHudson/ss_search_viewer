@@ -113,7 +113,7 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         targetForLine = d3.select("svg#" + idOfTargetSVG + " g#line1data");
         drawMarkerLineCompress(targetForLine, refPWMOffset, unshiftedMotifLength, 
                                                    xScale, 55, refStrand); 
-        console.log("made it to line 2 for one stacked plot");
+        //console.log("made it to line 2 for one stacked plot");
         //draw the reference sequence on line 2.
         var refSeqTargetSelector = d3.select("svg#" + idOfTargetSVG + " g#line2data");
         drawUnscaledSequenceScaled(refSeqTargetSelector, refSeq, xScale, unscaledLetterHeight);
@@ -167,9 +167,9 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         if (columnWidthScaled < 20){
             targetForLine.attr('transform', function(){ return 'translate(0, 40)'; } );
         }
-        console.log("supposedly completed drawing one plot " + idOfTargetSVG );
-        console.log("at the time this function completes, we have this many matches for the above ID");
-        console.log($("#"+ idOfTargetSVG).length);
+        //console.log("supposedly completed drawing one plot " + idOfTargetSVG );
+        //console.log("at the time this function completes, we have this many matches for the above ID");
+        //console.log($("#"+ idOfTargetSVG).length);
         //end code for SNP half of plot.
         
         //adjust the label positions..
@@ -196,15 +196,8 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         }else{ 
           downshift = 130; }
         line4.attr('transform', function(){ return 'translate(0, ' + downshift  + ')'; } );  
-        console.log("shift down of bottom row: " + downshift);
+        //console.log("shift down of bottom row: " + downshift);
 }//end of function to draw fixed-width full composite logo plot
-
-
-
-
-
-
-
 
 //This appears to work.
 function applyScaledHighlight(highlightPosition, idOfTargetSVG, xScale, columnWidthScaled){
@@ -229,18 +222,15 @@ function applyScaledHighlight(highlightPosition, idOfTargetSVG, xScale, columnWi
       highlight.attr("x", function(){ 
                                var happyX = xScale(highlightPosition) - 2; 
                                return  happyX + nudge; })
-               .attr("y", yShift + yNudge)         //.attr("y", "10")
-               .attr("height", highlightHeight ) //"105")
+               .attr("y", yShift + yNudge)       
+               .attr("height", highlightHeight ) 
                .attr("width", function(){ return columnWidthScaled; } )
                .style("fill", "#d3d3d3");
     }
 }
 
-
-
-                         
 //lots of hardcoded numbers; get away from these if it's possible.
-//SHRINK
+//SHRINK TODO: Rename this function to something more reasonable.
 function drawUnscaledSequenceScaled(sequenceTargetSelector, sequenceData, xScale, letterHeight){
     var seqColumn = sequenceTargetSelector.selectAll(".sequence-column")
            .data(sequenceData)   //one column per datum
