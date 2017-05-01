@@ -130,10 +130,6 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
 
         //draw the line 4 motif.
         //SNP strand determines the direction the line 4 motif is displayed
-        //don't re-declare var dataForMotif;
-        //var xScale = d3.scale
-        //               .ordinal()
-        //               .rangeRoundBands([0, maxColumnCount*columnWidthScaled], .1);
 
          targetGroup = d3.select("svg#"+ idOfTargetSVG + " g#line4data");
 
@@ -167,27 +163,18 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         if (columnWidthScaled < 20){
             targetForLine.attr('transform', function(){ return 'translate(0, 40)'; } );
         }
-        //console.log("supposedly completed drawing one plot " + idOfTargetSVG );
-        //console.log("at the time this function completes, we have this many matches for the above ID");
-        //console.log($("#"+ idOfTargetSVG).length);
         //end code for SNP half of plot.
-        
+       
         //adjust the label positions..
-        var labelXShift = 40;//(svgWidth)/2 - 10;  width is fixed now, so this should always have the same Xoffset.
-        //var labelYShift = 17 + (10 - columnWidthScaled / 2) ;
-        
+        var labelXShift = 40;
         var labelYShift = 1.129 * columnWidthScaled - 10.76;
         if (columnWidthScaled == 29){
             labelYShift -=  6;
         }
-        console.log("label Y shift : " + labelYShift);
+        //console.log("label Y shift : " + labelYShift);
         d3.select("svg#" + idOfTargetSVG + " g.snp-label")
           .attr('transform', 'translate('+labelXShift+', ' + labelYShift  + ' )');
 
-        //labelShift = labelShift - 20;
-        //d3.select("svg#"+ idOfTargetSVG + " g.ref-label")
-        //  .attr('transform', 'translate('+labelShift+', 8)');
-        //
         //Need to adjust the translation of the bottom half of the plot. 
         var line4 = d3.select("svg#" + idOfTargetSVG + " g#line4data"); 
         var downshift;
@@ -268,27 +255,16 @@ function drawScaledHorizontalAxis(svgSelector, xScale, sequence, maxColumnCount,
     var xAxis = d3.svg.axis()
         .scale(xScale)
         .orient("bottom");   
-    //this is experimental
-    
     var axisScaleAdjustment = sequence.length / 2;
     var axisTranslateForward = Math.floor(maxColumnCount*.1);
-    //console.log("axisTranslateForward " + axisTranslateForward);
-    //try to eliminate the padding
+
     var axisScale = d3.scale.ordinal()
                       .rangeRoundBands([0, sequence.length*columnWidth], .1);
-                      //.rangeRoundBands([0, sequence.length*columnWidth-axisScaleAdjustment], .1);
 
     axisScale.domain( sequence.map( function(d, i) { return i + 1; } ));  
-
     var altXAxis = d3.svg.axis().scale(axisScale).orient("bottom");
-
-    //height is defined way up...
-    //console.log("columnWidth " +   columnWidth);
-    
     var height =  columnWidth * 1.35;
-    //try defining height like it's defined in the calling method. 
     //SHRINK
-    //var offset = height + 11 ; //This should not change per motif.
     var offset = height + height * 0.2; //This should not change per motif.
     //y = -1.851851852·10-2 x2 + 1.611111111 x + 7  haha http://www.xuru.org/rt/PR.asp#Manually
     var offset = (-1.851851/100)*Math.pow(columnWidth,2) + 1.6211111*columnWidth + 5;
@@ -302,8 +278,6 @@ function drawScaledHorizontalAxis(svgSelector, xScale, sequence, maxColumnCount,
        .style('font-size', label_font_size)
        .call(altXAxis);
 }
-
-
 
 //TODO:
 //could be changed to add some scaling into this.
@@ -330,4 +304,3 @@ function drawLettersIntoColumns(columnsSelector, x, y){
                        })
       .style( "font-size", function(e) { return ( y(e.y0) - y(e.y1) ) * capHeightAdjust; } );
 }
-
