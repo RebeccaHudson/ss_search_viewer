@@ -1,0 +1,129 @@
+<div id="sort-controls">
+  <div class="hide-overflow">
+      <select class="sort-control" id="sort-select" size=5>
+        <option value="pval_rank"> P-value Rank           </option>
+        <option value="coordinate">Genomic Coordinate     </option>
+        <option value="pval_snp">  P-value SNP            </option>
+      </select>
+  </div>
+  <div class="hide-overflow">
+      <select class="sort-control" id="sort-order-select" disabled="true" size=5>
+        <option value="asc">ascending              </option>
+        <option value="asc">ascending              </option>
+        <option value="asc">ascending              </option>
+      </select>
+  </div>
+  <div id='shift-priority'> 
+      <button onclick="priorityChange(event, 'up');">
+        <span class="glyphicon glyphicon-chevron-up"></span>
+      </button>
+      <button onclick="priorityChange(event, 'down');">
+        <span class="glyphicon glyphicon-chevron-down"></span>
+      </button>
+  </div>
+</div>
+ <style type="text/css">
+    .sort-control option{ font-size: 14px; }
+     #sort-order-select option { color: black; }
+     #sort-order-select { width : 7em; }
+     #shift-priority { width: 30px; 
+                       display: inline-block;
+                       /*position: fixed;*/
+                       margin-top: 1.5em;
+                     }
+     /* got this from here 
+        http://stackoverflow.com/questions/41644637/
+        how-to-remove-select-vertical-scroll-bar*/
+    .hide-overflow select{
+       padding: 4px;
+       margin: -5px -20px -5px -5px;
+     }
+     .hide-overflow {
+       display: inline-block;
+       vertical-align: top;
+       overflow: hidden;
+       border: solid #DCDFE3 1px
+     }
+ </style>
+
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+      var sort_order = readSortOrder();
+      buildQuery();
+      //console.log("initial sort order: "); 
+      //console.log(sort_order);
+    } );
+  
+    /* toggle the sort order for the selected element */
+    $('#sort-order-select option').on('click', function(){
+        if ( $(this).attr('value') == 'asc' ){
+          $(this).attr('value', 'desc');   
+          $(this).text('descending');
+        }else {
+          $(this).attr('value', 'asc');   
+          $(this).text('ascending');
+        }
+      buildQuery();
+    });
+  
+    function buildQuery(event=null){
+      if (event != null){ event.preventDefault();}
+      var sort_order = readSortOrder();
+      var sort_dict = { "sort" : sort_order };
+      var jsd = JSON.stringify(sort_dict);
+      //console.log(jsd);
+      $("#id_sort_order").text(jsd); 
+    }
+
+   //http://stackoverflow.com/questions/24152459/
+   //how-to-swap-placement-of-two-elements-including-their-classes-ids-with-onclick
+   function swapAdjacent(el0, el1) {
+     if ( (el0 == null) || (el1 == null) ){ return; }
+     var i1 = el0.index; var i2 = el1.index;
+     el0.parentNode.insertBefore(el1, el0);
+     //swap the orders too; pull the indices from the others.
+     var a = $("#sort-order-select")[0].children[i1];
+     var b = $("#sort-order-select")[0].children[i2];
+     a.parentNode.insertBefore(b, a);
+   }
+ 
+   function check_for_end(to_swap){
+       if (to_swap.length > 0){ return to_swap[0]; }
+       return null;
+   }
+ 
+   function priorityChange(event, up_or_down){
+      event.preventDefault();
+      var selected = $("#sort-select").find(":selected");
+      if (selected.length == 0){
+        return; 
+      }
+      selected = selected[0];
+      var to_swap;
+      if (up_or_down == 'down'){ 
+        to_swap = check_for_end($("#sort-select").find(":selected").next());
+        swapAdjacent(selected, to_swap); 
+      } else {
+        to_swap = check_for_end($("#sort-select").find(":selected").prev());
+        swapAdjacent(to_swap, selected); 
+      }
+     //update the query
+     buildQuery();
+   }
+ 
+   /* Read the order of elements in the sort control */
+   function readSortOrder(){
+     var  opts =  $("#sort-select").children();
+     var sort_orders = $("#sort-order-select").children();
+     var sort_order = [];
+     for ( var i = 0; i < opts.length; i++){
+       var key_for_term = opts[i].value;
+       var order_for_term = sort_orders[i].value;
+       var d = {};
+       d[key_for_term] = { 'order' : order_for_term };  
+      sort_order.push(d);
+     }
+     return sort_order;
+   }
+ </script>
+
