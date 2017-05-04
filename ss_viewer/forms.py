@@ -299,3 +299,4 @@ class SearchByGeneNameForm(GenericSearchForm):
                                      initial = 1000, 
                                      min_value = 0)
     window_size.error_messages = { 'required': 'Missing window size (required).'}
+    sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
