@@ -29,6 +29,13 @@
 <td> {{ gene_name_form.pvalue_snp_direction }}
      {{ gene_name_form.pvalue_snp_cutoff }} </td>
 </tr>
+<tr>
+  <td><label> Specify sort order:</label><br/>
+      <label style="font-size: 12px;" >
+               Select a field to adjust <br/> its sort priority.<br/> 
+               Reverse a sort order by <br/> clicking on it.</label>  </td> 
+  <td> {% include "ss_viewer/sort_widget.html" %} </td>
+</tr>
 </tbody>
 </table>
   {# Include the hidden fields #}
