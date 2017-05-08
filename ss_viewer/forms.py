@@ -5,6 +5,7 @@ import pickle
 import re
 
 #Each form type has a p-value cutoff and a page number of results shown.
+#prefixes explained here: https://docs.djangoproject.com/en/1.11/ref/forms/api/#prefixes-for-forms
 class GenericSearchForm(forms.Form):
     default_cutoff = 0.05
     pvalue_tip = 'Show results with pvalues less than or equal to this '
@@ -51,6 +52,7 @@ class GenericSearchForm(forms.Form):
                                      required = False,
                                      label = "Select cutoff direction for pvalue reference.")
 
+    sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
 
     def clean(self):
         cleaned_data = super(GenericSearchForm, self).clean()
@@ -76,6 +78,7 @@ class SnpidSearchUtils:
         return sorted(deduped_snpids)
 
 class SearchBySnpidForm(GenericSearchForm):
+    prefix = 'snpid'
     text_to_explain_snpbox = "SNPids"
     snpid_tip = "Enter SNPids to search for."
     styled_widget = forms.Textarea(attrs={'class':'form-control', 
@@ -126,6 +129,7 @@ class SearchBySnpidForm(GenericSearchForm):
 
 #A separate form for searching through the data by genomic location
 class SearchByGenomicLocationForm(GenericSearchForm):
+    prefix = 'genomic_location'
     default_data = None   #don't need this.
 
     gl_pos_label_text = { 'start' : 'Start position on chromosome',
@@ -188,7 +192,7 @@ class SearchByGenomicLocationForm(GenericSearchForm):
 
  
 class SearchByTranscriptionFactorForm(GenericSearchForm):
- 
+    prefix = 'trans_factor'
     tf_library_options=[('jaspar','JASPAR'),
                         ('encode','ENCODE')]
     styled_widget = forms.RadioSelect(attrs={"class" : "form-control",
@@ -240,6 +244,7 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
                                             required = False)
 
 class SearchBySnpidWindowForm(GenericSearchForm):
+    prefix = 'snpid_window'
     styled_widget = forms.TextInput(attrs={"class":"form-control",
                                            "title": "Search for data with a window "+\
                                                     "around the position of the "   +\
@@ -280,6 +285,7 @@ class SearchBySnpidWindowForm(GenericSearchForm):
 
 
 class SearchByGeneNameForm(GenericSearchForm):
+    prefix='gene_name'
     styled_widget = forms.TextInput(attrs={"class":"form-control",
                                            "title" : "Name of the gene to search form."}) 
     gene_name = forms.CharField(widget = styled_widget,
@@ -299,4 +305,4 @@ class SearchByGeneNameForm(GenericSearchForm):
                                      initial = 1000, 
                                      min_value = 0)
     window_size.error_messages = { 'required': 'Missing window size (required).'}
-    sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
+    #sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
