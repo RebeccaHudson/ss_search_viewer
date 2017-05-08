@@ -71,8 +71,7 @@
       var sort_order = readSortOrder();
       var sort_dict = { "sort" : sort_order };
       var jsd = JSON.stringify(sort_dict);
-      //console.log(jsd);
-      $("#id_sort_order").text(jsd); 
+      $("#id_sort_order").attr('value', jsd);
     }
 
    //http://stackoverflow.com/questions/24152459/
