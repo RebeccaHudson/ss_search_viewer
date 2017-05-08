@@ -51,6 +51,8 @@ class GenericSearchView(View):
 
         self.search_form = search_form
         form_data = self.search_form.cleaned_data
+     
+        print "What about the not-cleaned data? " + repr(self.search_form.data)
 
         if request.POST['action'] == 'Download Results':
             print "handling download!"
@@ -65,7 +67,14 @@ class GenericSearchView(View):
 
         #TODO: take the call to api_search_query.update(self.get_pvalues_from_form())
         #      out of individual search types.
-        api_search_query.update( self.get_pvalue_directions_from_form() ) 
+        api_search_query.update( 
+               self.get_pvalue_directions_from_form() ) 
+               #??self.get_pvalue_directions_from_form(api_search_query) ) 
+
+        print "cleaned data keys: " + repr(form_data.keys())
+        sort_order = self.handle_sort_order(form_data)
+        print "sort order? " + repr(sort_order)
+        api_search_query.update(sort_order)
 
         api_search_query.update(
                {'from_result' :  search_request_params['search_result_offset']})
@@ -90,6 +99,16 @@ class GenericSearchView(View):
 
         return HttpResponse(json.dumps(context), 
                             content_type="application/json") 
+ 
+    def handle_sort_order(self, form_data ):
+        #sort_order = {'sort_order': None } 
+        sort_order = { }
+        #with just a key and no value, it's a set.
+        if 'sort_order' in form_data.keys():
+            string_val = form_data['sort_order']
+            #print "value of sort order?  " + string_val
+            sort_order['sort_order'] = json.loads(string_val)
+        return sort_order
 
     def handle_paging_and_return_context(self, form_data,
                                                     search_request_params):
