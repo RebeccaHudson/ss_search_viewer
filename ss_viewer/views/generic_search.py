@@ -31,8 +31,19 @@ class GenericSearchView(View):
         #get the 'Action' out of the post.
         if request.POST['action'] in ['Prev', 'Next']:
             oneDict = request.POST.dict()
-            search_form = self.form_class(oneDict)
+            #look at the form class; use the prefix to prepend to each field.
+            print "paging request, trying to prepend each id with the correct form prefix."
+            print "prefix " + self.form_class.prefix
+            print "one dict ; " + repr(oneDict)
+            newDict = {}
+            for onekey in oneDict.keys():
+                newkey = '-'.join([self.form_class.prefix, onekey])
+                newDict[newkey] = oneDict[onekey]
+            search_form = self.form_class(newDict)
+            print "did this dict work?" + repr(newDict)
+            #search_form = self.form_class(oneDict)
         else: 
+            print "valid post? " + repr(request.POST)
             search_form = self.form_class(request.POST, request.FILES)
 
         if not search_form.is_valid() \
@@ -73,6 +84,9 @@ class GenericSearchView(View):
 
         print "cleaned data keys: " + repr(form_data.keys())
         sort_order = self.handle_sort_order(form_data)
+       
+        print "page of results shown "  + str(form_data['page_of_results_shown'])
+ 
         print "sort order? " + repr(sort_order)
         api_search_query.update(sort_order)
 
@@ -106,7 +120,7 @@ class GenericSearchView(View):
         #with just a key and no value, it's a set.
         if 'sort_order' in form_data.keys():
             string_val = form_data['sort_order']
-            #print "value of sort order?  " + string_val
+            print "value of sort order?  " + string_val
             sort_order['sort_order'] = json.loads(string_val)
         return sort_order
 
