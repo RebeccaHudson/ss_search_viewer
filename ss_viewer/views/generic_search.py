@@ -82,19 +82,13 @@ class GenericSearchView(View):
                                                  self.search_form.cleaned_data,
                                                  search_request_params)
         context.update(shared_context)
-        if 'file_of_snpids' in context['form_data'].keys() and context['form_data']['file_of_snpids'] is not None:
-           del context['form_data']['file_of_snpids'] 
-
         return HttpResponse(json.dumps(context), 
                             content_type="application/json") 
  
     def handle_sort_order(self):
         sort_order = { }
-        #can I avoid passing the form data into here?
-        print "is sort info in here? " + repr(self.search_form.cleaned_data)
         if 'sort_order' in self.search_form.cleaned_data.keys():
             string_val = self.search_form.cleaned_data['sort_order']
-            print "value of sort order?  " + string_val
             sort_order['sort_order'] = json.loads(string_val)
         return sort_order
 
