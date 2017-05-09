@@ -34,8 +34,16 @@
             {{ snpid_window_form.pvalue_snp_cutoff }}         
       </td>
   </tr>
+
+<tr>
+   {% include "ss_viewer/sort_widget.html" %} 
+</tr>
 </tbody>
 </table>
+  {# Include the hidden fields #}
+  {% for hidden in snpid_window_form.hidden_fields %}
+  {{ hidden }}
+  {% endfor %}
       <div class="submit-buttons">
           <input type="submit" name="action" value="Search by Window around SNPid"  
                                                           class="btn btn-primary" />
