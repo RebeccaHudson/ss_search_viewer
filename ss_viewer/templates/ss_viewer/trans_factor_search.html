@@ -8,7 +8,6 @@
   <td>   {{ tf_search_form.tf_library.label_tag }}  </td>
   <td>   {{ tf_search_form.tf_library  }} </td>
 </tr>
-
 <tr> 
   <td>   {{ tf_search_form.trans_factor.label_tag }}  </td>
   <td class='trans-factor'>   {{ tf_search_form.trans_factor  }} </td>
@@ -31,8 +30,15 @@
   <td>   {{ tf_search_form.pvalue_snp_direction  }} 
          {{ tf_search_form.pvalue_snp_cutoff  }} </td>
 </tr>
+<tr>
+   {% include "ss_viewer/sort_widget.html" %} 
+</tr>
 </tbody>
 </table>
+  {# Include the hidden fields #}
+  {% for hidden in tf_search_form.hidden_fields %}
+  {{ hidden }}
+  {% endfor %}
       <div class="submit-buttons">
           <input type="submit" name="action" value="Search by Transcription Factor"  
                                                           class="btn btn-primary" />
