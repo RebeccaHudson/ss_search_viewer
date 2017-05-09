@@ -29,6 +29,7 @@
    <script type="text/javascript" src="{% static 'ss_viewer/plots.js' %}"></script>
    <!-- plots.js contains all code for drawing plots  -->
 
+   <script type="text/javascript" src="{% static 'ss_viewer/sort-widget.js' %}"></script>
    <!-- <script type="text/javascript" src="{% static 'ss_viewer/table-fixed-header.js' %}"></script> -->
 
 
@@ -475,6 +476,8 @@ div.explain#search-exp { height: 100px; }
         $("p.explain-search").hide();  
         $(target + '-explain').show();
         console.log("just triggered display of explaination for " + target);
+        console.log("rebuilding the text for the sort portion of the query.");
+        buildQuery();
     });
 </script>
 </body>
