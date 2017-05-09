@@ -29,10 +29,13 @@ class GenericSearchView(View):
             request.POST = json.loads(st)
  
         #get the 'Action' out of the post.
-        if request.POST['action'] in ['Prev', 'Next']:
-            oneDict = request.POST.dict()
+        if request.POST['action'] in ['Prev', 'Next', 'Download Results']:
+            if request.POST['action'] == 'Download Results':
+                oneDict = request.POST
+            else:
+                oneDict = request.POST.dict()
             #look at the form class; use the prefix to prepend to each field.
-            print "paging request, trying to prepend each id with the correct form prefix."
+            print "paging or download request, trying to prepend each id with the correct form prefix."
             print "prefix " + self.form_class.prefix
             print "one dict ; " + repr(oneDict)
             newDict = {}
@@ -65,30 +68,30 @@ class GenericSearchView(View):
      
         print "What about the not-cleaned data? " + repr(self.search_form.data)
 
-        if request.POST['action'] == 'Download Results':
-            print "handling download!"
-            #print "data from search form " + repr(self.search_form.cleaned_data)
-            return self.handle_download(self.search_form.cleaned_data, request)
-   
-        search_request_params = Paging.get_paging_info_for_request(request, 
-                                             form_data['page_of_results_shown']) 
 
         api_search_query = self.setup_api_search_query(form_data, request)
-
-
-        #TODO: take the call to api_search_query.update(self.get_pvalues_from_form())
-        #      out of individual search types.
+    
+        api_search_query.update(self.get_pvalues_from_form())
         api_search_query.update( 
                self.get_pvalue_directions_from_form() ) 
                #??self.get_pvalue_directions_from_form(api_search_query) ) 
 
         print "cleaned data keys: " + repr(form_data.keys())
         sort_order = self.handle_sort_order(form_data)
-       
-        print "page of results shown "  + str(form_data['page_of_results_shown'])
- 
         print "sort order? " + repr(sort_order)
         api_search_query.update(sort_order)
+
+        if request.POST['action'] == 'Download Results':
+            print "handling download!"
+            #print "data from search form " + repr(self.search_form.cleaned_data)
+            return self.handle_download(api_search_query, request)
+   
+        search_request_params = Paging.get_paging_info_for_request(request, 
+                                             form_data['page_of_results_shown']) 
+
+        #TODO: take the call to api_search_query.update(self.get_pvalues_from_form())
+        #      out of individual search types.
+        print "page of results shown "  + str(form_data['page_of_results_shown'])
 
         api_search_query.update(
                {'from_result' :  search_request_params['search_result_offset']})
@@ -118,6 +121,7 @@ class GenericSearchView(View):
         #sort_order = {'sort_order': None } 
         sort_order = { }
         #with just a key and no value, it's a set.
+        #can I avoid passing the form data into here?
         if 'sort_order' in form_data.keys():
             string_val = form_data['sort_order']
             print "value of sort order?  " + string_val
@@ -132,11 +136,12 @@ class GenericSearchView(View):
         context = { 'form_data' : self.search_form.data }
         return context
 
-    def handle_download(self, form_data, request):
+    def handle_download(self, search_params, request):
         #was setting search_params = form_data, but that's sending too much stuff in.
-        search_params = self.handle_params_for_download(form_data)
-        search_params.update( self.get_pvalues_from_form())
-        search_params.update( self.get_pvalue_directions_from_form() ) 
+        #search_params = self.handle_params_for_download(form_data) #safely get rid of this.
+        #search_params = self.setup_api_search_query(form_data, request)
+        #search_params.update( self.get_pvalues_from_form())
+        #search_params.update( self.get_pvalue_directions_from_form() ) 
         return StreamingCSVDownloadHandler.streaming_csv_view(request, 
                                                                search_params, 
                                                                self.api_action_name)

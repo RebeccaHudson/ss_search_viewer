@@ -358,6 +358,7 @@ class StreamingCSVDownloadHandler:
             api_search_query.update(
                                {'from_result':search_offset,
                                 'page_size':settings.API_HOST_INFO['download_result_page_size']})
+            print "for download: api search query : "+ repr(api_search_query)
             api_response = requests.post( APIUrls.setup_api_url(api_action),
                  json=api_search_query, headers={'content-type':'application/json'})
             
