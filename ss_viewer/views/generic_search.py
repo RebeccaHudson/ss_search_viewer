@@ -16,68 +16,80 @@ import json
 class GenericSearchView(View):
     template_name = 'ss_viewer/multi-searchpage.html'
     search_form = None 
+    api_search_query = None
 
     #For search views, this should just point back to the main search page.
     def get(self, request, *args, **kwargs):
         return redirect(reverse('ss_viewer:multi-search')) 
-   
-    def post(self, request, *args, **kwargs):
-        search_form = None 
+
+    #pass the request through without change if it's a download request.
+    def check_for_download_request(self, request):
         if len(request.POST.keys()) == 1:
-            print "This is a download; rework the post."
-            st = request.POST.keys()[0]      
-            request.POST = json.loads(st)
+           st = request.POST.keys()[0]      
+           request.POST = json.loads(st)
+        return request 
+
+    def setup_form_for_paging_or_download_request(self,request):
+        newDict = None
+        if request.POST['action'] in ['Prev', 'Next']:
+            newDict = self.setup_form_for_paging_request(request)
+        else:
+            newDict = self.setup_form_for_download_request(request)
+
+        newDict = self.add_form_prefix_to_fields_for_search(newDict)
+        self.search_form = self.form_class(newDict)
+
+    def setup_form_for_paging_request(self, request):
+        print "setup for paging request.." 
+        return request.POST.dict()
+
+    def setup_form_for_download_request(self, request):
+        return request.POST 
  
-        #get the 'Action' out of the post.
+    #Not paging or download. 
+    def setup_form_for_standard_request(self, request):
+        self.search_form = self.form_class(request.POST, request.FILES)
+
+    def pull_all_query_data_from_form(self):
+        form_data = self.search_form.cleaned_data
+        self.api_search_query = self.setup_api_search_query(form_data)
+        self.api_search_query.update(self.get_pvalues_from_form())
+        self.api_search_query.update(self.get_pvalue_directions_from_form() ) 
+        self.api_search_query.update(self.handle_sort_order() ) 
+
+    def prepare_search_parameters(self, request):
+        search_request_params = Paging.get_paging_info_for_request(request, 
+                                     self.search_form.cleaned_data['page_of_results_shown']) 
+        self.api_search_query.update(
+               {'from_result' :  search_request_params['search_result_offset']})
+        return search_request_params  
+
+    def post(self, request, *args, **kwargs):
+        request = self.check_for_download_request(request) 
+        #rearranges the request if it's a download.
+
+        #get the 'Action' out of the post; setup the form accordingly.
         if request.POST['action'] in ['Prev', 'Next', 'Download Results']:
-            if request.POST['action'] == 'Download Results':
-                oneDict = request.POST
-            else:
-                oneDict = request.POST.dict()
-            newDict = {}
-            for onekey in oneDict.keys():
-                newkey = '-'.join([self.form_class.prefix, onekey])
-                newDict[newkey] = oneDict[onekey]
-            search_form = self.form_class(newDict)
+            self.setup_form_for_paging_or_download_request(request)
         else: 
             #case when it's a basic (not paging or download) search
-            search_form = self.form_class(request.POST, request.FILES)
+            self.setup_form_for_standard_request(request)
 
-        if not search_form.is_valid() \
-          and not request.POST['action'] == 'Download Results':
-            context = {}
-            errs = search_form.errors
-            context['form_errors'] = \
-               [ str(item) for one_error in errs.values() for item in one_error]
-            context =  StandardFormset.handle_invalid_form(context)
-            return HttpResponse(json.dumps(context), 
-                            content_type="application/json",
-                            status=400) 
+        if not self.search_form.is_valid():
+            return self.handle_invalid_form()
 
-        self.search_form = search_form
-        form_data = self.search_form.cleaned_data
-     
-        api_search_query = self.setup_api_search_query(form_data, request)
-        api_search_query.update(self.get_pvalues_from_form())
-        api_search_query.update(self.get_pvalue_directions_from_form() ) 
-        api_search_query.update(self.handle_sort_order() ) 
+        #assigns and handles api_search_query.
+        self.pull_all_query_data_from_form()
               
         if request.POST['action'] == 'Download Results':
-        #don't do anything with paging or 'from'; 
-        #the whole result set is to be downloaded. 
-            return self.handle_download(api_search_query, request)
+            return self.handle_download(request)
   
         #handle paging stuff. 
-        search_request_params = Paging.get_paging_info_for_request(request, 
-                                             form_data['page_of_results_shown']) 
-        api_search_query.update(
-               {'from_result' :  search_request_params['search_result_offset']})
-
+        search_request_params = self.prepare_search_parameters(request)
         #make a version of this that's not returning all the page stuff.
-        shared_context = APIResponseHandler.handle_search(api_search_query,
+        shared_context = APIResponseHandler.handle_search(self.api_search_query,
                                                           self.api_action_name,
                                                           search_request_params)
-
         context = self.handle_paging_and_return_context(
                                                  self.search_form.cleaned_data,
                                                  search_request_params)
@@ -100,7 +112,8 @@ class GenericSearchView(View):
         context = { 'form_data' : self.search_form.data }
         return context
 
-    def handle_download(self, search_params, request):
+    def handle_download(self,  request):
+        search_params = self.api_search_query
         return StreamingCSVDownloadHandler.streaming_csv_view(request, 
                                                                search_params, 
                                                                self.api_action_name)
@@ -124,3 +137,20 @@ class GenericSearchView(View):
         if 'pvalue_snp_cutoff' in pvalue_dict:
             pvalues_for_search.update({'pvalue_snp'  : pvalue_dict['pvalue_snp_cutoff']})
         return pvalues_for_search
+
+    def handle_invalid_form(self):
+        errs = self.search_form.errors
+        context = { 'form_errors' :
+                    [ str(item) for one_error in errs.values() for item in one_error]
+                  }
+        context =  StandardFormset.handle_invalid_form(context)
+        return HttpResponse(json.dumps(context), 
+                        content_type="application/json",
+                        status=400) 
+
+    def add_form_prefix_to_fields_for_search(self, oneDict):
+        newDict = {}
+        for onekey in oneDict.keys():
+            newkey = '-'.join([self.form_class.prefix, onekey])
+            newDict[newkey] = oneDict[onekey]
+        return newDict
