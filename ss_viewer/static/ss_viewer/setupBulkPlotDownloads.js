@@ -51,29 +51,17 @@ function checkedRowPlotDownload(){
        var images = [];
        var counter = 0;
        var targets = $('svg[id^="target"].target');
-       //add some logic that results in only checked rows being added. 
-       //get the parent element of each target.
-       // check that parent element for a checkbox; 
-       // if that checkbox is checked; add it to the real list of 'targets'
-       // elsewise, just continue on.
-       // $("input[type=checkbox]")/
-       //starting at 1 excludes target-0, the SVG skeleton.
        checkedTargets = []; 
        for (var i = 1; i < targets.length; i++){ //skip over the skeleton, target-0
           //the following depends on the structure of the data table.           
           var idToUse = targets[i].id.replace('target-', '');
           var checky = $("input#" + idToUse); 
-          console.log("id being checked ... " + idToUse);
           checky = checky[0]; 
-          console.log("checky : " + checky );//+ " checky.checked: " + checky.checked);
           if ( checky.checked == true ){
-             console.log("checkedTargets added one" + idToUse);
              checkedTargets.push(targets[i]); 
           }
        }
-       console.log("checkedTargets.length " + checkedTargets.length);
        for (var i = 0; i < checkedTargets.length; i++) {
-          console.log("adding one plot to the bulk download " + checkedTargets[i]);
           convertImgToBase64URL(checkedTargets[i], function (base64Img, fname_for_plot) {
             var dataForOnePlot = base64Img.replace("data:image/png;base64,", '');
             images.push({
@@ -86,6 +74,9 @@ function checkedRowPlotDownload(){
             }
           });
         }
+       if (checkedTargets.length == 0){
+           alert("No plots are checked. No download will be created.");
+       } 
 }      
 
 //true to check all boxes; false to uncheck all boxes.
