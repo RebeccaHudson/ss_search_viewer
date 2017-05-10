@@ -8,7 +8,7 @@ class SnpidWindowSearchView(GenericSearchView):
     form_name_in_context = 'snpid_window_form'
     api_action_name = 'search-by-window-around-snpid'
   
-    def setup_api_search_query(self, form_data, request):
+    def setup_api_search_query(self, form_data):
         requested_snpid = form_data['snpid']
         api_search_query =  {'snpid'       : requested_snpid, 
                              'window_size' : form_data['window_size']}

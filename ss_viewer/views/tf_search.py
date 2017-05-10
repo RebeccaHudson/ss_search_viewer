@@ -9,7 +9,7 @@ class TranscriptionFactorSearchView(GenericSearchView):
     previous_search_params = None
 
     #do transcription-factor specific stuff here. 
-    def setup_api_search_query(self, form_data, request):
+    def setup_api_search_query(self, form_data):
         tft = TFTransformer()
         motif_value = None
         if form_data['tf_library'] == 'encode':

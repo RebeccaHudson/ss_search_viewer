@@ -7,7 +7,7 @@ class GenomicLocationSearchView(GenericSearchView):
     api_action_name = 'search-by-gl'
 
 
-    def setup_api_search_query(self, form_data, request):
+    def setup_api_search_query(self, form_data):
         api_search_query =  { 'chromosome' : form_data['selected_chromosome'],
                               'start_pos'  : form_data['gl_start_pos'],
                               'end_pos'    : form_data['gl_end_pos']          }
