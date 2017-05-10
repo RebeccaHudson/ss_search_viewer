@@ -54,7 +54,7 @@ def faq_page(request):
     return render(request, faq_page_template, context) 
 
 def home_page(request):
-    home_page_template = 'ss_viewer/happyhome.html'
+    home_page_template = 'ss_viewer/home_page.html'
     context = {}
     return render(request, home_page_template, context)
 
