@@ -1,11 +1,9 @@
-
-//start code for bulk downloads
 //Clones the node containing the plot to be added to the ZIP. 
 //adds definitions for the Arrowhead markers.
 //sets up an HTML <canvas> element, including appropriate width,
 //serizlizes the SVG copy into a string of XML.
 function setupBulkPlotDownload(svg){
-   console.log("bulk download for svg selector: " + svg );
+   //console.log("bulk download for svg selector: " + svg );
    svg = svg.cloneNode(true); //makes a deep copy.
    svg.setAttribute("id", "tempSVG");
    var defs = d3.select(svg).insert("defs", ":first-child").append("marker")
@@ -23,72 +21,48 @@ function setupBulkPlotDownload(svg){
     return data;
 }
 
-//working answer for this tough problem adapted from:
+function checkedRowPlotDownload(){
+    var images = [];
+    var counter = 0;
+    var targets = $('svg[id^="target"].target');
+    checkedTargets = []; 
+    for (var i = 1; i < targets.length; i++){ //skip over the skeleton, target-0
+       //the following depends on the structure of the data table.           
+       var idToUse = targets[i].id.replace('target-', '');
+       var checky = $("input#" + idToUse); 
+       checky = checky[0]; 
+       if ( checky.checked == true ){
+          checkedTargets.push(targets[i]); 
+       }
+    }
+    for (var i = 0; i < checkedTargets.length; i++) {
+       convertImgToBase64URL(checkedTargets[i], function (base64Img, fname_for_plot) {
+         var dataForOnePlot = base64Img.replace("data:image/png;base64,", '');
+         images.push({
+           data: dataForOnePlot,
+            tag: fname_for_plot
+         });
+         counter++;
+         if (counter == (checkedTargets.length)) {
+           createArchive(images);
+         }
+       });
+     }
+    if (checkedTargets.length == 0){
+        alert("No plots are checked. No download will be created.");
+    } 
+}      
+//working answer for this tough problem (above) adapted from:
 //http://stackoverflow.com/questions/31384408/
 //     how-to-get-multiple-files-via-ajax-and-download-them-as-a-zip-file-via-javascrip 
-function bulkPlotDownload(){
-       var images = [];
-       var counter = 0;
-       var targets = $('svg[id^="target"]');
-       //starting at 1 excludes target-0, the SVG skeleton.
-       for (var i = 1; i< targets.length; i++) {
-          convertImgToBase64URL(targets[i], function (base64Img, fname_for_plot) {
-            var dataForOnePlot = base64Img.replace("data:image/png;base64,", '');
-            images.push({
-              data: dataForOnePlot,
-               tag: fname_for_plot
-            });
-            counter++;
-            if (counter == (targets.length-1)) {
-              createArchive(images);
-            }
-          });
-        }
-}      
 
-//make another version of bulk_plot_download
-function checkedRowPlotDownload(){
-       var images = [];
-       var counter = 0;
-       var targets = $('svg[id^="target"].target');
-       checkedTargets = []; 
-       for (var i = 1; i < targets.length; i++){ //skip over the skeleton, target-0
-          //the following depends on the structure of the data table.           
-          var idToUse = targets[i].id.replace('target-', '');
-          var checky = $("input#" + idToUse); 
-          checky = checky[0]; 
-          if ( checky.checked == true ){
-             checkedTargets.push(targets[i]); 
-          }
-       }
-       for (var i = 0; i < checkedTargets.length; i++) {
-          convertImgToBase64URL(checkedTargets[i], function (base64Img, fname_for_plot) {
-            var dataForOnePlot = base64Img.replace("data:image/png;base64,", '');
-            images.push({
-              data: dataForOnePlot,
-               tag: fname_for_plot
-            });
-            counter++;
-            if (counter == (checkedTargets.length)) {
-              createArchive(images);
-            }
-          });
-        }
-       if (checkedTargets.length == 0){
-           alert("No plots are checked. No download will be created.");
-       } 
-}      
 
 //true to check all boxes; false to uncheck all boxes.
 function hitAllPlotCheckboxes(trueOrFalse){
    var checkboxes = $('input[type="checkbox"]').prop('checked', trueOrFalse);   
 }
 
-
-
-
-
-//gets used, based on the same example cited for bulkPlotDownload()
+// based on the same example cited for bulkPlotDownload()
 function convertImgToBase64URL(svgSelector, callback){
     var img = new Image();
     var fname_for_plot = svgSelector.getAttribute("id");
@@ -122,4 +96,3 @@ function createArchive(images){
     });
 }
 //end code for bulk downloads
-
