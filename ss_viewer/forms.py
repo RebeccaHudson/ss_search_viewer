@@ -42,15 +42,19 @@ class GenericSearchForm(forms.Form):
     
     styled_widget = forms.Select(attrs={ "title" : "Select the cutoff direction.",
                                         "style" : "float:left; margin-top:5px;"  })
-    pvalue_snp_direction  = forms.ChoiceField(widget=styled_widget,
-                                     choices = use_these_choices, 
-                                     required = False,
-                                     label = "Select cutoff direction for pvalue SNP.")
 
-    pvalue_ref_direction  = forms.ChoiceField(widget=styled_widget,
-                                     choices = use_these_choices, 
-                                     required = False,
-                                     label = "Select cutoff direction for pvalue reference.")
+    #pvalue_snp_direction  = forms.ChoiceField(widget=styled_widget,
+    #                                 choices = use_these_choices, 
+    #                                 required = False,
+    #                                 label = "Select cutoff direction for pvalue SNP.")
+
+    #pvalue_ref_direction  = forms.ChoiceField(widget=styled_widget,
+    #                                 choices = use_these_choices, 
+    #                                 required = False,
+    #                                 label = "Select cutoff direction for pvalue reference.")
+    #TODO: replace pvalue reference direction and snp direction with this field type.
+    pvalue_snp_direction = forms.CharField(widget = forms.HiddenInput(), required = False)
+    pvalue_ref_direction = forms.CharField(widget = forms.HiddenInput(), required = False)
 
     sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
 
