@@ -35,6 +35,7 @@
    <!-- keep the snpidFile input consistent; make the 'clear' button appear and disappear.-->
    <script type="text/javascript" src="{% static 'ss_viewer/snpidFileInputControls.js' %}"></script>
 
+   <script type="text/javascript" src="{% static 'ss_viewer/directional.js' %}"></script>
 
 </head>
 <body>
@@ -227,7 +228,8 @@
       setupAjaxyFormSubmissions();
 
       setupSNPidFileControls();
-
+ 
+      writeBothCutoffDirections();
     });//end of document.ready stuff.
 
       function unpopulatedSearchResultsTable(){
@@ -328,6 +330,8 @@
         $(target + '-explain').show();
         console.log("rebuilding the text for the sort portion of the query.");
         buildQuery();
+        writeBothCutoffDirections(); 
+        //Sync the cutoff direction buttons with the hidden form fields.
     });
 </script>
 </body>
