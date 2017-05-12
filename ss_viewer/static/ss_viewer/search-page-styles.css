@@ -1,115 +1,129 @@
- div.explain {
-      padding:10px; 
-      margin-left:5px;
-      margin-top: 0px;
-      border:1px dashed lightgray;
- }
-
- #download-exp {
-      display:none;  
- }
-
- #drop-in td {
-    vertical-align: middle;
-    border-left: .5px solid rgba(128, 128, 128, 0.76);
- } 
- #drop-in table{
-    border: .5px solid grey;
- }
-
-/* begin stuff from http://jsfiddle.net/dPixie/byB9d/3/ */ 
-
-div.scroll { 
-    clear: both;
-    height: 550px;
-    overflow: hidden;
-    width: 1316px;
-    display: block; }
-
-div.scroll table.fixed-header { 
-   width: 1164px;
-   float: left;
-}
-
-thead.fixed-header tr { 
-   display: block;
-   position: relative;
-   border-bottom: 1px solid gray;
-}
-
-thead.fixed-header { 
-  display: table-header-group;
-  vertical-align: middle;
-}
-
-table.fixed-header thead.fixed-header th { 
-  border-left: 1px solid black;
-  border-bottom: 0px;
-  text-align: left;
-  display: table-cell; 
-  padding-left: 0px;
-  padding-right: 0px; }
-
-table.fixed-header thead.fixed-header th + th { 
- border-left: 1px solid black; 
- border-bottom: 0px;
- /*border-right: 1px solid black;*/ }
+/* Styles for the search page and results table.*/
 
 
-table.fixed-header tbody.scroll-content {
-  display: block;
-  height: 525px;
-  overflow: auto;
-  width: 1162px;
-}
+   /* Result table styles for creating the scrollable
+    * table itself.*/
 
-tbody.scroll-content tr {
-  display: table-row;
-}
+     #drop-in td {
+        vertical-align: middle;
+        border-left: .5px solid rgba(128, 128, 128, 0.76);
+     } 
 
-table.fixed-header tbody.scroll-content td {
-   display: table-cell;
-   padding-left: 0px;
-   padding-right: 0px; 
-   border-bottom: 1px solid gray;
-   border-top: 0px;
-}
+     #drop-in table{
+        border: .5px solid grey;
+     }
 
-table.fixed-header thead.fixed-header span {
-  display: block;
-  text-align: center;
-  width: 100%;
-}
+    /* begin stuff from http://jsfiddle.net/dPixie/byB9d/3/ */ 
+    /* Scroll class used for the div where the table is dropped in*/
+    div.scroll { 
+        clear: both;
+        height: 550px;
+        overflow: hidden;
+        width: 1316px;
+        display: block; }
 
-svg { width: 290px; }
+    div.scroll table.fixed-header { 
+       width: 1164px;
+       float: left;
+    }
 
-/* unfix column widths at your own peril */
-.snpid { width: 85px; }
-.coordinate { width: 150px; }
-.pval_rank { width: 90px; }
-.pval_ref { width: 120px; }
-.pval_snp { width: 90px; }
-.trans_factor { width: 140px; }
-.details { width: 60px; }
-.cl_plot { width: 300px; }
-.add_to_download { width: 105px; }
+    thead.fixed-header tr { 
+       display: block;
+       position: relative;
+       border-bottom: 1px solid gray;
+    }
 
-#flex { 
-  display : flex; 
-  width: 1164px;
-}
-#infobox { flex: 1; } 
-p.explain-search { display: none; }
-div.explain#search-exp { height: 100px; } 
+    thead.fixed-header { 
+      display: table-header-group;
+      vertical-align: middle;
+    }
 
-/* the SNPid list is open by default */
- #snpid_search_form-explain { display: block; }
+    table.fixed-header thead.fixed-header th { 
+      border-left: 1px solid black;
+      border-bottom: 0px;
+      text-align: left;
+      display: table-cell; 
+      padding-left: 0px;
+      padding-right: 0px; }
 
-#ajaxyPagingButtons {
-  margin-right: auto;
-  margin-left: auto;
-  width: 250px;
-  margin-bottom: 45px;
-}
+    table.fixed-header thead.fixed-header th + th { 
+     border-left: 1px solid black; 
+     border-bottom: 0px;
+      }
 
-#tabbed-forms { margin-right: 2px; }
+
+    table.fixed-header tbody.scroll-content {
+      display: block;
+      height: 525px;
+      overflow: auto;
+      width: 1162px;
+    }
+
+    tbody.scroll-content tr {
+      display: table-row;
+    }
+
+    table.fixed-header tbody.scroll-content td {
+       display: table-cell;
+       padding-left: 0px;
+       padding-right: 0px; 
+       border-bottom: 1px solid gray;
+       border-top: 0px;
+    }
+
+    table.fixed-header thead.fixed-header span {
+      display: block;
+      text-align: center;
+      width: 100%;
+    }
+
+/* Result table styles for sepecific columns */
+/* NOTE: unfix column widths at your own peril */
+   svg { width: 290px; }
+   .snpid { width: 85px; }
+   .coordinate { width: 150px; }
+   .pval_rank { width: 90px; }
+   .pval_ref { width: 120px; }
+   .pval_snp { width: 90px; }
+   .trans_factor { width: 140px; }
+   .details { width: 60px; }
+   .cl_plot { width: 300px; }
+   .add_to_download { width: 105px; }
+
+
+/* Styles for the 'infobox' that explains the search types  */
+    #flex { 
+      display: flex; 
+      width: 1164px;
+    }
+
+    #infobox { flex: 1; } 
+    p.explain-search { display: none; }
+    div.explain#search-exp { height: 100px; } 
+
+    /* The SNPid list search is open when the page loads. */
+     #snpid_search_form-explain { display: block; }
+
+    div.explain {
+          padding:10px; 
+          margin-left:5px;
+          margin-top: 0px;
+          border:1px dashed lightgray;
+     }
+
+/* Style(s) that determine how the box describing downloads looks. */
+     #download-exp {
+          display:none;  
+     } /* is shown when search results are shown */
+
+/* Styles for buttons to page forward and back through search results*/
+    #ajaxyPagingButtons {
+      margin-right: auto;
+      margin-left: auto;
+      width: 250px;
+      margin-bottom: 45px;
+    }
+
+/* Style(s) for displaying the tabbed-search-forms 
+ * (Bootstrap handles most of it though.)*/
+    #tabbed-forms { margin-right: 2px; }
