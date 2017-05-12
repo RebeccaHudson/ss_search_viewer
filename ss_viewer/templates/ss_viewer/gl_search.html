@@ -28,13 +28,13 @@
 
 <tr>
 <td> {{ gl_search_form.pvalue_ref_cutoff.label_tag }} </td>
-<td> {{ gl_search_form.pvalue_ref_direction }} 
+<td> {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} 
      {{ gl_search_form.pvalue_ref_cutoff }}</td>
 </tr>
 
 <tr>
 <td> {{ gl_search_form.pvalue_snp_cutoff.label_tag }} </td>
-<td> {{ gl_search_form.pvalue_snp_direction }} 
+<td> {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
      {{ gl_search_form.pvalue_snp_cutoff }}</td>
 </tr>
 <tr>

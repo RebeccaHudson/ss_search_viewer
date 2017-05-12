@@ -19,12 +19,12 @@
 </tr>
     <tr> 
   <td>   {{ snpid_search_form.pvalue_ref_cutoff.label_tag }}  </td>
-  <td>  {{ snpid_search_form.pvalue_ref_direction }} 
+  <td>  {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} 
         {{ snpid_search_form.pvalue_ref_cutoff  }} </td>
 </tr>
 <tr> 
   <td>   {{ snpid_search_form.pvalue_snp_cutoff.label_tag }}  </td>
-  <td>   {{ snpid_search_form.pvalue_snp_direction }}
+  <td>   {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
          {{ snpid_search_form.pvalue_snp_cutoff  }} </td>
 </tr>
 

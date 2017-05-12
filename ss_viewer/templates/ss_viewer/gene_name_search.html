@@ -21,12 +21,12 @@
 </tr>
 <tr>
 <td> {{ gene_name_form.pvalue_ref_cutoff.label_tag }} </td>
-<td> {{ gene_name_form.pvalue_ref_direction }} 
+<td> {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} 
      {{ gene_name_form.pvalue_ref_cutoff }}</td>
 </tr>
 <tr>
 <td> {{ gene_name_form.pvalue_snp_cutoff.label_tag }} </td>
-<td> {{ gene_name_form.pvalue_snp_direction }}
+<td> {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
      {{ gene_name_form.pvalue_snp_cutoff }} </td>
 </tr>
 <tr>
