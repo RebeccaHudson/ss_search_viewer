@@ -358,96 +358,89 @@ div.explain#search-exp { height: 100px; }
 
     });//end of document.ready stuff.
 
+      function unpopulatedSearchResultsTable(){
+        return(`<table id="search_results" class="table table-condensed fixed-header"> \
+  <thead class="fixed-header">                                                         \   
+  <tr class="header" id="hide">                                   \ 
+    <th class="snpid"><span>SNPid
+         <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">?</a></sup>  
+                                        </span>  </th>     \ 
+    <th class="coordinate"><span>Chromosome:Position<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">?</a></sup>
+                                        </span>  </th>     \ 
+    <th class="pval_rank" ><span>p-value Rank<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+                                        </span>  </th>     \
+    <th class="pval_ref"><span>p-value Reference<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+                                        </span>  </th>     \ 
+    <th class="pval_snp"><span>p-value SNP<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup> 
+                                        </span>  </th>     \
+    <th class="trans_factor"><span>Transcription Factor<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:motifTable">?</a></sup> 
+                                        </span>  </th>      \ 
+    <th class="details"><span>Details                   </span>  </th>      \
+    <th class="cl_plot"><span>Composite Logo Plot
+        <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-4:part-4"> ?</a></sup> 
+                                         </span>  </th>    \ 
+    <th class="add_to_download"><span>Add to Download            </span>  </th>    \
+  </tr>                                                \ 
+  </thead>                                             \ 
+  <tbody class="scroll-content">
+ </tbody>`);
+ }
 
+    function seutpOneRowOfSearchResults(api_response){
+      var row = "<tr>";
+      row += "<td class='snpid' >" + 
+             '<a href="' + api_response.dbsnp_link + '" target="_blank">' + 
+               api_response.snpid + '</a>' + 
+             "</td>";   
+      row += "<td class='coordinate'>" +
+                 '<a href="' + api_response.ucsc_link + '" target="_blank">' +
+                 api_response.chr + ":"  + 
+                 api_response.pos.toLocaleString() + '</a>' +
+             "</td>";   
+      row += "<td class='pval_rank'>" + api_response.pval_rank.toExponential(3) + "</td>";   
+      row += "<td class='pval_ref'>" +  api_response.pval_ref.toExponential(3) + "</td>";   
+      row += "<td class='pval_snp'>" +  api_response.pval_snp.toExponential(3) + "</td>";   
+      row += "<td class='trans_factor'>";
+      if ( ! ( api_response.factorbook_link === null ) ){
+        row += '<a href="' + 
+               api_response.factorbook_link +
+               '" target="_blank">';
+      } 
+      row += api_response.trans_factor;
+      if (!(api_response.factorbook_link === null)){ row += '</a>'; }
 
+      row += "</td>";   
+
+      row += '<td id="plot_data_'  + api_response.plot_id_str +  '" style="display:none;"';
+      row += ' class="plotting_data">' + api_response.json_for_plotting + '</td>';
+      row += '<td class="details"> <a href=' 
+                    + '"{% url 'ss_viewer:detail' id_str='x_x_x' %}'.replace('x_x_x', '') 
+                    +  api_response.plot_id_str + '" target="_blank">Details</a></td>';
+      row += "<td class=\"stacked-plot cl_plot\" id=\"stacked-plot-" + api_response.plot_id_str +"\"></td>";
+      row += '<td class="add_to_download"> <input type="checkbox" id="' + api_response.plot_id_str + '" ></td>';
+      row += "</tr>";
+      return row;
+    }
 
 
       //put search results into the document.
       function show_search_results(json) {
-        showHidePrevNext(json.search_paging_info);
-        //if it's null, no buttons will be shown.
-
-        $("#download_button").attr("style", "display: inline;");
-        $("#download_page_of_plots").attr("style", "display: inline;");
-        $("#download_plots_for_checked_rows").attr("style", "display: inline;");
-
-        var content = `<table id="search_results" class="table table-condensed fixed-header"> \
-          <thead class="fixed-header">                                                         \   
-          <tr class="header" id="hide">                                   \ 
-               <th class="snpid"><span>SNPid
-                    <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">?</a></sup>  
-                                                   </span>  </th>     \ 
-               <th class="coordinate"><span>Chromosome:Position<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">?</a></sup>
-                                                   </span>  </th>     \ 
-               <th class="pval_rank" ><span>p-value Rank<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
-                                                   </span>  </th>     \
-               <th class="pval_ref"><span>p-value Reference<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
-                                                   </span>  </th>     \ 
-               <th class="pval_snp"><span>p-value SNP<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup> 
-                                                   </span>  </th>     \
-               <th class="trans_factor"><span>Transcription Factor<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:motifTable">?</a></sup> 
-                                                   </span>  </th>      \ 
-               <th class="details"><span>Details                   </span>  </th>      \
-               <th class="cl_plot"><span>Composite Logo Plot
-                   <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-4:part-4"> ?</a></sup> 
-                                                    </span>  </th>    \ 
-               <th class="add_to_download"><span>Add to Download            </span>  </th>    \
-          </tr>                                                \ 
-          </thead>                                             \ 
-          <tbody class="scroll-content">
-         </tbody>`;                                
+          showHidePrevNext(json.search_paging_info);
+          //if it's null, no buttons will be shown.
+          $("#download_button").attr("style", "display: inline;");
+          $("#download_page_of_plots").attr("style", "display: inline;");
+          $("#download_plots_for_checked_rows").attr("style", "display: inline;");
+          var content = unpopulatedSearchResultsTable();
           $("#drop-in").append(content);
           $('#download-exp').show();
           var rows = "";
           for (var i = 0; i < json.api_response.length; i ++){
-              rows += "<tr>";
-              rows += "<td class='snpid' >" + 
-                      '<a href="' + json.api_response[i].dbsnp_link + '" target="_blank">' + 
-                        json.api_response[i].snpid + '</a>' + 
-                      "</td>";   
-              rows += "<td class='coordinate'>" +
-                          '<a href="' + json.api_response[i].ucsc_link + '" target="_blank">' +
-                          json.api_response[i].chr + ":"  + 
-                          json.api_response[i].pos.toLocaleString() + '</a>' +
-                      "</td>";   
-
-              rows += "<td class='pval_rank'>" + json.api_response[i].pval_rank.toExponential(3) + "</td>";   
-              rows += "<td class='pval_ref'>" + json.api_response[i].pval_ref.toExponential(3) + "</td>";   
-              rows += "<td class='pval_snp'>" + json.api_response[i].pval_snp.toExponential(3) + "</td>";   
-
-              rows += "<td class='trans_factor'>";
-              if ( ! ( json.api_response[i].factorbook_link === null ) ){
-                rows += '<a href="' + 
-                        json.api_response[i].factorbook_link +
-                        '" target="_blank">';
-              } 
-              rows += json.api_response[i].trans_factor;
-              if (!(json.api_response[i].factorbook_link === null)){ rows += '</a>'; }
-
-              rows += "</td>";   
-
-              rows += '<td id="plot_data_'  + json.api_response[i].plot_id_str +  '" style="display:none;"';
-              rows += ' class="plotting_data">' + json.api_response[i].json_for_plotting + '</td>';
-              rows += '<td class="details"> <a href=' 
-                             + '"{% url 'ss_viewer:detail' id_str='x_x_x' %}'.replace('x_x_x', '') 
-                             +  json.api_response[i].plot_id_str + '" target="_blank">Details</a></td>';
-              rows += "<td class=\"stacked-plot cl_plot\" id=\"stacked-plot-" + json.api_response[i].plot_id_str +"\"></td>";
-              rows += '<td class="add_to_download"> <input type="checkbox" id="' + json.api_response[i].plot_id_str + '" ></td>';
-              rows += "</tr>";
+              var oneRow = seutpOneRowOfSearchResults(json.api_response[i]);
+              rows += oneRow;
           }
           $("#drop-in table tbody").append(rows);
-
-          //$('.table-fixed-header').fixedHeader();
-          //console.log("setup the fixed, scrollable header");          
-
           setupPlotsForSearchResults(); 
-          console.log("we setup the search results plots.. " );
-
-
-          //show the download stuffs here.
       }//end of show_search_results function.
-
-
 
     $(".formcontrol").tooltip({
       position: "bottom left",
@@ -457,12 +450,10 @@ div.explain#search-exp { height: 100px; }
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
         var target = $(e.target).attr("href");
-        //based on what the value of target is. 
-        //make a selector from 'target'.  
+        //based on what the value of target is, make a selector from 'target'.
         //hide all of the other ones; 
         $("p.explain-search").hide();  
         $(target + '-explain').show();
-        console.log("just triggered display of explaination for " + target);
         console.log("rebuilding the text for the sort portion of the query.");
         buildQuery();
     });
