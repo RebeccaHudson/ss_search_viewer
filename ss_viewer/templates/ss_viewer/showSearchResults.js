@@ -61,67 +61,31 @@ function makeAColumn(content, styleclass, link=null, id=null,  hide=false){
 
 
 function seutpOneRowOfSearchResults(api_response){
-
-
     var row = "<tr>";
-    /*row += "<td class='snpid' >" + 
-        '<a href="' + api_response.dbsnp_link + '" target="_blank">' + 
-          api_response.snpid + '</a>' + 
-        "</td>";   
-    */
+
     row += makeAColumn(api_response.snpid,'snpid', link=api_response.dbsnp_link);
-    
-    /*row += "<td class='coordinate'>" +
-           '<a href="' + api_response.ucsc_link + '" target="_blank">' +
-           api_response.chr + ":"  + 
-           api_response.pos.toLocaleString() + '</a>' +
-           "</td>"; */
+
     var coordToShow = [api_response.chr, api_response.pos.toLocaleString()].join(':');
     row += makeAColumn(coordToShow, 'coordinate', link=api_response.ucsc_link); 
 
-    //row += "<td class='pval_rank'>" + api_response.pval_rank.toExponential(3) + "</td>";   
     row += makeAColumn(api_response.pval_rank.toExponential(3), 'pval_rank');
-
-    //row += "<td class='pval_ref'>" +  api_response.pval_ref.toExponential(3) + "</td>";   
     row += makeAColumn(api_response.pval_ref.toExponential(3), 'pval_ref');
-
-    //row += "<td class='pval_snp'>" +  api_response.pval_snp.toExponential(3) + "</td>";   
     row += makeAColumn( api_response.pval_snp.toExponential(3), 'pval_snp');
-
-    /*
-    row += "<td class='trans_factor'>";
-    if ( ! ( api_response.factorbook_link === null ) ){
-        row += '<a href="' + 
-          api_response.factorbook_link +
-          '" target="_blank">';
-    }
-    row += api_response.trans_factor;
-    if (!(api_response.factorbook_link === null)){ row += '</a>'; }
-    row += "</td>";   
-    //should behave correctly if link is null or not..
-    */
-    //makeAColumn(content, styleclass, id=null, link=null, hide=false){
     row += makeAColumn( api_response.trans_factor, 'trans_factor', link=api_response.factorbook_link);
 
-    /*row += '<td id="plot_data_'  + api_response.plot_id_str +  '" style="display:none;"';
-    row += ' class="plotting_data">' + api_response.json_for_plotting + '</td>';*/
     var idToUse = 'plot_data_'  + api_response.plot_id_str;
     row += makeAColumn(api_response.json_for_plotting, 'plotting_data', link=null, id=idToUse, hide=true);
 
     var detailLink =  '{% url 'ss_viewer:detail' id_str='x_x_x' %}'.replace('x_x_x', '') + api_response.plot_id_str;
     row += makeAColumn('Details', 'details', link=detailLink); 
-    //row += '<td class="details"> <a href='
-    //              + '"{% url 'ss_viewer:detail' id_str='x_x_x' %}'.replace('x_x_x', '') 
-    //              +  api_response.plot_id_str + '" target="_blank">Details</a></td>';
  
     idToUse = 'stacked-plot-' + api_response.plot_id_str;
     row += makeAColumn('', 'stacked-plot cl_plot', link=null, id=idToUse);
-    //row += "<td class=\"stacked-plot cl_plot\" id=\"stacked-plot-" + api_response.plot_id_str +"\"></td>";
     
     var checkbox = ['<input', setupAttribute('type', 'checkbox'), 
                    setupAttribute('id', api_response.plot_id_str), '>'].join(' ');
     row += makeAColumn(checkbox, 'add_to_download');
-    //row += '<td class="add_to_download"> <input type="checkbox" id="' + api_response.plot_id_str + '" ></td>';
+
     row += "</tr>";
     return row;
 }
