@@ -96,7 +96,6 @@ function show_search_results(json) {
     showHidePrevNext(json.search_paging_info);
     //if it's null, no buttons will be shown.
     $("#download_button").attr("style", "display: inline;");
-    $("#download_page_of_plots").attr("style", "display: inline;");
     $("#download_plots_for_checked_rows").attr("style", "display: inline;");
     var content = unpopulatedSearchResultsTable();
     $("#drop-in").append(content);
