@@ -25,10 +25,11 @@ function create_search_post(action_name, search_type){
            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
                xhr.setRequestHeader("X-CSRFToken", csrftoken);
            }
-           var target = $("body");
+           show_or_hide_spinner(true);
+           /*var target = $("body");
            var spinner = new Spinner().spin();
            target.append(spinner.el);
-           console.log("appended spinner!");
+           console.log("appended spinner!");*/
       },
       url: url_endpoint, 
       type: "POST", 
@@ -57,7 +58,7 @@ function create_search_post(action_name, search_type){
           //JSON dict containing search params that correspond to any 
           //search results shown.
           
-           var values = {};
+          var values = {};
 
           values = json.form_data; //does it work to just store the dict directly and re-copy it?
           if (json.search_paging_info != null){ 
@@ -87,8 +88,9 @@ function create_search_post(action_name, search_type){
           showHidePrevNext(null); //hides the next and previous buttons.
       },
       complete: function(){
-          console.log("complete is acctually happenning; do shared stuff if this triggers for success AND error.");
-          $("div.spinner").remove();
+          //console.log("complete is acctually happenning; do shared stuff if this triggers for success AND error.");
+          show_or_hide_spinner(false);
+          //$("div.spinner").remove();
       }
   });              
 }
@@ -117,19 +119,13 @@ function create_paging_post(action_name, search_type){
            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
                xhr.setRequestHeader("X-CSRFToken", csrftoken);
            }
-           var target = $("body");
-           var spinner = new Spinner().spin();
-           target.append(spinner.el);
-           console.log("appended spinner!");
+           show_or_hide_spinner(true);
       },
-      url: url_endpoint, //url: "ajaxy-snpid-window-search/",
+      url: url_endpoint, 
       type: "POST", 
       data: values , 
      
       success: function(json) {
-          console.log("PAGING: AJAX call reported success. Next line w/ response");
-          console.log(json);
-
           //this should contain a correct version of page_of_results_shown.
           $("div.status_message").text(json.status_message);
 
@@ -166,24 +162,26 @@ function create_paging_post(action_name, search_type){
       },
       complete: function(){
           //console.log("complete is acctually happenning; do shared stuff if this triggers for success AND error.");
-          $("div.spinner").remove();
+          show_or_hide_spinner(false);
+          //$("div.spinner").remove();
       }
   });              
 }
 
 
 //may be factored back into other create_post function; separate for now.
-
 //SOURCE:
 //http://stackoverflow.com/questions/28165424/download-file-via-jquery-ajax-post
 function create_download_post(search_type) {
   var val_text = $("div#current_search_params").text();
   values = jQuery.parseJSON(val_text);
   values['action'] = 'Download Results';
-  //var result_text = $("div.status_message").text();
   var result_text = $("#status_above").text();
   $("div.status_message").text("Working... ");
   $("#status_above").show(); $("#status_below").hide();
+
+  //appending/removing the spinner should be a small function.
+  show_or_hide_spinner(true);
 
   var url_endpoint = 'ajaxy-' + search_type + '/';
 
@@ -198,17 +196,29 @@ function create_download_post(search_type) {
           document.body.appendChild(a);
           a.click();
           $("div.status_message").text(result_text);
-          console.log("just set status message to result text: " + result_text);
+      }
+      if (xhttp.readyState == XMLHttpRequest.DONE) {
+            show_or_hide_spinner(false);
       }
   };
   xhttp.open("POST", url_endpoint);
   xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
   xhttp.setRequestHeader("X-CSRFToken", csrftoken);
- 
-  console.log("values for submitting for download; "+ values);
 
   // You should set responseType as blob for binary responses
   xhttp.responseType = 'blob';
   xhttp.withCredentials = true;
   xhttp.send(JSON.stringify(values));
 }
+
+//try to use everywhere the spinner appears. 
+//true for show, false for hide.
+function show_or_hide_spinner(showOrHide){
+  if (showOrHide === true){
+    var target = $("body");
+    var spinner = new Spinner().spin();
+    target.append(spinner.el);
+  }
+  else{ $("div.spinner").remove(); }
+}
+

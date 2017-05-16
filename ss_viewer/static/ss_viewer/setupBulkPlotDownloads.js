@@ -22,6 +22,7 @@ function setupBulkPlotDownload(svg){
 }
 
 function checkedRowPlotDownload(){
+    //factor out into function that just appends the spinner.
     var images = [];
     var counter = 0;
     var targets = $('svg[id^="target"].target');
@@ -35,6 +36,12 @@ function checkedRowPlotDownload(){
           checkedTargets.push(targets[i]); 
        }
     }
+    if (checkedTargets.length == 0){
+        alert("No plots are checked. No download will be created.");
+    }else{
+        show_or_hide_spinner(true);
+    }
+ 
     for (var i = 0; i < checkedTargets.length; i++) {
        convertImgToBase64URL(checkedTargets[i], function (base64Img, fname_for_plot) {
          var dataForOnePlot = base64Img.replace("data:image/png;base64,", '');
@@ -48,9 +55,7 @@ function checkedRowPlotDownload(){
          }
        });
      }
-    if (checkedTargets.length == 0){
-        alert("No plots are checked. No download will be created.");
-    } 
+
 }      
 //working answer for this tough problem (above) adapted from:
 //http://stackoverflow.com/questions/31384408/
@@ -93,6 +98,7 @@ function createArchive(images){
     zip.generateAsync({type:"blob"})
        .then(function(blob){
        saveAs(blob, "images.zip");
+       show_or_hide_spinner(false);
     });
 }
 //end code for bulk downloads
