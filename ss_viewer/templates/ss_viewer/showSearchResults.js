@@ -93,6 +93,7 @@ function seutpOneRowOfSearchResults(api_response){
 
 //put search results into the document.
 function show_search_results(json) {
+    if ( json.api_response == null ) { return; }
     showHidePrevNext(json.search_paging_info);
     //if it's null, no buttons will be shown.
     var content = unpopulatedSearchResultsTable();
