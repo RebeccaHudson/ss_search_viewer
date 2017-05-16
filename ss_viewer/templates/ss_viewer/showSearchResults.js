@@ -95,8 +95,6 @@ function seutpOneRowOfSearchResults(api_response){
 function show_search_results(json) {
     showHidePrevNext(json.search_paging_info);
     //if it's null, no buttons will be shown.
-    $("#download_button").attr("style", "display: inline;");
-    $("#download_plots_for_checked_rows").attr("style", "display: inline;");
     var content = unpopulatedSearchResultsTable();
     $("#drop-in").append(content);
     $('#download-exp').show();
@@ -107,7 +105,6 @@ function show_search_results(json) {
     }
     $("#drop-in table tbody").append(rows);
     //
-    $("#status_above").hide();//if there are search results, hide the top one.
-    $("#status_below").show();//if there are search results, show the bottom one.
+    showStatusInCorrectPlace(false); //hide the top one.
     setupPlotsForSearchResults(); 
 }//end of show_search_results function.

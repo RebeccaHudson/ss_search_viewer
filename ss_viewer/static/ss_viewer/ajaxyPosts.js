@@ -7,15 +7,9 @@ function create_search_post(action_name, search_type){
  form_data.append('action',  action_name);
  var url_endpoint = search_type + '/';
 
- $("div.status_message").text("Working... ");
- $("#status_above").show(); $("#status_below").hide();//TODO: factor out instances of this combination into their own function.
- 
- $("div#download_button").attr("style", "display:none;");
- $("#download_plots_for_checked_rows").hide();  //remove this
- $("#download-exp").hide(); 
- //TODO: no need to explicitly show and hide the child dowload buttons.
+ hideControlsWhileLoading();
 
- showHidePrevNext(null); 
+
  //hides the search buttons while we are working...
 
   $.ajax({
@@ -24,10 +18,6 @@ function create_search_post(action_name, search_type){
                xhr.setRequestHeader("X-CSRFToken", csrftoken);
            }
            show_or_hide_spinner(true);
-           /*var target = $("body");
-           var spinner = new Spinner().spin();
-           target.append(spinner.el);
-           console.log("appended spinner!");*/
       },
       url: url_endpoint, 
       type: "POST", 
@@ -93,20 +83,24 @@ function create_search_post(action_name, search_type){
   });              
 }
 
+function  hideControlsWhileLoading(){
+   $("div.status_message").text("Working... ");
+   showStatusInCorrectPlace(true);
+   $("#download-exp").hide(); //hides child elements.
+   showHidePrevNext(null); 
+}
+
+
+
 //search type should already be present.
 //some of this can be factored out...
 function create_paging_post(action_name, search_type){
  var val_text = $("div#current_search_params").text();
  var values = jQuery.parseJSON(val_text);
  values['action'] = action_name
- var url_endpoint = 'ajaxy-' + search_type + '/';
- $("div.status_message").text("Working... ");
- $("#status_above").show(); $("#status_below").hide();
+ var url_endpoint = 'ajaxy-' + search_type + '/'; //really? still ajaxy?
 
- $("div#download_button").attr("style", "display:none;");
- $("#download-exp").hide(); //TODO: no need to individually hide child 
-                            //elements of the download-exp(lanation) box.
- showHidePrevNext(null); 
+ hideControlsWhileLoading();
  //hides the search buttons while we are working...
 
   console.log("about to send ajax to endpoint " +
@@ -137,8 +131,7 @@ function create_paging_post(action_name, search_type){
           }else{ 
               //not setting the page of search results; but no error means 
                //that there's a non-error, no search results case here.
-              $("#status_above").show();
-              $("#status_below").hide();
+              showStatusInCorrectPlace(true);
           }
           var values_to_save_for_paging = JSON.stringify(values);
           $("div#current_search_params").text(values_to_save_for_paging);
@@ -155,8 +148,7 @@ function create_paging_post(action_name, search_type){
           $("div#form_errors").append(errlist);
           $("div.status_message").text(errorJSON.status_message);
           showHidePrevNext(null); //hides the next and previous buttons.
-          $("#status_above").show();
-          $("#status_below").hide();
+          showStatusInCorrectPlace(true);
       },
       complete: function(){
           //console.log("complete is acctually happenning; do shared stuff if this triggers for success AND error.");
@@ -176,11 +168,12 @@ function create_download_post(search_type) {
   values['action'] = 'Download Results';
   var result_text = $("#status_above").text();
   $("div.status_message").text("Working... ");
-  $("#status_above").show(); $("#status_below").hide();
+  showStatusInCorrectPlace(true);//show the upper one, hide the lower
 
   //appending/removing the spinner should be a small function.
   show_or_hide_spinner(true);
 
+  //this is still in play?
   var url_endpoint = 'ajaxy-' + search_type + '/';
 
   xhttp = new XMLHttpRequest();
@@ -219,4 +212,16 @@ function show_or_hide_spinner(showOrHide){
   }
   else{ $("div.spinner").remove(); }
 }
+
+//true for upper, false for lower.
+function showStatusInCorrectPlace(isUpper){
+    if (isUpper === true){
+        $("#status_above").show();
+        $("#status_below").hide();
+    }else{
+        $("#status_above").hide();
+        $("#status_below").show();
+    }    
+}
+
 
