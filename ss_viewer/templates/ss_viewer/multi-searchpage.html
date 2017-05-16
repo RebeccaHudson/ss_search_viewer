@@ -173,8 +173,9 @@
 {% endif %}
 </span>
 
-<div id="status_message"> {{ status_message }} </div>
 
+
+<div class="status_message" id="status_above"> {{ status_message }} </div>
 <!-- Errors will be reported here when they are returned from AJAX requests -->
 <div id="form_errors">
 </div>
@@ -183,6 +184,7 @@
 </div>
 <br />
 
+<div class="status_message"  id="status_below" style="display: none;"> {{ status_message }} </div>
 <div id="ajaxyPagingButtons" >
      <button type="button"
              onclick='pagingAJAX("Prev");'
@@ -197,6 +199,9 @@
              <span class="glyphicon glyphicon-chevron-right"></span>
              </button>
 </div>
+
+
+
 
 </div> <!-- close the 'content' div -->
 </div> <!-- close the 'container' div -->

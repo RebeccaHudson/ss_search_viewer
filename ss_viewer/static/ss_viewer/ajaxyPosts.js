@@ -8,7 +8,9 @@ function create_search_post(action_name, search_type){
  // var url_endpoint = 'ajaxy-' + search_type + '/';
  var url_endpoint = search_type + '/';
 
- $("div#status_message").text("Working... ");
+ $("div.status_message").text("Working... ");
+ $("#status_above").show(); $("#status_below").hide();//TODO: factor out instances of this combination into their own function.
+ 
  $("div#download_button").attr("style", "display:none;");
  $("#download_page_of_plots").hide();   //remove this
  $("#download_plots_for_checked_rows").hide();  //remove this
@@ -38,7 +40,8 @@ function create_search_post(action_name, search_type){
       success: function(json) {
           console.log("AJAX call reported success. Next line w/ response");
           console.log(json);
-          $("div#status_message").text(json.status_message);
+          $("div.status_message").text(json.status_message);
+          console.log('this happened!');
 
           if ( json.api_response != null){
               show_search_results(json);
@@ -79,7 +82,8 @@ function create_search_post(action_name, search_type){
           } 
           errlist += '</ul>';
           $("div#form_errors").append(errlist);
-          $("div#status_message").text(errorJSON.status_message);
+          //$("div#status_message").text(errorJSON.status_message);
+          $("div.status_message").text(errorJSON.status_message);
           showHidePrevNext(null); //hides the next and previous buttons.
       },
       complete: function(){
@@ -96,7 +100,9 @@ function create_paging_post(action_name, search_type){
  var values = jQuery.parseJSON(val_text);
  values['action'] = action_name
  var url_endpoint = 'ajaxy-' + search_type + '/';
- $("div#status_message").text("Working... ");
+ $("div.status_message").text("Working... ");
+ $("#status_above").show(); $("#status_below").hide();
+
  $("div#download_button").attr("style", "display:none;");
  $("#download-exp").hide(); //TODO: no need to individually hide child 
                             //elements of the download-exp(lanation) box.
@@ -125,7 +131,7 @@ function create_paging_post(action_name, search_type){
           console.log(json);
 
           //this should contain a correct version of page_of_results_shown.
-          $("div#status_message").text(json.status_message);
+          $("div.status_message").text(json.status_message);
 
           if ( json.api_response != null){
               show_search_results(json);
@@ -134,6 +140,11 @@ function create_paging_post(action_name, search_type){
               values.page_of_results_shown =
                       json.search_paging_info.page_of_results_to_display;
               console.log("...setting page number of results shown to:" + values.page_of_results_shown);
+          }else{ 
+              //not setting the page of search results; but no error means 
+               //that there's a non-error, no search results case here.
+              $("#status_above").show();
+              $("#status_below").hide();
           }
           var values_to_save_for_paging = JSON.stringify(values);
           $("div#current_search_params").text(values_to_save_for_paging);
@@ -148,11 +159,13 @@ function create_paging_post(action_name, search_type){
           } 
           errlist += '</ul>';
           $("div#form_errors").append(errlist);
-          $("div#status_message").text(errorJSON.status_message);
+          $("div.status_message").text(errorJSON.status_message);
           showHidePrevNext(null); //hides the next and previous buttons.
+          $("#status_above").show();
+          $("#status_below").hide();
       },
       complete: function(){
-          console.log("complete is acctually happenning; do shared stuff if this triggers for success AND error.");
+          //console.log("complete is acctually happenning; do shared stuff if this triggers for success AND error.");
           $("div.spinner").remove();
       }
   });              
@@ -167,8 +180,10 @@ function create_download_post(search_type) {
   var val_text = $("div#current_search_params").text();
   values = jQuery.parseJSON(val_text);
   values['action'] = 'Download Results';
-  var result_text = $("div#status_message").text();
-  $("div#status_message").text("Working... ");
+  //var result_text = $("div.status_message").text();
+  var result_text = $("#status_above").text();
+  $("div.status_message").text("Working... ");
+  $("#status_above").show(); $("#status_below").hide();
 
   var url_endpoint = 'ajaxy-' + search_type + '/';
 
@@ -182,7 +197,8 @@ function create_download_post(search_type) {
           a.style.display = 'none';
           document.body.appendChild(a);
           a.click();
-          $("div#status_message").text(result_text);
+          $("div.status_message").text(result_text);
+          console.log("just set status message to result text: " + result_text);
       }
   };
   xhttp.open("POST", url_endpoint);

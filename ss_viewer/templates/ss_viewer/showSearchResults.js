@@ -107,5 +107,8 @@ function show_search_results(json) {
         rows += oneRow;
     }
     $("#drop-in table tbody").append(rows);
+    //
+    $("#status_above").hide();//if there are search results, hide the top one.
+    $("#status_below").show();//if there are search results, show the bottom one.
     setupPlotsForSearchResults(); 
 }//end of show_search_results function.
