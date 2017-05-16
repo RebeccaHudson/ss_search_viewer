@@ -1,16 +1,23 @@
-//TODO: determine if search type is a needed parameter for these.
-function create_search_post(action_name, search_type){
+function pull_search_type(form_data){
+  for (var key of form_data.keys()) {
+      //every search type has a pvalue_rank_cutoff;
+      if ( key.search('pvalue_rank_cutoff') > 0 ){
+      //if the string is not found, search returns -1
+          var prefix = key.split('-')[0]; 
+          return prefix.replace('_', '-') + '-search';
+      } 
+   } 
+}
+
+function create_search_post(action_name){
  var formElement = document.querySelector('div.active form');
  form_data = new FormData(formElement); 
- 
+ var search_type = pull_search_type(form_data);
  form_data.append('search_type', search_type);
  form_data.append('action',  action_name);
  var url_endpoint = search_type + '/';
 
  hideControlsWhileLoading();
-
-
- //hides the search buttons while we are working...
 
   $.ajax({
       beforeSend: function(xhr, settings) {
@@ -27,22 +34,17 @@ function create_search_post(action_name, search_type){
       contentType: false,
      
       success: function(json) {
-          console.log("AJAX call reported success. Next line w/ response");
-          console.log(json);
+          //console.log(json);
           $("div.status_message").text(json.status_message);
-          console.log('this happened!');
 
           if ( json.api_response != null){
               show_search_results(json);
           }
 
           //save data about the search onto the page: 
-          //search type
           $("#type_of_shown_results").text(search_type);
 
-          //what about just grabbing the form data that is sent back?
-          console.log(json.form_data); //try to grab the values out of here.
-
+          console.log(json.form_data);
           //JSON dict containing search params that correspond to any 
           //search results shown.
           
@@ -71,14 +73,11 @@ function create_search_post(action_name, search_type){
           } 
           errlist += '</ul>';
           $("div#form_errors").append(errlist);
-          //$("div#status_message").text(errorJSON.status_message);
           $("div.status_message").text(errorJSON.status_message);
           showHidePrevNext(null); //hides the next and previous buttons.
       },
       complete: function(){
-          //console.log("complete is acctually happenning; do shared stuff if this triggers for success AND error.");
           show_or_hide_spinner(false);
-          //$("div.spinner").remove();
       }
   });              
 }
@@ -90,18 +89,15 @@ function  hideControlsWhileLoading(){
    showHidePrevNext(null); 
 }
 
-
-
 //search type should already be present.
 //some of this can be factored out...
 function create_paging_post(action_name, search_type){
  var val_text = $("div#current_search_params").text();
  var values = jQuery.parseJSON(val_text);
  values['action'] = action_name
- var url_endpoint = 'ajaxy-' + search_type + '/'; //really? still ajaxy?
+ var url_endpoint = search_type + '/';
 
  hideControlsWhileLoading();
- //hides the search buttons while we are working...
 
   console.log("about to send ajax to endpoint " +
               url_endpoint +  " with these values:");
@@ -118,7 +114,6 @@ function create_paging_post(action_name, search_type){
       data: values , 
      
       success: function(json) {
-          //this should contain a correct version of page_of_results_shown.
           $("div.status_message").text(json.status_message);
 
           if ( json.api_response != null){
@@ -151,9 +146,7 @@ function create_paging_post(action_name, search_type){
           showStatusInCorrectPlace(true);
       },
       complete: function(){
-          //console.log("complete is acctually happenning; do shared stuff if this triggers for success AND error.");
           show_or_hide_spinner(false);
-          //$("div.spinner").remove();
       }
   });              
 }
@@ -167,14 +160,13 @@ function create_download_post(search_type) {
   values = jQuery.parseJSON(val_text);
   values['action'] = 'Download Results';
   var result_text = $("#status_above").text();
+
+  //Don't hide the download explanation box while preparing the download.
   $("div.status_message").text("Working... ");
   showStatusInCorrectPlace(true);//show the upper one, hide the lower
-
-  //appending/removing the spinner should be a small function.
   show_or_hide_spinner(true);
 
-  //this is still in play?
-  var url_endpoint = 'ajaxy-' + search_type + '/';
+  var url_endpoint = search_type + '/';
 
   xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
