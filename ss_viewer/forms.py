@@ -133,8 +133,7 @@ class SearchBySnpidForm(GenericSearchForm):
 
 #A separate form for searching through the data by genomic location
 class SearchByGenomicLocationForm(GenericSearchForm):
-    prefix = 'genomic_location'
-    default_data = None   #don't need this.
+    prefix = 'gl_region'
 
     gl_pos_label_text = { 'start' : 'Start position on chromosome',
                           'end'   : 'End position on chromosome' }
