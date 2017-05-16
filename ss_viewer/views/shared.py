@@ -214,8 +214,10 @@ class Paging:
 class APIResponseHandler:
     @staticmethod  
     def setup_hits_message(hitcount, page_of_results_to_display):
+        #Showing page N, a through b of N total pairs.
+        totalPageCount = (hitcount / settings.API_HOST_INFO['result_page_size']) + 1
         return 'Got ' + str(hitcount) + ' matching (SNP,TF) pairs.' +\
-               ' Showing page: ' + str(page_of_results_to_display)
+               ' Showing page: ' + str(page_of_results_to_display) + " out of " + str(totalPageCount) + "."
      
     @staticmethod 
     #meant to handle one page of results at a time.
