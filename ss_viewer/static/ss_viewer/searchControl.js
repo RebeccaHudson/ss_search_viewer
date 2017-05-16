@@ -1,30 +1,10 @@
-//add event listeners for each search form submit button.
 function setupAjaxyFormSubmissions(){
-   $("#snpid_window_form").on('submit', function(event){
-       event.preventDefault();
-       hideControlsDuringSearch();
-       create_search_post('search', 'snpid-window-search');
-   });
-   $("#snpid_search_form").on('submit', function(event){
-       event.preventDefault();  //works fine here?
-       hideControlsDuringSearch();
-       create_search_post('search', 'snpid-search');
-   });
-   $("#gl_region_search_form").on('submit', function(event){
-       event.preventDefault();  //works fine here?
-       hideControlsDuringSearch();
-       create_search_post('search', 'gl-region-search');
-   });
-   $("#gene_name_form").on('submit', function(event){
-       event.preventDefault();
-       hideControlsDuringSearch();
-       create_search_post('search', 'gene-name-search');
-   });
-   $("#tf_search_form").on('submit', function(event){
-       event.preventDefault();
-       hideControlsDuringSearch();
-       create_search_post('search', 'trans-factor-search');
-   });
+    //Matches all of the search forms.
+    $("form").on('submit', function(event){
+        event.preventDefault();
+        hideControlsDuringSearch();
+        create_search_post('search');
+    });
 }
 
 function hideControlsDuringSearch(){
@@ -32,29 +12,28 @@ function hideControlsDuringSearch(){
      $("#search_results").remove();   
      $("#drop-in").empty();
      clearOutPlots();
-     //$("div#plots").empty(); //does this work? no.
 }
 
+function showHideOneButton(btn_selector, show_that_button){
+    if ( show_that_button) { $(btn_selector).show();  
+    }else{ $(btn_selector).hide(); }
+} 
+
 function showHidePrevNext(search_paging_info){
-    if ( (search_paging_info != null) && (search_paging_info.show_next_btn) ){
-      $("#ajaxyPagingButtons #next_button").attr("style", "display:inline;"); 
-    }else{
-      $("#ajaxyPagingButtons #next_button").attr("style", "display:none;"); 
+    var btn_selector = '#ajaxyPagingButtons'; 
+    var show_btn = {'prev': false, 'next': false};
+    if (search_paging_info != null){ 
+       show_btn['prev'] =  search_paging_info.show_prev_btn;
+       show_btn['next'] = search_paging_info.show_next_btn; 
     }
-    if ( (search_paging_info != null) && (search_paging_info.show_prev_btn) ){
-      $("#ajaxyPagingButtons #prev_button").attr("style", "display:inline;"); 
-    }else{ 
-      $("#ajaxyPagingButtons #prev_button").attr("style", "display:none;"); 
-    }
+    showHideOneButton(btn_selector + ' #next_button', show_btn['next']); 
+    showHideOneButton(btn_selector + ' #prev_button', show_btn['prev']);
 }
 
 //add event listener for paging buttons
 function pagingAJAX(nextOrPrev){
    var active_search = $("span#type_of_shown_results")[0].innerText.trim();
-   $("div#form_errors").empty();
-   $("#search_results").remove();   
-   $("#drop-in").empty();
-   clearOutPlots();
+   hideControlsDuringSearch();
    create_paging_post(nextOrPrev, active_search);
 }
 
