@@ -3,7 +3,7 @@ function setupAjaxyFormSubmissions(){
     $("form").on('submit', function(event){
         event.preventDefault();
         hideControlsDuringSearch();
-        create_search_post('search');
+        create_search_post();
     });
 }
 
@@ -30,12 +30,6 @@ function showHidePrevNext(search_paging_info){
     showHideOneButton(btn_selector + ' #prev_button', show_btn['prev']);
 }
 
-//add event listener for paging buttons
-function pagingAJAX(nextOrPrev){
-   var active_search = $("span#type_of_shown_results")[0].innerText.trim();
-   hideControlsDuringSearch();
-   create_paging_post(nextOrPrev, active_search);
-}
 
 function clearOutPlots(){
    var plotsForPage = ['svg[id^="target"]', 
@@ -47,9 +41,17 @@ function clearOutPlots(){
    $(plotSelector).remove();
 }
 
+function getActiveSearchType(){
+    return $("span#type_of_shown_results")[0].innerText.trim();
+}
+
+//Handle events for paging buttons.
+function pagingAJAX(nextOrPrev){
+   hideControlsDuringSearch();
+   create_paging_post(nextOrPrev, getActiveSearchType());
+}
 
 //add event listener for Download button
 function clickDownloadResultsAJAX(){
-   var active_search = $("span#type_of_shown_results")[0].innerText.trim();
-   create_download_post(active_search); //action name, search type
+   create_download_post(getActiveSearchType()); //action name, search type
 }
