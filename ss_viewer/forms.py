@@ -309,3 +309,10 @@ class SearchByGeneNameForm(GenericSearchForm):
                                      min_value = 0)
     window_size.error_messages = { 'required': 'Missing window size (required).'}
     #sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
+
+    def clean(self):
+        cleaned_data = super(SearchByGeneNameForm, self).clean()    
+        gene_nm = cleaned_data['gene_name'].decode('utf-8').upper()
+        cleaned_data['gene_name'] = gene_nm.encode('utf-8') 
+
+
