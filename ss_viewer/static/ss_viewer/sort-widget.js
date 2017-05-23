@@ -9,7 +9,7 @@
       console.log("initial sort order: "); 
       console.log(sort_order);
 
-    $('.sort-order-select option').on('click', function(){
+    /*$('.sort-order-select option').on('click', function(){
     console.log("clicked!");
         if ( $(this).attr('value') == 'asc' ){
           $(this).attr('value', 'desc');   
@@ -19,28 +19,58 @@
           $(this).text('ascending');
         }
       buildQuery();
-    });
+    });*/
   
+      $(".sortflip").on('click', function(){
+         //flips the sort direction for the currently displayed field.
+         //also flips the icon indicating sort order.
+         var selected_field = $("div.active .sort-select option:selected");
+         if ($(this).hasClass('glyphicon-sort-by-attributes')){
+             showDescendingIcon();
+             selected_field.attr('direction', 'desc'); 
+         }else{ 
+             showAscendingIcon();
+             selected_field.attr('direction', 'asc'); 
+          }
+          buildQuery();
+      }); 
 
 
-    } );
-  
+      $("div.active .sort-select option").on('click', function(){
+       var drctn = $(this).attr('direction');
+       //console.log("does this show the direction?");
+       //console.log(drctn);
+       if (drctn == 'asc' ){ showAscendingIcon(); }else{ 
+          showDescendingIcon();
+       }
+      });
+
+    } );//end of document.ready stuff here.
+
+    function showAscendingIcon(){
+       console.log("show ascending");
+       var selector = $("div.active .sortflip");
+       selector.removeClass('glyphicon-sort-by-attributes-alt');
+       selector.addClass('glyphicon-sort-by-attributes');
+    }
+    function showDescendingIcon(){
+       console.log("show descending");
+       var selector = $("div.active .sortflip");
+       selector.removeClass('glyphicon-sort-by-attributes');
+       selector.addClass('glyphicon-sort-by-attributes-alt');
+    }
+ 
     /* toggle the sort order for the selected element */
-    //var  active_form = $("#tabbed-forms div.active div.sort-controls");
-
     function buildQuery(event=null){
       var active_form = $("#tabbed-forms div.active");
       if (event != null){ event.preventDefault();}
       var sort_order = readSortOrder();
       var sort_dict = { "sort" : sort_order };
       var jsd = JSON.stringify(sort_dict);
-      //$("#id_sort_order").attr('value', jsd);
       console.log("buildQuery has written : " + jsd);
-      //active_form.find("#id_sort_order").attr('value', jsd);
       active_form.find("[id$=sort_order]").attr('value', jsd);
-      //$("#id_sort_order").attr('value', jsd);
-      //$("#id_sort_order").attr('value', jsd);
     }
+
 
    //http://stackoverflow.com/questions/24152459/
    //how-to-swap-placement-of-two-elements-including-their-classes-ids-with-onclick
@@ -50,11 +80,9 @@
      var i1 = el0.index; var i2 = el1.index;
      el0.parentNode.insertBefore(el1, el0);
      //swap the orders too; pull the indices from the others.
-     var a = active_form.find(".sort-order-select")[0].children[i1];
-     var b = active_form.find(".sort-order-select")[0].children[i2];
-     //var a = $("#sort-order-select")[0].children[i1];
-     //var b = $("#sort-order-select")[0].children[i2];
-     a.parentNode.insertBefore(b, a);
+     //var a = active_form.find(".sort-order-select")[0].children[i1];
+     //var b = active_form.find(".sort-order-select")[0].children[i2];
+     //a.parentNode.insertBefore(b, a);
    }
 
    function check_for_end(to_swap){
@@ -86,12 +114,12 @@
    /* Read the order of elements in the sort control */
    function readSortOrder(){
      var active_form = $("#tabbed-forms div.active div.sort-controls");
-     var  opts =  active_form.find(".sort-select").children();
-     var sort_orders = active_form.find(".sort-order-select").children();
+     var opts =  active_form.find(".sort-select").children();
      var sort_order = [];
      for ( var i = 0; i < opts.length; i++){
        var key_for_term = opts[i].value;
-       var order_for_term = sort_orders[i].value;
+       var order_for_term = $(opts[i]).attr("direction"); 
+       console.log("order for term : " + order_for_term);
        var d = {};
        d[key_for_term] = { 'order' : order_for_term };  
       sort_order.push(d);

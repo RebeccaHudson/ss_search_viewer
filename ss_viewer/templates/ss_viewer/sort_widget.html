@@ -24,22 +24,29 @@
   <div class="sort-selectors">
       <div class="hide-overflow">
           <select class="sort-control sort-select" size=5>
-            <option value="pval_rank"> P-value Rank           </option>
-            <option value="coordinate">Genomic Coordinate     </option>
-            <option value="pval_snp">  P-value SNP            </option>
-            <option value="pval_ref">  P-value Reference      </option>
+            <option value="pval_rank"  direction="asc"> P-value Rank           </option>
+            <option value="coordinate" direction="asc">Genomic Coordinate     </option>
+            <option value="pval_snp"   direction="asc">  P-value SNP            </option>
+            <option value="pval_ref"   direction="asc">  P-value Reference      </option>
           </select>
       </div>
-      <div class="hide-overflow">
-          <!-- this is supposed to be disabled; should still be clickable. -->
-          <select class="sort-control sort-order-select" disabled="true" size=5>
-            <option value="asc">ascending              </option>
-            <option value="asc">ascending              </option>
-            <option value="asc">ascending              </option>
-            <option value="asc">ascending              </option>
-          </select>
+
+      <span style="margin-top:25px;" class="sortflip glyphicon glyphicon-sort-by-attributes"></span>
+      <!-- this is supposed to be disabled; should still be clickable. 
+            <div class="hide-overflow">
+            <select class="sort-control sort-order-select" disabled="true" size=5>
+              <option value="asc">ascending              </option>
+              <option value="asc">ascending              </option>
+              <option value="asc">ascending              </option>
+              <option value="asc">ascending              </option>
+          </select> -->
       </div>
+       
+
+
   </div>
+
+           
 </div>
 </td>
  <style type="text/css">
@@ -47,7 +54,6 @@
         css-how-to-position-child-divs-in-main-div-side-by-side*/
     div.sort-controls { display:flex;  }
     div.sort-controls > div.sort-selectors { flex: 1; }
-    div.sort-controls > div.shift-priority { /*flex: 1;*/ }
 
     .sort-control option{ font-size: 14px; }
     .sort-order-select option { 
