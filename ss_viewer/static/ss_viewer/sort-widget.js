@@ -9,17 +9,6 @@
       console.log("initial sort order: "); 
       console.log(sort_order);
 
-    /*$('.sort-order-select option').on('click', function(){
-    console.log("clicked!");
-        if ( $(this).attr('value') == 'asc' ){
-          $(this).attr('value', 'desc');   
-          $(this).text('descending');
-        }else {
-          $(this).attr('value', 'asc');   
-          $(this).text('ascending');
-        }
-      buildQuery();
-    });*/
   
       $(".sortflip").on('click', function(){
          //flips the sort direction for the currently displayed field.
@@ -38,8 +27,6 @@
 
       $("div.active .sort-select option").on('click', function(){
        var drctn = $(this).attr('direction');
-       //console.log("does this show the direction?");
-       //console.log(drctn);
        if (drctn == 'asc' ){ showAscendingIcon(); }else{ 
           showDescendingIcon();
        }
@@ -79,10 +66,6 @@
      if ( (el0 == null) || (el1 == null) ){ return; }
      var i1 = el0.index; var i2 = el1.index;
      el0.parentNode.insertBefore(el1, el0);
-     //swap the orders too; pull the indices from the others.
-     //var a = active_form.find(".sort-order-select")[0].children[i1];
-     //var b = active_form.find(".sort-order-select")[0].children[i2];
-     //a.parentNode.insertBefore(b, a);
    }
 
    function check_for_end(to_swap){
@@ -94,7 +77,6 @@
       event.preventDefault();
       var  active_form = $("#tabbed-forms div.active div.sort-controls");
       var selected = active_form.find(".sort-select").find(":selected");
-      //var selected = $("#sort-select").find(":selected");
       if (selected.length == 0){
         return; 
       }
