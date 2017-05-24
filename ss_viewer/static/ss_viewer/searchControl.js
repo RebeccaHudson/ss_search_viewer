@@ -10,8 +10,11 @@ function setupAjaxyFormSubmissions(){
 function setupJumpToPageControl(){
     $("#jump").on("click", function(event){
       event.preventDefault();
-      //VALIDATE the number.
       var jumpTo = $("#user-page-number")[0].value;
+      var min = $("#user-page-number").attr('min');
+      var max = $("#user-page-number").attr('max');
+      if (jumpTo < min){ jumpTo = min;  }
+      if (jumpTo > max){ jumpTo = max;  }
       pagingAJAX('jump-' + jumpTo);
    }); 
 }

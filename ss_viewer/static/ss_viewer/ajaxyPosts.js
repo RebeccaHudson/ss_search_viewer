@@ -171,6 +171,11 @@ function showStatusInCorrectPlace(isUpper){
     }    
 }
 
+//Don't let users jump past the end of the search results.
+function setMaxValueOnJumpControl(search_paging_info){
+   $("#user-page-number").attr('max', search_paging_info.total_page_count);
+}
+
 function  hideControlsWhileLoading(){
    $("div.status_message").text("Working... ");
    showStatusInCorrectPlace(true);

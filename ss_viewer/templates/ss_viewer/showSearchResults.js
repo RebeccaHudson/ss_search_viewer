@@ -108,4 +108,5 @@ function show_search_results(json) {
     //
     showStatusInCorrectPlace(false); //hide the top one.
     setupPlotsForSearchResults(); 
+    setMaxValueOnJumpControl(json.search_paging_info);
 }//end of show_search_results function.

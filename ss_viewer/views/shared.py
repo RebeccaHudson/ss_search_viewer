@@ -210,7 +210,9 @@ class Paging:
              search_paging_info['show_prev_btn'] = True
 
         search_paging_info['page_of_results_to_display'] = page_of_results_to_display
-
+        totalPageCount = (hitcount / settings.API_HOST_INFO['result_page_size']) + 1
+        search_paging_info['total_page_count'] = totalPageCount 
+        #could be refactored so calculation above does not get repeated in 'setup_hits_message'
         return search_paging_info
 
 
@@ -219,6 +221,7 @@ class APIResponseHandler:
     @staticmethod  
     def setup_hits_message(hitcount, page_of_results_to_display):
         #Showing page N, a through b of N total pairs.
+        #could be refactored so the following calculation is not repeated in the 'Paging' class.
         totalPageCount = (hitcount / settings.API_HOST_INFO['result_page_size']) + 1
         return 'Got ' + str(hitcount) + ' matching (SNP,TF) pairs.' +\
                ' Showing page: ' + str(page_of_results_to_display) + " out of " + str(totalPageCount) + "."
