@@ -23,6 +23,7 @@ function hideControlsDuringSearch(){
      $("div#form_errors").empty();
      $("#search_results").remove();   
      $("#drop-in").empty();
+     $(".jump").hide();
      clearOutPlots();
 }
 
@@ -40,6 +41,7 @@ function showHidePrevNext(search_paging_info){
        show_btn['next'] = search_paging_info.show_next_btn; 
        var pg_number =  search_paging_info.page_of_results_to_display;
        $("#user-page-number")[0].value = pg_number;
+       $(".jump").show();
     }
     showHideOneButton(btn_selector + ' #next_button', show_btn['next']); 
     showHideOneButton(btn_selector + ' #prev_button', show_btn['prev']);

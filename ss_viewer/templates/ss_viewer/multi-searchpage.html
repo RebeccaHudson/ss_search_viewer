@@ -192,8 +192,9 @@
              id="prev_button">
             <span class="glyphicon glyphicon-chevron-left"></span>
              Previous</button>
-     <button id='jump'>Jump to</button>
-     <input style="width: 3.5em;" id="user-page-number" type="number" min="1"/>
+     <button id='jump' style="display:none;" class="jump">Jump to</button>
+     <input style="width: 3.5em; display:none;" class="jump" id="user-page-number"
+            type="number" min="1"/>
      <button type="submit" 
              onclick='pagingAJAX("Next");'
              style="display:none;"
