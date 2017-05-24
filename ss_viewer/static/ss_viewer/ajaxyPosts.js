@@ -68,7 +68,12 @@ function create_paging_post(action_name, search_type){
           show_or_hide_spinner(false);
       }
   });              
-}
+} //also handles 'jump' action to jump to any valid page.
+
+
+
+
+
 
 //shared between success handler for search and paging posts.
 function handleResults(values, json){

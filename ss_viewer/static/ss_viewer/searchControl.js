@@ -7,6 +7,15 @@ function setupAjaxyFormSubmissions(){
     });
 }
 
+function setupJumpToPageControl(){
+    $("#jump").on("click", function(event){
+      event.preventDefault();
+      //VALIDATE the number.
+      var jumpTo = $("#user-page-number")[0].value;
+      pagingAJAX('jump-' + jumpTo);
+   }); 
+}
+
 function hideControlsDuringSearch(){
      $("div#form_errors").empty();
      $("#search_results").remove();   
@@ -19,16 +28,20 @@ function showHideOneButton(btn_selector, show_that_button){
     }else{ $(btn_selector).hide(); }
 } 
 
+//factor the textbox logic into another function
 function showHidePrevNext(search_paging_info){
     var btn_selector = '#ajaxyPagingButtons'; 
     var show_btn = {'prev': false, 'next': false};
     if (search_paging_info != null){ 
        show_btn['prev'] =  search_paging_info.show_prev_btn;
        show_btn['next'] = search_paging_info.show_next_btn; 
+       var pg_number =  search_paging_info.page_of_results_to_display;
+       $("#user-page-number")[0].value = pg_number;
     }
     showHideOneButton(btn_selector + ' #next_button', show_btn['next']); 
     showHideOneButton(btn_selector + ' #prev_button', show_btn['prev']);
 }
+
 
 
 function clearOutPlots(){

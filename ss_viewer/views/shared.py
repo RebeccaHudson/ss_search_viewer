@@ -189,6 +189,10 @@ class Paging:
              page_of_results_to_display = page_of_search_results + 1
         elif request.POST['action'] == 'Prev':
              page_of_results_to_display = page_of_search_results - 1
+        elif 'jump' in request.POST['action']:
+             #VALIDATION.
+             page_of_results_to_display = \
+                 int(request.POST['action'].split('-')[1])
 
         search_result_offset = (page_of_results_to_display - 1) * \
                               settings.API_HOST_INFO['result_page_size']

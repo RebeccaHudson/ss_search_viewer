@@ -192,6 +192,8 @@
              id="prev_button">
             <span class="glyphicon glyphicon-chevron-left"></span>
              Previous</button>
+     <button id='jump'>Jump to</button>
+     <input style="width: 3.5em;" id="user-page-number" type="number"/>
      <button type="submit" 
              onclick='pagingAJAX("Next");'
              style="display:none;"
@@ -213,7 +215,7 @@
     jQuery(document).ready(function ($) {
 
         $('#tabs').tab();
-
+ 
         /* (for searches by TF) have JASPAR selected by default */
             $('#id_encode_trans_factor').attr('disabled', 'disabled');
             $('#id_tf_library_0').attr('checked', 'checked');
@@ -236,6 +238,7 @@
       setupAjaxyFormSubmissions(); //Event listeners to submit forms asynchronously. 
       setupSNPidFileControls();
       writeBothCutoffDirections();
+      setupJumpToPageControl();
     });//end of document.ready stuff.
 
     $(".formcontrol").tooltip({

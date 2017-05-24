@@ -23,9 +23,10 @@
           }
           buildQuery();
       }); 
-
-
-      $("div.active .sort-select option").on('click', function(){
+ 
+      //only hits the first active div.
+      //$("div.active .sort-select option").on('click', function(){
+      $(".sort-select option").on('click', function(){
        var drctn = $(this).attr('direction');
        if (drctn == 'asc' ){ showAscendingIcon(); }else{ 
           showDescendingIcon();
@@ -101,7 +102,7 @@
      for ( var i = 0; i < opts.length; i++){
        var key_for_term = opts[i].value;
        var order_for_term = $(opts[i]).attr("direction"); 
-       console.log("order for term : " + order_for_term);
+       //console.log("order for term : " + order_for_term);
        var d = {};
        d[key_for_term] = { 'order' : order_for_term };  
       sort_order.push(d);

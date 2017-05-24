@@ -68,8 +68,10 @@ class GenericSearchView(View):
         request = self.check_for_download_request(request) 
         #rearranges the request if it's a download.
 
+        print "request.POST['action'] " + request.POST['action']
         #get the 'Action' out of the post; setup the form accordingly.
-        if request.POST['action'] in ['Prev', 'Next', 'Download Results']:
+        if request.POST['action'] in ['Prev', 'Next', 'Download Results'] or\
+             'jump' in  request.POST['action']:
             self.setup_form_for_paging_or_download_request(request)
         else: 
             #case when it's a basic (not paging or download) search
