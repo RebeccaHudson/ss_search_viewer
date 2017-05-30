@@ -7,11 +7,9 @@ function drawPlotsInline(){
        var data_for_one_plot = this.textContent;
        onePlotData = jQuery.parseJSON(data_for_one_plot);
        plottingData.push(onePlotData);
-       //console.log("preparing for one plot.. " + data_for_one_plot ); 
    });
    cloneSVGSkeleton(plottingData);  
    //the only thing cloneSVGSkeleton does with plottingData is get its length.
- 
    //hide all 3 of the original skeleton plots.
    $("svg#target-0").hide();
    $("svg#target-stacked-plot-0").hide();
@@ -21,7 +19,6 @@ function drawPlotsInline(){
 function svgImage(xml) {
   var image = new Image();
   image.src = 'data:image/svg+xml;base64,' + window.btoa(xml);
-  //window.btoa(unescape(encodeURIComponent(xml)))}
   image.onload = function() {
     var canvas = document.createElement('canvas');
     canvas.width = image.width;
@@ -43,7 +40,6 @@ function svgImage(xml) {
 //this happens when search results are returned.
 //this should recieve 'plottingData' as a parameter to make it more testable.
 function setupPlotsForSearchResults(){
-   console.log("setupPlotsForSearchResults  ... logging here.");
    var plottingData = [];
    $("td.plotting_data" ).each(function() {
        var data_for_one_plot = this.textContent;
@@ -53,7 +49,6 @@ function setupPlotsForSearchResults(){
    cloneSVGSkeleton(plottingData);
    //how many SVGs got cloned?  
    var stackedPlotClones = $('#target-stacked-plot-');
-   console.log("stackedPlotClones length : " +  stackedPlotClones.length);
    //there should be matches for target-stacked-plot at this point.
    for ( var n = 0; n < plottingData.length; n++){
        var targetSVGid = "target-" + plottingData[n].plot_id_str;
@@ -61,7 +56,7 @@ function setupPlotsForSearchResults(){
 
        makeAPlot(plottingData[n], targetSVGid);
        drawFixedWidthCompositePlot(plottingData[n], fullStackPlotId);
-       //
+       
        if ( n > 0 ){
          $("#"+targetSVGid).parent().addClass("hidden");
        }else {
@@ -72,8 +67,6 @@ function setupPlotsForSearchResults(){
        //try: not moving the main plot into an 'inline' position.
        //     see if checkedRow plot downloads can still be made to work.
        var fullStackPlotToMove = $("#" + fullStackPlotId).parent().detach();
-       console.log("moving full stack plot : " );
-       console.log( fullStackPlotToMove);
        //how does the bulk download find this plot in order to download it?
 
        var idOfFullStackPlotTarget = "#stacked-plot-" + plottingData[n].plot_id_str;
@@ -82,5 +75,4 @@ function setupPlotsForSearchResults(){
        fullStackPlotToMove.appendTo(putFullStackPlotHere);
        fullStackPlotToMove.find('svg').show();
    } 
-   console.log("completed plotting!");
   }
