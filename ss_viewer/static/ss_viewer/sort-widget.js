@@ -6,9 +6,6 @@
     jQuery(document).ready(function ($) {
       var sort_order = readSortOrder();
       buildQuery();
-      console.log("initial sort order: "); 
-      console.log(sort_order);
-
   
       $(".sortflip").on('click', function(){
          //flips the sort direction for the currently displayed field.
@@ -36,13 +33,11 @@
     } );//end of document.ready stuff here.
 
     function showAscendingIcon(){
-       console.log("show ascending");
        var selector = $("div.active .sortflip");
        selector.removeClass('glyphicon-sort-by-attributes-alt');
        selector.addClass('glyphicon-sort-by-attributes');
     }
     function showDescendingIcon(){
-       console.log("show descending");
        var selector = $("div.active .sortflip");
        selector.removeClass('glyphicon-sort-by-attributes');
        selector.addClass('glyphicon-sort-by-attributes-alt');
@@ -55,7 +50,6 @@
       var sort_order = readSortOrder();
       var sort_dict = { "sort" : sort_order };
       var jsd = JSON.stringify(sort_dict);
-      console.log("buildQuery has written : " + jsd);
       active_form.find("[id$=sort_order]").attr('value', jsd);
     }
 
@@ -102,7 +96,6 @@
      for ( var i = 0; i < opts.length; i++){
        var key_for_term = opts[i].value;
        var order_for_term = $(opts[i]).attr("direction"); 
-       //console.log("order for term : " + order_for_term);
        var d = {};
        d[key_for_term] = { 'order' : order_for_term };  
       sort_order.push(d);
