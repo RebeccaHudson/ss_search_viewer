@@ -39,7 +39,6 @@ function drawMarkerLineCompress(targetForLine, pwmOffset, unshiftedMotifLength, 
 
 function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         //start with the reference end of the plot
-        console.log("getting a full-stack plot for target" + idOfTargetSVG);
         var refSeq = plotToMake.ref_aug_match_seq.split("");
         var refStrand = plotToMake.ref_strand;//Plus or -
         var refPWMOffset = plotToMake.ref_extra_pwm_off;
@@ -51,7 +50,6 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         var randomMotif = plotToMake.motif_data;
         var maxColumnCount = d3.max([refSeq.length, 
                                      randomMotif.forward.length + refPWMOffset  ]);
-        console.log("compelted fixed with calculations ");
         //columnWidth is 35 by default.
         //side margin
         var  sideMargin = 10;
@@ -113,7 +111,6 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         targetForLine = d3.select("svg#" + idOfTargetSVG + " g#line1data");
         drawMarkerLineCompress(targetForLine, refPWMOffset, unshiftedMotifLength, 
                                                    xScale, 55, refStrand); 
-        //console.log("made it to line 2 for one stacked plot");
         //draw the reference sequence on line 2.
         var refSeqTargetSelector = d3.select("svg#" + idOfTargetSVG + " g#line2data");
         drawUnscaledSequenceScaled(refSeqTargetSelector, refSeq, xScale, unscaledLetterHeight);
@@ -158,7 +155,6 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         drawScaledHorizontalAxis(snpSeqTargetSelector, xScale, snpSeq, maxColumnCount, columnWidthScaled);
 
         var highlightPosition = findSNPLocation(plotToMake);
-        //console.log("highlight position"  + highlightPosition);
         applyScaledHighlight(highlightPosition, idOfTargetSVG, xScale, columnWidthScaled);
         if (columnWidthScaled < 20){
             targetForLine.attr('transform', function(){ return 'translate(0, 40)'; } );
@@ -171,7 +167,6 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         if (columnWidthScaled == 29){
             labelYShift -=  6;
         }
-        //console.log("label Y shift : " + labelYShift);
         d3.select("svg#" + idOfTargetSVG + " g.snp-label")
           .attr('transform', 'translate('+labelXShift+', ' + labelYShift  + ' )');
 
@@ -183,7 +178,6 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         }else{ 
           downshift = 130; }
         line4.attr('transform', function(){ return 'translate(0, ' + downshift  + ')'; } );  
-        //console.log("shift down of bottom row: " + downshift);
 }//end of function to draw fixed-width full composite logo plot
 
 //This appears to work.
@@ -297,7 +291,7 @@ function drawLettersIntoColumns(columnsSelector, x, y){
       .attr("y", function(e, i) { 
                         var yVal =  (y(e.y0) - (y(e.y0) - y(e.y1))*logoYAdjust); 
                         if (isNaN(yVal)) {
-                            console.log("avoiding NaN..");
+                            //can this be shortcircuited somehow?
                             return 0;
                         }
                         return yVal;
