@@ -14,28 +14,31 @@
 <div class="sort-controls">
   <div class='shift-priority'> 
       <button onclick="priorityChange(event, 'up');">
-        <span class="glyphicon glyphicon-chevron-up"></span>
+        <span class="glyphicon glyphicon-menu-up"></span>
       </button>
       <button onclick="priorityChange(event, 'down');">
-        <span class="glyphicon glyphicon-chevron-down"></span>
+        <span class="glyphicon glyphicon-menu-down"></span>
       </button>
   </div>
 
   <div class="sort-selectors">
       <div class="hide-overflow">
-          <select class="sort-control sort-select" size=5>
-            <option value="pval_rank"  direction="asc"> P-value Rank           </option>
-            <option value="coordinate" direction="asc">Genomic Coordinate     </option>
-            <option value="pval_snp"   direction="asc">  P-value SNP            </option>
-            <option value="pval_ref"   direction="asc">  P-value Reference      </option>
+          <select class="sort-control sort-select" size=4>
+            <option value="pval_rank"  direction="asc">  P-value Rank      </option>
+            <option value="coordinate" direction="asc">  Genomic Coordinate</option>
+            <option value="pval_snp"   direction="asc">  P-value SNP       </option>
+            <option value="pval_ref"   direction="asc">  P-value Reference </option>
           </select>
       </div>
 
-      <span style="margin-top:25px;" class="sortflip glyphicon glyphicon-sort-by-attributes"></span>
-      <!-- this is supposed to be disabled; should still be clickable. 
-            <div class="hide-overflow">
-            <select class="sort-control sort-order-select" disabled="true" size=5>
-              <option value="asc">ascending              </option>
+      <!-- this is supposed to be disabled; should still be clickable. -->
+            <div class="hide-overflow" style="width:23px;">
+            <!-- <select class="sort-control sort-order-select" disabled="true" size=5>-->
+      <span style="font-size:18px;" class="sortflip glyphicon glyphicon-sort-by-attributes"></span>
+      <span style="font-size:18px;" class="sortflip glyphicon glyphicon-sort-by-attributes"></span>
+      <span style="font-size:18px;" class="sortflip glyphicon glyphicon-sort-by-attributes"></span>
+      <span style="font-size:18px;" class="sortflip glyphicon glyphicon-sort-by-attributes"></span>
+     <!--         <option value="asc">ascending              </option>
               <option value="asc">ascending              </option>
               <option value="asc">ascending              </option>
               <option value="asc">ascending              </option>
@@ -55,7 +58,10 @@
     div.sort-controls { display:flex;  }
     div.sort-controls > div.sort-selectors { flex: 1; }
 
-    .sort-control option{ font-size: 14px; }
+    .sort-control option{ 
+          font-size: 14px; 
+          height: 1.5em;
+     }
     .sort-order-select option { 
              color: black; 
      }
@@ -75,6 +81,10 @@
     .hide-overflow select{
        padding: 4px;
        margin: -5px -20px -5px -5px;
+     }
+     .hide-overflow span {
+       margin-top: .1em;
+       margin-bottom: .1em; 
      }
      .hide-overflow {
        display: inline-block;
