@@ -35,6 +35,13 @@
   table.template { 
       border: 0px;
   }
+  /* Copied from :
+  https://stackoverflow.com/questions/25227461/
+          how-to-remove-url-shown-after-links-from-a-printed-page-chrome */
+  @media print {
+      a:after { content:''; }
+      a[href]:after { content: none !important; }
+  }
 
   </style>
 </head>
