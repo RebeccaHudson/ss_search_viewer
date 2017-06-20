@@ -4,13 +4,7 @@ import json
 from ss_viewer.views.shared import MotifTransformer
 from ss_viewer.views.shared import APIUrls 
 from ss_viewer.views.shared import APIResponseHandler 
-
-
-#TODO: pull the motif data out of the API, not this static file
-from ss_viewer.views.shared import MotifPlottingData
-
 from ss_viewer.views.shared import ExternalResourceUrls 
-
 from django.core.exceptions import ValidationError
 from tempfile import NamedTemporaryFile 
 import csv
