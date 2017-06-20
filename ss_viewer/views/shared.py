@@ -65,34 +65,6 @@ class TFTransformer:
 
 
 
-#can pull this out of the API when it's available
-#TODO: factor this method out and consider making an API call to the 'motifs' data type.
-class MotifPlottingData:
-    def __init__(self):
-        motifs = None
-        
-        #put this into its own function
-        fpath = os.path.dirname(os.path.dirname(__file__)) + "/lookup-tables" +\
-        '/JASPARmotifs.json'
-        motif_data = {}
-        with open(fpath , 'r') as f:
-            motifs = json.load(f)
-            for one_motif in motifs['list']:
-                motif = one_motif['motif']
-                motif_data[motif] = {}
-                motif_data[motif]['forward'] = one_motif['forward']
-                motif_data[motif]['reverse'] = one_motif['reverse']
-        self.motifs = motif_data
-
-    def lookup_motif_data(self, motif):
-        motif_data = None
-        #print "self.motifs type:" + str(type(self.motifs))
-        #print "self.motifs.keys()" + str(self.motifs.keys())
-        #print "looking for motif : " + motif
-        if motif in self.motifs:
-            motif_data = self.motifs[motif]
-        return motif_data
-
 #TODO: finish deprecating this class and fully replace it
 # with the one below.
 class PValueFromForm:
@@ -232,22 +204,17 @@ class APIResponseHandler:
     def get_plots(rows_to_display):
         plot_data = {} 
         field_names = ['motif', 'snpid', 'snpAllele'] 
-        first_plot_id_str = None
+        #first_plot_id_str = None
          
-        #motifPlotData object gets the actual motif data.    
-        #mpd = MotifPlottingData() #Deprecate this
-     
         for one_row in rows_to_display:
-            plot_id_str = "_".join([one_row[field_name] for field_name in field_names ])
+            plot_id_str = \
+              "_".join([one_row[field_name] for field_name in field_names ])
             plot_id_str_for_web_page = plot_id_str.replace(".", "_")
             one_row['plot_id_str'] = plot_id_str_for_web_page
-            #print "plot ID for web page looks like this "+ plot_id_str_for_web_page
-            #plot_data[plot_id_str_for_ web_page] = reverse('ss_viewer:dynamic-svg', args=[plot_id_str])  
-            #everything is a JASPAR motif right now. Switch to ENCODE somewhere else.
-            #motif_data = mpd.lookup_motif_data(one_row['motif'])
-            #print "\n\nis this the same as what follows ? " + repr(motif_data)
+
+            #Motifs for ENCODE and JASPAR are pulled from an Elasticsearch 
+            #index by the API.
             motif_data_b = json.loads(one_row['motif_bits'])
-            print "\n\nis this the same as what is above?" + repr(motif_data_b)
             json_for_plotting = { 'snp_aug_match_seq': one_row['snp_aug_match_seq'],
                                   'snp_extra_pwm_off': one_row['snp_extra_pwm_off'],
                                   'ref_aug_match_seq': one_row['ref_aug_match_seq'],
@@ -260,14 +227,14 @@ class APIResponseHandler:
                                   'plot_id_str'     : plot_id_str_for_web_page
                                  }
             one_row['json_for_plotting'] = json.dumps(json_for_plotting)
-            if first_plot_id_str is None:
-                first_plot_id_str = plot_id_str_for_web_page
-                #tell the interface which plot to show first.
+            #if first_plot_id_str is None:
+            #    first_plot_id_str = plot_id_str_for_web_page
+            #    #tell the interface which plot to show first.
         if not any(plot_data):
             return None
         return { 'response_data' : rows_to_display, 
-                 'plot_data': plot_data , 
-                 'first_plot_id_str': first_plot_id_str}
+                 'plot_data': plot_data }  #, 
+                 #'first_plot_id_str': first_plot_id_str}
  
     
 
@@ -281,7 +248,7 @@ class APIResponseHandler:
 
         response_data = None
         plot_source = None
-        first_plot_id_str = None
+        #first_plot_id_str = None
         api_response = None
         search_paging_info = None
         print "attempting search"
@@ -319,7 +286,7 @@ class APIResponseHandler:
             if plot_data is not None: #append the plot id strings to each row..
                 response_data = plot_data['response_data']
                 plot_source = plot_data['plot_data']          
-                first_plot_id_str = plot_data['first_plot_id_str']
+                #first_plot_id_str = plot_data['first_plot_id_str']
 
             status_message = APIResponseHandler.setup_hits_message(response_json['hitcount'], 
                                        search_request_params['page_of_results_to_display'])
@@ -329,8 +296,8 @@ class APIResponseHandler:
         return  {'status_message' : status_message, 
                  'search_paging_info' : search_paging_info,
                  'api_response'       : response_data,
-                 'plot_source'          : plot_source,
-                 'first_plot_id_str'  : first_plot_id_str }
+                 'plot_source'          : plot_source } #,
+                 #'first_plot_id_str'  : first_plot_id_str }
     
 
 
