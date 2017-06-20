@@ -235,7 +235,7 @@ class APIResponseHandler:
         first_plot_id_str = None
          
         #motifPlotData object gets the actual motif data.    
-        mpd = MotifPlottingData()
+        #mpd = MotifPlottingData() #Deprecate this
      
         for one_row in rows_to_display:
             plot_id_str = "_".join([one_row[field_name] for field_name in field_names ])
@@ -244,8 +244,10 @@ class APIResponseHandler:
             #print "plot ID for web page looks like this "+ plot_id_str_for_web_page
             #plot_data[plot_id_str_for_ web_page] = reverse('ss_viewer:dynamic-svg', args=[plot_id_str])  
             #everything is a JASPAR motif right now. Switch to ENCODE somewhere else.
-            
-            motif_data = mpd.lookup_motif_data(one_row['motif'])
+            #motif_data = mpd.lookup_motif_data(one_row['motif'])
+            #print "\n\nis this the same as what follows ? " + repr(motif_data)
+            motif_data_b = json.loads(one_row['motif_bits'])
+            print "\n\nis this the same as what is above?" + repr(motif_data_b)
             json_for_plotting = { 'snp_aug_match_seq': one_row['snp_aug_match_seq'],
                                   'snp_extra_pwm_off': one_row['snp_extra_pwm_off'],
                                   'ref_aug_match_seq': one_row['ref_aug_match_seq'],
@@ -253,7 +255,7 @@ class APIResponseHandler:
                                   'snp_strand'      : one_row['snp_strand'],
                                   'ref_strand'      : one_row['ref_strand'], 
                                   'motif'           : one_row['motif'],
-                                  'motif_data'      : motif_data,
+                                  'motif_data'      : motif_data_b, #change to _b ...
                                   'snpid'           : one_row['snpid'],
                                   'plot_id_str'     : plot_id_str_for_web_page
                                  }
@@ -367,6 +369,7 @@ class StreamingCSVDownloadHandler:
             api_search_query.update(
                                {'from_result':search_offset,
                                 'page_size':settings.API_HOST_INFO['download_result_page_size']})
+            api_search_query.update({'for_download': True})
             print "for download: api search query : "+ repr(api_search_query)
             api_response = requests.post( APIUrls.setup_api_url(api_action),
                  json=api_search_query, headers={'content-type':'application/json'})
