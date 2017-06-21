@@ -50,6 +50,8 @@ function create_paging_post(action_name, search_type){
  var values = jQuery.parseJSON(val_text);
  values['action'] = action_name
  hideControlsWhileLoading();
+ console.log("paging post with the following values: ");
+ console.log(values);
  $.ajax({
       beforeSend: function(xhr, settings) {
            csrfSafeSend(xhr, settings);
@@ -71,10 +73,6 @@ function create_paging_post(action_name, search_type){
 } //also handles 'jump' action to jump to any valid page.
 
 
-
-
-
-
 //shared between success handler for search and paging posts.
 function handleResults(values, json){
     $("div.status_message").text(json.status_message);
@@ -88,9 +86,17 @@ function handleResults(values, json){
         //that this is a non-error, but empty search results case.
         showStatusInCorrectPlace(true);
     }
+  
+    //stringify the ic filter information ONCE. 
+    if (typeof values['ic_filter'] == 'object'){ 
+        values['ic_filter'] = JSON.stringify(values['ic_filter']);
+        //must be un-stringified on the back end.
+    }
+
     var values_to_save_for_paging = JSON.stringify(values);
+    console.log("saving these values for paging:  ");
+    console.log(values);
     $("div#current_search_params").text(values_to_save_for_paging);
-    //console.log(json.form_data);
 }
 
 

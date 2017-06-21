@@ -37,11 +37,16 @@ class GenericSearchView(View):
             newDict = self.setup_form_for_download_request(request)
 
         newDict = self.add_form_prefix_to_fields_for_search(newDict)
+        print "newDict : " + repr(newDict)
         self.search_form = self.form_class(newDict)
 
     def setup_form_for_paging_request(self, request):
         print "setup for paging request.." 
-        return request.POST.dict()
+        print "here is what we have " + repr(request.POST.dict())
+        motif_ic_str = request.POST.dict()['ic_filter']
+        d = request.POST.dict()    
+        d['ic_filter'] = json.loads(motif_ic_str)
+        return d #request.POST.dict()
 
     def setup_form_for_download_request(self, request):
         return request.POST 
@@ -56,6 +61,8 @@ class GenericSearchView(View):
         self.api_search_query.update(self.get_pvalues_from_form())
         self.api_search_query.update(self.get_pvalue_directions_from_form() ) 
         self.api_search_query.update(self.handle_sort_order() ) 
+        print "contains it here? " + repr(form_data)
+        self.handle_ic_filter()
 
     def prepare_search_parameters(self, request):
         search_request_params = Paging.get_paging_info_for_request(request, 
@@ -73,10 +80,10 @@ class GenericSearchView(View):
         if request.POST['action'] in ['Prev', 'Next', 'Download Results'] or\
              'jump' in  request.POST['action']:
             self.setup_form_for_paging_or_download_request(request)
+            #print "does this request contain the motif-ic info? " + repr(request.body)
         else: 
             #case when it's a basic (not paging or download) search
             self.setup_form_for_standard_request(request)
-
         if not self.search_form.is_valid():
             return self.handle_invalid_form()
 
@@ -105,6 +112,13 @@ class GenericSearchView(View):
             string_val = self.search_form.cleaned_data['sort_order']
             sort_order['sort_order'] = json.loads(string_val)
         return sort_order
+  
+    def handle_ic_filter(self):
+        ic_to_include = [] #contains 1, 2, 3, or 4
+        ic_values = self.search_form.cleaned_data['ic_filter']
+        print "********************************* " + repr(ic_values) + "********************"
+        # self.search_form.cleaned_data.keys()
+        
 
     def handle_paging_and_return_context(self, form_data,
                                                     search_request_params):
