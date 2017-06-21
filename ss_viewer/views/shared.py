@@ -43,12 +43,17 @@ class MotifTransformer:
 
 #maybe put this with searches by transcription factor.
 class TFTransformer:
-    def __init__(self):
-        lut = None
+    def __init__(self, jaspar_or_encode):
+        lut = None;  fpath = None
         #TODO: the following pickle must be processed in such a way that a 
         # lookup on a TF with multiple motif values returns a list.
+        if jaspar_or_encode == 'jaspar':
+         which_one = '/lut_jaspar_motifs_by_tf.pkl'
+        else: #assuming 'encode' 
+          which_one = '/lut_encode_motifs_by_tf.pkl'
+
         fpath = os.path.dirname(os.path.dirname(__file__)) + "/lookup-tables" +\
-          '/lut_jaspar_motifs_by_tf.pkl'
+                  which_one
         with open(fpath , 'r') as f:  
             lut = pickle.load(f) 
         self.lut = lut
@@ -58,12 +63,6 @@ class TFTransformer:
         if not type(one_or_more_motif_values) == list:
           one_or_more_motif_values = [one_or_more_motif_values]
         return one_or_more_motif_values
-
-
-
-
-
-
 
 #TODO: finish deprecating this class and fully replace it
 # with the one below.
@@ -162,7 +161,7 @@ class Paging:
         elif request.POST['action'] == 'Prev':
              page_of_results_to_display = page_of_search_results - 1
         elif 'jump' in request.POST['action']:
-             #VALIDATION.
+             #VALIDATION?
              page_of_results_to_display = \
                  int(request.POST['action'].split('-')[1])
 
@@ -204,8 +203,6 @@ class APIResponseHandler:
     def get_plots(rows_to_display):
         plot_data = {} 
         field_names = ['motif', 'snpid', 'snpAllele'] 
-        #first_plot_id_str = None
-         
         for one_row in rows_to_display:
             plot_id_str = \
               "_".join([one_row[field_name] for field_name in field_names ])
@@ -227,31 +224,20 @@ class APIResponseHandler:
                                   'plot_id_str'     : plot_id_str_for_web_page
                                  }
             one_row['json_for_plotting'] = json.dumps(json_for_plotting)
-            #if first_plot_id_str is None:
-            #    first_plot_id_str = plot_id_str_for_web_page
-            #    #tell the interface which plot to show first.
         if not any(plot_data):
             return None
         return { 'response_data' : rows_to_display, 
-                 'plot_data': plot_data }  #, 
-                 #'first_plot_id_str': first_plot_id_str}
+                 'plot_data': plot_data } 
  
-    
-
-
-
-
     @staticmethod
     #api_action should be 'search-by-tf' or 'search-by-gl'
     #This code gets repeated between every search.
     def handle_search(api_search_query, api_action, search_request_params):
-
         response_data = None
         plot_source = None
-        #first_plot_id_str = None
         api_response = None
         search_paging_info = None
-        print "attempting search"
+        print "attempting search, query: " + repr(api_search_query)
         api_search_query.update({"page_size": settings.API_HOST_INFO['result_page_size']})
         try:
             api_response = requests.post( APIUrls.setup_api_url(api_action),
@@ -286,7 +272,6 @@ class APIResponseHandler:
             if plot_data is not None: #append the plot id strings to each row..
                 response_data = plot_data['response_data']
                 plot_source = plot_data['plot_data']          
-                #first_plot_id_str = plot_data['first_plot_id_str']
 
             status_message = APIResponseHandler.setup_hits_message(response_json['hitcount'], 
                                        search_request_params['page_of_results_to_display'])
@@ -296,8 +281,7 @@ class APIResponseHandler:
         return  {'status_message' : status_message, 
                  'search_paging_info' : search_paging_info,
                  'api_response'       : response_data,
-                 'plot_source'          : plot_source } #,
-                 #'first_plot_id_str'  : first_plot_id_str }
+                 'plot_source'          : plot_source }
     
 
 
