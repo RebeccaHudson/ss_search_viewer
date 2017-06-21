@@ -27,9 +27,12 @@
   <td>   {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
          {{ snpid_search_form.pvalue_snp_cutoff  }} </td>
 </tr>
-
 <tr>
    {% include "ss_viewer/sort_widget.html" %} 
+</tr>
+<tr>
+   <td>  {{ snpid_search_form.ic_filter.label_tag }}  </td>
+   <td>  {{ snpid_search_form.ic_filter }} </td>
 </tr>
 </table>
 

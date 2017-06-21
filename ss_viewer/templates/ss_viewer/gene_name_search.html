@@ -32,6 +32,10 @@
 <tr>
    {% include "ss_viewer/sort_widget.html"  %} 
 </tr>
+<tr>
+    <td>{{ gene_name_form.ic_filter.label_tag }} </td>
+    <td>{{ gene_name_form.ic_filter }}  </td>
+</tr>
 </tbody>
 </table>
   {# Include the hidden fields #}
@@ -42,6 +46,10 @@
           <input type="submit" name="action" value="Search by Gene Name"  
                                                           class="btn btn-primary" />
       </div> <!-- end div for submit buttons. -->
-       <button id="gene-name-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
+       <button id="gene-name-search-demo"
+               type="button" class="btn btn-link" 
+               title="Fill out the form with demo values.">
+         Use demo values for search.
+      </button>
   </form>
 </div>

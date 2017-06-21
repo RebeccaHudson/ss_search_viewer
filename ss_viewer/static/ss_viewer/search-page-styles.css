@@ -127,3 +127,11 @@
 /* Style(s) for displaying the tabbed-search-forms 
  * (Bootstrap handles most of it though.)*/
     #tabbed-forms { margin-right: 2px; }
+
+/*Display the information content filtering controls horizontally. 
+  Matches ALL of the controls whose IDs end in '-ic_filter'*/
+    [id$=-ic_filter] li { display: inline; }
+    [id$=-ic_filter] { padding: 0px; }
+    [id$=-ic_filter] label { font-size: 12px; }
+
+

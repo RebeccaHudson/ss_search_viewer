@@ -38,26 +38,27 @@ class GenericSearchForm(forms.Form):
                                            required = False)
     
     use_these_choices = ( ("lt", "<"), ("gte", u"\u2265"))
-    #"class":"form-control", 
     
     styled_widget = forms.Select(attrs={ "title" : "Select the cutoff direction.",
-                                        "style" : "float:left; margin-top:5px;"  })
+                                         "style" : "float:left; margin-top:5px;"  })
 
-    #pvalue_snp_direction  = forms.ChoiceField(widget=styled_widget,
-    #                                 choices = use_these_choices, 
-    #                                 required = False,
-    #                                 label = "Select cutoff direction for pvalue SNP.")
-
-    #pvalue_ref_direction  = forms.ChoiceField(widget=styled_widget,
-    #                                 choices = use_these_choices, 
-    #                                 required = False,
-    #                                 label = "Select cutoff direction for pvalue reference.")
-    #TODO: replace pvalue reference direction and snp direction with this field type.
     pvalue_snp_direction = forms.CharField(widget = forms.HiddenInput(), required = False)
     pvalue_ref_direction = forms.CharField(widget = forms.HiddenInput(), required = False)
 
     sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
 
+    ic_options = [('4','Very High'),
+                  ('3','High'),
+                  ('2','Moderate'),
+                  ('1','Low'),]
+    #Lifted from 
+    #https://stackoverflow.com/questions/2229029/django-choicefield-with-
+    #   checkboxselectmultiple-all-selected-by-default/14364035
+    ic_filter = forms.MultipleChoiceField(choices=ic_options,
+                                          label="Filter by information content", 
+                                          required = False, 
+                                          widget=forms.CheckboxSelectMultiple(attrs={"checked":"",
+                                                                                     'class':'ic-filter'}))
     def clean(self):
         cleaned_data = super(GenericSearchForm, self).clean()
         if cleaned_data.get('pvalue_rank_cutoff') is None:
@@ -312,6 +313,8 @@ class SearchByGeneNameForm(GenericSearchForm):
 
     def clean(self):
         cleaned_data = super(SearchByGeneNameForm, self).clean()    
+        if not 'gene_name' in cleaned_data:          
+            raise forms.ValidationError('Gene name is missing.');       
         gene_nm = cleaned_data['gene_name'].decode('utf-8').upper()
         cleaned_data['gene_name'] = gene_nm.encode('utf-8') 
 
