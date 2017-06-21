@@ -40,16 +40,20 @@ class GenericSearchView(View):
         print "newDict : " + repr(newDict)
         self.search_form = self.form_class(newDict)
 
+    def unpack_motif_ic_list(self, dict_as_given):
+        motif_ic_str = dict_as_given['ic_filter']
+        dict_as_given['ic_filter'] = json.loads(motif_ic_str)
+        #dict_as_given will be modified in the calling method.
+
     def setup_form_for_paging_request(self, request):
-        print "setup for paging request.." 
-        print "here is what we have " + repr(request.POST.dict())
-        motif_ic_str = request.POST.dict()['ic_filter']
-        d = request.POST.dict()    
-        d['ic_filter'] = json.loads(motif_ic_str)
-        return d #request.POST.dict()
+        d = request.POST.dict()
+        self.unpack_motif_ic_list(d)
+        return d 
 
     def setup_form_for_download_request(self, request):
-        return request.POST 
+        d = request.POST
+        self.unpack_motif_ic_list(d)
+        return d
  
     #Not paging or download. 
     def setup_form_for_standard_request(self, request):
@@ -61,8 +65,8 @@ class GenericSearchView(View):
         self.api_search_query.update(self.get_pvalues_from_form())
         self.api_search_query.update(self.get_pvalue_directions_from_form() ) 
         self.api_search_query.update(self.handle_sort_order() ) 
-        print "contains it here? " + repr(form_data)
-        self.handle_ic_filter()
+        ic_filter = self.handle_ic_filter()
+        self.api_search_query.update(ic_filter)
 
     def prepare_search_parameters(self, request):
         search_request_params = Paging.get_paging_info_for_request(request, 
@@ -75,12 +79,10 @@ class GenericSearchView(View):
         request = self.check_for_download_request(request) 
         #rearranges the request if it's a download.
 
-        print "request.POST['action'] " + request.POST['action']
         #get the 'Action' out of the post; setup the form accordingly.
         if request.POST['action'] in ['Prev', 'Next', 'Download Results'] or\
              'jump' in  request.POST['action']:
             self.setup_form_for_paging_or_download_request(request)
-            #print "does this request contain the motif-ic info? " + repr(request.body)
         else: 
             #case when it's a basic (not paging or download) search
             self.setup_form_for_standard_request(request)
@@ -116,10 +118,10 @@ class GenericSearchView(View):
     def handle_ic_filter(self):
         ic_to_include = [] #contains 1, 2, 3, or 4
         ic_values = self.search_form.cleaned_data['ic_filter']
-        print "********************************* " + repr(ic_values) + "********************"
-        # self.search_form.cleaned_data.keys()
+        ic_dict = { 'ic_filter' : ic_values }
+        #print "********************************* " + repr(ic_values) + "********************"
+        return ic_dict
         
-
     def handle_paging_and_return_context(self, form_data,
                                                     search_request_params):
         form_data['page_of_results_shown'] =  \
