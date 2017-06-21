@@ -10,11 +10,11 @@ function setupAjaxyFormSubmissions(){
 function setupJumpToPageControl(){
     $("#jump").on("click", function(event){
       event.preventDefault();
-      var jumpTo = $("#user-page-number")[0].value;
-      var min = $("#user-page-number").attr('min');
-      var max = $("#user-page-number").attr('max');
-      if (jumpTo < min){ jumpTo = min;  }
-      if (jumpTo > max){ jumpTo = max;  }
+      var jumpTo = parseInt($("#user-page-number")[0].value);
+      var min = parseInt($("#user-page-number").attr('min'));
+      var max = parseInt($("#user-page-number").attr('max'));
+      if (jumpTo < min){  jumpTo = min;  }
+      if (jumpTo > max){  jumpTo = max;  }
       pagingAJAX('jump-' + jumpTo);
    }); 
 }
@@ -46,8 +46,6 @@ function showHidePrevNext(search_paging_info){
     showHideOneButton(btn_selector + ' #next_button', show_btn['next']); 
     showHideOneButton(btn_selector + ' #prev_button', show_btn['prev']);
 }
-
-
 
 function clearOutPlots(){
    var plotsForPage = ['svg[id^="target"]', 
