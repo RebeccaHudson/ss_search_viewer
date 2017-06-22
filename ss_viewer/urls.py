@@ -42,7 +42,7 @@ urlpatterns = [
        views.shared.StandardFormset.show_multisearch_page,
        name='multi-search'),
 
-  url(r'detail/(?P<id_str>\w+_\w+_\w+)/$',
+  url(r'detail/(?P<id_str>[\w\:-]+_\w+_\w+)/$',
        views.single_detail.one_row_detail,
        name = 'detail'),
 
