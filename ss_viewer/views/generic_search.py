@@ -1,4 +1,5 @@
 import re
+import copy
 from ss_viewer.views.shared import APIResponseHandler
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -51,7 +52,7 @@ class GenericSearchView(View):
         return d 
 
     def setup_form_for_download_request(self, request):
-        d = request.POST
+        d = copy.deepcopy(request.POST)
         d.update(self.unpack_motif_ic_list(d))
         return d
  
