@@ -42,17 +42,17 @@ class GenericSearchView(View):
 
     def unpack_motif_ic_list(self, dict_as_given):
         motif_ic_str = dict_as_given['ic_filter']
-        dict_as_given['ic_filter'] = json.loads(motif_ic_str)
+        return {'ic_filter':  json.loads(motif_ic_str)}
         #dict_as_given will be modified in the calling method.
 
     def setup_form_for_paging_request(self, request):
         d = request.POST.dict()
-        self.unpack_motif_ic_list(d)
+        d.update(self.unpack_motif_ic_list(d))
         return d 
 
     def setup_form_for_download_request(self, request):
         d = request.POST
-        self.unpack_motif_ic_list(d)
+        d.update(self.unpack_motif_ic_list(d))
         return d
  
     #Not paging or download. 
