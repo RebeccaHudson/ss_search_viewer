@@ -29,7 +29,7 @@ function checkedRowPlotDownload(){
     checkedTargets = []; 
     for (var i = 1; i < targets.length; i++){ //skip over the skeleton, target-0
        //the following depends on the structure of the data table.           
-       var idToUse = targets[i].id.replace('target-', '');
+       var idToUse = targets[i].id.replace('target-', '').replace(/\:/g, '\\:');;
        var checky = $("input#" + idToUse); 
        checky = checky[0]; 
        if ( checky.checked == true ){

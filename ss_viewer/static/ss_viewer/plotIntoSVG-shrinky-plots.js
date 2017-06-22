@@ -38,7 +38,10 @@ function drawMarkerLineCompress(targetForLine, pwmOffset, unshiftedMotifLength, 
 }
 
 function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
+        //idOfTargetSVG = idOfTargetSVG.replace(/\:/g, '\\:');
         //start with the reference end of the plot
+        //
+        
         var refSeq = plotToMake.ref_aug_match_seq.split("");
         var refStrand = plotToMake.ref_strand;//Plus or -
         var refPWMOffset = plotToMake.ref_extra_pwm_off;

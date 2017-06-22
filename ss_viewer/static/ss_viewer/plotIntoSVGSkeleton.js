@@ -20,9 +20,14 @@
     //don't call this unless there's already an SVG on the page!
     sequencelogoFont();
 
+
     //motifMap gets loaded earlier from test-motif-data.js
     //motif_data, a key in the plotToMake dict, replaces the motif parameter
     function makeAPlot(plotToMake, idOfTargetSVG){
+        //motifs sometimes contain ':' characters, which are not valid inside
+        //of a JQuery selector.
+        //idOfTargetSVG = idOfTargetSVG.replace(/\:/g, '\\:');
+        //is this already being escaped?
 
         var motifName = plotToMake.motif;
         var snpSeq = plotToMake.snp_aug_match_seq.split("");
