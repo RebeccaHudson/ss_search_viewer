@@ -52,11 +52,8 @@ function setupPlotsForSearchResults(){
    //there should be matches for target-stacked-plot at this point.
    for ( var n = 0; n < plottingData.length; n++){
        var id_str = plottingData[n].plot_id_str.replace(/\:/g, '\\:');
-       //escape the damned colons!!
-       console.log("running for id : " + id_str);
-
-       var targetSVGid = "target-" + id_str;                  // plottingData[n].plot_id_str;
-       var fullStackPlotId = 'target-stacked-plot-' + id_str; //plottingData[n].plot_id_str;
+       var targetSVGid = "target-" + id_str;                  
+       var fullStackPlotId = 'target-stacked-plot-' + id_str; 
 
        makeAPlot(plottingData[n], targetSVGid);
        drawFixedWidthCompositePlot(plottingData[n], fullStackPlotId);
@@ -73,7 +70,7 @@ function setupPlotsForSearchResults(){
        var fullStackPlotToMove = $("#" + fullStackPlotId).parent().detach();
        //how does the bulk download find this plot in order to download it?
 
-       var idOfFullStackPlotTarget = "#stacked-plot-" + id_str; //plottingData[n].plot_id_str;
+       var idOfFullStackPlotTarget = "#stacked-plot-" + id_str;
        var putFullStackPlotHere = $(idOfFullStackPlotTarget);
 
        fullStackPlotToMove.appendTo(putFullStackPlotHere);
