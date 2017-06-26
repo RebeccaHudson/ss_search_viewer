@@ -250,7 +250,10 @@ class APIResponseHandler:
         if api_response is  None:
              status_message = "API timed out. Request took too long."
         elif api_response.status_code == 204:
-            status_message = 'No results match the query.'
+             status_message = 'No results match the query.'
+        elif api_response.status_code == 207:
+            if str(api_response.text).find('INFO') is not -1:
+                status_message  = api_response.text.replace('"', "")
         elif api_response.status_code == 500:
             status_message = 'API error; no data returned.'
             if len(api_response.text) > 0 and len(api_response.text) < 200:
