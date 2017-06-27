@@ -18,7 +18,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_URL = '/old/static/' #once this app is back at /, take out the /old/ and put
                             #in 'static'
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
@@ -29,7 +28,6 @@ SECRET_KEY = 'z_qjigm@1xd6(vv7*uc-p(f@4wjcrrlwixgxlpm&tbs2d*yj^s'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 #I added this setting.
 API_HOST_INFO = {
@@ -136,13 +134,12 @@ USE_TZ = True
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
-#STATIC_URL = os.path.join(BASE_DIR, "static/")
-
 
 HARD_LIMITS = {
-  'MAX_NUMBER_OF_SNPIDS_ALLOWED_TO_REQUEST': 100000000000000,
-  'MAX_NUMBER_OF_BASES_IN_GENOMIC_LOCATION_REQUEST': 1000000000000000,
-  'MAX_CSV_DOWNLOAD' : 60000
+  'MAX_NUMBER_OF_SNPIDS_ALLOWED_TO_REQUEST': 1000000,
+  'MAX_NUMBER_OF_BASES_IN_GENOMIC_LOCATION_REQUEST': 1000000,
+  'MAX_CSV_DOWNLOAD' : 60000,
+  'ELASTIC_MAX_RESULT_WINDOW' : 10000
 }
 
 
