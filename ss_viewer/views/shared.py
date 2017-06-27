@@ -367,11 +367,9 @@ class StreamingCSVDownloadHandler:
                 response_json = json.loads(api_response.text)
                 api_response_data = response_json['data']         
                 prepared_data = mt.transform_motifs_to_transcription_factors(api_response_data)
-                #print "hitcount = " + str(response_json['hitcount'])
-                #print "got this much data out of API this round : " + str(len(api_response_data))
                 for dr in prepared_data:
                     rows.append( [ dr[field_name] for field_name in fields_for_csv ])
-                    if len(rows) >= settings.HARD_LIMITS['MAX_CSV_DOWNLOAD']:
+                    if len(rows) - 1 >= settings.HARD_LIMITS['MAX_CSV_DOWNLOAD']:
                         keep_on_paging = False
                         break
             else:
