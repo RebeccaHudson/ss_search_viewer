@@ -120,7 +120,6 @@ class SearchBySnpidForm(GenericSearchForm):
             raise forms.ValidationError(('You must specify snpids in the textbox,'
                                         ' OR provide a file.'),
                                          code='missing-input')
-        
         if not snpid_file:
             snpid_list  = \
                  SnpidSearchUtils.clean_and_validate_snpid_text_input(
@@ -133,6 +132,9 @@ class SearchBySnpidForm(GenericSearchForm):
         if snpid_list is None: 
             raise forms.ValidationError(
                                 ('No properly formatted SNPids in the text.'))
+        max_snpids = settings.HARD_LIMITS['MAX_NUMBER_OF_SNPIDS_ALLOWED']
+        if len(snpid_list) > max_snpids:
+            snpid_list = snpid_list[:max_snpids]
         cleaned_data['snpid_list'] = snpid_list
         cleaned_data['raw_requested_snpids'] = ", ".join(snpid_list)
 
