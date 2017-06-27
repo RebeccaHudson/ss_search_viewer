@@ -47,10 +47,15 @@ class GenericSearchForm(forms.Form):
 
     sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
 
-    ic_options = [('4','Very High'),
-                  ('3','High'),
-                  ('2','Moderate'),
-                  ('1','Low'),]
+    #This is apparently swapped?
+    #ic_options = [('4','Very High'),
+    #              ('3','High'),
+    #              ('2','Moderate'),
+    #              ('1','Low'),]
+    ic_options = [('1','Very High'),
+                  ('2','High'),
+                  ('3','Moderate'),
+                  ('4','Low'),]
     #Lifted from 
     #https://stackoverflow.com/questions/2229029/django-choicefield-with-
     #   checkboxselectmultiple-all-selected-by-default/14364035
