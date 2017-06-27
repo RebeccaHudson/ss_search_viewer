@@ -177,9 +177,18 @@ function showStatusInCorrectPlace(isUpper){
     }    
 }
 
-//Don't let users jump past the end of the search results.
+/*Don't let users jump past the end of the search results.
+  use total_page_count or max_page_availabe, whichever one is greater. 
+  Don't allow paging past max_result_window / page_size (666 for now) */
 function setMaxValueOnJumpControl(search_paging_info){
-   $("#user-page-number").attr('max', search_paging_info.total_page_count);
+   var maxPg;
+   if (search_paging_info.max_page_available <  
+         search_paging_info.total_page_count){
+        maxPg = search_paging_info.max_page_available;
+      }else{
+        maxPg = search_paging_info.total_page_count;
+      }
+      $("#user-page-number").attr('max',maxPg );
 }
 
 function  hideControlsWhileLoading(){
