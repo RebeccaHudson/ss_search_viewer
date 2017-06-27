@@ -35,7 +35,7 @@ API_HOST_INFO = {
   'host_port' : '8005',
   'api_root' : 'api_v0',
   'result_page_size'  : 15, #this should be much bigger later.
-  'download_result_page_size' : 5000,
+  'download_result_page_size' : 250,
 }
 
 ELASTICSEARCH_URLS = [ 'http://atsnp-db'+ str(x) +'.biostat.wisc.edu:9200' for x in range(1,4) ]
@@ -138,7 +138,7 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 HARD_LIMITS = {
   'MAX_NUMBER_OF_SNPIDS_ALLOWED_TO_REQUEST': 1000000,
   'MAX_NUMBER_OF_BASES_IN_GENOMIC_LOCATION_REQUEST': 1000000000,
-  'MAX_CSV_DOWNLOAD' : 60000,
+  'MAX_CSV_DOWNLOAD' : 5000,
   'ELASTIC_MAX_RESULT_WINDOW' : 10000
 }
 
