@@ -191,13 +191,13 @@ class SearchByGenomicLocationForm(GenericSearchForm):
             raise forms.ValidationError(('Start position must be less than or equal'
                                         ' to the end position.'),
                                         code='region-size-0'  )
-         
-        max_size_of_region = settings.HARD_LIMITS['MAX_NUMBER_OF_SNPIDS_ALLOWED_TO_REQUEST']
+        max_size_of_region = \
+          settings.HARD_LIMITS['MAX_NUMBER_OF_BASES_IN_GENOMIC_LOCATION_REQUEST']
         if end_pos - start_pos > max_size_of_region: 
-            raise forms.ValidationError(('The size of the specified region must be'
-                                       'less than or equal to.' + 
-                                        str(max_size_of_region)   ),
-                                       code='region-size-too-large' )
+            raise forms.ValidationError(
+                        ('The size of the specified region must be'
+                        'less than or equal to {:,}.'.format(max_size_of_region)
+                                       ), code='region-size-too-large')
 
  
 class SearchByTranscriptionFactorForm(GenericSearchForm):
