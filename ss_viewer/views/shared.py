@@ -171,18 +171,28 @@ class Paging:
                  'page_of_results_to_display' : page_of_results_to_display }
 
     @staticmethod
+    def calculate_max_page_available():
+        return (settings.HARD_LIMITS['ELASTIC_MAX_RESULT_WINDOW'] / \
+               settings.API_HOST_INFO['result_page_size']) 
+
+    @staticmethod
     def get_paging_info_for_display(hitcount, page_of_results_to_display):
         search_paging_info = {'show_next_btn': False, 'show_prev_btn': False}
+        max_page_available = Paging.calculate_max_page_available()
         hits_paged = (page_of_results_to_display ) * \
                      settings.API_HOST_INFO['result_page_size']
-        if hitcount > hits_paged:
+        if hitcount > hits_paged and \
+           page_of_results_to_display < max_page_available:
             search_paging_info['show_next_btn'] = True
         if page_of_results_to_display > 1:
              search_paging_info['show_prev_btn'] = True
+        
 
         search_paging_info['page_of_results_to_display'] = page_of_results_to_display
         totalPageCount = (hitcount / settings.API_HOST_INFO['result_page_size']) + 1
         search_paging_info['total_page_count'] = totalPageCount 
+
+        search_paging_info['max_page_available'] = Paging.calculate_max_page_available()
         #could be refactored so calculation above does not get repeated in 'setup_hits_message'
         return search_paging_info
 
@@ -194,9 +204,17 @@ class APIResponseHandler:
         #Showing page N, a through b of N total pairs.
         #could be refactored so the following calculation is not repeated in the 'Paging' class.
         totalPageCount = (hitcount / settings.API_HOST_INFO['result_page_size']) + 1
-        return 'Got ' + str(hitcount) + ' matching (SNP,TF) pairs.' +\
-               ' Showing page: ' + str(page_of_results_to_display) + " out of " + str(totalPageCount) + "."
-     
+        hitsMsg = ""
+        if hitcount > settings.HARD_LIMITS['ELASTIC_MAX_RESULT_WINDOW']:
+            hitsMsg +=  \
+             "The first {:,}".format( \
+                   settings.HARD_LIMITS['ELASTIC_MAX_RESULT_WINDOW']) +\
+             "  available from  "
+        hitsMsg +=  "{:,} matching (SNP,TF) pairs.".format(hitcount)
+        hitsMsg +=  " Showing page: {:,}".format(page_of_results_to_display) +\
+                    " out of  {:,}.".format(totalPageCount)
+        return hitsMsg
+                    
     @staticmethod 
     #meant to handle one page of results at a time.
     #start with just the first result
@@ -228,6 +246,21 @@ class APIResponseHandler:
             return None
         return { 'response_data' : rows_to_display, 
                  'plot_data': plot_data } 
+
+    @staticmethod
+    def check_that_result_window_is_not_exceeded(search_request_params):
+        last_doc_requested =  \
+        settings.API_HOST_INFO['result_page_size'] + \
+        search_request_params['search_result_offset']
+          
+        limit =  settings.HARD_LIMITS['ELASTIC_MAX_RESULT_WINDOW']
+        print "last doc requested : " + str(last_doc_requested)
+        print "hard ES window limit " + str(limit)
+        print "all of the search_request_parameters : " + repr(search_request_params)
+        if last_doc_requested <= limit:
+            return True
+        return False
+ 
  
     @staticmethod
     #api_action should be 'search-by-tf' or 'search-by-gl'
@@ -238,7 +271,8 @@ class APIResponseHandler:
         api_response = None
         search_paging_info = None
         print "attempting search, query: " + repr(api_search_query)
-        api_search_query.update({"page_size": settings.API_HOST_INFO['result_page_size']})
+        api_search_query.update( \
+               {"page_size": settings.API_HOST_INFO['result_page_size']})
         try:
             api_response = requests.post( APIUrls.setup_api_url(api_action),
                                       json=api_search_query, 
@@ -308,7 +342,7 @@ class StreamingCSVDownloadHandler:
                  'pval_ref', 'pval_snp', 'pval_cond_ref', 'pval_cond_snp',
                  'pval_diff', 'refAllele', 'snpAllele']
 
-    #get all of the needed parts
+    #get all of the needed parts.  Check against limits!
     @staticmethod
     def return_rows_from_api( api_search_query, api_action):
         fields_for_csv = StreamingCSVDownloadHandler.fields_for_csv()
