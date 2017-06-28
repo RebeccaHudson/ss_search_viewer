@@ -137,10 +137,18 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 
 HARD_LIMITS = {
   'MAX_NUMBER_OF_SNPIDS_ALLOWED': 1000,
-  'MAX_NUMBER_OF_BASES_IN_GENOMIC_LOCATION_REQUEST': 1000000000,
+  'MAX_NUMBER_OF_BASES_IN_GENOMIC_LOCATION_REQUEST': 250000000,
   'MAX_CSV_DOWNLOAD' : 5000,
-  'ELASTIC_MAX_RESULT_WINDOW' : 10000
+  'ELASTIC_MAX_RESULT_WINDOW' : 10000,
 }
+
+#max number of bases in genomic location request
+#ch1 is about 249 million bases, so we limit 
+#requests to 250 million.
+
+#ELASTIC_MAX_RESULT_WINDOW:
+#is a setting in the Elasticsearch cluster.
+
 
 
 QUERY_DEFAULTS = {
