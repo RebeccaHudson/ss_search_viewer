@@ -158,22 +158,22 @@ class SearchByGenomicLocationForm(GenericSearchForm):
                           'end'   : 'End position on chromosome' }
 
     gl_start_pos = forms.IntegerField(widget=
-                                        forms.NumberInput(attrs={"class":'form-control',
-                                          'step':1, 
-                                          "title": "Search for data in a region" +\
-                                          " that begins at this position on the chromosome."}),
-                                      label = gl_pos_label_text['start'], 
-                                      required=False,
-                                      min_value = 0 )
+                         forms.NumberInput(attrs={"class":'form-control',
+                           'step':1, 
+                           "title": "Search for data in a region" +\
+                           " that begins at this position on the chromosome."}),
+                       label = gl_pos_label_text['start'], 
+                       required=False,
+                       min_value = 0 )
 
     gl_end_pos = forms.IntegerField(widget=
-                                        forms.NumberInput(attrs={"class":'form-control',
-                                          'step':1, 
-                                          "title": "Search for data in a region" +\
-                                          " that ends at this position on the chromosome."}),
-                                    label = gl_pos_label_text['end'],
-                                    required=False,
-                                    min_value = 1)
+                           forms.NumberInput(attrs={"class":'form-control',
+                             'step':1, 
+                             "title": "Search for data in a region" +\
+                             " that ends at this position on the chromosome."}),
+                       label = gl_pos_label_text['end'],
+                       required=False,
+                       min_value = 1)
 
     chromosomes = [ "ch" + str(x) for x in range(1, 23) ]
     chromosomes.extend(['chX', 'chY', 'chM'])
@@ -280,13 +280,15 @@ class SearchBySnpidWindowForm(GenericSearchForm):
                                                       "number of bases of the position of " +\
                                                       "the snpid."})
     #TODO: figure out what the max_value on this should actually be.
-    window_size = forms.IntegerField(widget = styled_widget,
-                                     label = "Window size",
-                                     initial = 1000, 
-                                     min_value = 0)
-    window_size.error_messages = { 'required': 'Missing window size (required).'}
-
-
+    window_size = forms.IntegerField(
+                   widget = styled_widget,
+                   label = "Window size",
+                   initial = 1000, 
+                   min_value = 0,
+                   max_value =\
+     settings.HARD_LIMITS['MAX_NUMBER_OF_BASES_IN_GENOMIC_LOCATION_REQUEST']/2 )
+    window_size.error_messages =  \
+           { 'required': 'Missing window size (required).'}
 
     def clean(self):
         cleaned_data = super(SearchBySnpidWindowForm, self).clean()
@@ -321,11 +323,15 @@ class SearchByGeneNameForm(GenericSearchForm):
                                                        " as + and - this many bases " +\
                                                        " of the gene's start and end position."})
     #TODO: figure out what the max_value on this should actually be.
-    window_size = forms.IntegerField(widget = styled_widget,
-                                     label = "Window size",
-                                     required = True,
-                                     initial = 1000, 
-                                     min_value = 0)
+    window_size = forms.IntegerField(
+       widget = styled_widget,
+       label = "Window size",
+       required = True,
+       initial = 1000, 
+       min_value = 0, 
+       max_value = \
+        settings.HARD_LIMITS['MAX_NUMBER_OF_BASES_IN_GENOMIC_LOCATION_REQUEST']
+                         / 2 )
     window_size.error_messages = { 'required': 'Missing window size (required).'}
     #sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
 
