@@ -47,11 +47,6 @@ class GenericSearchForm(forms.Form):
 
     sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
 
-    #This is apparently swapped?
-    #ic_options = [('4','Very High'),
-    #              ('3','High'),
-    #              ('2','Moderate'),
-    #              ('1','Low'),]
     ic_options = [('1','Very High'),
                   ('2','High'),
                   ('3','Moderate'),
@@ -177,14 +172,14 @@ class SearchByGenomicLocationForm(GenericSearchForm):
 
     chromosomes = [ "ch" + str(x) for x in range(1, 23) ]
     chromosomes.extend(['chX', 'chY', 'chM'])
-    #all of the choices look like this: choices_for_chromosome =  ( ('ch1', 'ch1' ), ) 
+    #all of the choices look like this: 
+    #choices_for_chromosome =  ( ('ch1', 'ch1' ), ) 
     styled_widget = forms.Select(attrs={"class":"form-control",
                                         "title": "Chromosome to search for data between the " +\
                                         "start and end positions specified."})
     selected_chromosome = forms.ChoiceField(widget=styled_widget,
                                             choices= zip(chromosomes,chromosomes),
                                             label="Select a chromosome")
-
     #ensure ranges are within hard limits.  
     def clean(self):
         cleaned_data = super(SearchByGenomicLocationForm, self).clean()
@@ -274,12 +269,14 @@ class SearchBySnpidWindowForm(GenericSearchForm):
     snpid = forms.CharField(widget = styled_widget, 
                             label = "SNPid")
     snpid.error_messages = {'required': 'Missing SNPid (required).'}
-    styled_widget = forms.NumberInput(attrs={"class"   : 'form-control',
-                                             'step'    : 1,
-                                             "title": "Search for data within + and - this "+\
-                                                      "number of bases of the position of " +\
-                                                      "the snpid."})
-    #TODO: figure out what the max_value on this should actually be.
+    styled_widget = forms.NumberInput(
+               attrs={"class"   : 'form-control',
+                      "step"    : 1,
+                      "title"   : "Search for data within + and - this " +\
+                                   "number of bases of the position of " +\
+                                          "the snpid."
+                     }
+                                     )
     window_size = forms.IntegerField(
                    widget = styled_widget,
                    label = "Window size",
@@ -322,7 +319,6 @@ class SearchByGeneNameForm(GenericSearchForm):
                                                        "region of the gene, as well " +\
                                                        " as + and - this many bases " +\
                                                        " of the gene's start and end position."})
-    #TODO: figure out what the max_value on this should actually be.
     window_size = forms.IntegerField(
        widget = styled_widget,
        label = "Window size",
