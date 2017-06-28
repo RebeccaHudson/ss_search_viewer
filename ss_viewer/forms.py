@@ -103,7 +103,8 @@ class SearchBySnpidForm(GenericSearchForm):
                                      )
 
     file_of_snpids = forms.FileField(required=False,
-                                     label = "File of SNPids")
+                                     label = "File of SNPids",
+                                     max_length=100000)
  
     def clean(self):
         cleaned_data = super(SearchBySnpidForm, self).clean()
@@ -125,6 +126,16 @@ class SearchBySnpidForm(GenericSearchForm):
                  SnpidSearchUtils.clean_and_validate_snpid_text_input(
                                                      snpid_textbox_contents)
         else:
+            print "all methods available on snpid_file ; " + repr(dir(snpid_file))
+            print "snpid_file size " + str(snpid_file.size)
+            print "snpid_file content type " + snpid_file.content_type
+            if not snpid_file.size <= 50000:
+                raise forms.ValidationError(('File is too large. \
+                   Submit a text file with at most 1,000 SNPids.'))
+            if not snpid_file.content_type == 'text/plain':
+                raise forms.ValidationError( 
+                 ('File provided is not a text file. \
+                   Submit a text file containing at most, 1,000 SNPids.') )
             text_in_file = snpid_file.read()
             snpid_list =  \
                  SnpidSearchUtils.clean_and_validate_snpid_text_input(
