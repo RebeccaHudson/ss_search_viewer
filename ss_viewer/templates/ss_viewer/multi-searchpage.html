@@ -77,8 +77,8 @@
    <div id="infobox">
    <div class="explain" id="search-exp"> <!-- contains information about each search type when its tab is active -->
      <p class="explain-search" id="snpid_search_form-explain">
-       Please type SNPids of interest in the box or upload a text file 
-       containing a list of SNPids. If more than 1,000 SNPids are specified, 
+       <span style="color: red; font-weight:bold;">Please type SNPids of interest in the box or upload a text file 
+       containing a list of SNPids.</span> If more than 1,000 SNPids are specified, 
        only the first 1,000 will be included in the search.
        Significant motif matches reaching the p-value cutoff will be returned.
      </p>
@@ -109,7 +109,6 @@
        here</a>. atSNP shows all SNPs having a statistically significant impact
        on the binding of the transcription factor at the p-value cutoff.
      </p>
-       {% include "ss_viewer/shared_explain.html" %}
    </div> <!-- end of 'search-exp' div -->
    <div class="explain" id="download-exp" >
          <div>
