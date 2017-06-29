@@ -39,14 +39,16 @@ def one_row_detail(request, id_str):
   context['ucsc_link'] =         \
      ExternalResourceUrls.ucsc_link(response_json['chr'], response_json['pos'])
 
+  #factorbook_link will be None if it's unavailable.
   context['factorbook_link'] =   \
      ExternalResourceUrls.factorbook_link(response_json['trans_factor'])
 
-  #factorbook_link will be None if it's unavailable.
   context['dbsnp_link'] =        \
      ExternalResourceUrls.dbsnp_link(response_json['snpid'])
 
-  context['jaspar_motif_link'] = \
-     ExternalResourceUrls.jaspar_motif_link(response_json['motif'])
+  #Determines which factor library the motif is from and provides
+  #the appropriate link.
+  context['motif_link'] =        \
+     ExternalResourceUrls.motif_link(response_json['motif'])
 
   return render(request, detail_page_template, context) 

@@ -111,9 +111,9 @@
              </thead>
             <tbody>
               <tr><td>Motif                           </td> 
-                  <td>{% if jaspar_motif_link %}<a href="{{ jaspar_motif_link }}">{% endif %}
-                     {{ api_response.motif }}        
-                      {% if jaspar_motif_link %}</a>{% endif %}
+                  <td><a href="{{ motif_link }}">
+                     {{ api_response.motif }}
+                     </a>
                   </td>
               </tr>
               <tr><td>Transcription Factor            </td> 

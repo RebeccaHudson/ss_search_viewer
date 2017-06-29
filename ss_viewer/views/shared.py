@@ -439,16 +439,20 @@ class ExternalResourceUrls:
         if t_factor in factorbookJaspar:
             return 'http://www.factorbook.org/human/chipseq/tf/' + t_factor 
         return None  #handle this in the view.
-
-    @staticmethod
-    #checks if it's a JASPAR motif with a regular expression. 
-    #If motif is not a JASPAR motif, then this functio returns None.
-    def jaspar_motif_link(motif):
+ 
+    @staticmethod 
+    def motif_link(motif):
+        link_start = None; link_end = None
         if re.match('MA(\d)+\.\d', motif):
-            linkBits = ['http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?',
-                        'ID=', motif, '&rm=present&collection=CORE']
-            return ''.join(linkBits) 
-        return None
+            link_start = 'http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID='
+            link_end = '&rm=present&collection=CORE'
+        else:
+            #Detect and handle ENCODE motifs in the same way that the
+            #MotifTransformer class does. (They don't meet the JASPAR regex.)
+            link_start = \
+              'http://compbio.mit.edu/encode-motifs/logos/table/logos/mat/fwd/' 
+            link_end = '.txt'
+        return ''.join([link_start, motif, link_end]) 
 
     @staticmethod
     #use motif transformer code as a pattern
