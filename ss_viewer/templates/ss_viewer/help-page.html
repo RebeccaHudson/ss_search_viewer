@@ -837,11 +837,39 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
              <p> atSNP utilizes a scale-out systems architecture to store and retrieve for three hundred billion records. As requirements for storage and performance with increase with user demand, we can add additional machines. Elasticsearch, a NoSQL database, utilizes a distributed scale-out system design for large workloads. It accomplishes this task by distributing requests for searches, and indexing as well as the indexes themselves amongst the scaled computing resources. An API handles communication between the search page and the Elasticsearch data store.
             </p>
            </div> <!-- end of accordion panel for part 5 -->
-         </section> <!-- end of part 5 -->
+        </section> <!-- end of part 5 -->
 
         <section> <!-- start of part 6 -->
            <div id="part-6" class="accordion" >
-           <hgroup><a name="part-6"><h4>6.&nbsp;How to Cite</h4></a></hgroup>
+           <hgroup><a name="part-6"><h4>6.&nbsp;Using atSNP Query Modifiers</h4></a></hgroup>
+           </div>
+           <div class="panel">
+           <p>
+           <h5><span><b>Swapping P-Value Cutoff Operators</b></span></h5> 
+           The operator for the SNP and reference pvalue cutoffs and be swapped
+           between &lt; and &ge;.
+           To reverse the operator for one of these cutoffs, click on the button 
+           with the operator on it beside the corresponding pvalue.
+           </p>
+           <p>
+           <h5><span><b>Adjusting the Sort Order</b></span></h5> 
+           The sort control indicates the priority of sort fields and the
+           direction of each sort field. If a field has top sort priority, then
+           that field will be the one that results are sorted by. Any results 
+           which have the same value for the first sort field will be ordered
+           by the values of the fields with the second sort priority and so on.
+           <br/> 
+           To reverse the sort order for one sort field from ascending to
+           descending or vice-versa, click the icon by that search field.
+           To advance or demote a sort field's priority, select it (by 
+           clicking on it) and click the up or down arrow.
+           </p>
+          </div> <!-- end of accordion panel for part 6 -->
+        </section> <!-- end of part 6 -->
+
+        <section> <!-- start of part 7 -->
+           <div id="part-7" class="accordion" >
+           <hgroup><a name="part-7"><h4>7.&nbsp;How to Cite</h4></a></hgroup>
            </div>
            <div class="panel">
            <p>
