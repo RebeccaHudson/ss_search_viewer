@@ -120,8 +120,16 @@
     #ajaxyPagingButtons {
       margin-right: auto;
       margin-left: auto;
-      width: 280px;
+      width: 580px;
       margin-bottom: 45px;
+    }
+
+/* Style for the "/ 889" pages span. */
+    #page_total { 
+       margin-left: 0.2em; 
+       margin-right: 0.2em; 
+       display: none;
+       font-size : 14px;
     }
 
 /* Style(s) for displaying the tabbed-search-forms 
