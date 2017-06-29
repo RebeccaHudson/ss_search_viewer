@@ -201,15 +201,15 @@ class APIResponseHandler:
         #Showing page N, a through b of N total pairs.
         #could be refactored so the following calculation is not repeated in the 'Paging' class.
         totalPageCount = (hitcount / settings.API_HOST_INFO['result_page_size']) + 1
-        hitsMsg = ""
-        if hitcount > settings.HARD_LIMITS['ELASTIC_MAX_RESULT_WINDOW']:
-            hitsMsg +=  \
-             "The first {:,}".format( \
-                   settings.HARD_LIMITS['ELASTIC_MAX_RESULT_WINDOW']) +\
-             "  available from  "
-        hitsMsg +=  "{:,} matching (SNP,TF) pairs.".format(hitcount)
-        hitsMsg +=  " Showing page: {:,}".format(page_of_results_to_display) +\
-                    " out of  {:,}.".format(totalPageCount)
+        #hitsMsg = ""
+        #if hitcount > settings.HARD_LIMITS['ELASTIC_MAX_RESULT_WINDOW']:
+        #    hitsMsg +=  \
+        #     "The first {:,}".format( \
+        #           settings.HARD_LIMITS['ELASTIC_MAX_RESULT_WINDOW']) +\
+        #     "  available from  "
+        hitsMsg =  "{:,} matching (SNP,TF) pairs.".format(hitcount)
+        #hitsMsg +=  " Showing page: {:,}".format(page_of_results_to_display) +\
+        #            " out of  {:,}.".format(totalPageCount)
         return hitsMsg
                     
     @staticmethod 
