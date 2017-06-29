@@ -132,6 +132,18 @@
        font-size : 14px;
     }
 
+
+/* Styles to highlight any messages about an invalid query */
+    #status_above { 
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    #form_errors { 
+        font-weight: bold;
+        color: red;
+        font-size: 14px;
+    }
 /* Style(s) for displaying the tabbed-search-forms 
  * (Bootstrap handles most of it though.)*/
     #tabbed-forms { margin-right: 2px; }
