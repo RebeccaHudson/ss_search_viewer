@@ -72,7 +72,6 @@
    <!-- if the nav tab ends here, you can independently scroll the search results -->
   </div> <!-- close the 'tabbed forms' div -->
   </div> <!-- close the 'side' div -->
-
    <!-- begin downloads div -->
    <div id="infobox">
    <div class="explain" id="search-exp"> <!-- contains information about each search type when its tab is active -->
@@ -80,60 +79,44 @@
        <span style="color: red; font-weight:bold;">Please type SNPids of interest in the box or upload a text file 
        containing a list of SNPids.</span> If more than 1,000 SNPids are specified, 
        only the first 1,000 will be included in the search.
-       <!-- Significant motif matches reaching the p-value cutoff will be returned. -->
      </p>
      <p class="explain-search" id="snpid_window_form-explain">
        Please type a SNPid of interest and a window size (number of base pairs)
        around the SNP. The window size is limited to 125 million bases.
-       <!-- atSNP grabs all SNPs located in the region and finds SNP-motif 
-       combinations reaching the p-value cutoff.  -->
      </p>
      <p class="explain-search" id="gl_region_search_form-explain"> 
        Please specify a genomic region of interest by typing its start and
        end position (1-based), and selecting the chromosome.
        The region is limited to 250 million bases.
-       <!-- atSNP grabs all SNPs located in the
-       region and finds SNP-motif combinations reaching the p-value cutoff. -->
      </p>
      <p class="explain-search" id="gene_name_form-explain">
        Please type a gene symbol name and a window size to which you want to 
-       extend a region of interest around the gene. The window size is 
-       limited to 125 million bases.
-       <!-- atSNP grabs all SNPs located in the region and finds SNP-motif 
-       combinations reaching the p-value cutoff.  -->
+       extend from the transcription start position and the transcription end
+       position of the gene. The window size is limited to 125 million bases.
      </p>
      <p class="explain-search" id="tf_search_form-explain">
        Please select a transcription factor library to use, then select a 
        transcription factor of interest. Information about the JASPAR and 
        ENCODE factor libraries information is available 
        <a href="{% url 'ss_viewer:help-page' %}#part-1:part-1"> here</a>.
-       <!-- atSNP shows all SNPs having a statistically significant impact
-       on the binding of the transcription factor at the p-value cutoff. -->
      </p>
    </div> <!-- end of 'search-exp' div -->
    <div class="explain" id="download-exp" >
          <div>
-           <p>Numeric data for the search results shown here can be downloaded in CSV
-             format.
-             For performance reasons, CSV downloads are currently limited to the first
-             5,000 rows.
             <div id="download_button" >
               <input type="submit" name="action"
                      value="Download Results"
                      class="btn-xs btn-danger"
                      onclick="clickDownloadResultsAJAX();" />
             </div>
+           <p>Numeric data for the search results shown here can be downloaded in CSV
+             format.
+             For performance reasons, CSV downloads are currently limited to the first
+             5,000 rows.
            </p>
          </div>
          <div>
             <p> 
-              A ZIP archive of PNG images for plots of the data on this page can be 
-              downloaded. To include plots in this download, check the boxes in the
-              rightmost column of the search results. Shortcuts to checking or unchecking
-              all of these boxes are available below the plot Download Button.<br />
-              <span style="font-size:10px;">
-                (Single plots can also be downloaded from the Details view for each row of data.)
-              </span>
               <div id="download_plots_for_checked_rows" >
                   <!-- TODO: put an alert indicating there's no darn rows checked -->
                   <input type="submit" name="checkedRowPlotDownload"
@@ -141,7 +124,14 @@
                          class="btn-xs"
                          onclick="checkedRowPlotDownload();" />
               </div>
-           </p>
+              A ZIP archive of PNG images for plots of the data on this page can be 
+              downloaded. To include plots in this download, check the boxes in the
+              rightmost column of the search results. Shortcuts to checking or unchecking
+              all of these boxes are available below the plot Download Button.<br />
+              <span style="font-size:10px;">
+                (Single plots can also be downloaded from the Details view for each row of data.)
+              </span>
+            </p>
                   <input type="submit" name="checkAllBoxes"
                          value="Add All Plots on Page to Download"
                          class="btn-xs btn-link"
