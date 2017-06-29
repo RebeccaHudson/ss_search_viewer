@@ -104,9 +104,10 @@
      </p>
      <p class="explain-search" id="tf_search_form-explain">
        Please select a transcription factor library to use, then select a 
-       transcription factor of interest. JASPAR and encode information is
-       available <a href="{% url 'ss_viewer:help-page' %}#part-1:part-1">
-       here</a>. <!-- atSNP shows all SNPs having a statistically significant impact
+       transcription factor of interest. Information about the JASPAR and 
+       ENCODE factor libraries information is available 
+       <a href="{% url 'ss_viewer:help-page' %}#part-1:part-1"> here</a>.
+       <!-- atSNP shows all SNPs having a statistically significant impact
        on the binding of the transcription factor at the p-value cutoff. -->
      </p>
    </div> <!-- end of 'search-exp' div -->
@@ -222,20 +223,20 @@
         $('#tabs').tab();
  
         /* (for searches by TF) have JASPAR selected by default */
-            $('#id_encode_trans_factor').attr('disabled', 'disabled');
-            $('#id_tf_library_0').attr('checked', 'checked');
-            $('#id_tf_library_1').removeAttr('checked');
+            $('#id_trans_factor-encode_trans_factor').attr('disabled', 'disabled');
+            $('#id_trans_factor-tf_library_0').attr('checked', 'checked');
+            $('#id_trans_factor-tf_library_1').removeAttr('checked');
 
         /* enable and disable the Transcription Factor selectors based 
            on which one the user is going to search*/
-        $('#id_tf_library').change(function(e){
+        $('#id_trans_factor-tf_library').change(function(e){
              var target_val = e.target.attributes.getNamedItem('value');
              if (target_val.value == 'encode'){
-                $("#id_trans_factor").attr('disabled', 'disabled');
-                $("#id_encode_trans_factor").removeAttr('disabled'); }
+                $("#id_trans_factor-trans_factor").attr('disabled', 'disabled');
+                $("#id_trans_factor-encode_trans_factor").removeAttr('disabled'); }
              if ( target_val.value == 'jaspar'){
-                $("#id_encode_trans_factor").attr('disabled', 'disabled');
-                $("#id_trans_factor").removeAttr('disabled');
+                $("#id_trans_factor-encode_trans_factor").attr('disabled', 'disabled');
+                $("#id_trans_factor-trans_factor").removeAttr('disabled');
                }
          });
       setupSearchDemos();
