@@ -185,15 +185,8 @@ class SearchByGenomicLocationForm(GenericSearchForm):
         cleaned_data = super(SearchByGenomicLocationForm, self).clean()
         start_pos = cleaned_data.get('gl_start_pos')
         end_pos = cleaned_data.get('gl_end_pos')
-
-        if start_pos is None:
-            start_pos = 0
-            cleaned_data['gl_start_pos'] = start_pos
-
-        if end_pos is None and start_pos is not None:
-            end_pos = cleaned_data['gl_start_pos'] + \
-                      int(settings.QUERY_DEFAULTS['DEFAULT_REGION_SIZE'])
-            cleaned_data['gl_end_pos'] = end_pos
+        if start_pos is None or end_pos is None:
+            raise forms.ValidationError(('Missing start or end coordinate or both.'))
 
         if start_pos > end_pos:
             raise forms.ValidationError(('Start position must be less than or equal'
@@ -242,13 +235,11 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
                                      required = False,
                                      label = "Select JASPAR transcription factor")
 
-
-
     other_styled_widget = forms.Select(attrs={"class":"form-control",
                                               "title" : "Seelect an ENCODE transcription factor."})
     encode_lut = None
     fpath = os.path.dirname(__file__) + '/lookup-tables' +\
-             '/lut_encode_prefixes.pkl'
+             '/encode_family_prefixes_only.pkl'
     with open(fpath, 'r') as f:
         encode_lut = pickle.load(f)
 
