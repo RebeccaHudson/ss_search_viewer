@@ -58,8 +58,8 @@
 
         //draw the 'strand' data next to where the SNP and reference sequences will appear
         //ref strand on line 2, SNP strand on line 3 (this is the + and -s)
-        d3.select("svg#" + idOfTargetSVG + " g#line2margin text").text(refStrand);
-        d3.select("svg#" + idOfTargetSVG + " g#line3margin text").text(snpStrand);
+        d3.select("svg#" + idOfTargetSVG + " g#line2margin text").text("(" + refStrand + ")");
+        d3.select("svg#" + idOfTargetSVG + " g#line3margin text").text("(" + snpStrand + ")");
 
         //Draw the scaled motifs (aka "PWM"s)
         //The line1 and line4 motifs will be the same motif, but possibly with

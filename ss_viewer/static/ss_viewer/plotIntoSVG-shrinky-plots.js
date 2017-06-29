@@ -87,8 +87,8 @@ function drawFixedWidthCompositePlot(plotToMake, idOfTargetSVG){
         //TODO: add parentheses to the strand information.
         //draw the 'strand' data next to where the SNP and reference sequences will appear
         //ref strand on line 2, SNP strand on line 3 (this is the + and -s)
-        d3.select("svg#" + idOfTargetSVG + " g#line2margin text").text(refStrand);
-        d3.select("svg#" + idOfTargetSVG + " g#line3margin text").text(snpStrand);
+        d3.select("svg#" + idOfTargetSVG + " g#line2margin text").text("(" + refStrand + ")");
+        d3.select("svg#" + idOfTargetSVG + " g#line3margin text").text("(" + snpStrand + ")");
 
 
         //draw the line 1 motif.
