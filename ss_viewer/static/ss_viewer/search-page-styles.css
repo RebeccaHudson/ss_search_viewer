@@ -99,7 +99,7 @@
 
     #infobox { flex: 1; } 
     p.explain-search { display: none; }
-    div.explain#search-exp { height: 250px; } 
+    div.explain#search-exp { height: 100px; } 
 
     /* The SNPid list search is open when the page loads. */
      #snpid_search_form-explain { display: block; }
