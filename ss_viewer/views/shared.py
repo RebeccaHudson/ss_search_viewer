@@ -45,13 +45,10 @@ class MotifTransformer:
 class TFTransformer:
     def __init__(self, jaspar_or_encode):
         lut = None;  fpath = None
-        #TODO: the following pickle must be processed in such a way that a 
-        # lookup on a TF with multiple motif values returns a list.
         if jaspar_or_encode == 'jaspar':
          which_one = '/lut_jaspar_motifs_by_tf.pkl'
         else: #assuming 'encode' 
-          which_one = '/lut_encode_motifs_by_tf.pkl'
-
+          which_one = '/lut_encode_motifs_by_family.pkl'
         fpath = os.path.dirname(os.path.dirname(__file__)) + "/lookup-tables" +\
                   which_one
         with open(fpath , 'r') as f:  
