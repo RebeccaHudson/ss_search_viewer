@@ -76,6 +76,7 @@ function create_paging_post(action_name, search_type){
 //shared between success handler for search and paging posts.
 function handleResults(values, json){
     $("div.status_message").text(json.status_message);
+    $("span.status_message").text(json.status_message);
     show_search_results(json);
     if (json.search_paging_info != null){ 
         values.page_of_results_shown =
