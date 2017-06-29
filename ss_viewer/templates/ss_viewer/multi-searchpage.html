@@ -189,8 +189,10 @@
 </div>
 <br />
 
-<div class="status_message"  id="status_below" style="display: none;"> {{ status_message }} </div>
+<!-- <div class="status_message"  id="status_below" style="display: none;"> {{ status_message }} </div> -->
+<!-- part of the effor to get the whole status message onto one line.-->
 <div id="ajaxyPagingButtons" >
+     <span class="status_message"  id="status_below" style="display: none;"> {{ status_message }} </span>
      <button type="button"
              onclick='pagingAJAX("Prev");'
              style="display:none;"
@@ -200,6 +202,9 @@
      <button id='jump' style="display:none;" class="jump">Jump to</button>
      <input style="width: 3.5em; display:none;" class="jump" id="user-page-number"
             type="number" min="1"/>
+     <span id="page_total" 
+           class="jump">
+     </span>
      <button type="submit" 
              onclick='pagingAJAX("Next");'
              style="display:none;"
