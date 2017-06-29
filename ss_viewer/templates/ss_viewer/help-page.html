@@ -864,6 +864,21 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
            To advance or demote a sort field's priority, select it (by 
            clicking on it) and click the up or down arrow.
            </p>
+           <p><h5><span><b>Limitations on Numeric Queries</b></span></h5>
+           Queries are numerically limited in the following ways:
+<ul>
+<li><h5><b>SNPid</b></h5> Up to 1,000 SNPids may be entered. 
+   Plain text files or direct input are both acceptable.</li>
+<li><h5><b>SNPid Window</b></h5> The window size is limited to 125 million bases. </li>
+<li><h5><b>Genomic Location</b></h5> 
+     The maximum region size is 250 million bases.
+     The window size is calculated by subtracting the start location from the 
+     end location on the selected chromosome. </li>
+<li><h5><b>Gene</b></h5> The region around the gene is limited to 125 million bases. </li>
+</ul>
+
+
+           </p>
           </div> <!-- end of accordion panel for part 6 -->
         </section> <!-- end of part 6 -->
 
