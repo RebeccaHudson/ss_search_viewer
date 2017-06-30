@@ -439,6 +439,22 @@ class ExternalResourceUrls:
         if t_factor in factorbookJaspar:
             return 'http://www.factorbook.org/human/chipseq/tf/' + t_factor 
         return None  #handle this in the view.
+
+    #A subset of ENCODE motifs don't have links directly available.
+    #If the given motif is among these, lookup the correspoinding 'linkable' motif.
+    @staticmethod 
+    def encode_motif_for_link(encode_motif):
+        fpath = os.path.dirname(os.path.dirname(__file__)) + "/lookup-tables" +\
+        '/lut_encode_motifs_for_link.pkl'
+        lut = None
+        with open(fpath , 'r') as f:
+            lut = pickle.load(f)
+        if encode_motif in lut:
+            return lut[encode_motif] 
+        #if it's not included in the 'for links' lookup table, use the same
+        #motif as was passed to this method.
+        return encode_motif
+
  
     @staticmethod 
     def motif_link(motif):
@@ -446,13 +462,16 @@ class ExternalResourceUrls:
         if re.match('MA(\d)+\.\d', motif):
             link_start = 'http://jaspar.genereg.net/cgi-bin/jaspar_db.pl?ID='
             link_end = '&rm=present&collection=CORE'
-        else:
+            return ''.join([link_start, motif, link_end])
+        return None
+        #else:
             #Detect and handle ENCODE motifs in the same way that the
             #MotifTransformer class does. (They don't meet the JASPAR regex.)
-            link_start = \
-              'http://compbio.mit.edu/encode-motifs/logos/table/logos/mat/fwd/' 
-            link_end = '.txt'
-        return ''.join([link_start, motif, link_end]) 
+            #motif = ExternalResourceUrls.encode_motif_for_link(motif)
+            #link_start = \
+            #  'http://compbio.mit.edu/encode-motifs/logos/table/logos/mat/fwd/' 
+            #link_end = '.txt'
+        # if ENCODE motifs should be included: return ''.join([link_start, motif, link_end]) 
 
     @staticmethod
     #use motif transformer code as a pattern
