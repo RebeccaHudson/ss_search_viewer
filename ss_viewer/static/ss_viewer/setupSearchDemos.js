@@ -23,7 +23,7 @@ function setupSearchDemos(){
 
     $("#tf-search-demo").click(function(e){
         e.preventDefault();
-        $('#id_trans_factor-trans_factor').val('Zfx'); 
+        $('#id_trans_factor-trans_factor').val('ZNF263'); 
         $('#id_trans_factor-encode_trans_factor').attr('disabled', 'disabled');
         $("#id_trans_factor-trans_factor").removeAttr('disabled');
         $('#id_trans_factor-tf_library_0').prop('checked', true);
