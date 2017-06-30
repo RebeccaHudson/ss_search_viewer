@@ -11,10 +11,15 @@ function setupJumpToPageControl(){
     $("#jump").on("click", function(event){
       event.preventDefault();
       var jumpTo = parseInt($("#user-page-number")[0].value);
+      $("#past_last_page").hide();
       var min = parseInt($("#user-page-number").attr('min'));
       var max = parseInt($("#user-page-number").attr('max'));
       if (jumpTo < min){  jumpTo = min;  }
-      if (jumpTo > max){  jumpTo = max;  }
+      if (jumpTo > max) {  
+          $("#past_last_page").show();
+          return; 
+          /* Do not allow any jumping at all in this case.*/
+      }
       pagingAJAX('jump-' + jumpTo);
    }); 
 }
@@ -36,6 +41,7 @@ function showHideOneButton(btn_selector, show_that_button){
 function showHidePrevNext(search_paging_info){
     var btn_selector = '#ajaxyPagingButtons'; 
     var show_btn = {'prev': false, 'next': false};
+    $("#past_last_page").hide();
     if (search_paging_info != null){ 
        show_btn['prev'] =  search_paging_info.show_prev_btn;
        show_btn['next'] = search_paging_info.show_next_btn; 

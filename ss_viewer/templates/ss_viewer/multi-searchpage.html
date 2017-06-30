@@ -3,13 +3,13 @@
   <meta charset="utf-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title>atSNP Search</title>
-  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
   <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
   <link href="{% static 'ss_viewer/plot-styles.css' %}" rel="stylesheet"> 
   <link href="{% static 'ss_viewer/search-page-styles.css' %}" rel="stylesheet"> 
+  <script type="text/javascript"  src="{% static 'ss_viewer/jquery-2.2.4.min.js' %}">
+  </script>
 
   <script src="http://d3js.org/d3.v3.min.js"></script>
    
@@ -183,6 +183,10 @@
 
 <!-- <div class="status_message"  id="status_below" style="display: none;"> {{ status_message }} </div> -->
 <!-- part of the effor to get the whole status message onto one line.-->
+<div id="past_last_page" class="alert alert-danger" style="display: none;">
+  <strong>Page value too high!</strong> You can not page past the 
+  <span id="max_pg_available"></span>th page.
+</div>
 <div id="ajaxyPagingButtons" >
      <span class="status_message"  id="status_below" style="display: none;"> {{ status_message }} </span>
      <button type="button"
@@ -204,6 +208,7 @@
              <span class="glyphicon glyphicon-chevron-right"></span>
              </button>
 </div>
+
 
 
 

@@ -190,6 +190,7 @@ function setMaxValueOnJumpControl(search_paging_info){
         maxPg = search_paging_info.total_page_count;
       }
       $("#user-page-number").attr('max',maxPg );
+      $("#max_pg_available").text(maxPg);
 }
 
 function  hideControlsWhileLoading(){
