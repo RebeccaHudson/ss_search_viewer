@@ -79,7 +79,7 @@ function convertImgToBase64URL(svgSelector, callback){
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       canvas.height = this.height;
       canvas.width = this.width;
-      ctx.drawImage(img, 0, -30);
+      ctx.drawImage(img, 0, 0);
       dataURL = canvas.toDataURL('image/png');
       callback(dataURL, fname_for_plot);
     };

@@ -26,7 +26,7 @@ function svgImage(xml) {
     var context = canvas.getContext('2d');
 
     //400 - 30 = 370
-    context.drawImage(image, 0, -30);
+    context.drawImage(image, 0, 0);
 
     var fname = $('div.show-plot svg').attr('id').replace('target-', '');
     var a = document.createElement('a');

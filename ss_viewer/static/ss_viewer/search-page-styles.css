@@ -1,6 +1,5 @@
 /* Styles for the search page and results table.*/
 
-
    /* Result table styles for creating the scrollable
     * table itself.*/
 
@@ -120,7 +119,7 @@
     #ajaxyPagingButtons {
       margin-right: auto;
       margin-left: auto;
-      width: 580px;
+      width: 630px;
       margin-bottom: 45px;
     }
 
@@ -200,4 +199,12 @@
     overflow: hidden;
     border: solid #DCDFE3 1px
   }
+
+
+  /*Make the primary search directive stand out.*/
+  span.bigred {
+    color: red; 
+    font-weight:bold;
+  }
+
 
