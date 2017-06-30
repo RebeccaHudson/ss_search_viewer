@@ -151,6 +151,7 @@ class StandardFormset:
 class Paging:
     @staticmethod
     def get_paging_info_for_request(request, page_of_search_results):
+        last_page_size = None
         page_of_results_to_display = 1
 
         if request.POST['action'] == 'Next':
@@ -164,13 +165,29 @@ class Paging:
 
         search_result_offset = (page_of_results_to_display - 1) * \
                               settings.API_HOST_INFO['result_page_size']
-        return { 'search_result_offset' : search_result_offset,
-                 'page_of_results_to_display' : page_of_results_to_display }
+
+
+        max_page_available = Paging.calculate_max_page_available()
+
+        #The size of the last page to display has to be calculated.
+        if max_page_available == page_of_results_to_display:
+            last_page_size =                                     \
+             settings.HARD_LIMITS['ELASTIC_MAX_RESULT_WINDOW'] - \
+               ((max_page_available - 1)   *                     \
+                 settings.API_HOST_INFO['result_page_size']      \
+               )
+            print "calculated last page size " + str(last_page_size)
+
+        return { 'search_result_offset'       : search_result_offset,
+                 'page_of_results_to_display' : page_of_results_to_display,
+                 'last_page_size'             : last_page_size  }
+        #last page size is None if this is not the last page
 
     @staticmethod
     def calculate_max_page_available():
+        #the last page will have fewer results on it.
         return (settings.HARD_LIMITS['ELASTIC_MAX_RESULT_WINDOW'] / \
-               settings.API_HOST_INFO['result_page_size']) 
+               settings.API_HOST_INFO['result_page_size']) + 1 
 
     @staticmethod
     def get_paging_info_for_display(hitcount, page_of_results_to_display):
@@ -184,7 +201,6 @@ class Paging:
         if page_of_results_to_display > 1:
              search_paging_info['show_prev_btn'] = True
         
-
         search_paging_info['page_of_results_to_display'] = page_of_results_to_display
         totalPageCount = (hitcount / settings.API_HOST_INFO['result_page_size']) + 1
         search_paging_info['total_page_count'] = totalPageCount 
@@ -267,9 +283,12 @@ class APIResponseHandler:
         plot_source = None
         api_response = None
         search_paging_info = None
+        page_size = settings.API_HOST_INFO['result_page_size']
         print "attempting search, query: " + repr(api_search_query)
-        api_search_query.update( \
-               {"page_size": settings.API_HOST_INFO['result_page_size']})
+        if search_request_params['last_page_size'] is not None:
+            page_size = search_request_params['last_page_size'] 
+            print "use last page size " + str(page_size)
+        api_search_query.update( {"page_size": page_size })
         try:
             api_response = requests.post( APIUrls.setup_api_url(api_action),
                                       json=api_search_query, 
