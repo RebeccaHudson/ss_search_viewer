@@ -1,0 +1,63 @@
+/* Theme stuff from in here..
+ * One single CSS file should define colors for the whole site. */
+
+body { background-color: lightblue; }
+
+/* this is what shows up outside of the navbar but inside of the body background.
+ * manifests as a little box around the navbar */
+.container-fluid { 
+   background-color: darkslateblue;
+}
+
+
+section { background-color: deepskyblue; }
+
+h3 { color: purple; }
+
+/* Styling the navigation bar */
+div.collapse {
+  background-color: darkslateblue;
+}
+
+.navbar-default .navbar-nav>.active>a
+{ 
+  background-color: #a94442;
+  color: white;
+ }
+.navbar-default .navbar-nav >.active>a:hover { 
+  background-color: yellow; 
+}
+
+
+/* not active navbar links when you hover */
+.navbar-default .navbar-nav > li > a:hover
+{ color: lime ; }
+
+.navbar-default .navbar-nav > li > a
+/* not active navbar links when you don't hover*/
+{ color: green ; }
+
+
+
+
+
+
+
+
+
+/* The blurbs on the homepage backgrounds */
+#content > div {
+  background-color: royalblue; 
+  color: whitesmoke;
+}
+
+#content > div > div {
+  background-color: turquoise; 
+  color: black;
+}
+
+/* links in divs in the content div, espec. found
+ * on the home page. */
+#content > div > p > a { color: darkgoldenrod; }
+
+
