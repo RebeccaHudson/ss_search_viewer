@@ -12,14 +12,17 @@
       $(".sortflip").on('click', function(){
          //flips the sort direction for the currently displayed field.
          //also flips the icon indicating sort order.
-         var selected_field = $("div.active .sort-select option:selected");
+         var selected_field = $("div.active .sort-select option");
+         /* figure out what the index of this one is */
+         console.log("the .sortflip that we clicked: ");
+         console.log($(this));
          if ($(this).hasClass('glyphicon-sort-by-attributes')){
              showDescendingIcon(this);
              selected_field.attr('direction', 'desc'); 
          }else{ 
              showAscendingIcon(this);
              selected_field.attr('direction', 'asc'); 
-          }
+         }    
           buildQuery();
       }); 
  
@@ -57,7 +60,11 @@
       var sort_order = readSortOrder();
       var sort_dict = { "sort" : sort_order };
       var jsd = JSON.stringify(sort_dict);
+      /* not the right sort order */
+      console.log("building this sort order");
+      console.log(jsd);
       active_form.find("[id$=sort_order]").attr('value', jsd);
+      console.log("called build query");
     }
 
 
@@ -121,9 +128,14 @@
      var active_form = $("#tabbed-forms div.active div.sort-controls");
      var opts =  active_form.find(".sort-select").children();
      var sort_order = [];
+     var flippers = $("div.active .sortflip"); /*this isn't pretty, but it works!*/
      for ( var i = 0; i < opts.length; i++){
        var key_for_term = opts[i].value;
        var order_for_term = $(opts[i]).attr("direction"); 
+       /* these attributes aren't being changed */
+       if ( $(flippers[i]).hasClass('glyphicon-sort-by-attributes') ){
+           order_for_term = 'asc'; }else{
+           order_for_term = 'desc'; }
        var d = {};
        d[key_for_term] = { 'order' : order_for_term };  
       sort_order.push(d);
