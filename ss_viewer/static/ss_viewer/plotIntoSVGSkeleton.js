@@ -20,6 +20,16 @@
     //don't call this unless there's already an SVG on the page!
     sequencelogoFont();
 
+    //Only resizes plot label if it otherwise wont' fit on the plot.
+    function resizePlotLabel(maxColumnCount){
+        if (maxColumnCount < 10){
+            var the_label = d3.select("g.plot-label text");
+            the_label.attr('font-size', 18);
+            //the_label.attr('transform', 'translate(0, 30)');
+            console.log("gonna resize that plot label.");
+        }
+    }
+
 
     //motifMap gets loaded earlier from test-motif-data.js
     //motif_data, a key in the plotToMake dict, replaces the motif parameter
@@ -144,8 +154,12 @@
                    .style("fill", "#d3d3d3");
         }
 
+        resizePlotLabel(maxColumnCount);
+
                //adjust the label positions..
-        var labelShift = (svgWidth - 300)/2 - 10;
+        //var labelShift = (svgWidth - 300)/2 - 10;
+        var labelShift = (svgWidth - 350)/2 - 10;
+        console.log('label shift : ' + labelShift);
         d3.select("svg#" + idOfTargetSVG + " g.snp-label")
           .attr('transform', 'translate('+labelShift+', 18)');
 
@@ -155,7 +169,8 @@
 
 
         var label = motifName + " Motif Scan for " + plotToMake.snpid;
-        labelShift = labelShift - 30;
+        //labelShift = labelShift - 30;
+        labelShift = labelShift - 40;
         d3.select("svg#"+idOfTargetSVG + " g.plot-label text")
           .text(label);
         d3.select("svg#"+idOfTargetSVG + " g.plot-label")
