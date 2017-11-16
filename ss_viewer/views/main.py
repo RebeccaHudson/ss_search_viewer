@@ -31,15 +31,24 @@ def test_svg_plots(request):
 def help_page(request):
     help_page_template = 'ss_viewer/help-page.html'
     context = {}
+    if request.GET and request.GET['flavor']:
+        context['flavor'] = request.GET['flavor']
     return render(request, help_page_template, context) 
 
 def faq_page(request):
     faq_page_template = 'ss_viewer/faq.html'
     context = {}
+    if request.GET and request.GET['flavor']:
+        context['flavor'] = request.GET['flavor']
+        #print "flavor : " + context['flavor']
+    #which_flavor = request.GET['flavor']
     return render(request, faq_page_template, context) 
 
 def home_page(request):
     home_page_template = 'ss_viewer/home_page.html'
     context = {}
+    #Can be removed later.
+    if request.GET and request.GET['flavor']:
+        context['flavor'] = request.GET['flavor']
     return render(request, home_page_template, context)
 

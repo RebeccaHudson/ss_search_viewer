@@ -37,14 +37,6 @@ div.collapse {
 /* not active navbar links when you don't hover*/
 { color: green ; }
 
-
-
-
-
-
-
-
-
 /* The blurbs on the homepage backgrounds */
 #content > div {
   background-color: royalblue; 
@@ -59,5 +51,39 @@ div.collapse {
 /* links in divs in the content div, espec. found
  * on the home page. */
 #content > div > p > a { color: darkgoldenrod; }
+
+
+
+
+/* search stuff */
+div.tab-pane.panel-body.active {
+   background-color: red;
+}
+
+ul#tabs.nav.nav-tabs  > li >  a {
+   background-color: orange;
+   color: black;
+}
+
+ul#tabs.nav.nav-tabs  > li.active >  a {
+   background-color: red;
+   border-color: black;
+   color: white;
+}
+
+
+
+/* specific to help page */
+div#content > section > div.panel {
+   background-color: cornflowerblue;
+}
+   /* these are the expandable help items */
+div.accordion {
+   background-color: darksalmon;
+}
+
+div.accordion.active {
+   background-color: orange;
+}
 
 

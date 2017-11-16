@@ -163,6 +163,11 @@ body {
 }
 
 </style>
+
+{% if flavor %} 
+<link href="{% static 'ss_viewer/colors/' %}{{ flavor }}.css" rel="stylesheet">
+{% endif %}
+
 </head>
 
 <body>

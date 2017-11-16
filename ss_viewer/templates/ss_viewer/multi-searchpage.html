@@ -5,7 +5,11 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>atSNP Search</title>
   <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
+
   <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
+  {% if flavor %} 
+  <link href="{% static 'ss_viewer/colors/' %}{{ flavor }}.css" rel="stylesheet">
+  {% endif %}
   <link href="{% static 'ss_viewer/plot-styles.css' %}" rel="stylesheet"> 
   <link href="{% static 'ss_viewer/search-page-styles.css' %}" rel="stylesheet"> 
 
