@@ -129,8 +129,10 @@ class StandardFormset:
                       'snpid_search_form' : snpid_form, 
                       'snpid_window_form' : snpid_window_form,
                       'gene_name_form'    : gene_name_form }
+
           if active_tab is not None:
               context.update({'active_tab': active_tab })
+
           return context 
 
      @staticmethod
@@ -139,6 +141,8 @@ class StandardFormset:
           context = StandardFormset.setup_formset_context()
           context.update({'status_message' : "Enter a search.",
                           'active_tab'     : 'none-yet'})
+          if request.GET and request.GET['flavor']:
+              context['flavor'] = request.GET['flavor']
           return render(request, searchpage_template, context)
 
      @staticmethod
@@ -365,20 +369,29 @@ class StreamingCSVDownloadHandler:
         mt = MotifTransformer()
         rows = []
         #Add headers to the downloaded data.
+        scroll_id = None   #should I move this?
         rows.append(fields_for_csv) 
         page_of_results = 0 
         keep_on_paging = True
+
+        #remove 'search_offset'
+        #search_offset = settings.API_HOST_INFO['download_result_page_size'] * page_of_results
+        #just run with the query as it is to begin with. 
+        #api_search_query.update(
+        #                   {'from_result':search_offset,
+        #                    'page_size':settings.API_HOST_INFO['download_result_page_size']})
+
+        api_search_query.update({'for_download': True})
+        print "for download: api search query : "+ repr(api_search_query)
+
+        api_response = requests.post( APIUrls.setup_api_url(api_action),
+             json=api_search_query, headers={'content-type':'application/json'})
+                     
         while keep_on_paging is True:
-            search_offset = settings.API_HOST_INFO['download_result_page_size'] * page_of_results
-            api_search_query.update(
-                               {'from_result':search_offset,
-                                'page_size':settings.API_HOST_INFO['download_result_page_size']})
-            api_search_query.update({'for_download': True})
-            print "for download: api search query : "+ repr(api_search_query)
-            api_response = requests.post( APIUrls.setup_api_url(api_action),
-                 json=api_search_query, headers={'content-type':'application/json'})
-            
             page_of_results += 1
+            if page_of_results > 30: 
+                keep_on_paging = False  #try to scroll here!
+            #status code changes to 204 when there is no data left to page through. 
             if api_response.status_code == 200:
                 response_json = json.loads(api_response.text)
                 api_response_data = response_json['data']         
@@ -388,9 +401,19 @@ class StreamingCSVDownloadHandler:
                     if len(rows) - 1 >= settings.HARD_LIMITS['MAX_CSV_DOWNLOAD']:
                         keep_on_paging = False
                         break
+                #just handled the return data 
+                print "here's the response json keys " + repr(response_json.keys())
+                #under what conditions do we not have a scroll id?
+                api_response = requests.post(APIUrls.setup_api_url('continue-scroll'),
+                                           json = {'scroll_id': response_json['scroll_id']})
+                print "status code spit out by API response; " + str(api_response.status_code)
+
             else:
                 print "api response : " + api_response.text
                 keep_on_paging = False
+        
+            #this should be sending the scroll id to the API.
+            #the api action is 'continue_scroll'
 
         print "returning this many rows " + str(len(rows))
         return rows
