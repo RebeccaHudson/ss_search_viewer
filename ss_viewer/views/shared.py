@@ -13,6 +13,8 @@ from ss_viewer.forms import SearchByGenomicLocationForm
 from ss_viewer.forms import SearchByTranscriptionFactorForm
 from ss_viewer.forms import SearchBySnpidWindowForm
 from ss_viewer.forms import SearchByGeneNameForm
+from ss_viewer.forms import SharedSearchControlsForm
+
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.http import StreamingHttpResponse
@@ -90,6 +92,22 @@ class PValueDictFromForm:
 
         return pv_dict
 
+    @staticmethod
+    def get_pvalues_from_dict(dict_in):
+        print "dict_in " + repr(dict_in)
+        pv_dict = {}
+        for pv_name in ['rank', 'ref', 'snp']:
+            key = "_".join(['pvalue', pv_name, 'cutoff'])
+            if dict_in.has_key(key) and \
+               dict_in.get(key) is not None:
+                print "this has key: " + key + " value: " + \
+                      str(dict_in.get(key))
+                pv_dict[key] = dict_in.get(key)
+        #A final failsafe.
+        if not pv_dict.has_key('pvalue_rank_cutoff'): 
+            pv_dict['pvalue_rank_cutoff'] = 0.05
+        return pv_dict
+
 
 #includes all of the forms that should be loaded every time.
 class StandardFormset:
@@ -99,6 +117,10 @@ class StandardFormset:
                                snpid_form=None,
                                snpid_window_form=None,
                                gene_name_form=None):
+
+          #Setup the shared search controls form.
+          shared_search_controls_form = SharedSearchControlsForm()
+
           active_tab = None
           hidden_page_number = {'page_of_results_shown':0}
           if tf_form is None:
@@ -124,11 +146,12 @@ class StandardFormset:
           else: 
               active_tab = 'gene-name'
 
-          context =  { 'tf_search_form' : tf_form,
-                      'gl_search_form': gl_form,
-                      'snpid_search_form' : snpid_form, 
-                      'snpid_window_form' : snpid_window_form,
-                      'gene_name_form'    : gene_name_form }
+          context =  { 'tf_search_form'   : tf_form,
+                       'gl_search_form'    : gl_form,
+                       'snpid_search_form' : snpid_form, 
+                       'snpid_window_form' : snpid_window_form,
+                       'gene_name_form'    : gene_name_form,
+                       'shared_search_controls_form' : shared_search_controls_form }
 
           if active_tab is not None:
               context.update({'active_tab': active_tab })
@@ -157,7 +180,8 @@ class Paging:
     def get_paging_info_for_request(request, page_of_search_results):
         last_page_size = None
         page_of_results_to_display = 1
-
+        print "page of search results " + repr(page_of_search_results) + str(page_of_search_results)
+        page_of_search_results = int(page_of_search_results)
         if request.POST['action'] == 'Next':
              page_of_results_to_display = page_of_search_results + 1
         elif request.POST['action'] == 'Prev':

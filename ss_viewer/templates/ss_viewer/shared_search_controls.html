@@ -1,0 +1,43 @@
+<div class="tab-pane panel-body">
+<!-- Do not switch based on which form is up. -->
+<form id="shared_controls">
+<table class="formControls">
+<tbody>
+<td> {{ shared_search_controls_form.pvalue_rank_cutoff.label_tag }} </td>
+<td> {{ shared_search_controls_form.pvalue_rank_cutoff }}</td>
+</tr>
+<tr>
+<td> {{ shared_search_controls_form.pvalue_ref_cutoff.label_tag }} </td>
+<td> {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} 
+     {{ shared_search_controls_form.pvalue_ref_cutoff }}</td>
+</tr>
+<tr>
+<td> {{ shared_search_controls_form.pvalue_snp_cutoff.label_tag }} </td>
+<td> {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
+     {{ shared_search_controls_form.pvalue_snp_cutoff }} </td>
+</tr>
+<tr>
+   {% include "ss_viewer/sort_widget.html"  %} 
+</tr>
+<tr>
+    <td>{{ shared_search_controls_form.ic_filter.label_tag }} </td>
+    <td>{{ shared_search_controls_form.ic_filter }}  </td>
+</tr>
+</tbody>
+</table>
+   <!-- below is where we are putting the hidden fields -->
+   {# Include the hidden fields #}
+   {% for hidden in shared_search_controls_form.hidden_fields %}
+   {{ hidden }}
+   {% endfor %}
+   <div class="submit-buttons">
+       <input type="submit" name="action" value="Search"  class="btn btn-primary" />
+   </div> <!-- end div for submit buttons. -->
+    <button id="shared-controls-search-demo"
+            type="button" class="btn btn-link" 
+            title="Fill out the form with demo values.">
+      Use demo values for search.
+   </button>
+  </form>
+
+</div>

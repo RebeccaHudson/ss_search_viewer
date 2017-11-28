@@ -16,43 +16,12 @@
      <td>    {{ snpid_window_form.window_size }}          </td>
  </tr>
 
-  <tr>
-      <td>   {{ snpid_window_form.pvalue_rank_cutoff.label_tag }}</td>
-      <td>   {{ snpid_window_form.pvalue_rank_cutoff }}          </td>
-  </tr>
-
-  <tr>
-      <td>   {{ snpid_window_form.pvalue_ref_cutoff.label_tag }}</td>
-      <td>  {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %}   
-            {{ snpid_window_form.pvalue_ref_cutoff }}         
-      </td>
-  </tr>
-
-  <tr>
-      <td>  {{ snpid_window_form.pvalue_snp_cutoff.label_tag }}</td>
-      <td>  {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
-            {{ snpid_window_form.pvalue_snp_cutoff }}         
-      </td>
-  </tr>
-
-<tr>
-   {% include "ss_viewer/sort_widget.html" %} 
-</tr>
-  <tr>
-      <td>  {{ snpid_window_form.ic_filter.label_tag }}</td>
-      <td>  {{ snpid_window_form.ic_filter }}          </td>
-  </tr>
-
 </tbody>
 </table>
-  {# Include the hidden fields #}
-  {% for hidden in snpid_window_form.hidden_fields %}
-  {{ hidden }}
-  {% endfor %}
-      <div class="submit-buttons">
-          <input type="submit" name="action" value="Search by Window around SNPid"  
-                                                          class="btn btn-primary" />
-       </div><!-- end div for submit buttons. -->
-       <button id="snpid-window-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
+      <!-- <div class="submit-buttons">
+          <input type="submit" name="action" value="Search by Window around SNPid"   
+                                                          class="btn btn-primary" /> -->
+       <!-- </div> end div for submit buttons. -->
+       <!-- <button id="snpid-window-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button> -->
   </form>
 </div>

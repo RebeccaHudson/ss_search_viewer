@@ -1,6 +1,7 @@
 
 function writeBothCutoffDirections(){
-   var active_form = $("#tabbed-forms div.active");
+   /*var active_form = $("#tabbed-forms div.active");*/
+   var active_form = $("#shared_controls");
    var btn_selector  = 'button[name=pvalue_snp]';
    var valueToWrite = active_form.find(btn_selector).attr('value'); 
    var btn_name = 'pvalue_snp';  
@@ -29,7 +30,8 @@ function switchDirection(event){
 } 
 
 function writeCutoffDirection(direction_value, button_name){ 
-    var active_form = $("#tabbed-forms div.active"); 
+    //var active_form = $("#tabbed-forms div.active"); 
+    var active_form = $("#shared_controls"); 
     var id_for_hidden_field = button_name + '_direction';
     var hidden_field_selector = '[id$=' + id_for_hidden_field + ']';
     var field_to_write = active_form.find(hidden_field_selector);

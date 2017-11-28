@@ -16,37 +16,12 @@
   <td>   {{ tf_search_form.encode_trans_factor.label_tag }}  </td>
   <td class='trans-factor'>   {{ tf_search_form.encode_trans_factor  }} </td>
 </tr>
-<tr> 
-  <td>   {{ tf_search_form.pvalue_rank_cutoff.label_tag }}  </td>
-  <td>   {{ tf_search_form.pvalue_rank_cutoff  }} </td>
-</tr>
-<tr> 
-  <td>   {{ tf_search_form.pvalue_ref_cutoff.label_tag }}  </td>
-  <td>   {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} 
-         {{ tf_search_form.pvalue_ref_cutoff  }} </td>
-</tr>
-<tr> 
-  <td>   {{ tf_search_form.pvalue_snp_cutoff.label_tag }}  </td>
-  <td>   {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
-         {{ tf_search_form.pvalue_snp_cutoff  }} </td>
-</tr>
-<tr>
-   {% include "ss_viewer/sort_widget.html" %} 
-</tr>
-<tr> 
-  <td>  {{ tf_search_form.ic_filter.label_tag }} </td>
-  <td>  {{ tf_search_form.ic_filter  }} </td>
-</tr>
 </tbody>
 </table>
-  {# Include the hidden fields #}
-  {% for hidden in tf_search_form.hidden_fields %}
-  {{ hidden }}
-  {% endfor %}
-      <div class="submit-buttons">
-          <input type="submit" name="action" value="Search by Transcription Factor"  
-                                                          class="btn btn-primary" />
-       </div><!-- end div for submit buttons. -->
-    <button id="tf-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button>
+      <!-- <div class="submit-buttons">
+          <input type="submit" name="action" value="Search by Transcription Factor"   
+                                                          class="btn btn-primary" /> -->
+       <!-- </div> end div for submit buttons. -->
+    <!-- <button id="tf-search-demo" type="button" class="btn btn-link" title="Fill out the form with demo values."> Use demo values for search.</button> -->
   </form>
 </div>

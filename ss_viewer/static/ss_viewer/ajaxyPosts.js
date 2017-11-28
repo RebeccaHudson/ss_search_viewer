@@ -1,8 +1,8 @@
 function pull_search_type(form_data){
+  var onekey = form_data.keys()[0];
   for (var key of form_data.keys()) {
-      //every search type has a pvalue_rank_cutoff;
-      if ( key.search('pvalue_rank_cutoff') > 0 ){
-      //if the string is not found, search returns -1
+      if ( key.search('-') > 0 ){
+           //if the string is not found, search returns -1
           var prefix = key.split('-')[0]; 
           return prefix.replace('_', '-') + '-search';
       } 
@@ -13,10 +13,21 @@ function create_search_post(){
  var formElement = document.querySelector('div.active form');
  form_data = new FormData(formElement); 
 
+ var shared_search_controls_form = document.querySelector('#shared_controls');
+ var shared_search_controls_form_data = new FormData(shared_search_controls_form);
+
  var search_type = pull_search_type(form_data);
  form_data.append('search_type', search_type);
  form_data.append('action',  'search');
 
+  shared_search_controls_dict = {};
+  /*  add each of the shared_form_controls to the formdata.*/
+  for (var pair of shared_search_controls_form_data.entries()) {
+     shared_search_controls_dict[pair[0]] = pair[1];
+  }
+
+ shared_search_controls_dict['sort_order'] = JSON.parse(shared_search_controls_dict['sort_order']);
+ form_data.append('shared_controls', JSON.stringify(shared_search_controls_dict));
  hideControlsWhileLoading();
 
   $.ajax({
@@ -32,7 +43,9 @@ function create_search_post(){
       contentType: false,
       success: function(json) {
           handleResults(json.form_data, json);
-          //save data about the search onto the page: 
+          //NEW: here, json does not yet contain the shared_search_control values.
+          //This is something to be dealt with in the views.
+          //save data about the search onto the page:
           $("#type_of_shown_results").text(search_type);
       },
       error: function(xhr, errmsg, err) {
@@ -52,6 +65,13 @@ function create_paging_post(action_name, search_type){
  hideControlsWhileLoading();
  console.log("paging post with the following values: ");
  console.log(values);
+ 
+ if ( ! ( typeof(values['sort_order']) == "string") ) {
+   values['sort_order'] =  JSON.stringify(values['sort_order']);
+ }
+ //console.log("after stringification of sort_order");
+ console.log(values);
+
  $.ajax({
       beforeSend: function(xhr, settings) {
            csrfSafeSend(xhr, settings);
@@ -93,6 +113,7 @@ function handleResults(values, json){
         values['ic_filter'] = JSON.stringify(values['ic_filter']);
         //must be un-stringified on the back end.
     }
+ 
 
     var values_to_save_for_paging = JSON.stringify(values);
     console.log("saving these values for paging:  ");

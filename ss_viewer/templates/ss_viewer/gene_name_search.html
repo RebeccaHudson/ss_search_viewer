@@ -15,41 +15,20 @@
   <td>   {{ gene_name_form.window_size.label_tag }}  </td>
   <td> {{ gene_name_form.window_size  }} </td>
 </tr>
-<tr>
-<td> {{ gene_name_form.pvalue_rank_cutoff.label_tag }} </td>
-<td> {{ gene_name_form.pvalue_rank_cutoff }}</td>
-</tr>
-<tr>
-<td> {{ gene_name_form.pvalue_ref_cutoff.label_tag }} </td>
-<td> {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} 
-     {{ gene_name_form.pvalue_ref_cutoff }}</td>
-</tr>
-<tr>
-<td> {{ gene_name_form.pvalue_snp_cutoff.label_tag }} </td>
-<td> {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
-     {{ gene_name_form.pvalue_snp_cutoff }} </td>
-</tr>
-<tr>
-   {% include "ss_viewer/sort_widget.html"  %} 
-</tr>
-<tr>
-    <td>{{ gene_name_form.ic_filter.label_tag }} </td>
-    <td>{{ gene_name_form.ic_filter }}  </td>
-</tr>
 </tbody>
 </table>
   {# Include the hidden fields #}
   {% for hidden in gene_name_form.hidden_fields %}
   {{ hidden }}
   {% endfor %}
-      <div class="submit-buttons">
+      <!-- <div class="submit-buttons">
           <input type="submit" name="action" value="Search by Gene Name"  
-                                                          class="btn btn-primary" />
-      </div> <!-- end div for submit buttons. -->
-       <button id="gene-name-search-demo"
+                                                          class="btn btn-primary" /> -->
+      <!-- </div>  end div for submit buttons. -->
+       <!-- <button id="gene-name-search-demo"
                type="button" class="btn btn-link" 
                title="Fill out the form with demo values.">
          Use demo values for search.
-      </button>
+      </button> -->
   </form>
 </div>
