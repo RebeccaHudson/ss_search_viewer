@@ -9,16 +9,9 @@ function pull_search_type(form_data){
    } 
 }
 
-function create_search_post(){
- var formElement = document.querySelector('div.active form');
- form_data = new FormData(formElement); 
-
- var shared_search_controls_form = document.querySelector('#shared_controls');
- var shared_search_controls_form_data = new FormData(shared_search_controls_form);
-
- var search_type = pull_search_type(form_data);
- form_data.append('search_type', search_type);
- form_data.append('action',  'search');
+function setup_shared_search_controls_dict(){
+ var shared_search_controls_form_data  = 
+            new FormData(document.querySelector('#shared_controls'));
 
   shared_search_controls_dict = {};
   /*  add each of the shared_form_controls to the formdata.*/
@@ -26,8 +19,26 @@ function create_search_post(){
      shared_search_controls_dict[pair[0]] = pair[1];
   }
 
- shared_search_controls_dict['sort_order'] = JSON.parse(shared_search_controls_dict['sort_order']);
- form_data.append('shared_controls', JSON.stringify(shared_search_controls_dict));
+  //Sort order is stored as a string representation of a dictionary.
+  shared_search_controls_dict['sort_order'] = 
+             JSON.parse(shared_search_controls_dict['sort_order']);
+
+  return shared_search_controls_dict;
+}
+
+
+
+function create_search_post(){
+ var formElement = document.querySelector('div.active form');
+ form_data = new FormData(formElement); 
+
+ var search_type = pull_search_type(form_data);
+ form_data.append('search_type', search_type);
+ form_data.append('action',  'search');
+
+ form_data.append('shared_controls', 
+                  JSON.stringify(setup_shared_search_controls_dict()));
+
  hideControlsWhileLoading();
 
   $.ajax({
@@ -43,9 +54,6 @@ function create_search_post(){
       contentType: false,
       success: function(json) {
           handleResults(json.form_data, json);
-          //NEW: here, json does not yet contain the shared_search_control values.
-          //This is something to be dealt with in the views.
-          //save data about the search onto the page:
           $("#type_of_shown_results").text(search_type);
       },
       error: function(xhr, errmsg, err) {
@@ -57,20 +65,15 @@ function create_search_post(){
   });              
 }
 
-//some of this can be factored out...
 function create_paging_post(action_name, search_type){
  var val_text = $("div#current_search_params").text();
  var values = jQuery.parseJSON(val_text);
  values['action'] = action_name
  hideControlsWhileLoading();
- console.log("paging post with the following values: ");
- console.log(values);
  
  if ( ! ( typeof(values['sort_order']) == "string") ) {
    values['sort_order'] =  JSON.stringify(values['sort_order']);
  }
- //console.log("after stringification of sort_order");
- console.log(values);
 
  $.ajax({
       beforeSend: function(xhr, settings) {
@@ -113,11 +116,10 @@ function handleResults(values, json){
         values['ic_filter'] = JSON.stringify(values['ic_filter']);
         //must be un-stringified on the back end.
     }
- 
 
     var values_to_save_for_paging = JSON.stringify(values);
-    console.log("saving these values for paging:  ");
-    console.log(values);
+    /*console.log("saving these values for paging:  ");
+    console.log(values);*/
     $("div#current_search_params").text(values_to_save_for_paging);
 }
 
