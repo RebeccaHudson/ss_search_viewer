@@ -38,8 +38,6 @@ function gene_name_search_demo(){
 function gl_region_search_demo(){
    $('#id_gl_region-gl_start_pos').val(10000); 
    $('#id_gl_region-gl_end_pos').val(143163);
-   //As of 5/17/17, significantly larger genomic location queries 
-   // crush the Elasticsearch cluster
    $('#id_gl_region-selected_chromosome').val('ch5');
 }
 
