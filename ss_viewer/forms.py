@@ -4,16 +4,22 @@ import os
 import pickle
 import re
 
+
+
 #Each form type has a p-value cutoff and a page number of results shown.
 #prefixes explained here: https://docs.djangoproject.com/en/1.11/ref/forms/api/#prefixes-for-forms
-class GenericSearchForm(forms.Form):
+#IN PROGRESS: instead of having all of the forms have these contorls on them, 
+# have all of the shared controls on one particular form.
+class SharedSearchControlsForm(forms.Form):
     default_cutoff = 0.05
     pvalue_tip = 'Show results with pvalues less than or equal to this '
     styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0000001", 
                                              'title': pvalue_tip }) 
 
+    #Not needed. page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
+    #But it's shared. Maybe I can refactor it into here?
     page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
-
+    previous_version_of_sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
 
     pvalue_rank_cutoff = forms.FloatField(widget=styled_widget,
                                           max_value=1, 
@@ -60,11 +66,13 @@ class GenericSearchForm(forms.Form):
                                           widget=forms.CheckboxSelectMultiple(attrs={"checked":"",
                                                                                      'class':'ic-filter'}))
     def clean(self):
-        cleaned_data = super(GenericSearchForm, self).clean()
+        cleaned_data = super(SharedSearchControlsForm, self).clean()
         if cleaned_data.get('pvalue_rank_cutoff') is None:
             cleaned_data['pvalue_rank_cutoff'] = 0.05
             print "assigned pvalue default"
         return cleaned_data
+
+
   
 #Used for parsing out SNPids from text files uploaded on the SNPid search form.
 class SnpidSearchUtils:
@@ -82,7 +90,7 @@ class SnpidSearchUtils:
           raise forms.ValidationError("No valid SNPids have been included.")  
         return sorted(deduped_snpids)
 
-class SearchBySnpidForm(GenericSearchForm):
+class SearchBySnpidForm(forms.Form):
     prefix = 'snpid'
     text_to_explain_snpbox = "SNPids"
     snpid_tip = "Enter SNPids to search for."
@@ -121,6 +129,7 @@ class SearchBySnpidForm(GenericSearchForm):
                  SnpidSearchUtils.clean_and_validate_snpid_text_input(
                                                      snpid_textbox_contents)
         else:
+            #TODO: clean this up down here.
             print "all methods available on snpid_file ; " + repr(dir(snpid_file))
             print "snpid_file size " + str(snpid_file.size)
             print "snpid_file content type " + snpid_file.content_type
@@ -146,7 +155,7 @@ class SearchBySnpidForm(GenericSearchForm):
 
 
 #A separate form for searching through the data by genomic location
-class SearchByGenomicLocationForm(GenericSearchForm):
+class SearchByGenomicLocationForm(forms.Form):
     prefix = 'gl_region'
 
     gl_pos_label_text = { 'start' : 'Start position on chromosome',
@@ -201,7 +210,7 @@ class SearchByGenomicLocationForm(GenericSearchForm):
                                        ), code='region-size-too-large')
 
  
-class SearchByTranscriptionFactorForm(GenericSearchForm):
+class SearchByTranscriptionFactorForm(forms.Form):
     prefix = 'trans_factor'
     tf_library_options=[('jaspar','JASPAR'),
                         ('encode','ENCODE')]
@@ -251,7 +260,7 @@ class SearchByTranscriptionFactorForm(GenericSearchForm):
                                             label = "Select ENCODE transcription factor",
                                             required = False)
 
-class SearchBySnpidWindowForm(GenericSearchForm):
+class SearchBySnpidWindowForm(forms.Form):
     prefix = 'snpid_window'
     styled_widget = forms.TextInput(attrs={"class":"form-control",
                                            "title": "Search for data with a window "+\
@@ -296,7 +305,7 @@ class SearchBySnpidWindowForm(GenericSearchForm):
 
 
 
-class SearchByGeneNameForm(GenericSearchForm):
+class SearchByGeneNameForm(forms.Form):
     prefix='gene_name'
     styled_widget = forms.TextInput(attrs={"class":"form-control",
                                            "title" : "Name of the gene to search form."}) 
@@ -320,7 +329,6 @@ class SearchByGeneNameForm(GenericSearchForm):
         settings.HARD_LIMITS['MAX_NUMBER_OF_BASES_IN_GENOMIC_LOCATION_REQUEST']
                          / 2 )
     window_size.error_messages = { 'required': 'Missing window size (required).'}
-    #sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
 
     def clean(self):
         cleaned_data = super(SearchByGeneNameForm, self).clean()    
