@@ -10,10 +10,7 @@ from ss_viewer.views.shared import StandardFormset
 from ss_viewer.views.shared import PValueDictFromForm
 from ss_viewer.views.shared import Paging
 from ss_viewer.views.shared import StreamingCSVDownloadHandler
-
 from ss_viewer.forms import SharedSearchControlsForm 
-
-
 from django.http import HttpResponse
 import json
 
@@ -27,7 +24,7 @@ class GenericSearchView(View):
     def get(self, request, *args, **kwargs):
         return redirect(reverse('ss_viewer:multi-search')) 
 
-    #pass the request through without change if it's a download request.
+    #Pass the request through without change if it's a download request.
     def check_for_download_request(self, request):
         if len(request.POST.keys()) == 1:
            st = request.POST.keys()[0]      
@@ -106,8 +103,6 @@ class GenericSearchView(View):
             #case when it's a basic (not paging or download) search
             self.setup_form_for_standard_request(request)
         if not self.search_form.is_valid(): 
-            #consider hand-validating the shared_search_controls_dict instead 
-            #  of relying on form validation. 
             return self.handle_invalid_form()
 
         #assigns and handles api_search_query.
