@@ -16,8 +16,6 @@ class SharedSearchControlsForm(forms.Form):
     styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0000001", 
                                              'title': pvalue_tip }) 
 
-    #Not needed. page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
-    #But it's shared. Maybe I can refactor it into here?
     page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
     previous_version_of_sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
 
@@ -25,7 +23,7 @@ class SharedSearchControlsForm(forms.Form):
                                           max_value=1, 
                                           min_value=0, 
                                           initial=default_cutoff,
-                                          label = "P-value cutoff",
+                                          #label = "P-value cutoff \n significance in change in function",
                                           required=False 
                                           )
 
@@ -33,14 +31,14 @@ class SharedSearchControlsForm(forms.Form):
                                            max_value=1,
                                            min_value=0, 
                                            initial=default_cutoff,
-                                           label = "P-value SNP cutoff",
+                                           label = "P-value SNP",
                                            required = False)
  
     pvalue_ref_cutoff = forms.FloatField(widget=styled_widget, 
                                            max_value=1,
                                            min_value=0, 
                                            initial=default_cutoff,
-                                           label = "P-value Reference cutoff",
+                                           label = "P-value reference",
                                            required = False)
     
     use_these_choices = ( ("lt", "<"), ("gte", u"\u2265"))
@@ -61,7 +59,7 @@ class SharedSearchControlsForm(forms.Form):
     #https://stackoverflow.com/questions/2229029/django-choicefield-with-
     #   checkboxselectmultiple-all-selected-by-default/14364035
     ic_filter = forms.MultipleChoiceField(choices=ic_options,
-                                          label="Filter by information content", 
+                                          label="Filter by \n motif degeneracy", 
                                           required = False, 
                                           widget=forms.CheckboxSelectMultiple(attrs={"checked":"",
                                                                                      'class':'ic-filter'}))
