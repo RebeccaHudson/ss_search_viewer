@@ -301,6 +301,23 @@ class APIResponseHandler:
         if last_doc_requested <= limit:
             return True
         return False
+
+
+    @staticmethod
+    def add_color_coding_to_search_results(results):
+        threshold = 0.03
+        for one_row in results:
+            difference = one_row['pval_ref'] - one_row['pval_snp'] 
+            if difference >= threshold :
+                one_row['color_code'] = 'gain' 
+            elif abs(difference) >= threshold:
+                one_row['color_code'] = 'loss'
+            else: 
+                one_row['color_code'] = 'neutral'
+            #JASPAR motif link is not added; it's only shown on the detail page.
+        return results
+
+
  
  
     @staticmethod
@@ -347,6 +364,10 @@ class APIResponseHandler:
             
             response_data = \
               ExternalResourceUrls.add_links_to_search_results(response_data)
+
+            response_data = \
+              APIResponseHandler.add_color_coding_to_search_results(response_data)
+
             #slyly avoiding nested dictionaries. 
             plot_data = APIResponseHandler.get_plots(response_data)
 

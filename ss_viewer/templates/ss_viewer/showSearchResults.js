@@ -59,10 +59,8 @@ function makeAColumn(content, styleclass, link=null, id=null,  hide=false){
   return col.join(' ');
 }
 
-
 function seutpOneRowOfSearchResults(api_response){
-    var row = "<tr>";
-
+    var row = "<tr class='" + api_response.color_code + "'  >";
     row += makeAColumn(api_response.snpid,'snpid', link=api_response.dbsnp_link);
 
     var coordToShow = [api_response.chr, api_response.pos.toLocaleString()].join(':');

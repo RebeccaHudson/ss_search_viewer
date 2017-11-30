@@ -3,6 +3,19 @@
    /* Result table styles for creating the scrollable
     * table itself.*/
 
+     tr.neutral { 
+        background-color: #FCE6C9
+        /* eggshell */
+     }
+
+     tr.loss {   
+        background-color: #FFC1C1;  
+     }
+  
+     tr.gain {  
+        background-color: #BDFCC9;    
+     }
+
      #drop-in td {
         vertical-align: middle;
         border-left: .5px solid rgba(128, 128, 128, 0.76);
@@ -148,7 +161,7 @@
     #tabbed-forms { margin-right: 2px; }
 
 /*Display the information content filtering controls horizontally. 
-  Matches ALL of the controls whose IDs end in '-ic_filter'*/
+  Matches ALL of the controls whose IDs end in 'ic_filter'*/
     [id$=ic_filter] li { display: inline; }
     [id$=ic_filter] { padding: 0px; }
     [id$=ic_filter] label { font-size: 12px; }
@@ -206,5 +219,7 @@
     color: red; 
     font-weight:bold;
   }
+
+
 
 
