@@ -227,7 +227,9 @@
         $('#tabs').tab();
  
         /* (for searches by TF) have JASPAR selected by default */
-            $('#id_trans_factor-encode_trans_factor').attr('disabled', 'disabled');
+            //hide the whole row.
+            $('#id_trans_factor-encode_trans_factor').parent().parent().hide();
+
             $('#id_trans_factor-tf_library_0').attr('checked', 'checked');
             $('#id_trans_factor-tf_library_1').removeAttr('checked');
 
@@ -236,12 +238,13 @@
         $('#id_trans_factor-tf_library').change(function(e){
              var target_val = e.target.attributes.getNamedItem('value');
              if (target_val.value == 'encode'){
-                $("#id_trans_factor-trans_factor").attr('disabled', 'disabled');
-                $("#id_trans_factor-encode_trans_factor").removeAttr('disabled'); }
+                $("#id_trans_factor-trans_factor").parent().parent().hide();
+                $("#id_trans_factor-encode_trans_factor").parent().parent().show();
+             }
              if ( target_val.value == 'jaspar'){
-                $("#id_trans_factor-encode_trans_factor").attr('disabled', 'disabled');
-                $("#id_trans_factor-trans_factor").removeAttr('disabled');
-               }
+                $('#id_trans_factor-encode_trans_factor').parent().parent().hide();
+                $("#id_trans_factor-trans_factor").parent().parent().show();
+             }
          });
       setupSearchDemos();
       drawPlotsInline();
