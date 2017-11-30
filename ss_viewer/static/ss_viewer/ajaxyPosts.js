@@ -14,10 +14,16 @@ function setup_shared_search_controls_dict(){
             new FormData(document.querySelector('#shared_controls'));
 
   shared_search_controls_dict = {};
+  motif_ic = [];
   /*  add each of the shared_form_controls to the formdata.*/
   for (var pair of shared_search_controls_form_data.entries()) {
-     shared_search_controls_dict[pair[0]] = pair[1];
+     if (pair[0] == 'ic_filter' ){ motif_ic.push(pair[1]);  }else{
+        shared_search_controls_dict[pair[0]] = pair[1];
+     } 
+     //console.log("shared data key: " +  pair[0] +  " shared data value: " +  pair[1]);
   }
+
+  shared_search_controls_dict['ic_filter']  = motif_ic;
 
   //Sort order is stored as a string representation of a dictionary.
   shared_search_controls_dict['sort_order'] = 
@@ -75,6 +81,11 @@ function create_paging_post(action_name, search_type){
    values['sort_order'] =  JSON.stringify(values['sort_order']);
  }
 
+ if ( ! ( typeof(values['ic_filter']) == "string") ) {
+   values['ic_filter'] =  JSON.stringify(values['ic_filter']);
+ }
+
+
  $.ajax({
       beforeSend: function(xhr, settings) {
            csrfSafeSend(xhr, settings);
@@ -112,14 +123,15 @@ function handleResults(values, json){
     }
   
     //stringify the ic filter information ONCE. 
-    if (typeof values['ic_filter'] == 'object'){ 
+    /*if (typeof values['ic_filter'] == 'object'){ 
+        console.log("strinifying ic filter values.");
         values['ic_filter'] = JSON.stringify(values['ic_filter']);
         //must be un-stringified on the back end.
-    }
+    }*/
 
     var values_to_save_for_paging = JSON.stringify(values);
-    /*console.log("saving these values for paging:  ");
-    console.log(values);*/
+    console.log("saving these values for paging:  ");
+    console.log(values);
     $("div#current_search_params").text(values_to_save_for_paging);
 }
 
