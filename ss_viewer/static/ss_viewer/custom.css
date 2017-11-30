@@ -17,6 +17,8 @@
 
 .panel-body {
     background-color: #DCDCDC;
+    padding: 10px;
+    padding-bottom: 5px;
 }
 
 
@@ -51,6 +53,7 @@ div.submit-buttons {
 form label{ 
    margin-right: 5px; 
    margin-top: 6px;
+   font-size: 12px;
    /*float: left;*/
 }
 
@@ -75,6 +78,8 @@ td.show_plots > button { font-size: 12px;
 
 /* don't put dots next to the radio buttons */
 ul { list-style-type: none; }
+
+ul#id_trans_factor-tf_library li  { display: inline; }
 
 input[type="radio"] {  
   float: left;
