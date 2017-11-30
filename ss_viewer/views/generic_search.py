@@ -34,10 +34,12 @@ class GenericSearchView(View):
     def setup_form_for_paging_or_download_request(self,request):
         newDict = None
         self.shared_search_controls_dict = {} 
+        #print "right before assignment: " + repr(request.POST.dict())
         for x in [ 'page_of_results_shown', 'ic_filter', 'sort_order', 'pvalue_snp', 'pvalue_ref', 'pvalue_rank', \
                     'pvalue_ref_direction' , 'pvalue_snp_direction' ]:
             self.shared_search_controls_dict[x] = request.POST.dict()[x]
         self.shared_search_controls_dict['sort_order'] =  json.loads(self.shared_search_controls_dict['sort_order'])
+        self.shared_search_controls_dict['ic_filter'] =  json.loads(self.shared_search_controls_dict['ic_filter'])
         if request.POST['action'] in ['Prev', 'Next']:
             newDict = self.setup_form_for_paging_request(request)
         else:
