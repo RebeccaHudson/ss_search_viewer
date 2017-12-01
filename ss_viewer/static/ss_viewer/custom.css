@@ -3,12 +3,23 @@
 
 #tabs li a {
     border: 2px solid;
+    font-size: 12px;
     background-color: #DCDCDC;
 }
 
 #tabs li.active a {
     border-bottom-color: transparent;
 }
+
+ul.nav-tabs  li  a{
+    padding: 5px 10px;
+    /* this was 5, 15 to take up more horizontal space before */
+}
+
+/* override the default list-wide border */
+ul.nav-tabs { border-bottom: 0px; }
+
+
 
 .tab-pane { 
     border:solid 1px gray;
@@ -18,8 +29,22 @@
 .panel-body {
     background-color: #DCDCDC;
     padding: 10px;
-    padding-bottom: 5px;
+    padding-bottom: 0px;
+   /* border-radius: 0 0 15px 15px;*/
 }
+
+.tab-pane.panel-body.active {
+    border-radius: 0 15px 0 0; 
+}
+
+
+#shared_controls_panel { 
+    border-radius: 0 0 15px 15px;
+}
+
+/* fix the uneven appearance of the form */
+div.tab-content { width: 100%; }
+
 
 
 
@@ -81,6 +106,8 @@ ul { list-style-type: none; }
 
 ul#id_trans_factor-tf_library li  { display: inline; }
 
+ul#id_trans_factor-tf_library label { margin-left: 1em; }
+
 input[type="radio"] {  
   float: left;
   height: 15px;
@@ -88,9 +115,11 @@ input[type="radio"] {
   margin-right: 15px; 
   padding : 8;
   vertical-align: middle;
+  margin-top: 1px;
 }
 
-label[for^="id_tf_library"] {
+/* can probably get rid of this styleclass */
+label[for~="tf_library"] {
   vertical-align: middle;
 }
 
