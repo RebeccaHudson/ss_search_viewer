@@ -1,9 +1,10 @@
-<div class="tab-pane panel-body">
+<div class="tab-pane panel-body" id="shared_controls_panel">
 <!-- Do not switch based on which form is up. -->
 <form id="shared_controls">
 <table class="formControls">
 <tbody>
-<td> {{ shared_search_controls_form.pvalue_rank_cutoff.label_tag }} </td>
+<td> <label for="id_pvalue_rank_cutoff"> p-value rank </label>
+</td>
 <td> {{ shared_search_controls_form.pvalue_rank_cutoff }}</td>
 </tr>
 <tr>
