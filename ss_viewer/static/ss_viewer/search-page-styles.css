@@ -16,6 +16,12 @@
         background-color: #BDFCC9;    
      }
 
+     tr td.cl_plot {
+        background-color: white;
+        /* keep the color coding to the numeric columns for now. */
+     }
+
+
      #drop-in td {
         vertical-align: middle;
         border-left: .5px solid rgba(128, 128, 128, 0.76);
@@ -189,10 +195,15 @@
       width : 7em;
       background-color:white;
   }
-  .shift-priority { width: 30px; 
+  .shift-priority { width: 40px; 
                     margin-top: 1.5em;
-                    margin-right: 4px;
+                    margin-right: 8px;
+                    flex: 0 0 0;
                   }
+
+  .shift-priority button {
+   
+  }
 
   /* got this from here 
      http://stackoverflow.com/questions/41644637/
