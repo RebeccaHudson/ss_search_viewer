@@ -158,6 +158,17 @@ function create_download_post(search_type) {
   var val_text = $("div#current_search_params").text();
   values = jQuery.parseJSON(val_text);
   values['action'] = 'Download Results';
+
+ //this code is copied out of paging handler
+ //TODO: factor it out into a sepearate function so it's not repeated.
+ if ( ! ( typeof(values['sort_order']) == "string") ) {
+   values['sort_order'] =  JSON.stringify(values['sort_order']);
+ }
+
+ if ( ! ( typeof(values['ic_filter']) == "string") ) {
+   values['ic_filter'] =  JSON.stringify(values['ic_filter']);
+ }
+
   var result_text = $("#status_above").text(); //Saved to be replaced after download.
 
   //Don't hide the download explanation box while preparing the download.
