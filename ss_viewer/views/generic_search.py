@@ -34,10 +34,19 @@ class GenericSearchView(View):
     def setup_form_for_paging_or_download_request(self,request):
         newDict = None
         self.shared_search_controls_dict = {} 
+        post_dict_to_use = None
+        #maybe should undo this? might not be needed.
+        if type(request.POST) is dict:
+            #occurs with downloads
+            post_dict_to_use = request.POST
+        else: 
+            #occurs with paging requests
+            post_dict_to_use = request.POST.dict()
         #print "right before assignment: " + repr(request.POST.dict())
+        print "right before assignment: " + repr(post_dict_to_use)
         for x in [ 'page_of_results_shown', 'ic_filter', 'sort_order', 'pvalue_snp', 'pvalue_ref', 'pvalue_rank', \
                     'pvalue_ref_direction' , 'pvalue_snp_direction' ]:
-            self.shared_search_controls_dict[x] = request.POST.dict()[x]
+            self.shared_search_controls_dict[x] = post_dict_to_use[x]
         self.shared_search_controls_dict['sort_order'] =  json.loads(self.shared_search_controls_dict['sort_order'])
         self.shared_search_controls_dict['ic_filter'] =  json.loads(self.shared_search_controls_dict['ic_filter'])
         if request.POST['action'] in ['Prev', 'Next']:
@@ -176,6 +185,12 @@ class GenericSearchView(View):
             pvalues_for_search.update({'pvalue_ref'  : pvalue_dict['pvalue_ref_cutoff']})
         if 'pvalue_snp_cutoff' in pvalue_dict:
             pvalues_for_search.update({'pvalue_snp'  : pvalue_dict['pvalue_snp_cutoff']})
+
+        #TODO: clean this up!
+        if 'pvalue_ref' in pvalue_dict:
+            pvalues_for_search.update({'pvalue_ref'  : pvalue_dict['pvalue_ref']})
+        if 'pvalue_snp' in pvalue_dict:
+            pvalues_for_search.update({'pvalue_snp'  : pvalue_dict['pvalue_snp']})
         return pvalues_for_search
 
     def handle_invalid_form(self):
