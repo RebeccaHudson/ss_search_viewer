@@ -19,7 +19,8 @@ class SharedSearchControlsForm(forms.Form):
     page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
     previous_version_of_sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
 
-    pvalue_rank_cutoff = forms.FloatField(widget=styled_widget,
+    #taking the word 'cutoff' off of these.
+    pvalue_rank = forms.FloatField(widget=styled_widget,
                                           max_value=1, 
                                           min_value=0, 
                                           initial=default_cutoff,
@@ -27,14 +28,14 @@ class SharedSearchControlsForm(forms.Form):
                                           required=False 
                                           )
 
-    pvalue_snp_cutoff = forms.FloatField(widget=styled_widget, 
+    pvalue_snp = forms.FloatField(widget=styled_widget, 
                                            max_value=1,
                                            min_value=0, 
                                            initial=default_cutoff,
                                            label = "P-value SNP",
                                            required = False)
  
-    pvalue_ref_cutoff = forms.FloatField(widget=styled_widget, 
+    pvalue_ref = forms.FloatField(widget=styled_widget, 
                                            max_value=1,
                                            min_value=0, 
                                            initial=default_cutoff,
