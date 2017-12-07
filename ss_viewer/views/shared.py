@@ -74,46 +74,6 @@ class PValueFromForm:
         return 0.05
 
 
-#maybe allow searches with only 1 to 2 out of 3 p-values.
-class PValueDictFromForm:
-    @staticmethod
-    def get_pvalues_from_form(form):
-        pv_dict = {}
-        for pv_name in ['rank', 'ref', 'snp']:
-            key = "_".join(['pvalue', pv_name, 'cutoff'])
-            if form.cleaned_data.has_key(key) and \
-               form.cleaned_data.get(key) is not None:
-                print "this has key: " + key + " value: " + \
-                      str(form.cleaned_data.get(key))
-                pv_dict[key] = form.cleaned_data.get(key)
-
-        if not pv_dict.has_key('pvalue_rank_cutoff'): 
-            pv_dict['pvalue_rank_cutoff'] = 0.05
-
-        return pv_dict
-
-    #This whole class could just go away..
-    @staticmethod
-    def get_pvalues_from_dict(dict_in):
-        print "dict_in " + repr(dict_in)
-        pv_dict = {}
-        for pv_name in ['rank', 'ref', 'snp']:
-            key = "_".join(['pvalue', pv_name, 'cutoff'])
-            alt_key = "_".join(['pvalue', pv_name])
-            if dict_in.has_key(key) and \
-               dict_in.get(key) is not None:
-                print "this has key: " + key + " value: " + \
-                      str(dict_in.get(key))
-                pv_dict[key] = dict_in.get(key)
-            elif dict_in.has_key(alt_key):
-                print "this has key: " + alt_key + " value: " + \
-                      str(dict_in.get(alt_key))
-                pv_dict[alt_key] = dict_in.get(alt_key)
-
-        #A final failsafe.
-        if not pv_dict.has_key('pvalue_rank_cutoff'): 
-            pv_dict['pvalue_rank_cutoff'] = 0.05
-        return pv_dict
 
 
 #includes all of the forms that should be loaded every time.
