@@ -5,17 +5,17 @@
 <tbody>
 <td> <label for="id_pvalue_rank_cutoff"> p-value rank </label>
 </td>
-<td> {{ shared_search_controls_form.pvalue_rank_cutoff }}</td>
+<td> {{ shared_search_controls_form.pvalue_rank}}</td>
 </tr>
 <tr>
-<td> {{ shared_search_controls_form.pvalue_ref_cutoff.label_tag }} </td>
+<td> {{ shared_search_controls_form.pvalue_ref.label_tag }} </td>
 <td> {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} 
-     {{ shared_search_controls_form.pvalue_ref_cutoff }}</td>
+     {{ shared_search_controls_form.pvalue_ref }}</td>
 </tr>
 <tr>
-<td> {{ shared_search_controls_form.pvalue_snp_cutoff.label_tag }} </td>
+<td> {{ shared_search_controls_form.pvalue_snp.label_tag }} </td>
 <td> {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
-     {{ shared_search_controls_form.pvalue_snp_cutoff }} </td>
+     {{ shared_search_controls_form.pvalue_snp }} </td>
 </tr>
 <tr>
    {% include "ss_viewer/sort_widget.html"  %} 
