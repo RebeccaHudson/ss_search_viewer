@@ -52,16 +52,16 @@ class SharedSearchControlsForm(forms.Form):
 
     sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
 
-    ic_options = [('1','Very High'),
-                  ('2','High'),
-                  ('3','Moderate'),
-                  ('4','Low'),]
+    ic_options = [('1','Low'), #Low degerneracy -> high information content.
+                  ('2','Moderate'),
+                  ('3','High'),
+                  ('4','Very High'),]
     #Lifted from 
     #https://stackoverflow.com/questions/2229029/django-choicefield-with-
     #   checkboxselectmultiple-all-selected-by-default/14364035
     ic_filter = forms.MultipleChoiceField(choices=ic_options,
-                                          label="Filter by \n motif degeneracy", 
-                                          required = False, 
+                                          label="Filter by motif degeneracy", 
+                                          required = False,  #Does this make it reject/fail if all of of these boxes are un-checked?
                                           widget=forms.CheckboxSelectMultiple(attrs={"checked":"",
                                                                                      'class':'ic-filter'}))
     def clean(self):
