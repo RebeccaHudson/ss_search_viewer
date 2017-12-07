@@ -63,16 +63,6 @@ class TFTransformer:
           one_or_more_motif_values = [one_or_more_motif_values]
         return one_or_more_motif_values
 
-#TODO: finish deprecating this class and fully replace it
-# with the one below.
-class PValueFromForm:
-    @staticmethod
-    def get_pvalue_rank_from_form(form):
-      if form.cleaned_data.has_key('pvalue_rank_cutoff'):
-        return form.cleaned_data.get('pvalue_rank_cutoff')
-      else:
-        return 0.05
-
 
 
 
