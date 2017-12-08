@@ -76,35 +76,6 @@
   </div> <!-- close the 'side' div -->
    <!-- begin downloads div -->
    <div id="infobox">
-   <div class="explain" id="search-exp"> <!-- contains information about each search type when its tab is active -->
-     <p class="explain-search" id="snpid_search_form-explain">
-       <span class="bigred">Please type SNPids of interest in the box or upload a text file 
-       containing a list of SNPids.</span> If more than 1,000 SNPids are specified, 
-       only the first 1,000 will be included in the search.
-     </p>
-     <p class="explain-search" id="snpid_window_form-explain">
-       <span class="bigred">Please type a SNPid of interest and a window size
-        (number of base pairs) around the SNP.</span>
-       The window size is limited to 125 million bases.
-     </p>
-     <p class="explain-search" id="gl_region_search_form-explain"> 
-       <span class="bigred">Please specify a genomic region of interest 
-       by typing its start and end position (1-based), and selecting the
-       chromosome.</span> The region is limited to 250 million bases.
-     </p>
-     <p class="explain-search" id="gene_name_form-explain">
-       <span class="bigred">Please type a gene symbol name and a window size to which you want to 
-       extend from the transcription start position to the transcription end
-       position of the gene.</span>The window size is limited to 125 million bases.
-     </p>
-     <p class="explain-search" id="tf_search_form-explain">
-      <span class="bigred">Please select a transcription factor library to use,
-       then select a transcription factor of interest. </span>
-       Information about the JASPAR and ENCODE factor libraries information is
-       available
-       <a href="{% url 'ss_viewer:help-page' %}#part-1:part-1">here</a>.
-     </p>
-   </div> <!-- end of 'search-exp' div -->
    <div class="explain" id="download-exp" >
          <div>
             <div id="download_button" >
