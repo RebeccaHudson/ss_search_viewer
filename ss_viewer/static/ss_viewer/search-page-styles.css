@@ -117,14 +117,18 @@
 
     #infobox { flex: 1; } 
     p.explain-search { display: none; }
-    div.explain#search-exp { height: 100px; } 
+    /*putting this inside of the search forms now: 
+     * div.explain#search-exp { height: 100px; } */
 
-    /* The SNPid list search is open when the page loads. */
+    /* The SNPid list search is open when the page loads. 
      #snpid_search_form-explain { display: block; }
-
+     may be able to just remove this..*/
+   /* tighten this up */
     div.explain {
-          padding:10px; 
-          margin-left:5px;
+          padding:5px; 
+          padding-bottom: 0px;
+          /*margin-left:5px;*/
+          padding-left: 10px;
           margin-top: 0px;
           border:1px dashed lightgray;
      }
@@ -227,7 +231,7 @@
 
   /*Make the primary search directive stand out.*/
   span.bigred {
-    color: red; 
+    color: #C41E3A;  /* this color is now 'cardinal' instead of RED.*/
     font-weight:bold;
   }
 
