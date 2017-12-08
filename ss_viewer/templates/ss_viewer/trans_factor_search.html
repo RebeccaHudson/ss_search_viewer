@@ -1,5 +1,14 @@
 <div class="tab-pane panel-body
    {%if active_tab == 'tf'%} active{%endif%}"  id="tf_search_form" >
+  <div class="explain" >
+  <p class="explain-search" id="tf_search_form-explain">
+      <span class="bigred">Please select a transcription factor library to use,
+       then select a transcription factor of interest. </span><br />
+       Information about the JASPAR and ENCODE factor libraries information is
+       available
+       <a href="{% url 'ss_viewer:help-page' %}#part-1:part-1">here</a>.
+  </p>
+  </div>
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:trans-factor-search' %}" method="post">
   {% csrf_token %}
 <table class="formControls">

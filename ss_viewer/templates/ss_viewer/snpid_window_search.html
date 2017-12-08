@@ -1,5 +1,13 @@
 <div class="tab-pane panel-body
    {%if active_tab == 'snpid-window'%} active{%endif%}"  id="snpid_window_form" >
+   <div class="explain"> 
+   <p class="explain-search" id="snpid_window_form-explain"> 
+       <span class="bigred">Please type a SNPid of interest and a window size
+        (number of base pairs) around the SNP.</span><br />
+        The window size is limited to 125 million bases.
+   </p>
+   </div>
+
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-window-search' %}" method="post">
   {% csrf_token %}
 
