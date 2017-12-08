@@ -239,10 +239,6 @@
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
         var target = $(e.target).attr("href");
         //based on what the value of target is, make a selector from 'target'.
-        //hide all of the other ones; 
-        $("p.explain-search").hide();  
-        $(target + '-explain').show();
-        console.log("rebuilding the text for the sort portion of the query.");
         buildQuery();
         writeBothCutoffDirections(); 
         //Sync the cutoff direction buttons with the hidden form fields.
