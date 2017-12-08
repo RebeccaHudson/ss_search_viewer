@@ -125,6 +125,7 @@ class StandardFormset:
               context['flavor'] = request.GET['flavor']
           return render(request, searchpage_template, context)
 
+     #Might be worth moving out of this class.
      @staticmethod
      def handle_invalid_form(context, status_message=None):
           if status_message == None:
