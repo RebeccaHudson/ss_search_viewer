@@ -116,9 +116,6 @@
     }
 
     #infobox { flex: 1; } 
-    p.explain-search { display: none; }
-    /*putting this inside of the search forms now: 
-     * div.explain#search-exp { height: 100px; } */
 
     /* The SNPid list search is open when the page loads. 
      #snpid_search_form-explain { display: block; }
@@ -127,7 +124,6 @@
     div.explain {
           padding:5px; 
           padding-bottom: 0px;
-          /*margin-left:5px;*/
           padding-left: 10px;
           margin-top: 0px;
           border:1px dashed lightgray;
