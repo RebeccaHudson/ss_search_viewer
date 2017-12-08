@@ -16,6 +16,7 @@ import json
 class GenericSearchView(View):
     template_name = 'ss_viewer/multi-searchpage.html'
     search_form = None 
+    shared_search_controls_errors = None
     shared_search_controls_dict = None 
     api_search_query = None
 
@@ -53,6 +54,8 @@ class GenericSearchView(View):
         self.shared_search_controls_dict = request.POST.dict()['shared_controls']
         self.shared_search_controls_dict = json.loads(self.shared_search_controls_dict)
 
+
+    #Used only for download and paging requests.
     def unpack_motif_ic_list(self, dict_as_given):
         motif_ic_str = dict_as_given['ic_filter']
         return {'ic_filter':  json.loads(motif_ic_str)}
@@ -74,14 +77,24 @@ class GenericSearchView(View):
 
     #Must include some handling for shared_search_controls.
     def pull_all_query_data_from_form(self):
-        form_data = self.search_form.cleaned_data  #query-type specific.
-        self.api_search_query = self.setup_api_search_query(form_data)
+        shared_control_values = {}
+        shared_control_values.update(self.get_pvalues_from_form())
+        shared_control_values.update(self.get_pvalue_directions_from_form() ) 
+        shared_control_values.update(self.handle_sort_order() ) 
+        shared_control_values.update(self.handle_ic_filter() )
 
-        self.api_search_query.update(self.get_pvalues_from_form())
-        self.api_search_query.update(self.get_pvalue_directions_from_form() ) 
-        self.api_search_query.update(self.handle_sort_order() ) 
-        ic_filter = self.handle_ic_filter()
-        self.api_search_query.update(ic_filter)
+        #any errors with these will be recorded in self.shared_search_control_errors
+  
+        if self.search_form.is_valid():
+          form_data = self.search_form.cleaned_data  #query-type specific.
+          self.api_search_query = self.setup_api_search_query(form_data)
+          self.api_search_query.update(shared_control_values)
+        #self.api_search_query.update(self.get_pvalues_from_form())
+        #self.api_search_query.update(self.get_pvalue_directions_from_form() ) 
+        #self.api_search_query.update(self.handle_sort_order() ) 
+        #ic_filter = self.handle_ic_filter()
+        #self.api_search_query.update(ic_filter)
+
 
     def prepare_search_parameters(self, request):
         if 'page_of_results_shown' not in self.shared_search_controls_dict or\
@@ -99,6 +112,8 @@ class GenericSearchView(View):
         request = self.check_for_download_request(request) 
         #rearranges the request if it's a download.
 
+        self.shared_search_controls_errors = [] #This should be a list, right?
+
         #get the 'Action' out of the post; setup the form accordingly.
         if request.POST['action'] in ['Prev', 'Next', 'Download Results'] or\
              'jump' in  request.POST['action']:
@@ -106,11 +121,17 @@ class GenericSearchView(View):
         else: 
             #case when it's a basic (not paging or download) search
             self.setup_form_for_standard_request(request)
-        if not self.search_form.is_valid(): 
+
+        #if self.search_form.is_valid():
+            #Can't pull query data off of the form if the form is not valid.
+        self.pull_all_query_data_from_form() #errors for shared controls should be
+                                                 #made available by/after this line.
+        if not self.search_form.is_valid() or \
+               not len(self.shared_search_controls_errors) == 0:
             return self.handle_invalid_form()
 
         #assigns and handles api_search_query.
-        self.pull_all_query_data_from_form()
+        #was here, moving to before handle_invalid_form: self.pull_all_query_data_from_form()
               
         if request.POST['action'] == 'Download Results':
             return self.handle_download(request)
@@ -133,10 +154,15 @@ class GenericSearchView(View):
         if 'sort_order' in self.shared_search_controls_dict.keys():
             sort_order['sort_order'] = self.shared_search_controls_dict['sort_order']
         return sort_order
-  
+ 
+    #Spit if this is empty. 
     def handle_ic_filter(self):
         ic_to_include = [] #contains 1, 2, 3, or 4
         ic_values = self.shared_search_controls_dict['ic_filter']
+        if len(ic_values) == 0:
+            print "*************** recognized empty ic_filter values"
+            msg = "No motif degeneracy levels are selected. Select at least one." 
+            self.shared_search_controls_errors.append(msg)
         ic_dict = { 'ic_filter' : ic_values }
         return ic_dict
         
@@ -158,6 +184,8 @@ class GenericSearchView(View):
         return StreamingCSVDownloadHandler.streaming_csv_view(request, 
                                                                search_params, 
                                                                self.api_action_name)
+
+    #Clean this up. Shorten it.
     def get_pvalue_directions_from_form(self):
         pvalue_directions = {}
         form_data = self.shared_search_controls_dict
@@ -179,9 +207,27 @@ class GenericSearchView(View):
 
     def handle_invalid_form(self):
         errs = self.search_form.errors
-        context = { 'form_errors' :
-                    [ str(item) for one_error in errs.values() for item in one_error]
-                  }
+        context = {'form_errors': []}
+ 
+        if len(errs) > 0:
+            context['form_errors'].extend(
+             [ str(item) for one_error in errs.values() for item in one_error])
+          
+        print "form errors content right after assigning form errors " + \
+           repr(context['form_errors'])      
+  
+        #TODO: The shared control errors have to be formatted properly. 
+        if len(self.shared_search_controls_errors) > 0: 
+            print "added some shared search controls errors.."
+            print "self.shared_search_controls_errors " + \
+               repr(self.shared_search_controls_errors)
+            context['form_errors'].extend(self.shared_search_controls_errors)
+           
+        print "form errors content right after assigning shared controls errors " + \
+           repr(context['form_errors'])      
+        #context = { 'form_errors' :
+        #            [ str(item) for one_error in errs.values() for item in one_error]
+        #          }
         context =  StandardFormset.handle_invalid_form(context)
         return HttpResponse(json.dumps(context), 
                         content_type="application/json",
