@@ -5,12 +5,12 @@
   <div class="explain" > 
   <p class="explain-search" id="snpid_search_form-explain">
    <span class="bigred">Please type SNPids of interest in the box or upload a text file
-   containing a list of SNPids.</span><br />If more than 1,000 SNPids are specified,
+   containing a list of SNPids.</span> <br />
+   SNPids can separated with commas, spaces, or newlines.
+   If more than 1,000 SNPids are specified, <br />
    only the first 1,000 will be included in the search.
   </p>
   </div>
-
-
 
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-search' %}" method="post">
   {% csrf_token %}
