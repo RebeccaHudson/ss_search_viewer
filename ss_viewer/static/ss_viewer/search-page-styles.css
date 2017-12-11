@@ -115,7 +115,7 @@
       width: 1164px;
     }
 
-    #infobox { flex: 1; } 
+    /* #infobox { flex: 1; } */
 
     /* The SNPid list search is open when the page loads. 
      #snpid_search_form-explain { display: block; }

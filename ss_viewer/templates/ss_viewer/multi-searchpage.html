@@ -58,74 +58,30 @@
 <div id="flex">
   <div id="search" class="side"> 
 
-  <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
-    <li  {%if active_tab == 'snpid' or active_tab == 'none-yet'%}class="active"{%endif%}><a href="#snpid_search_form" data-toggle="tab"  >SNPid List</a></li>
-    <li {%if active_tab == 'snpid-window'%}class="active"{%endif%}><a href="#snpid_window_form" data-toggle="tab" >SNPid Window</a></li>
-    <li {%if active_tab == 'gl-region' %}
-        class="active"
-        {% endif %}><a href="#gl_region_search_form" data-toggle="tab">Genomic Location</a></li>
-    <li {%if active_tab == 'gene-name'%}class="active"{%endif%}><a href="#gene_name_form" data-toggle="tab" >Gene</a></li>
-    <li {%if active_tab == 'tf'%}class="active"{%endif%}><a href="#tf_search_form" data-toggle="tab" >Transcription Factor</a></li>
-  </ul>
+    <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
+      <li  {%if active_tab == 'snpid' or active_tab == 'none-yet'%}class="active"{%endif%}><a href="#snpid_search_form" data-toggle="tab"  >SNPid List</a></li>
+      <li {%if active_tab == 'snpid-window'%}class="active"{%endif%}><a href="#snpid_window_form" data-toggle="tab" >SNPid Window</a></li>
+      <li {%if active_tab == 'gl-region' %}
+          class="active"
+          {% endif %}><a href="#gl_region_search_form" data-toggle="tab">Genomic Location</a></li>
+      <li {%if active_tab == 'gene-name'%}class="active"{%endif%}><a href="#gene_name_form" data-toggle="tab" >Gene</a></li>
+      <li {%if active_tab == 'tf'%}class="active"{%endif%}><a href="#tf_search_form" data-toggle="tab" >Transcription Factor</a></li>
+    </ul>
 
 
-  <div id="tabbed-forms" class="tab-content">
-  {% include "ss_viewer/gl_search.html" %} 
-  {% include "ss_viewer/snpid_search.html" %}
-  {% include "ss_viewer/trans_factor_search.html" %}
-  {% include "ss_viewer/snpid_window_search.html" %}
-  {% include "ss_viewer/gene_name_search.html" %}
-   <!-- if the nav tab ends here, you can independently scroll the search results -->
-  </div> <!-- close the 'tabbed forms' div -->
-  {% include "ss_viewer/shared_search_controls.html" %}
-  </div> <!-- close the 'side' div -->
-   <!-- begin downloads div -->
-   <div id="infobox">
-   <div class="explain" id="download-exp" >
-         <div>
-            <div id="download_button" >
-              <input type="submit" name="action"
-                     value="Download Results"
-                     class="btn-xs btn-danger"
-                     onclick="clickDownloadResultsAJAX();" />
-            </div>
-           <p>Numeric data for the search results shown here can be downloaded in CSV
-             format.
-             For performance reasons, CSV downloads are currently limited to the first
-             5,000 rows.
-           </p>
-         </div>
-         <div>
-            <p> 
-              <div id="download_plots_for_checked_rows" >
-                  <!-- TODO: put an alert indicating there's no darn rows checked -->
-                  <input type="submit" name="checkedRowPlotDownload"
-                         value="Download Plots for Checked Rows"
-                         class="btn-xs"
-                         onclick="checkedRowPlotDownload();" />
-              </div>
-              A ZIP archive of PNG images for plots of the data on this page can be 
-              downloaded. To include plots in this download, check the boxes in the
-              rightmost column of the search results. Shortcuts to checking or unchecking
-              all of these boxes are available below the plot Download Button.<br />
-              <span style="font-size:10px;">
-                (Single plots can also be downloaded from the Details view for each row of data.)
-              </span>
-            </p>
-                  <input type="submit" name="checkAllBoxes"
-                         value="Add All Plots on Page to Download"
-                         class="btn-xs btn-link"
-                         onclick="hitAllPlotCheckboxes(true);" />
-                  <input type="submit" name="uncheckAllBoxes"
-                         value="Remove All Plots on Page From Download"
-                         class="btn-xs btn-link"
-                         onclick="hitAllPlotCheckboxes(false);" />
-        </div>
-   </div>
-   <!-- end downloads div -->
-  </div> <!-- end the 'info box' div -->
-<!-- end 'flex' div -->
-</div>
+    <div id="tabbed-forms" class="tab-content">
+       {% include "ss_viewer/gl_search.html" %} 
+       {% include "ss_viewer/snpid_search.html" %}
+       {% include "ss_viewer/trans_factor_search.html" %}
+       {% include "ss_viewer/snpid_window_search.html" %}
+       {% include "ss_viewer/gene_name_search.html" %}
+        <!-- if the nav tab ends here, you can independently scroll the search results -->
+    </div> <!-- close the 'tabbed forms' div -->
+    {% include "ss_viewer/shared_search_controls.html" %}
+
+  </div> <!-- close the 'side' div that contains all of the search controls -->
+
+</div> <!-- end 'flex' div -->
 
 
 <!--  this is the way that we will be displaying the plot -->
@@ -147,6 +103,22 @@
   {{ active_tab }} 
 {% endif %}
 </span>
+
+
+<!-- TODO: see that this stays hidden when search results are not shown -->
+ <div id="download_button" >
+     <input type="submit" name="action"
+          value="Download Results"
+          class="btn-xs btn-danger"
+          onclick="clickDownloadResultsAJAX();" />
+ </div>
+<!-- TODO: add this info to a popup that comes up when you launch a download 
+  Numeric data for the search results shown here can be downloaded in CSV
+  format.
+  For performance reasons, CSV downloads are currently limited to the first
+  5,000 rows.  -->
+
+
 
 
 
