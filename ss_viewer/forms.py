@@ -157,8 +157,8 @@ class SearchBySnpidForm(forms.Form):
 class SearchByGenomicLocationForm(forms.Form):
     prefix = 'gl_region'
 
-    gl_pos_label_text = { 'start' : 'Start position on chromosome',
-                          'end'   : 'End position on chromosome' }
+    gl_pos_label_text = { 'start' : 'Start position',
+                          'end'   : 'End position' }
 
     gl_start_pos = forms.IntegerField(widget=
                          forms.NumberInput(attrs={"class":'form-control',
@@ -187,7 +187,7 @@ class SearchByGenomicLocationForm(forms.Form):
                                         "start and end positions specified."})
     selected_chromosome = forms.ChoiceField(widget=styled_widget,
                                             choices= zip(chromosomes,chromosomes),
-                                            label="Select a chromosome")
+                                            label="Chromosome")
     #ensure ranges are within hard limits.  
     def clean(self):
         cleaned_data = super(SearchByGenomicLocationForm, self).clean()
