@@ -15,20 +15,24 @@
   {% csrf_token %}
 <table class="formControls">
 <tbody>
+
 <tr> 
-  <td>   {{ gl_search_form.gl_start_pos.label_tag }}  </td>
-  <td> {{ gl_search_form.gl_start_pos  }} </td>
+  <td style="width: 5.5em;"> {{ gl_search_form.selected_chromosome.label_tag }}
+  <td style="width: 1.5em;"> </td>
+  <td style="width: 10em;"  > {{ gl_search_form.gl_start_pos.label_tag }}  </td>
+  <td style="width: 1.5em;"> </td>
+  <td style="width: 10em;"  > {{ gl_search_form.gl_end_pos.label_tag }}    </td>
 </tr>
 
 <tr>
-  <td>    {{ gl_search_form.gl_end_pos.label_tag }} </td>
-  <td> {{ gl_search_form.gl_end_pos }} </td>
-  </tr>
-
-<tr>
-<td> {{ gl_search_form.selected_chromosome.label_tag }} </td>
-<td> {{ gl_search_form.selected_chromosome }} </td>
+ <td> {{ gl_search_form.selected_chromosome }}</td>
+ <td> <span style="font-weight: bold">:</span> </td>
+ <td style="width: 10em;" > {{ gl_search_form.gl_start_pos  }}       </td>
+ <td> <span style="font-weight: bold">-</span> </td>
+ <td style="width: 10em;" > {{ gl_search_form.gl_end_pos }}          </td>
 </tr>
+
+
 </tbody>
 </table>
   </form>

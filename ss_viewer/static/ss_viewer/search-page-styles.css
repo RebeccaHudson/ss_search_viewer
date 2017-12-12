@@ -195,6 +195,21 @@
    
   }
 
+  /* make the genomic region formatting more standard-looking */
+  #id_gl_region-selected_chromosome{
+      width: 6em;
+  }
+
+  [for='id_gl_region-gl_start_pos'] {
+      width: 10em;
+  }
+
+  #id_gl_region-gl_start_pos, #id_gl_region-gl_end_pos {
+      width: 90%;
+  }
+
+
+
   /* got this from here 
      http://stackoverflow.com/questions/41644637/
      how-to-remove-select-vertical-scroll-bar*/
