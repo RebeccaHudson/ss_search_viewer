@@ -20,6 +20,7 @@ function setupSearchDemos(){
             break;
         }
         fill_in_pvalues();
+        check_all_degeneracy_levels();
     });
 }
 
@@ -60,6 +61,13 @@ function fill_in_pvalues(){
     $(prefix + 'pvalue_rank_cutoff').val(cutoff_for_all);
     $(prefix + 'pvalue_snp_cutoff').val(cutoff_for_all);
     $(prefix + 'pvalue_ref_cutoff').val(cutoff_for_all);
+}
+
+function check_all_degeneracy_levels(){
+   $("#id_ic_filter_0")[0].checked = true;
+   $("#id_ic_filter_1")[0].checked = true;
+   $("#id_ic_filter_2")[0].checked = true;
+   $("#id_ic_filter_3")[0].checked = true;
 }
 
 /* No defaults are provided for sort order; you get results no matter what you do.*/
