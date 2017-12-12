@@ -3,8 +3,9 @@
 
 #tabs li a {
     border: 2px solid;
-    font-size: 12px;
+    font-size: 14px;
     background-color: #DCDCDC;
+    font-weight: bold;
 }
 
 #tabs li.active a {
@@ -20,7 +21,7 @@ ul.nav-tabs  li  a{
 ul.nav-tabs { border-bottom: 0px; }
 
 
-/* special colors for each search form */
+/* special colors for each search form 
 #tabs li a[href='#snpid_window_form'], div.tab-pane.panel-body#snpid_window_form {
     background-color:#c3efc8; 
 }
@@ -40,7 +41,7 @@ ul.nav-tabs { border-bottom: 0px; }
 #tabs li a[href="#snpid_search_form"], div.tab-pane.panel-body#snpid_search_form {
  background-color:#fbdfaa;
 }
-
+*/
 /*div.tab-pane.panel-body#snpid_window_form {
     background-color: #8ed8b8;
 }*/
@@ -61,6 +62,8 @@ ul.nav-tabs { border-bottom: 0px; }
    /* border-radius: 0 0 15px 15px;*/
 }
 
+
+
 .tab-pane.panel-body.active {
     border-radius: 0 15px 0 0; 
 }
@@ -68,6 +71,7 @@ ul.nav-tabs { border-bottom: 0px; }
 
 #shared_controls_panel { 
     border-radius: 0 0 15px 15px;
+    background-color: #b4b4b4;
 }
 
 /* fix the uneven appearance of the form */
@@ -99,9 +103,6 @@ div.submit-buttons {
 .table thead { font-size: 11px; }
 .table tbody { font-size: 12px; }
 
-.table-striped > tbody > tr:nth-of-type(2n+1) {
-    background-color: #C9C9F3;
-}
 
 form label{ 
    margin-right: 5px; 
@@ -119,9 +120,9 @@ div .show-plot img {  height: 375px; }
 
 /*div .tab-pane { width: 6px;  } */
 
-div .side { display: inline-block;
+/*div .side { display: inline-block;
             vertical-align: top;
-            } 
+            } */
 
 div .plot { margin-left:1.5em; }
 
