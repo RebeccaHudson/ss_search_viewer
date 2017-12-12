@@ -51,6 +51,7 @@ function create_search_post(){
       beforeSend: function(xhr, settings) {
         csrfSafeSend(xhr, settings)
         show_or_hide_spinner(true);
+        /*show the LOADING  div */
       },
       url: search_type + '/', 
       type: "POST", 
@@ -209,8 +210,13 @@ function show_or_hide_spinner(showOrHide){
     var target = $("body");
     var spinner = new Spinner().spin();
     target.append(spinner.el);
+    console.log(spinner.el);
+    $("#loading").show(); 
   }
-  else{ $("div.spinner").remove(); }
+  else{ 
+        $("div.spinner").remove();
+        $("#loading").hide(); 
+  }
 }
 
 //true for upper, false for lower.

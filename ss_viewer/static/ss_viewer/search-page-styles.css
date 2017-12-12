@@ -110,16 +110,6 @@
 
 
 /* Styles for the 'infobox' that explains the search types  */
-    #flex { 
-      display: flex; 
-      width: 1164px;
-    }
-
-    /* #infobox { flex: 1; } */
-
-    /* The SNPid list search is open when the page loads. 
-     #snpid_search_form-explain { display: block; }
-     may be able to just remove this..*/
    /* tighten this up */
     div.explain {
           padding:5px; 
@@ -221,7 +211,7 @@
     display: inline-block;
     vertical-align: top;
     overflow: hidden;
-    border: solid #DCDFE3 1px
+    /*border: solid #DCDFE3 1px*/
   }
 
 
@@ -231,6 +221,20 @@
     font-weight:bold;
   }
 
-
+  /* lifted from o
+   * https://stackoverflow.com/questions/18499449/show-ajax-spinner-hide-page-render-until-all-ajax-calls-complete
+   */
+  #loading {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      /*background-color: rgba(0,0,0,.5);  more transparent */
+      background-color: rgba(0,0,0,.15);  
+      -webkit-transition: all .5s ease;
+      z-index: 220;
+      display:none;
+  }
 
 

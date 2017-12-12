@@ -46,6 +46,7 @@
  
 </head>
 <body>
+
 <div class="container">
 <div id="content">
 {% include "ss_viewer/navbar.html" with active='searches' %}
@@ -164,6 +165,9 @@
 
 
 </div> <!-- close the 'content' div -->
+<!-- try to freeze the page while it's loading -->
+
+
 </div> <!-- close the 'container' div -->
 
 <!-- TODO: ensure this is handled in <head> and get it out of here. -->
@@ -219,4 +223,6 @@
     {% include "ss_viewer/showSearchResults.js" %}
 
 </script>
+
+<div id="loading"> </div>
 </body>
