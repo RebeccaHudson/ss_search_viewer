@@ -96,7 +96,6 @@ function show_search_results(json) {
     //if it's null, no buttons will be shown.
     var content = unpopulatedSearchResultsTable();
     $("#drop-in").append(content);
-    $('#download-exp').show();
     var rows = "";
     for (var i = 0; i < json.api_response.length; i ++){
         var oneRow = seutpOneRowOfSearchResults(json.api_response[i]);

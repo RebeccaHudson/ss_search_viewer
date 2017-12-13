@@ -119,11 +119,6 @@
           border:1px dashed lightgray;
      }
 
-/* Style(s) that determine how the box describing downloads looks. */
-     #download-exp {
-          display:none;  
-     } /* is shown when search results are shown */
-
 /* Styles for buttons to page forward and back through search results*/
     #ajaxyPagingButtons {
       margin-right: auto;
