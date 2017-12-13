@@ -109,7 +109,7 @@
    .add_to_download { width: 105px; }
 
 
-/* Styles for the 'infobox' that explains the search types  */
+/* Styles for the box that explains each search type */
    /* tighten this up */
     div.explain {
           padding:5px; 
