@@ -19,7 +19,8 @@ app_name = 'ss_viewer'
 
 urlpatterns = [
   url(r'^$', 
-         views.main.home_page,
+         #was views.main.home_page,
+         views.shared.StandardFormset.show_multisearch_page,
          name = 'index'), 
 
   url  (r'^svg-test/$', 
