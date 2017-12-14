@@ -78,3 +78,64 @@ function setupPlotsForSearchResults(){
        fullStackPlotToMove.find('svg').show();
    } 
   }
+
+function downloadSinglePlot(e){
+   //get a reference to this row's plot. 
+   /*console.log("called downloadSinglePlot");
+   console.log("following, is e: ");
+   console.log(e);
+   console.log("following, is e.target: ");
+   console.log(e.target);
+
+   */
+
+   console.log("following, is $(e.target).attr('id'): ");
+   console.log($(e.target).attr('id'));
+   var target_id = $(e.target).attr('id').replace('download-plot', 'target');
+   console.log("target_id" + target_id); 
+   var svg = document.querySelector('svg#' + target_id);
+   //var svg = document.querySelector('svg#target-0');
+   svg = svg.cloneNode(true); //the true parameter specifies a deep copy
+   svg.setAttribute('id', 'tempSVG');
+   var defs = d3.select(svg).insert("defs", ":first-child").append("marker")
+                                   .attr("id","Triangle")
+                                   .attr("markerWidth","5")
+                                   .attr("markerHeight","3")
+                                   .attr("stroke", "blue")
+                                   .attr("orient", "auto")
+                                   .attr("viewBox", "0 0 10 10")
+                                   .attr('refX', '1')
+                                   .attr('refY', '5')
+                                   .append("path").attr("d", "M 0 0 L 10 5 L 0 10 z");
+          
+   var canvas = document.getElementById('canvas');
+   canvas.setAttribute('width',  $("#target-0").attr('width'));
+
+   var ctx = canvas.getContext('2d');
+
+   // Reset the canvas to remove any plots drawn before this one 
+  //           //taken from :http://www.html5canvastutorials.com/advanced/html5-clear-canvas/ 
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
+   var xmlData = (new XMLSerializer()).serializeToString(svg);
+   var image = new Image();
+   image.src = 'data:image/svg+xml;base64,' + window.btoa(xmlData);
+   image.onload = function() {
+       var canvas = document.createElement('canvas');
+       canvas.width = image.width;
+       canvas.height = image.height;
+       var context = canvas.getContext('2d');
+        /*context.drawImage(image, 0, -30);*/
+       context.drawImage(image, 0, 0);  /* add 50*/
+       //var fname = "{{ id_str }}";
+       var fname = target_id;
+       console.log('name of saved plot file: ' + fname);
+       var a = document.createElement('a');
+       a.download = fname + ".png";
+       a.href = canvas.toDataURL('image/png');
+       document.body.appendChild(a);
+       a.click();
+  }
+
+}
+
+

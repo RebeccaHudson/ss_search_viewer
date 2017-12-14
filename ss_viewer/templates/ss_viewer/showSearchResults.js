@@ -90,7 +90,6 @@ function seutpOneRowOfSearchResults(api_response){
 
 //write another version of show_search_results that will take a rendered string and drop it in.
 function show_untabled_search_results(page_of_results){
-
     var content = page_of_results;
     $("#drop-in").append(content);
 
@@ -99,6 +98,10 @@ function show_untabled_search_results(page_of_results){
     showStatusInCorrectPlace(false); //hide the top one.
     setMaxValueOnJumpControl(search_paging_info);
     setupPlotsForSearchResults(); 
+    $(".download_detail_plot").click(function(e) {
+        downloadSinglePlot(e);
+    });
+
 }
 
 

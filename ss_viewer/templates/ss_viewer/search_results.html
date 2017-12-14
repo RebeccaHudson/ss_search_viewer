@@ -34,6 +34,15 @@
           Details </a>
       </div>
 
+
+     <div class="plot_download_btn">
+         <button title="Download this plot." class="download_detail_plot"
+                  id="download-plot-{{ one_result.plot_id_str }}"
+                 type="button" class="btn-primary" style=" padding: 5px; font-weight: bold;">
+                  Download Plot</button>
+      </div> 
+
+
       <!-- may need to change the JS that sets up the plots for each search result -->
       <div style="display: none; " class="plotting_data" id="plot_data_{{ one_result.plot_id_str }}">
          {{ one_result.json_for_plotting }}
