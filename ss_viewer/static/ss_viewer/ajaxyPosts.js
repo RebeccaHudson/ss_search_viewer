@@ -110,9 +110,18 @@ function create_paging_post(action_name, search_type){
 
 //shared between success handler for search and paging posts.
 function handleResults(values, json){
+    //console.log("json.status_message "  + json);
+   
+   
     $("div.status_message").text(json.status_message);
     $("span.status_message").text(json.status_message);
-    show_search_results(json);
+    //original, replaced with the new version show_search_results(json);
+    show_untabled_search_results(json); //the json here is no longer just json
+
+    console.log("here is the data that is coming in");
+    /* idea: just render the search results type as needed */    
+    //console.log(json);   //there's not a .form_data?
+    
     if (json.search_paging_info != null){ 
         values.page_of_results_shown =
             json.search_paging_info.page_of_results_to_display;
@@ -129,11 +138,12 @@ function handleResults(values, json){
         values['ic_filter'] = JSON.stringify(values['ic_filter']);
         //must be un-stringified on the back end.
     }*/
-
-    var values_to_save_for_paging = JSON.stringify(values);
-    console.log("saving these values for paging:  ");
-    console.log(values);
-    $("div#current_search_params").text(values_to_save_for_paging);
+    //can I get myself a copy of these?
+    console.log("no values saved for paging here, it's done by the template.");
+    //var values_to_save_for_paging = JSON.stringify(values);
+    //console.log("saving these values for paging:  ");
+    //console.log(values);
+    //$("div#current_search_params").text(values_to_save_for_paging);
 }
 
 

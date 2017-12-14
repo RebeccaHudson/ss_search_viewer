@@ -145,9 +145,21 @@ class GenericSearchView(View):
         context = self.handle_paging_and_return_context(
                                                  self.search_form.cleaned_data,
                                                  search_request_params)
+ 
         context.update(shared_context)
-        return HttpResponse(json.dumps(context), 
-                            content_type="application/json") 
+        #TODO: try to make this parseable on the front-end      
+        context['search_paging_info'] = json.dumps(context['search_paging_info'])
+        context['form_data'] = json.dumps(context['form_data'])
+        context['plot_source'] = json.dumps(context['plot_source'])
+
+        #This is where a rendering would take place.
+        #how do other views do this that don't just return json? 
+        #return HttpResponse('ss_viewer/search_results.html', 
+        template_path = 'ss_viewer/search_results.html' 
+        print "keys in context:  " + str(context.keys())
+        return render(request, template_path, context)
+        #return HttpResponse(json.dumps(context), 
+        #                    content_type="application/json") 
  
     def handle_sort_order(self):
         sort_order = { }

@@ -247,4 +247,27 @@
       display:none;
   }
 
+div.single-search-result {
+    font-size: 14px;
+    color: white;
+    border: black 2px;    
+    background-color: #756bb1;
+    margin: 3em;
+    padding: 5px; 
+    border-radius: 10px;
+    display: flex;
+}
+
+div.single-search-result a {
+    color: gold;
+}
+
+/* nudge the composite logo plot to the rightmost side of the result */
+div.single-search-result div.side { 
+  float: right;
+}
+
+
+
+
 

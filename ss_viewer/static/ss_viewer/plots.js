@@ -41,10 +41,11 @@ function svgImage(xml) {
 //this should recieve 'plottingData' as a parameter to make it more testable.
 function setupPlotsForSearchResults(){
    var plottingData = [];
-   $("td.plotting_data" ).each(function() {
+   $("div.plotting_data" ).each(function() {
        var data_for_one_plot = this.textContent;
        onePlotData = jQuery.parseJSON(data_for_one_plot);
        plottingData.push(onePlotData);
+       console.log("added one bit of plotting data.. ");
    });
    cloneSVGSkeleton(plottingData);
    //how many SVGs got cloned?  
