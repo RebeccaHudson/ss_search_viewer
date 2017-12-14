@@ -1,0 +1,48 @@
+<!-- consider putting a container around this -->
+<!-- set display: none -->
+<div id="current_search_params" style="display: none;"> {{ form_data }} </div>
+<div id="search_paging_info"> {{ search_paging_info }} </div>
+
+{% for one_result in api_response %}
+   <div class="single-search-result" > 
+      <div class="unique_to_record" style="flex-grow: 1;">
+        <span>SNPid: 
+        <a href="{{ one_result.dbsnp_link }}" target="_blank">
+                        {{ one_result.snpid }}
+        </a></span></br>
+        <span>Coordinate: 
+               <a href="{{ one_result.ucsc_link }}" target="_blank">
+                  {{ one_result.chr }} : {{ one_result.pos }}
+               </a> </span></br>
+        <span> 
+         Transcription Factor:
+         {% if one_result.factorbook_link %}
+         <a href="{{ one_result.factorbook_link }}" target="_blank">{% endif %}
+         {{ one_result.trans_factor }} 
+         {% if one_result.factorbook_link %}</a>{% endif %}
+        </span>
+      </div>
+      <div style="flex-grow: 1;" class="pvalues_for_record">
+        <span>P-value SNP impact: {{ one_result.pval_rank|stringformat:".3e" }} </span> </br>
+        <span>P-value SNP : {{ one_result.pval_snp|stringformat:".3e" }}  </span> </br>
+        <span>P-value reference: {{ one_result.pval_ref|stringformat:".3e" }} </span> </br>
+      </div>
+        
+      <div  class="search-result-controls">
+          {% url 'ss_viewer:detail' id_str=one_result.plot_id_str as the_url %}
+          <a href="{{ the_url }}" target="_blank" >
+          Details </a>
+      </div>
+
+      <!-- may need to change the JS that sets up the plots for each search result -->
+      <div style="display: none; " class="plotting_data" id="plot_data_{{ one_result.plot_id_str }}">
+         {{ one_result.json_for_plotting }}
+      </div>
+ 
+      <div class="stacked-plot cl_plot" 
+           id="stacked-plot-{{ one_result.plot_id_str  }}" 
+           style="flex-grow: 1;" >
+      </div>
+
+   </div>
+{% endfor %}
