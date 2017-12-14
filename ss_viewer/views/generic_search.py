@@ -202,7 +202,17 @@ class GenericSearchView(View):
         pval_dict = {}
         for one_pval in ['rank', 'ref', 'snp']:
             k = '_'.join(['pvalue', one_pval])
-            pval_dict[k] = self.shared_search_controls_dict[k]
+            #don't require all 3 pvalues? 
+            #should p-value rank be required for a query?
+            if k in self.shared_search_controls_dict and \
+                    self.shared_search_controls_dict[k]:
+                pval_dict[k] = self.shared_search_controls_dict[k]
+            print "pval_dict as given : " + str(pval_dict)
+        #TODO: confirm that only and exactly 1 of the three p-values is needed. 
+        if not pval_dict:
+            msg = "No p-values have been specified, \
+                   specify at least one to search."
+            self.shared_search_controls_errors.append(msg)
         return pval_dict
 
     def handle_invalid_form(self):
