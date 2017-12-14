@@ -21,6 +21,8 @@ STATIC_URL = '/old/static/' #once this app is back at /, take out the /old/ and 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
+UCSC_WINDOW_WIDTH = 200
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'z_qjigm@1xd6(vv7*uc-p(f@4wjcrrlwixgxlpm&tbs2d*yj^s'
 

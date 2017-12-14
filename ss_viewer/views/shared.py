@@ -457,10 +457,11 @@ class ExternalResourceUrls:
     def ucsc_link(chromosome, position):
         chromosome = chromosome.replace('ch', 'chr') 
         position = int(position)
-        posWindowStart = str(position - 10000)
+        half_width = settings.UCSC_WINDOW_WIDTH/2
+        posWindowStart = str(position - half_width)
         if posWindowStart < 0:
             posWindowStart = 0
-        posWindowEnd = str(position + 10000)             
+        posWindowEnd = str(position + half_width)             
         linkBits = \
            ['http://genome.ucsc.edu/cgi-bin/hgTracks?org=Human',
             '&db=hg38&position=', chromosome, ':', posWindowStart,'-',
