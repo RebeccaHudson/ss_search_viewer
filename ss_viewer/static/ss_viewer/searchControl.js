@@ -27,7 +27,8 @@ function setupJumpToPageControl(){
 function hideControlsDuringSearch(){
      $("div#form_errors").empty();
      $("#search_results").remove();   
-     $("#drop-in").empty();
+     $("#results").empty(); //this might be what is making the paging data blank for post.
+                            //consider specifically emptying the search results instead of this.
      $(".jump").hide();
      clearOutPlots();
 }
@@ -71,8 +72,9 @@ function getActiveSearchType(){
 
 //Handle events for paging buttons.
 function pagingAJAX(nextOrPrev){
-   hideControlsDuringSearch();
+   console.log('nextOrPrev = ' + nextOrPrev);
    create_paging_post(nextOrPrev, getActiveSearchType());
+   hideControlsDuringSearch();
 }
 
 //add event listener for Download button

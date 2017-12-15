@@ -26,7 +26,7 @@
             var the_label = d3.select("g.plot-label text");
             the_label.attr('font-size', 18);
             //the_label.attr('transform', 'translate(0, 30)');
-            console.log("gonna resize that plot label.");
+            //console.log("gonna resize that plot label.");
         }
     }
 
@@ -159,7 +159,7 @@
                //adjust the label positions..
         //var labelShift = (svgWidth - 300)/2 - 10;
         var labelShift = (svgWidth - 350)/2 - 10;
-        console.log('label shift : ' + labelShift);
+        //console.log('label shift : ' + labelShift);
         d3.select("svg#" + idOfTargetSVG + " g.snp-label")
           .attr('transform', 'translate('+labelShift+', 18)');
 

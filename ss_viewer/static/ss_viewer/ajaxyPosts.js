@@ -45,6 +45,9 @@ function create_search_post(){
  form_data.append('shared_controls', 
                   JSON.stringify(setup_shared_search_controls_dict()));
 
+ console.log("here's the form data in create_search_post"); 
+ console.log(form_data);
+
  hideControlsWhileLoading();
 
   $.ajax({
@@ -74,8 +77,17 @@ function create_search_post(){
 
 function create_paging_post(action_name, search_type){
  var val_text = $("div#current_search_params").text();
+
+ console.log("val text: " + val_text);
  var values = jQuery.parseJSON(val_text);
+ 
+ console.log("we got the values in there :");
+ console.log(values);
+
+ console.log(" action is there : " + action_name);
+ console.log(" search type is there: " + search_type);
  values['action'] = action_name
+
  hideControlsWhileLoading();
  
  if ( ! ( typeof(values['sort_order']) == "string") ) {
@@ -85,7 +97,7 @@ function create_paging_post(action_name, search_type){
  if ( ! ( typeof(values['ic_filter']) == "string") ) {
    values['ic_filter'] =  JSON.stringify(values['ic_filter']);
  }
-
+ console.log("about to create a paging post.");
 
  $.ajax({
       beforeSend: function(xhr, settings) {
@@ -110,15 +122,18 @@ function create_paging_post(action_name, search_type){
 
 //shared between success handler for search and paging posts.
 function handleResults(values, json){
-    //console.log("json.status_message "  + json);
-   
-   
-    $("div.status_message").text(json.status_message);
-    $("span.status_message").text(json.status_message);
-    //original, replaced with the new version show_search_results(json);
+    $("#drop-in").empty();  //remove the metadata type stuff. It's no longer needed.
     show_untabled_search_results(json); //the json here is no longer just json
+   
+    var message = $("#status-message-for-results").text();
 
-    console.log("here is the data that is coming in");
+    $("div.status_message").text(message);
+    $("span.status_message").text(message);
+    //$("div.status_message").text(json.status_message);
+    //$("span.status_message").text(json.status_message);
+    //original, replaced with the new version show_search_results(json);
+
+
     /* idea: just render the search results type as needed */    
     //console.log(json);   //there's not a .form_data?
     
