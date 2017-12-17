@@ -21,35 +21,6 @@ ul.nav-tabs  li  a{
 ul.nav-tabs { border-bottom: 0px; }
 
 
-/* special colors for each search form 
-#tabs li a[href='#snpid_window_form'], div.tab-pane.panel-body#snpid_window_form {
-    background-color:#c3efc8; 
-}
-
-#tabs li a[href="#gene_name_form"], div.tab-pane.panel-body#gene_name_form {
-     background-color:  #ffbdb5
-}
-
-#tabs li a[href="#tf_search_form"], div.tab-pane.panel-body#tf_search_form {
-     background-color:#d4d9fc;
-}
-
-#tabs li a[href="#gl_region_search_form"], div.tab-pane.panel-body#gl_region_search_form {
-     background-color:#dcd2ec;
-}
-
-#tabs li a[href="#snpid_search_form"], div.tab-pane.panel-body#snpid_search_form {
- background-color:#fbdfaa;
-}
-*/
-/*div.tab-pane.panel-body#snpid_window_form {
-    background-color: #8ed8b8;
-}*/
-
-
-
-
-
 .tab-pane { 
     border:solid 1px gray;
     border-top: 0;
