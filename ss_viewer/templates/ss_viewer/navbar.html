@@ -20,12 +20,6 @@
            src="{% static 'ss_viewer/atsnp-logo-transparent.png' %}" />
        <ul class="nav navbar-nav">
         <!-- the li that represents the page we're on should have class == 'active' -->
-        <li {% if active == 'home' %}class="active"{%endif%} >
-            <a href="{% url 'ss_viewer:home-page' %}">
-            <span class="glyphicon glyphicon-info-sign"></span>
-            About</a>
-        </li>
-
         <li {% if active == 'searches' %}class="active"{%endif%} >
            <a href="{% url 'ss_viewer:multi-search' %}">
            <span class="glyphicon glyphicon-search"></span>
@@ -40,6 +34,11 @@
          <a href="{% url 'ss_viewer:faq-page'  %}">
          <span class="glyphicon glyphicon-question-sign"></span>
          FAQ</a></li>
+        <li {% if active == 'home' %}class="active"{%endif%} >
+            <a href="{% url 'ss_viewer:home-page' %}">
+            <span class="glyphicon glyphicon-info-sign"></span>
+            About</a>
+        </li>
       </ul>
          <!-- style this nicely -->
         <a href="http://www.cpcp.wisc.edu/">
