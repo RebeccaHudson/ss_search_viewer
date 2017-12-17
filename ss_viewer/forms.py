@@ -28,13 +28,11 @@ class SharedSearchControlsForm(forms.Form):
     pvalue_snp = forms.FloatField(widget=styled_widget, 
                                            max_value=1,
                                            min_value=0, 
-                                           initial=default_cutoff, 
                                            required = False)
  
     pvalue_ref = forms.FloatField(widget=styled_widget, 
                                            max_value=1,
                                            min_value=0, 
-                                           initial=default_cutoff,
                                            required = False)
    
     #TODO: try removing the follwoing 2 lines and see if anything bad happens. 
