@@ -6,6 +6,7 @@
   <title>atSNP Search</title>
   <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
 
+  <link href="{% static 'ss_viewer/balloon.min.css' %}" rel="stylesheet">
   <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
   {% if flavor %} 
   <link href="{% static 'ss_viewer/colors/' %}{{ flavor }}.css" rel="stylesheet">
@@ -42,6 +43,8 @@
    <script type="text/javascript" src="{% static 'ss_viewer/snpidFileInputControls.js' %}"></script>
    <script type="text/javascript" src="{% static 'ss_viewer/directional.js' %}"></script>
 
+   <!-- <script type="text/javascript" src="{% static 'ss_viewer/tips/tooltipster-master/dist/js/tooltipster.bundle.min.js' %}"></script>-->
+
    <script type="text/javascript" src="{% static 'ss_viewer/google_analytics.js' %}"></script> 
  
 </head>
@@ -53,7 +56,7 @@
 
 <!-- explain what this is for right here: -->
 <div> <h4> Search for effects of SNPs on transcription factor binding</h4> 
-      <p> select a search type: </p>
+      <p> Select a search type: </p>
 </div>
 
 <div id="flex">
@@ -203,11 +206,15 @@
       setupJumpToPageControl();
     });//end of document.ready stuff.
 
+    //console.log("testing tooltipster plugin");
+    //  $('.tiptip').tooltipster();
+
+    /*console.log("specifically choosing to skip the .tooltip funciton to test CSS3 tooltips");
     $(".formcontrol").tooltip({
       position: "bottom left",
       offset: [-2, 10],
-      opacity: 0.1
-    });
+      opacity: 1.0
+    });*/
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
         var target = $(e.target).attr("href");
