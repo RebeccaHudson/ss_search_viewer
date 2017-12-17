@@ -22,8 +22,8 @@
         <!-- the li that represents the page we're on should have class == 'active' -->
         <li {% if active == 'home' %}class="active"{%endif%} >
             <a href="{% url 'ss_viewer:home-page' %}">
-            <span class="glyphicon glyphicon-home"></span>
-            Home</a>
+            <span class="glyphicon glyphicon-info-sign"></span>
+            About</a>
         </li>
 
         <li {% if active == 'searches' %}class="active"{%endif%} >
@@ -33,7 +33,7 @@
 
         <li {% if active == 'help' %}class="active"{%endif%} >
             <a href="{% url 'ss_viewer:help-page'  %}">
-            <span class="glyphicon glyphicon-info-sign"></span>
+            <span class="glyphicon glyphicon-book"></span>
             Help</a></li>
 
         <li {% if active == 'faq' %}class="active"{%endif%} >
