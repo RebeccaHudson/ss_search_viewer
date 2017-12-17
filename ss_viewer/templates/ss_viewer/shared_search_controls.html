@@ -5,19 +5,19 @@
 <table class="formControls">
 <tbody>
 <tr>
-<td> <label data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="down" for="id_pvalue_rank"> p-value SNP impact </label>
+<td> <label data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="right" for="id_pvalue_rank"> p-value SNP impact </label>
 </td>
 <td data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="down"> {{ shared_search_controls_form.pvalue_rank}}</td>
 </tr>
 <tr>
-<td> <label data-balloon="{{ tooltips.pvalue_ref }}" data-balloon-pos="down" for="id_pvalue_ref"> p-value Reference  <label> </td>
+<td> <label data-balloon="{{ tooltips.pvalue_ref }}" data-balloon-pos="right" for="id_pvalue_ref"> p-value Reference  <label> </td>
 <td data-balloon="{{ tooltips.pvalue_ref }}" data-balloon-pos="down">
  {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} 
  {{ shared_search_controls_form.pvalue_ref }}
 </td>
 </tr>
 <tr>
-<td> <label data-balloon="{{ tooltips.pvalue_snp }}" data-balloon-pos="down" for="id_pvalue_snp"> p-value SNP </label> </td>
+<td> <label data-balloon="{{ tooltips.pvalue_snp }}" data-balloon-pos="right" for="id_pvalue_snp"> p-value SNP </label> </td>
 <td data-balloon="{{ tooltips.pvalue_snp }}"  data-balloon-pos="down"> {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
      {{ shared_search_controls_form.pvalue_snp }} </td>
 </tr>
@@ -25,7 +25,7 @@
    {% include "ss_viewer/sort_widget.html"  %} 
 </tr>
 <tr>
-    <td><label data-balloon="{{ tooltips.motif_degeneracy }}" data-balloon-pos="down" for="id_ic_filter">Filter by motif degeneracy</label></td>
+    <td><label data-balloon="{{ tooltips.motif_degeneracy }}" data-balloon-pos="right" for="id_ic_filter">Filter by motif degeneracy</label></td>
     <td data-balloon="{{ tooltips.motif_degeneracy }}"  data-balloon-pos="down"> {{ shared_search_controls_form.ic_filter }}  </td>
 </tr>
 </tbody>
