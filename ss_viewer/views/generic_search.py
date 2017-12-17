@@ -11,6 +11,7 @@ from ss_viewer.views.shared import Paging
 from ss_viewer.views.shared import StreamingCSVDownloadHandler
 from ss_viewer.forms import SharedSearchControlsForm 
 from django.http import HttpResponse
+from django.conf import settings
 import json
 
 class GenericSearchView(View):
@@ -156,6 +157,7 @@ class GenericSearchView(View):
         #how do other views do this that don't just return json? 
         #return HttpResponse('ss_viewer/search_results.html', 
         template_path = 'ss_viewer/search_results.html' 
+        context['tooltips'] = settings.ALL_TOOLTIPS
         print "keys in context:  " + str(context.keys())
         return render(request, template_path, context)
         #return HttpResponse(json.dumps(context), 
