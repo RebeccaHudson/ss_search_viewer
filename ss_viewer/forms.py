@@ -13,8 +13,7 @@ import re
 class SharedSearchControlsForm(forms.Form):
     default_cutoff = 0.05
     pvalue_tip = 'Show results with pvalues less than or equal to this '
-    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0000001", 
-                                             'title': pvalue_tip }) 
+    styled_widget = forms.NumberInput(attrs={'class':'form-control','step':"0.0000001" }) 
 
     page_of_results_shown = forms.IntegerField(widget = forms.HiddenInput(), required = False)
     previous_version_of_sort_order = forms.CharField(widget = forms.HiddenInput(), required = False)
@@ -24,29 +23,24 @@ class SharedSearchControlsForm(forms.Form):
                                           max_value=1, 
                                           min_value=0, 
                                           initial=default_cutoff,
-                                          #label = "P-value cutoff \n significance in change in function",
-                                          required=False 
-                                          )
+                                          required=False)
 
     pvalue_snp = forms.FloatField(widget=styled_widget, 
                                            max_value=1,
                                            min_value=0, 
-                                           initial=default_cutoff,
-                                           label = "P-value SNP",
+                                           initial=default_cutoff, 
                                            required = False)
  
     pvalue_ref = forms.FloatField(widget=styled_widget, 
                                            max_value=1,
                                            min_value=0, 
                                            initial=default_cutoff,
-                                           label = "P-value reference",
                                            required = False)
-    
+   
+    #TODO: try removing the follwoing 2 lines and see if anything bad happens. 
     use_these_choices = ( ("lt", "<"), ("gte", u"\u2265"))
-    
     styled_widget = forms.Select(attrs={ "title" : "Select the cutoff direction.",
                                          "style" : "float:left; margin-top:5px;"  })
-
     pvalue_snp_direction = forms.CharField(widget = forms.HiddenInput(), required = False)
     pvalue_ref_direction = forms.CharField(widget = forms.HiddenInput(), required = False)
 
@@ -60,10 +54,8 @@ class SharedSearchControlsForm(forms.Form):
     #https://stackoverflow.com/questions/2229029/django-choicefield-with-
     #   checkboxselectmultiple-all-selected-by-default/14364035
     ic_filter = forms.MultipleChoiceField(choices=ic_options,
-                                          label="Filter by motif degeneracy", 
-                                          required = False,  #Does this make it reject/fail if all of of these boxes are un-checked?
-                                          widget=forms.CheckboxSelectMultiple(attrs={"checked":"",
-                                                                                     'class':'ic-filter'}))
+      required = False, 
+      widget=forms.CheckboxSelectMultiple(attrs={"checked":"", 'class':'ic-filter'}))
     def clean(self):
         cleaned_data = super(SharedSearchControlsForm, self).clean()
         if cleaned_data.get('pvalue_rank_cutoff') is None:
