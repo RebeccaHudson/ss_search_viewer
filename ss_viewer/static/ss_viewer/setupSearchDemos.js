@@ -57,10 +57,10 @@ function snpid_window_search_demo(){
 
 function fill_in_pvalues(){
     var prefix = "#id_";
-    var cutoff_for_all = 0.05;
-    $(prefix + 'pvalue_rank_cutoff').val(cutoff_for_all);
-    $(prefix + 'pvalue_snp_cutoff').val(cutoff_for_all);
-    $(prefix + 'pvalue_ref_cutoff').val(cutoff_for_all);
+    var default_cutoff = 0.05;
+    $(prefix + 'pvalue_rank').val(default_cutoff);
+    $(prefix + 'pvalue_snp').val("");
+    $(prefix + 'pvalue_ref_cutoff').val("");
 }
 
 function check_all_degeneracy_levels(){
