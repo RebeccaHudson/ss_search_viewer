@@ -112,7 +112,7 @@ class StandardFormset:
 
           if active_tab is not None:
               context.update({'active_tab': active_tab })
-
+          context.update({"tooltips": settings.ALL_TOOLTIPS} )
           return context 
 
      @staticmethod
@@ -209,7 +209,7 @@ class APIResponseHandler:
         #     "The first {:,}".format( \
         #           settings.HARD_LIMITS['ELASTIC_MAX_RESULT_WINDOW']) +\
         #     "  available from  "
-        hitsMsg =  "{:,} matching (SNP,TF) pairs.".format(hitcount)
+        hitsMsg =  "Query returned {:,} (SNP,TF) pairs.".format(hitcount)
         #hitsMsg +=  " Showing page: {:,}".format(page_of_results_to_display) +\
         #            " out of  {:,}.".format(totalPageCount)
         return hitsMsg
@@ -433,6 +433,7 @@ class StreamingCSVDownloadHandler:
         response = StreamingHttpResponse((writer.writerow(row) for row in rows),
                                          content_type="text/csv")
         response['Content-Disposition'] = 'attachment; filename="search-results.csv"'
+        print "response info :  " + repr(response)
         return response
 
 class APIUrls:
