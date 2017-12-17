@@ -25,9 +25,10 @@
         </span>
       </div>
       <div style="flex-grow: 1;" class="pvalues_for_record">
-        <span>P-value SNP impact: {{ one_result.pval_rank|stringformat:".3e" }} </span> </br>
-        <span>P-value SNP : {{ one_result.pval_snp|stringformat:".3e" }}  </span> </br>
-        <span>P-value reference: {{ one_result.pval_ref|stringformat:".3e" }} </span> </br>
+        <span data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="up">P-value SNP impact: {{ one_result.pval_rank|stringformat:".3e" }}</span> <br/>
+        <span data-balloon="{{ tooltips.pvalue_snp }}" data-balloon-pos="up">P-value SNP : {{ one_result.pval_snp|stringformat:".3e" }}  </span> <br/>
+        <span data-balloon="{{ tooltips.pvalue_ref}}"  data-balloon-pos="up">P-value reference: {{ one_result.pval_ref|stringformat:".3e" }} </span> <br/>
+        <span>Change in function : {{ one_result.color_code }} </span>
       </div>
         
       <div  class="search-result-controls">
@@ -37,7 +38,7 @@
       </div>
 
      <div class="plot_download_btn">
-         <button title="Download this plot." class="download_detail_plot"
+         <button title="Download this plot." class="btn-default download_detail_plot"
                   id="download-plot-{{ one_result.plot_id_str }}"
                  type="button" class="btn-primary" style=" padding: 5px; font-weight: bold;">
                   Download Plot</button>
