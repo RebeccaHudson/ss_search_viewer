@@ -5,7 +5,7 @@
 <table class="formControls">
 <tbody>
 <tr>
-<td> <label data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="right" for="id_pvalue_rank"> p-value SNP impact </label>
+<td> <label data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_rank"> p-value SNP impact </label>
 </td>
 <td data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="down"> {{ shared_search_controls_form.pvalue_rank}}</td>
 </tr>
@@ -25,7 +25,7 @@
    {% include "ss_viewer/sort_widget.html"  %} 
 </tr>
 <tr>
-    <td><label data-balloon="{{ tooltips.motif_degeneracy }}" data-balloon-pos="right" for="id_ic_filter">Filter by motif degeneracy</label></td>
+    <td><label data-balloon="{{ tooltips.motif_degeneracy }}" data-balloon-pos="down" data-balloon-length="fit" for="id_ic_filter">Filter by motif degeneracy</label></td>
     <td data-balloon="{{ tooltips.motif_degeneracy }}"  data-balloon-pos="down"> {{ shared_search_controls_form.ic_filter }}  </td>
 </tr>
 </tbody>
