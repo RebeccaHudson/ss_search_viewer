@@ -4,18 +4,17 @@
 /* color coding for our evaluation of changes in transcription factor function */
      span.neutral { 
         font-weight: bolder;
-        color: #FCE6C9
-        /* eggshell */
+        color: #7570b3;
      }
 
      span.loss {   
         font-weight: bolder;
-        color: #FF4C6F;  
+        color: #d95f02;
      }
   
      span.gain {  
         font-weight: bolder;
-        color: #39FF14;    
+        color: #1b9e77;
      }
 
      tr td.cl_plot {
@@ -238,18 +237,21 @@
 
 div.single-search-result {
     font-size: 15px;
-    color: white;
-    border: black 2px;    
-    background-color: #756bb1;
+    color: black;
+    /*background-color: #756bb1;*/
     margin: 0em 1em 1em 0em;
-    /*margin: 3em; loosen up width */ 
     padding: 5px; 
     border-radius: 10px;
     display: flex;
+  
+    border-width: 2px;
+    border-color: black;
+    border-style: dashed
 }
 
 div.single-search-result a {
-    color: #d6b15e;
+    color: blue;
+    /*color: #d6b15e;*/
     /*color: gold;*/
 }
 
@@ -258,7 +260,8 @@ div.single-search-result div.side {
   float: right;
 }
 
-span.label { font-size: 16px;   }
+span.label { font-size: 16px; 
+             color: black;   }
 
 span.value { font-size: 24px;  }
 
