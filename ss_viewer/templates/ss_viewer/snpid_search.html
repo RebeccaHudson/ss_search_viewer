@@ -14,9 +14,13 @@
 
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:snpid-search' %}" method="post">
   {% csrf_token %}
-  <div class="fieldWrapper">
-    {{ snpid_search_form.raw_requested_snpids.label_tag }}
+  <div  class="fieldWrapper">
+    <label for="id_snpid-raw_requested_snpids" data-balloon="{{ tooltips.snpid_box }}" data-balloon-pos="right">
+       SNPids 
+    </label>
+    <div data-balloon="{{ tooltips.snpid_box }}" data-balloon-pos="up"> 
     {{ snpid_search_form.raw_requested_snpids  }}
+    </div>
   </div>
 <table class="formControls">
 <tr> 
