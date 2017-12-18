@@ -273,6 +273,7 @@ function setMaxValueOnJumpControl(search_paging_info){
 function  hideControlsWhileLoading(){
    $("div.status_message").text("Working... ");
    showStatusInCorrectPlace(true);
+   $("#download_button").hide();
    showHidePrevNext(null); 
 }
 
