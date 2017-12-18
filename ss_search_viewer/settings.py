@@ -19,7 +19,10 @@ ALL_TOOLTIPS = {
     'pvalue_ref'  : 'P-value for the PWM match with the reference allele.', 
     'pvalue_snp'  : 'P-value for the PWM match with the SNP allele.',
     'motif_degeneracy' : 'PWMs are classified into the degeneracy classes shown here based on their information content (IC).',
-    'snpid_box'    :"Enter SNPids to search for."
+    'snpid_box'    :"Enter SNPids to search for.",
+    'genomic_location_start' : "Search for data in a region that begins at this position on the chromosome.", 
+    'genomic_location_end'   : "Search for data in a region taht ends at this position on the chromosome.",
+    'genomic_location_chromosome' : "Chromosome to search for data between the start and end positions specified."
 }
 
 
