@@ -12,7 +12,7 @@
               <div class="unique_to_record" style="flex-grow: 1;">
                 <!-- start the SNPid line -->
                 <span class="label">
-                   SNPid:
+                   SNPid<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:snpTable">?</a></sup>:
                 </span>
                 <span class="value">
                      <a href="{{ one_result.dbsnp_link }}" target="_blank">
@@ -31,7 +31,8 @@
                 <!-- end the coordinate line -->
                 <!-- start the transcription factor line -->
                 <span class="label"> 
-                     Transcription Factor:
+                     Transcription Factor
+                     <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:motifTable">?</a></sup>:
                 </span>
                 <!-- BELOW: include the factorbook link if it's available, otherwise just print the 
                      transcription factor itself -->
@@ -45,17 +46,23 @@
 
               <div style="flex-grow: 1;" class="pvalues_for_record">
                 <span data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="left" data-balloon-length="large">
-                    <span class="label">P-value SNP impact:</span>
+                    <span class="label">P-value SNP impact
+                      <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>:
+                    </span>
                     <span class="value"> {{ one_result.pval_rank|stringformat:".3e" }} </span>  
                 </span><br/>
 
                 <span data-balloon="{{ tooltips.pvalue_snp }}" data-balloon-pos="left">
-                    <span class="label"> P-value SNP:</span>
+                    <span class="label"> P-value SNP
+                      <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>:
+                    </span>
                     <span class="value"> {{ one_result.pval_snp|stringformat:".3e" }} </span>
                 </span><br />
 
                 <span data-balloon="{{ tooltips.pvalue_ref}}"  data-balloon-pos="left">
-                    <span class="label"> P-value reference:</span>
+                    <span class="label"> P-value reference 
+                      <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>:
+                    </span>
                     <span class="value"> {{ one_result.pval_ref|stringformat:".3e" }} </span> 
                 </span><br />
 

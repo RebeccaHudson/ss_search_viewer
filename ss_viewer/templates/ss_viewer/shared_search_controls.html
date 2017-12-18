@@ -5,21 +5,36 @@
 <table class="formControls">
 <tbody>
 <tr>
-<td> <label data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_rank"> p-value SNP impact </label>
-</td>
-<td data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="down"> {{ shared_search_controls_form.pvalue_rank}}</td>
+  <td> 
+     <label data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_rank"> 
+     p-value SNP impact <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+     </label>
+  </td>
+  <td data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="down"> 
+     {{ shared_search_controls_form.pvalue_rank}}
+  </td>
 </tr>
 <tr>
-<td> <label data-balloon="{{ tooltips.pvalue_ref }}" data-balloon-pos="right" for="id_pvalue_ref"> p-value Reference  <label> </td>
-<td data-balloon="{{ tooltips.pvalue_ref }}" data-balloon-pos="down">
- {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} 
- {{ shared_search_controls_form.pvalue_ref }}
-</td>
+  <td>
+    <label data-balloon="{{ tooltips.pvalue_ref }}" data-balloon-pos="right" for="id_pvalue_ref"> p-value Reference
+        <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+    <label> 
+  </td>
+  <td data-balloon="{{ tooltips.pvalue_ref }}" data-balloon-pos="down">
+     {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} 
+     {{ shared_search_controls_form.pvalue_ref }}
+  </td>
 </tr>
 <tr>
-<td> <label data-balloon="{{ tooltips.pvalue_snp }}" data-balloon-pos="right" for="id_pvalue_snp"> p-value SNP </label> </td>
-<td data-balloon="{{ tooltips.pvalue_snp }}"  data-balloon-pos="down"> {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
-     {{ shared_search_controls_form.pvalue_snp }} </td>
+    <td>
+      <label data-balloon="{{ tooltips.pvalue_snp }}" data-balloon-pos="right" for="id_pvalue_snp"> p-value SNP 
+        <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+      </label>
+    </td>
+    <td data-balloon="{{ tooltips.pvalue_snp }}"  data-balloon-pos="down"> 
+      {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
+         {{ shared_search_controls_form.pvalue_snp }} 
+    </td>
 </tr>
 <tr>
    {% include "ss_viewer/sort_widget.html"  %} 
