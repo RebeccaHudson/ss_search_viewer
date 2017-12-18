@@ -358,6 +358,16 @@ class Echo(object):
 class StreamingCSVDownloadHandler:
 
     @staticmethod
+    #pval_rank is now called pval_snp_impact. Change other field names here if they are to 
+    #have different names than those in the raw data/ Elasticsearch index.
+    def field_labels_for_csv(): 
+        return  ['chr', 'pos', 'snpid', 'trans_factor', 'motif', 
+                 'pval_snp_impact','log_lik_ref', 'log_lik_ratio', 'log_enhance_odds',
+                 'log_reduce_odds', 'log_lik_snp', 'snp_strand', 'ref_strand',
+                 'pval_ref', 'pval_snp', 'pval_cond_ref', 'pval_cond_snp',
+                 'pval_diff', 'refAllele', 'snpAllele']
+
+    @staticmethod
     def fields_for_csv():
         return  ['chr', 'pos', 'snpid', 'trans_factor', 'motif', 
                  'pval_rank','log_lik_ref', 'log_lik_ratio', 'log_enhance_odds',
@@ -373,7 +383,7 @@ class StreamingCSVDownloadHandler:
         rows = []
         #Add headers to the downloaded data.
         scroll_id = None   #should I move this?
-        rows.append(fields_for_csv) 
+        rows.append(StreamingCSVDownloadHandler.field_labels_for_csv()) 
         page_of_results = 0 
         keep_on_paging = True
 
