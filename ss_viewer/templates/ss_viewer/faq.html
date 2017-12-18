@@ -11,6 +11,7 @@
     font-weight: bold;
     color: blue;
   }
+  body { font-size: 16px; }
 </style>
 </head>
 
@@ -127,6 +128,40 @@ Shin, Sunyoung, Hudson, Rebecca, Harrison, Christopher, Craven, Mark, and Keleş
 </ul>
 </section>
 </p>
+
+<p>
+  <section>
+    <b>Q12. What is a non-technical interpretation of the three p-values?</b>
+    <ul>
+       <li> A12-1. P-value SNP Impact: Is  the SNP a candidate for potential gain- or loss-of -function? </li>
+       <li> A12-2. P-value Reference: Is there a candidate binding site at the SNP location with the reference allele?</li>
+       <li> A12-3. P-value SNP:  Is there a candidate binding site at the SNP location with the SNP allele?</li>
+    </ul>
+  </section>
+</p>
+
+<p>
+  <section>
+    <b> Q13. How does atSNP DB define gain-of-function?</b>
+    <ul> 
+    <li>
+    A13. atSNP DB generates candidates for gain of function by identifying (SNP, PWM) pairs with
+    <p style="margin-left: 2em;"> 
+    P-value SNP Impact &lt;= 0.05 <br />
+    P-value Reference &gt; 0.05   <br /> 
+    P-value SNP &lt;= 0.05        <br />
+    </p>
+    
+    This essentially identifies (SNP, PWM) pairs which do not have a statistically significant match with the reference allele and the SNP allele leads to a statistically significant match (i.e., creating a binding site).
+    
+    Note  that these p-values are only suggestive and users should make them more stringent. 
+   </li>
+  </section>
+</p>
+
+
+
+
 
 <!-- start debug stuff -->
 {% if flavor %}
