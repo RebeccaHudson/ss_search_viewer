@@ -18,7 +18,8 @@ ALL_TOOLTIPS = {
     'pvalue_rank' : 'Threshold for the p-value of difference in PWM match scores with the reference and the SNP alleles.',
     'pvalue_ref'  : 'P-value for the PWM match with the reference allele.', 
     'pvalue_snp'  : 'P-value for the PWM match with the SNP allele.',
-    'motif_degeneracy' : 'PWMs are classified into the degeneracy classes shown here based on their information content (IC).'
+    'motif_degeneracy' : 'PWMs are classified into the degeneracy classes shown here based on their information content (IC).',
+    'snpid_box'    :"Enter SNPids to search for."
 }
 
 
