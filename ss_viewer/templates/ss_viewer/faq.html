@@ -2,7 +2,7 @@
 <html>
 <head>
  <meta charset="utf-8">
-<title>atSNP Search Help</title>
+<title>atSNP FAQ </title>
     <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
     <script type="text/javascript" src="{% static 'ss_viewer/google_analytics.js' %}"></script>
@@ -46,16 +46,16 @@
 <section>
 <b>Q3. How does atSNP DB handle SNPs with indels, and others?</b>
 <ul>
-<li>A3. dbSNP classifies genetic variation in eight types. Click <a href="http://www.ncbi.nlm.nih.gov/books/NBK44447"> here </a> for the types of variation. The current atSNP DB only considers the major single nucleotide variation class . The class takes 88.8% of all genetic variation, specifically 132,946,852 SNPs out of 149,735,377.</li>
+<li>A3. dbSNP classifies genetic variation in eight types. Click <a href="http://www.ncbi.nlm.nih.gov/books/NBK44447"> here </a> for the types of variation. The current atSNP DB only considers the major single nucleotide variation class; the class TAKES 88.8% of all genetic variation, specifically 132,946,852 SNPs out of 149,735,377.</li>
 </ul>
 </section>
 </p>
 
 <p>
 <section>
-<b>Q4. When reference genome has more than one nucleotide on the SNP position, which one do you pick as the nucleotide on the reference genome?</b>
+<b>Q4. How are multi-allelic SNPs evaluated?</b>
 <ul>
-<li>A4. atSNP DB considers all multiple nucleotides as a reference and provides atSNP statistics and p-values.</li>
+<li>A4. atSNP DB considers all possible alleles one at a time and provides atSNP statistics and p-values.</li>
 </ul>
 </section>
 </p>
@@ -73,7 +73,7 @@
 <section>
 <b>Q6. Can I have summary statistics of atSNP DB?</b>
 <ul>
-<li>A6. Yes, we have quick summary statistics. We investigated 132,946,852 SNPs and considered 2,270 PWMs. We have evaluated total 307,602,574,340 SNP-PWM combinations.</li>
+<li>A6. We investigated 132,946,852 SNPs and considered 2,270 PWMs. We have evaluated total 307,602,574,340 SNP-PWM combinations.</li>
 </ul>
 </section>
 </p>
@@ -83,16 +83,17 @@
 <section>
 <b>Q7. Are downloads available?</b>
 <ul>
-<li>A7. The current release allows downloading the results up to the first 5,000 rows in the format of csv. This helps users statistically investigate impact of SNPs on transcription factor binding and goodness of match between motif and SNP/Reference alleles. We plan to make bulk downloads available in the next release.</li>
+<li>A7. The current release allows downloading the results up to the first 5,000 rows in CSV format.</li>
 </ul>
 </section>
 </p>
 
 <p>
 <section>
-<b>Q8. How can I interpret logo plots?</b>
+<b>Q8. How can I interpret the logo plots?</b>
 <ul>
-<li>A8. The plots are called composite logo plots and this helps users to easily see where the matches occur, how different the matches between both alleles are and how significant they are. Please click here (link: Composite logo plot under Documentation menu) for the interpretation.</li>
+<li>A8. The plots are called composite logo plots and they aim to provide a quick visualization of the region around the SNP and the sequence matches to the PWM.  
+    Please click <a href="{% url 'ss_viewer:help-page' %}#part-4:part-4">here</a> for the interpretation.</li>
 </ul>
 </section>
 </p>
