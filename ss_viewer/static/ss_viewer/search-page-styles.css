@@ -1,19 +1,18 @@
 /* Styles for the search page and results table.*/
 
-   /* Result table styles for creating the scrollable
-    * table itself.*/
 
-     tr.neutral { 
-        background-color: #FCE6C9
+/* color coding for our evaluation of changes in transcription factor function */
+     span.neutral { 
+        color: #FCE6C9
         /* eggshell */
      }
 
-     tr.loss {   
-        background-color: #FFC1C1;  
+     span.loss {   
+        color: #FF4C6F;  
      }
   
-     tr.gain {  
-        background-color: #BDFCC9;    
+     span.gain {  
+        color: #39FF14;    
      }
 
      tr td.cl_plot {
