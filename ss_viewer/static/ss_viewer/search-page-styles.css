@@ -31,19 +31,6 @@
         border: .5px solid grey;
      }
 
-    /* begin stuff from http://jsfiddle.net/dPixie/byB9d/3/ */ 
-    /* Scroll class used for the div where the table is dropped in*/
-    div.scroll { 
-        clear: both;
-        height: 550px;
-        overflow: hidden;
-        width: 1316px;
-        display: block; }
-
-    div.scroll table.fixed-header { 
-       width: 1164px;
-       float: left;
-    }
 
     thead.fixed-header tr { 
        display: block;
@@ -248,18 +235,20 @@
   }
 
 div.single-search-result {
-    font-size: 14px;
+    font-size: 15px;
     color: white;
     border: black 2px;    
     background-color: #756bb1;
-    margin: 3em;
+    margin: 0em 1em 1em 0em;
+    /*margin: 3em; loosen up width */ 
     padding: 5px; 
     border-radius: 10px;
     display: flex;
 }
 
 div.single-search-result a {
-    color: gold;
+    color: #d6b15e;
+    /*color: gold;*/
 }
 
 /* nudge the composite logo plot to the rightmost side of the result */
@@ -267,7 +256,10 @@ div.single-search-result div.side {
   float: right;
 }
 
+span.label { font-size: 16px;   }
 
+span.value { font-size: 24px;  }
 
+div.pvalues_for_record span { padding: 3px 2px 3px 2px; }
 
-
+svg.stacked-target { border-radius: 10px; }
