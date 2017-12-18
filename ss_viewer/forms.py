@@ -36,9 +36,9 @@ class SharedSearchControlsForm(forms.Form):
                                            required = False)
    
     #TODO: try removing the follwoing 2 lines and see if anything bad happens. 
-    use_these_choices = ( ("lt", "<"), ("gte", u"\u2265"))
-    styled_widget = forms.Select(attrs={ "title" : "Select the cutoff direction.",
-                                         "style" : "float:left; margin-top:5px;"  })
+    #use_these_choices = ( ("lt", "<"), ("gte", u"\u2265"))
+    #styled_widget = forms.Select(attrs={ "style" : "float:left; margin-top:5px;"  })
+
     pvalue_snp_direction = forms.CharField(widget = forms.HiddenInput(), required = False)
     pvalue_ref_direction = forms.CharField(widget = forms.HiddenInput(), required = False)
 
@@ -81,16 +81,13 @@ class SnpidSearchUtils:
 
 class SearchBySnpidForm(forms.Form):
     prefix = 'snpid'
-    text_to_explain_snpbox = "SNPids"
     styled_widget = forms.Textarea(attrs={'class':'form-control', 
                                           'cols': '25', 'rows': '3' } )
     raw_requested_snpids = forms.CharField(
                                      widget=styled_widget,
                                      max_length=100000,
                                      strip=True,
-                                     required=False,
-                                     label=text_to_explain_snpbox,
-                                     )
+                                     required=False)
 
     file_of_snpids = forms.FileField(required=False,
                                      label = "File of SNPids",
@@ -188,13 +185,10 @@ class SearchByTranscriptionFactorForm(forms.Form):
     prefix = 'trans_factor'
     tf_library_options=[('jaspar','JASPAR'),
                         ('encode','ENCODE')]
-    styled_widget = forms.RadioSelect(attrs={"class" : "form-control",
-                                             "title" : "Select either the ENCODE or JASPAR motif library."})
+    styled_widget = forms.RadioSelect(attrs={"class" : "form-control"})
     tf_library = forms.ChoiceField(choices=tf_library_options,
                                    widget=styled_widget,
-                                   initial='jaspar',
-                                   label = "Select a transcription factor library.")
-
+                                   initial='jaspar')
     lut = None
     fpath = os.path.dirname(__file__) + '/lookup-tables' +\
              '/lut_tfs_by_jaspar_motif.pkl'
@@ -210,16 +204,14 @@ class SearchByTranscriptionFactorForm(forms.Form):
     #lowercase the transcription factor name before alphabetizing.
     use_these_choices = sorted(tuple(use_these_choices), key=lambda x:(x[1].lower()))
   
-    styled_widget = forms.Select(attrs={"class":"form-control",
-                                        "title" : "Select the transcription factor here."})
+    styled_widget = forms.Select(attrs={"class":"form-control"})
 
     trans_factor = forms.ChoiceField(widget = styled_widget,
                                      choices = use_these_choices, 
-                                     required = False,
-                                     label = "Select JASPAR transcription factor")
+                                     required = False)
 
-    other_styled_widget = forms.Select(attrs={"class":"form-control",
-                                              "title" : "Seelect an ENCODE transcription factor."})
+    other_styled_widget = forms.Select(attrs={"class":"form-control" })
+
     encode_lut = None
     fpath = os.path.dirname(__file__) + '/lookup-tables' +\
              '/encode_family_prefixes_only.pkl'
@@ -231,29 +223,19 @@ class SearchByTranscriptionFactorForm(forms.Form):
 
     encode_trans_factor = forms.ChoiceField(widget = other_styled_widget,
                                             choices = use_these_encode_choices,
-                                            label = "Select ENCODE transcription factor",
                                             required = False)
 
 class SearchBySnpidWindowForm(forms.Form):
     prefix = 'snpid_window'
-    styled_widget = forms.TextInput(attrs={"class":"form-control",
-                                           "title": "Search for data with a window "+\
-                                                    "around the position of the "   +\
-                                                    "snpid entered here." }) 
-    snpid = forms.CharField(widget = styled_widget, 
-                            label = "SNPid")
+    styled_widget = forms.TextInput(attrs={"class":"form-control"})
+    snpid = forms.CharField(widget = styled_widget) 
     snpid.error_messages = {'required': 'Missing SNPid (required).'}
     styled_widget = forms.NumberInput(
                attrs={"class"   : 'form-control',
-                      "step"    : 1,
-                      "title"   : "Search for data within + and - this " +\
-                                   "number of bases of the position of " +\
-                                          "the snpid."
-                     }
-                                     )
+                      "step"    : 1 })
+
     window_size = forms.IntegerField(
                    widget = styled_widget,
-                   label = "Window size",
                    initial = 1000, 
                    min_value = 0,
                    max_value =\
@@ -281,21 +263,13 @@ class SearchBySnpidWindowForm(forms.Form):
 
 class SearchByGeneNameForm(forms.Form):
     prefix='gene_name'
-    styled_widget = forms.TextInput(attrs={"class":"form-control",
-                                           "title" : "Name of the gene to search form."}) 
+    styled_widget = forms.TextInput(attrs={"class":"form-control"})
     gene_name = forms.CharField(widget = styled_widget,
-                                label = "Gene Symbol",
                                 required = True)
 
-    styled_widget = forms.NumberInput(attrs={"class":'form-control',
-                                             'step':1,
-                                             "title" : "Search for data within the " +\
-                                                       "region of the gene, as well " +\
-                                                       " as + and - this many bases " +\
-                                                       " of the gene's start and end position."})
+    styled_widget = forms.NumberInput(attrs={"class":'form-control', 'step':1})
     window_size = forms.IntegerField(
        widget = styled_widget,
-       label = "Window size",
        required = True,
        initial = 1000, 
        min_value = 0, 

@@ -15,11 +15,15 @@
 <table class="formControls">
 <tbody>
 <tr> 
-  <td>   {{ gene_name_form.gene_name.label_tag }}  </td>
+  <td> <label for="id_gene_name-gene_name" data-balloon="{{ tooltips.gene_name }}"  data-balloon-pos="left" >
+         Gene Name
+       </label></td>
   <td> {{ gene_name_form.gene_name  }} </td>
 </tr>
 <tr> 
-  <td>   {{ gene_name_form.window_size.label_tag }}  </td>
+  <td> <label for="id_gene_name-gene_name" data-balloon="{{ tooltips.gene_window_size }}" data-balloon-pos="left" data-balloon-length="large">
+        Window Size
+       </label></td>
   <td> {{ gene_name_form.window_size  }} </td>
 </tr>
 </tbody>

@@ -18,14 +18,13 @@
     <label for="id_snpid-raw_requested_snpids" data-balloon="{{ tooltips.snpid_box }}" data-balloon-pos="right">
        SNPids 
     </label>
-    <div data-balloon="{{ tooltips.snpid_box }}" data-balloon-pos="up"> 
-    {{ snpid_search_form.raw_requested_snpids  }}
+    <div> 
+      {{ snpid_search_form.raw_requested_snpids  }}
     </div>
   </div>
 <table class="formControls">
 <tr> 
-  <td><label  for="snpid_search_form.file_of_snpids.id_for_label }}">
-    {{ snpid_search_form.file_of_snpids.label }}</label>    </td>
+  <td><label for="id_snpid-file_of_snpids">File of SNPids</label></td>
    <td> {{  snpid_search_form.file_of_snpids  }} 
    <button id="clear-snpid-file" class="btn-link" style="display:none;">Clear File</button></td>
 </tr>

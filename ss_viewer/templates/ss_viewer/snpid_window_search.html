@@ -15,14 +15,21 @@
 <tbody>
 
 <tr>  
-<td>     {{ snpid_window_form.snpid.label_tag }} </td>
+<td>
+   <label for="id_snpid_window-snpid" data-balloon="{{ tooltips.snpid_window_snpid }}" data-balloon-pos="left" data-balloon-length="medium">
+       SNPid
+   </label> 
+</td>
 <td>     {{ snpid_window_form.snpid  }}</td>
 </tr> 
  <tr> 
-     <td>    {{ snpid_window_form.window_size.label_tag }}</td> 
+     <td> 
+        <label for="id_snpid_window-window_size" data-balloon="{{ tooltips.snpid_window_size }}" data-balloon-pos="left" data-balloon-length="medium">
+            Window Size
+        </label>
+     </td> 
      <td>    {{ snpid_window_form.window_size }}          </td>
  </tr>
-
 </tbody>
 </table>
   </form>

@@ -14,16 +14,22 @@
 <table class="formControls">
 <tbody>
 <tr> 
-  <td>   {{ tf_search_form.tf_library.label_tag }}  </td>
+  <td><label style="width: 9em;" for="id_trans_factor-tf_library_0" data-balloon="{{ tooltips.trans_factor_library }}" data-balloon-pos="up" > 
+       Select a transcription factor library.
+      </label> 
+  </td>
   <td>   {{ tf_search_form.tf_library  }} </td>
 </tr>
-<tr> 
-  <td>   {{ tf_search_form.trans_factor.label_tag }}  </td>
-  <td class='trans-factor'>   {{ tf_search_form.trans_factor  }} </td>
+<tr>
+  <td><label style="width:9em; " for="id_trans_factor-trans_factor" data-balloon="{{ tooltips.trans_factor_select }}" data-balloon-pos="up">
+       Select JASPAR Transcription Factor 
+      </label></td>
+  <td class='trans-factor'> {{ tf_search_form.trans_factor  }}</td>
 </tr>
 <tr> 
-  <td>   {{ tf_search_form.encode_trans_factor.label_tag }}  </td>
-  <td class='trans-factor'>   {{ tf_search_form.encode_trans_factor  }} </td>
+  <td><label style="width:9em;" for="id_trans_factor-encode_trans_factor" data-balloon="{{ tooltips.trans_factor_select }}" data-balloon-pos="up">Select ENCODE Transcription Factor
+      </label></td>
+  <td class='trans-factor'> {{ tf_search_form.encode_trans_factor  }}</td>
 </tr>
 </tbody>
 </table>
