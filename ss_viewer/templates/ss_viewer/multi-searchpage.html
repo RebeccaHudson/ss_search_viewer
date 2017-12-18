@@ -58,8 +58,7 @@
 </div>
 
 <div id="flex">
-  <div id="search" class="side"> 
-
+  <div id="search"> 
     <ul id="tabs" class="nav nav-tabs" data-tabs="tabs">
       <li  {%if active_tab == 'snpid' or active_tab == 'none-yet'%}class="active"{%endif%}><a href="#snpid_search_form" data-toggle="tab"  >SNPid List</a></li>
       <li {%if active_tab == 'snpid-window'%}class="active"{%endif%}><a href="#snpid_window_form" data-toggle="tab" >SNPid Window</a></li>
@@ -86,7 +85,7 @@
 
 
 <!--  this is the way that we will be displaying the plot -->
-<div class="side plot">
+<div class="plot">
    <div id="plots">
    {% include "ss_viewer/svg_skeleton.html" %}
    {% include "ss_viewer/fixed_width_cl_plot.html" %}
