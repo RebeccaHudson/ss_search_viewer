@@ -7,52 +7,93 @@
 <div id="results">
 {% for one_result in api_response %}
    <div class="single-search-result" > 
-      <div class="unique_to_record" style="flex-grow: 1;">
-        <span>SNPid: 
-        <a href="{{ one_result.dbsnp_link }}" target="_blank">
+      <div class="result_data_side" style="flex-grow: 1.6; flex-direction: column; display: flex;">
+          <div class="top_row_of_data" style="display: flex; flex-grow: 2;" >
+              <div class="unique_to_record" style="flex-grow: 1;">
+                <!-- start the SNPid line -->
+                <span class="label">
+                   SNPid:
+                </span>
+                <span class="value">
+                     <a href="{{ one_result.dbsnp_link }}" target="_blank">
                         {{ one_result.snpid }}
-        </a></span></br>
-        <span>Coordinate: 
-               <a href="{{ one_result.ucsc_link }}" target="_blank">
-                  {{ one_result.chr }} : {{ one_result.pos }}
-               </a> </span></br>
-        <span> 
-         Transcription Factor:
-         {% if one_result.factorbook_link %}
-         <a href="{{ one_result.factorbook_link }}" target="_blank">{% endif %}
-         {{ one_result.trans_factor }} 
-         {% if one_result.factorbook_link %}</a>{% endif %}
-        </span>
-      </div>
-      <div style="flex-grow: 1;" class="pvalues_for_record">
-        <span data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="up">P-value SNP impact: {{ one_result.pval_rank|stringformat:".3e" }}</span> <br/>
-        <span data-balloon="{{ tooltips.pvalue_snp }}" data-balloon-pos="up">P-value SNP : {{ one_result.pval_snp|stringformat:".3e" }}  </span> <br/>
-        <span data-balloon="{{ tooltips.pvalue_ref}}"  data-balloon-pos="up">P-value reference: {{ one_result.pval_ref|stringformat:".3e" }} </span> <br/>
-        <span>Change in function : {{ one_result.color_code }} </span>
-      </div>
-        
-      <div  class="search-result-controls">
-          {% url 'ss_viewer:detail' id_str=one_result.plot_id_str as the_url %}
-          <a href="{{ the_url }}" target="_blank" >
-          Details </a>
-      </div>
+                     </a>
+                </span></br> <!-- end the SNPid line -->
+                <!-- start the coordinate line -->  
+                <span class="label">
+                    Coordinate:
+                </span>
+                <span class="value"> 
+                       <a href="{{ one_result.ucsc_link }}" target="_blank">
+                          {{ one_result.chr }} : {{ one_result.pos }}
+                       </a>
+                </span></br>
+                <!-- end the coordinate line -->
+                <!-- start the transcription factor line -->
+                <span class="label"> 
+                     Transcription Factor:
+                </span>
+                <!-- BELOW: include the factorbook link if it's available, otherwise just print the 
+                     transcription factor itself -->
+                <span class="value">
+                     {% if one_result.factorbook_link %}<a href="{{ one_result.factorbook_link }}" target="_blank">{% endif %}
+                     {{ one_result.trans_factor }} 
+                     {% if one_result.factorbook_link %}</a>{% endif %}
+                </span>
+                <!-- end the transcription factor line -->
+              </div> <!-- end unique_to_record div -->
 
-     <div class="plot_download_btn">
-         <button title="Download this plot." class="btn-default download_detail_plot"
-                  id="download-plot-{{ one_result.plot_id_str }}"
-                 type="button" class="btn-primary" style=" padding: 5px; font-weight: bold;">
-                  Download Plot</button>
-      </div> 
+              <div style="flex-grow: 1;" class="pvalues_for_record">
+                <span data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="left" data-balloon-length="large">
+                    <span class="label">P-value SNP impact:</span>
+                    <span class="value"> {{ one_result.pval_rank|stringformat:".3e" }} </span>  
+                </span><br/>
 
+                <span data-balloon="{{ tooltips.pvalue_snp }}" data-balloon-pos="left">
+                    <span class="label"> P-value SNP:</span>
+                    <span class="value"> {{ one_result.pval_snp|stringformat:".3e" }} </span>
+                </span><br />
+
+                <span data-balloon="{{ tooltips.pvalue_ref}}"  data-balloon-pos="left">
+                    <span class="label"> P-value reference:</span>
+                    <span class="value"> {{ one_result.pval_ref|stringformat:".3e" }} </span> 
+                </span><br />
+
+                <span class="label">Change in function : </span>
+                <span class="value">{{ one_result.color_code }} </span>
+
+              </div> <!-- end pvalues for record div -->
+          </div> <!-- end top row of data div -->     
+             
+          <div class="bottom_row_of_data" style="margin-bottom: .5em;"> 
+              <div class="download_and_details_for_record" style="display:flex;"> 
+                    <div class="detail-link" style="flex-grow:1.9;">
+                        {% url 'ss_viewer:detail' id_str=one_result.plot_id_str as the_url %}
+                        <span class="value"><a href="{{ the_url }}" target="_blank" style="margin-left: 1em">View Result Details</a></span>
+                    </div> <!-- end detail link div -->
+                    <div class="plot_download_btn" style="flex-grow:0.25;" >
+                       <button title="Download this plot." 
+                               class="btn btn-info btn-xs download_detail_plot"
+                               id="download-plot-{{ one_result.plot_id_str }}"
+                               type="button" class="btn-primary" 
+                               style=" padding: 3px; font-weight: bold;">
+                                Download Plot
+                       </button>
+                    </div> <!-- end div for plot download button -->
+              </div> <!-- end download_and_details_for_record -->
+          </div> <!-- end bottom_row_of_data div -->
+
+      </div> <!-- end result data side div -->
       <!-- may need to change the JS that sets up the plots for each search result -->
       <div style="display: none; " class="plotting_data" id="plot_data_{{ one_result.plot_id_str }}">
          {{ one_result.json_for_plotting }}
       </div>
- 
-      <div class="stacked-plot cl_plot" 
-           id="stacked-plot-{{ one_result.plot_id_str  }}" 
-           style="flex-grow: 1;" >
-      </div>
+      <div class="plot-container" style="flex-grow: 0;" >  
+          <div class="stacked-plot cl_plot" 
+               id="stacked-plot-{{ one_result.plot_id_str  }}" 
+               style="float: right;" >
+          </div>
+      </div> <!-- end plot container div -->
 
    </div>
 {% endfor %}
