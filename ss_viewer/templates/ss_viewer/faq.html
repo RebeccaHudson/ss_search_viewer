@@ -159,9 +159,115 @@ Shin, Sunyoung, Hudson, Rebecca, Harrison, Christopher, Craven, Mark, and Keleş
   </section>
 </p>
 
+<p>
+   <section>
+     <b>Q14. How does atSNP DB define loss-of-function?</b>
+     <ul> 
+        <li>
+        A14. atSNP DB generates candidates for loss-of-function by identifying (SNP, PWM) pairs  with
+       <p style="margin-left: 2em;"> 
+         P-value SNP Impact &lt;= 0.05<br />
+         P-value Reference &lt;= 0.05 <br />
+         P-value SNP &gt; 0.05        <br />
+       </p>
+         This essentially identifies (SNP, PWM) pairs which have a statistically significant match with the reference allele and the SNP allele lead to a  statistically insignificant match (i.e., destroying a binding site).
+         Note  that these p-values are only suggestive and users should make them more stringent. 
+       </li>
+     </ul>
+   </section>
+</p>
+
+<p>
+<section>
+    <b>Q15. How are motifs (PWMs) classified into low, moderate, high, and very high degeneracy groups?</b>
+    <ul>
+         <li>A15. This is based on computing information content of each individual position and then averaging the information content across all positions.  Then, each PWM is classified as follows based on its average information content.
+         </li>
+         <li>
+         <!-- style this table in a special way maybe? -->
+         <table border="1">
+            <thead>
+              <th>Information Content</th><th>Label</th>
+            </thead>
+            <tbody>
+              <tr><td>[0, 0.5]  </td><td>Low      </td></tr>
+              <tr><td>[0.5, 2]  </td><td>Moderate </td></tr>
+              <tr><td>[2.5, 3]  </td><td>High     </td></tr>
+              <tr><td>[FOO, BAR]</td><td>Very High</td></tr>
+            </tbody>
+         </table>
+         </li>
+         <li> 
+         <p> Low information content indicates a very degenerate motif. While this does not have implications in terms of actual functionality, when possible, following up less degenerate motifs is more preferable.</p>
+         </li>
+      </ul>
+    </section>
+</p>
+
+
+<p>
+   <section>
+      <b>Q16. What is a good use for atSNP DB sort order?</b>
+      <ul>
+        <li> 
+           A16. Options for sorting the queries are useful for getting top candidates of gain or loss of function.
+           For example, top loss-of-function candidates can be revealed by<br />
+           Sort by:
+           <p style="margin-left: 2em;"> 
+              P-value Ref: Ascending<br />
+              P-value Impact:  Ascending <br />
+              P-value SNP: Descending<br />
+           </p>
+           Similarly, 
+           For example, top gain-of-function candidates can be revealed by<br />
+           Sort by
+           <p style="margin-left: 2em;"> 
+              P-value SNP: Ascending<br />
+              P-value SNP Impact:  Ascending<br />
+              P-value Reference: Descending<br />
+           </p> 
+        </li>
+      </ul>
+   </section>
+</p>
 
 
 
+<p>
+  <section>
+    <b>Q17. I would like to evaluate some SNPs that are not in atSNP DB. Any suggestions?</b>
+    <ul> 
+      <li>
+         A17. We suggest using the atsnp R package. The R package has both the JASPAR and the ENCODE motif libraries that you can evaluate your SNPs against.
+      </ul>   
+    </li>
+   </section>
+</p>
+
+
+<p>
+  <section>
+   <b>Q18. I would like to evaluate my SNPs against PWMs that are not part of JASPAR or ENCODE. Any suggestions?</b>
+     <ul> 
+       <li>
+          A18. We suggest using the atsnp R package which allows user defined PWMs. 
+       </li>
+     </ul>
+  </section>
+</p>
+
+
+
+<p>
+  <section>
+   <b>Q19. I am working on data from Diversity Outbred (DO) mouse. Can I use atSNP DB?</b>
+   <ul> 
+     <li>
+        Q19. The current release of atSNP DB only has human data. We suggest using the atsnp R package for evaluating your DO SNPs. 
+     </li>
+   </ul>
+   </section>
+</p>
 
 <!-- start debug stuff -->
 {% if flavor %}
