@@ -3,15 +3,18 @@
 
 /* color coding for our evaluation of changes in transcription factor function */
      span.neutral { 
+        font-weight: bolder;
         color: #FCE6C9
         /* eggshell */
      }
 
      span.loss {   
+        font-weight: bolder;
         color: #FF4C6F;  
      }
   
      span.gain {  
+        font-weight: bolder;
         color: #39FF14;    
      }
 
