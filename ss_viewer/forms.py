@@ -145,24 +145,13 @@ class SearchBySnpidForm(forms.Form):
 class SearchByGenomicLocationForm(forms.Form):
     prefix = 'gl_region'
 
-    gl_pos_label_text = { 'start' : 'Start position',
-                          'end'   : 'End position' }
-
     gl_start_pos = forms.IntegerField(widget=
-                         forms.NumberInput(attrs={"class":'form-control',
-                           'step':1, 
-                           "title": "Search for data in a region" +\
-                           " that begins at this position on the chromosome."}),
-                       label = gl_pos_label_text['start'], 
-                       required=False,
-                       min_value = 0 )
+                      forms.NumberInput(attrs={"class":'form-control', 'step':1}), 
+                      required=False,
+                      min_value = 0 )
 
     gl_end_pos = forms.IntegerField(widget=
-                           forms.NumberInput(attrs={"class":'form-control',
-                             'step':1, 
-                             "title": "Search for data in a region" +\
-                             " that ends at this position on the chromosome."}),
-                       label = gl_pos_label_text['end'],
+                       forms.NumberInput(attrs={"class":'form-control', 'step':1}),
                        required=False,
                        min_value = 1)
 
@@ -170,9 +159,7 @@ class SearchByGenomicLocationForm(forms.Form):
     chromosomes.extend(['chX', 'chY', 'chM'])
     #all of the choices look like this: 
     #choices_for_chromosome =  ( ('ch1', 'ch1' ), ) 
-    styled_widget = forms.Select(attrs={"class":"form-control",
-                                        "title": "Chromosome to search for data between the " +\
-                                        "start and end positions specified."})
+    styled_widget = forms.Select(attrs={"class":"form-control"})
     selected_chromosome = forms.ChoiceField(widget=styled_widget,
                                             choices= zip(chromosomes,chromosomes),
                                             label="Chromosome")
