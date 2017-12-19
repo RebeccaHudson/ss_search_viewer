@@ -175,32 +175,30 @@ body {
   <div id="content">
       {% include "ss_viewer/navbar.html" with active='help' %}
       <h3>atSNP Search Help</h3>
-      <p style="size:10px;">(click sections to expand)</p>
      <section>  <!-- start of part 1 -->
         <div id="part-1" class="accordion">
             <hgroup><a name="part-1"><h4>1.&nbsp;Understanding motif libraries</h4></a></hgroup>
         </div>
         <div class="panel">
-        <p> Motif libraries provide nucleotide patters that transcription factors recoginze well. 
+        <p> Motif libraries provide nucleotide patterns that transcription factors recoginze well 
         from a set of transcription factor binding sites. The binding profiles are represented 
         with position weight matrices (PWMs). PWMs are used for probabilistic description of the 
         patterns in genomic sequences. The PWM is visualized as a sequence logo, where letter 
         heights are scaled based on their information content.
         </p>
         <ul class="disc">
-          <li> JASPAR 2014 Core Vertabrata </li>
-          <section><p>JASPAR (http://jaspar2014.genereg.net/) is the largest open-access database of 
+          <li> JASPAR 2014 Core Vertebrata </li>
+          <section><p><a href="http://jaspar2014.genereg.net/">JASPAR</a> is the largest open-access database of 
                    matrix-based nucleotide profiles describing the binding preferences of transcription
-                   factors from multiple species (Mathelier et al., 2013). JASPAR 2014 Core Vertabrata provide
+                   factors from multiple species (Mathelier et al., 2013). JASPAR 2014 Core Vertebrata provides
                    position frequency matrices for 205 non-redundant profiles and their summaries. The
                    position frequency matrix is converted into the position weight matrix, which carries the 
                    same information.                     </p>
                    <p>
                    <h5> <span class="underline">Example<span></h5>
                     The JASPAR library contains a position frequency matrix for a transcription factor RUNX1
-                    and its sequence logo as below. Its summary is presented here 
-                    (link: <a href="http://jaspar2014.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0002.2&rm=present&collection=CORE">
-                            http://jaspar2014.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0002.2&rm=present&collection=CORE</a>.)
+                    and its sequence logo as below. Its summary is presented 
+                    <a href="http://jaspar2014.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0002.2&rm=present&collection=CORE"> here</a>.
                    </p>
                    <p>
                    <figure>
@@ -250,13 +248,16 @@ body {
 
           <li> ENCODE Library </li>
           <section>
-          The ENCODE library features systematic discovery and characterization of regulatory motifs in ENCODE transcription factor binding experiments. (Kheradpour et al., 2014) These PWSs are available at <a href="http://compbio.mit.edu/encode-motifs/">http://compbio.mit.edu/encode-motifs/</a>. They collected known motifs from the literature (TRANSFAC, JASPAR Homo Sapiens, and UniPROBE). Further, they discovered <i>de novo </i> motifs from hundreds of transcription factor binding experiments performed by ENCODE (encodeproject.org). These motifs were discovered using established tools such as MDscan , MEME, Trawler, and AlignACE . All known and discovered motifs are grouped as in the table at <a href="http://compbio.mit.edu/encode-motifs/">http://compbio.mit.edu/encode-motifs/</a>. 
-For known ENCODE motifs, the name indicates the literature which initially reported the motif. For <i>de novo</i> motifs, the name contains information about the experimets in which it was discovered. This information includes the name of the lab, and the names of any motif discovery tools used. 
+          The ENCODE library features systematic discovery and characterization of regulatory motifs in transcription factor binding experiments (Kheradpour et al., 2014). These PWSs are available <a href="http://compbio.mit.edu/encode-motifs/">here</a>. This collection contains known motifs from the literature 
+ (TRANSFAC, JASPAR Homo Sapiens, and UniPROBE). In addition to the <i>de novo </i> motifs from hundreds of transcription factor binding experiments performed by <a href="encodeproject.org">ENCODE</a>. 
+These motifs were discovered using established tools such as MDscan , MEME, Trawler, and AlignACE . 
+All known and discovered motifs are grouped as in the table <a href="http://compbio.mit.edu/encode-motifs/">here</a>. 
+For known ENCODE motifs, the naming convention indicates the source which initially reported the motif. For <i>de novo</i> motifs, the names contain information about the experiments ther were used to discover the motif. This information includes the name of the lab, and the names of any motif discovery tools used. 
 </section>
 
            <section> <!-- begin exapmle section -->
             <h5> <span class="underline">Example<span></h5>
-            <p>ENCODE library provides 22 known motifs and 6 discovered motifs for transcription factor GATA, which are available at <a href="http://compbio.mit.edu/encode-motifs/tf.html?GATA">http://compbio.mit.edu/encode-motifs/tf.html?GATA</a>. Here, we present one known GATA motif (GATA_known12) and one discovered GATA motif (GATA_disc1). GATA_known12 is from JASPAR Homo Sapiens and GATA_disc1 is obtained from ENCODE Snyder Lab GATA TF experiments with MDscan tool.</p>
+            <p>ENCODE library provides 22 known motifs and 6 discovered motifs for transcription factor GATA, which are available <a href="http://compbio.mit.edu/encode-motifs/tf.html?GATA">here</a>. Here, we present one known GATA motif (GATA_known12) and one discovered GATA motif (GATA_disc1). GATA_known12 is from JASPAR Homo Sapiens and GATA_disc1 is obtained from ENCODE Snyder Lab GATA1 ChiP-seq TF experiments with the MDscan tool.</p>
             <p>
             <figure>
              <!-- filenames for images do not match up to captioned figure numbers! -->
@@ -396,7 +397,10 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
        <section> <!-- start of part 2 -->
 
         <div id="part-2" class="accordion">
-           <hgroup><a name="part-2"><h4>2.&nbsp;at-SNP <i>in-silico</i> statistical method</h4></a></hgroup>
+           
+           <hgroup><a name="part-2"></a>
+                <h4>2.<a href="" target="_blank">&nbsp;atSNP <i>in-silico</i> Statistical Method (Zuo et al., 2015, Bioinformatics)</a></h4></a>
+           </hgroup>
         </div>
         <div class="panel">
               <p><h3><b>OVERVIEW AND PROCEDURE</b></h3></p>
