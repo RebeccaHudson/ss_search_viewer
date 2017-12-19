@@ -88,6 +88,9 @@ td.red {    color: red; }
 }
 
 ul.refs { padding: 0px; }
+/* get rid of the style above? */ 
+
+ol.refs { padding: 0px; } 
 .refs li { margin-top: 2px; }
 .sequence {  font-size: 16px; 
              font-family: monospace; }
@@ -838,7 +841,8 @@ The SNP “rs117959046” is a genetic mutation from C to T on the forward stran
            <hgroup><a name="part-4"><h4>4.&nbsp;Reading a Composite Logo Plot</h4></a></hgroup>
          </div>
          <div class="panel">
-           <p> atSNP provides a composite logo plot to visualize the impacts of SNPs on transcription factor binding. Users can easily see whether SNPs enhance or disrupt the binding of transcription factors, and how significant these changes are.
+           <p> atSNP provides a composite logo plot to visualize the impacts of SNPs on transcription factor binding. 
+               These plots reveal whether the SNP might lead to gain of function or loss of function.
            </p> 
             <section> <!-- begin examples section -->
               <h5> <span class="underline">Examples<span></h5> 
@@ -847,7 +851,12 @@ The SNP “rs117959046” is a genetic mutation from C to T on the forward stran
                 <figcaption>Figure 12 GATA2 motif scan for rs117959046</figcaption> 
              </figure>
               <p> 
-               The SNP, rs117959046, is highly likely to create a binding site for the transcription factor GATA2 on the genome. The composite logo plot illustrates this with the comparison between the best matches of GATA2_2 PWM on the reference and SNP alleles. Among subsequences of length 5 overlapping the SNP position on the reference allele, “AGACA” on the forward strand has the largest log likelihood score. The subsequence is referred to as the “best match with the reference genome”. This subsequence is depicted on the second row with the corresponding PWM on the first row. Similarly, among subsequences of length 5 overlapping the SNP position on the SNP allele, “AGATA” on the forward strand is referred to as the “best match with the SNP genome”. It is depicted on the third row with the corresponding PWM on the fourth row.
+                The SNP, rs117959046, is highly likely to create a binding site for the transcription factor GATA2 on the genome. 
+                The composite logo plot illustrates this with the comparison between the best matches of GATA2_2 PWM on the reference and SNP alleles. 
+                Among subsequences of length 5 overlapping the SNP position with the reference allele, “AGACA” on the forward strand has the largest log likelihood score.
+                The subsequence is referred to as the “best match with the reference genome”. This subsequence is depicted on the second row with the corresponding PWM 
+                on the first row. Similarly, among subsequences of length 5 overlapping the SNP position with the SNP allele, “AGATA” on the forward strand is referred
+                to as the “best match with the SNP genome”. It is depicted on the third row with the corresponding PWM on the fourth row.
               </p>
              <figure>
                 <img height="350" src="{% static 'ss_viewer/docs/image09.jpg' %}" id="figure-11"/>
@@ -873,7 +882,7 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
              <figure>
                <img height="530" src="{% static 'ss_viewer/docs/image10.png' %}" id="figure-12" />
              </figure>
-             <p> atSNP utilizes a scale-out systems architecture to store and retrieve for three hundred billion records. As requirements for storage and performance with increase with user demand, we can add additional machines. Elasticsearch, a NoSQL database, utilizes a distributed scale-out system design for large workloads. It accomplishes this task by distributing requests for searches, and indexing as well as the indexes themselves amongst the scaled computing resources. An API handles communication between the search page and the Elasticsearch data store.
+             <p> atSNP utilizes a scale-out systems architecture to store and retrieve approximately thirty seven billion records. As requirements for storage and performance with increase with user demand, we can add additional machines. Elasticsearch, a NoSQL database, utilizes a distributed scale-out system design for large workloads. It accomplishes this task by distributing requests for searches amongst the scaled computing resources. An API handles communication between the search page and the Elasticsearch data store.
             </p>
            </div> <!-- end of accordion panel for part 5 -->
         </section> <!-- end of part 5 -->
@@ -885,10 +894,10 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
            <div class="panel">
            <p>
            <h5><span><b>Swapping P-Value Cutoff Operators</b></span></h5> 
-           The operator for the SNP and reference pvalue cutoffs and be swapped
+           The operator for the SNP and reference P-value cutoffs can be swapped
            between &lt; and &ge;.
            To reverse the operator for one of these cutoffs, click on the button 
-           with the operator on it beside the corresponding pvalue.
+           with the operator on it beside the corresponding P-value.
            </p>
            <p>
            <h5><span><b>Adjusting the Sort Order</b></span></h5> 
@@ -927,12 +936,12 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
            </div>
            <div class="panel">
            <p>
-           <ul class="refs">
-             <li><cite>Zuo, Chandler, Shin, Sunyoung, and Keleş, Sündüz. atSNP: transcription factor binding affinity testing for regulatory SNP detection. Bioinformatics (2015): 31, 3353-3355.
+           <ol class="refs">
+             <li><cite><a href="https://doi.org/10.1093/bioinformatics/btv328"> Zuo, Chandler, Shin, Sunyoung, and Keleş, Sündüz. atSNP: transcription factor binding affinity testing for regulatory SNP detection. Bioinformatics (2015): 31, 3353-3355</a>.
              </cite> </li>
-             <li><cite>Shin, Sunyoung, Hudson, Rebecca, Harrison, Christopher, Craven, Mark, and Keleş, Sündüz. atSNP DB: a web resource for quantifying impact of dbSNP SNPs on transcription factor binding. (2016). In preparation.
+             <li><cite>Shin, Sunyoung, Hudson, Rebecca, Harrison, Christopher, Craven, Mark, and Keleş, Sündüz. atSNP DB: a web resource for quantifying impact of dbSNP SNPs on transcription factor binding. (2018). In preparation.
              </cite> </li>
-           </ul>
+           </ol>
            </p>
           </div> <!-- end of accordion panel for part 6 -->
         </section> <!-- end of part 6 -->
