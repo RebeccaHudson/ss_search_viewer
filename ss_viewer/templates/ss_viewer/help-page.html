@@ -391,15 +391,13 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
 
          </div> <!-- end of first accordion panel -->
         </section> <!-- end of part 1 -->
-
-
          
        <section> <!-- start of part 2 -->
 
         <div id="part-2" class="accordion">
            
-           <hgroup><a name="part-2"></a>
-                <h4>2.<a href="" target="_blank">&nbsp;atSNP <i>in-silico</i> Statistical Method (Zuo et al., 2015, Bioinformatics)</a></h4></a>
+           <hgroup>
+                <h4>2.<a name="part-2">&nbsp;atSNP <i>in-silico</i> Statistical Method (Zuo et al., 2015, Bioinformatics)</a></h4></a>
            </hgroup>
         </div>
         <div class="panel">
@@ -409,7 +407,14 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
                    <img height="340" src="{% static 'ss_viewer/docs/image06.png' %}" id="figure-04"/>
                    <figcaption>Figure 4 atSNP flowchart</figcaption>
                 </figure>
-                <p> atSNP takes as input SNP information/genomic subsequences and a PWM for a transcription factor. atSNP uses a first order Markov model and an importance sampling technique to test the statistical significance of the best match between the PWM and the subsequences overlapping the SNP position on both reference and SNP alleles. And, most importantly, tests the impact of SNPs on the change in the goodness of the match. The testing results are summarized with a table and a graphical output called a composite logo plot. To learn more about the outputs, visit <a onclick="openAndScroll(true);" href="#part-3:part-3">"Interpreting search output”</a> and <a onclick="openAndScroll(true);" href="#part-4:part-4">“Reading composite logo plot”</a>.</p>
+                <p> atSNP takes as input SNP information/genomic subsequences and a PWM for a transcription factor. 
+                    atSNP uses a first order Markov model and an importance sampling technique to test the statistical 
+                    significance of the best match between the PWM and the subsequences overlapping the SNP position 
+                    with both the reference and the SNP alleles. More imporantly, it further tests the impact of SNPs on the 
+                    matches to the PWM. The testing results are summarized with a table and a graphical
+                    output named a composite logo plot. To learn more about the outputs, visit 
+                    <a onclick="openAndScroll(true);" href="#part-3:part-3">"Interpreting search output”</a> and 
+                    <a onclick="openAndScroll(true);" href="#part-4:part-4">“Reading composite logo plot”</a>.</p>
 
 
                 <figure>
@@ -418,7 +423,13 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
                    Table 1 Comparison of atSNP with existing methods detecting impact of SNPs on transcription factor binding
                    </figcaption> 
                 </figure>
-              <p> Table 1 provides a comparison of functionality beween atSNP's statistical method and alternative methods. atSNP provides the most comprehensive information on identifying impact of SNPs on transcription factor binding. Only atSNP and is-rSNP provide statistical quantification on the impact of SNPs on the binding. Further, atSNP addresses the scalability issue with a efficient computation enabled by an importance sampling technique. atSNP visualizes the best matches on both reference and SNP alleles and their change created by the SNP.  </p>
+                <p> Table 1 provides a comparison of functionality beween atSNP's statistical method and alternative methods.
+                    atSNP provides the most comprehensive information on identifying impact of SNPs on transcription factor binding. 
+                    Only atSNP and is-rSNP provide statistical quantification of the impact of SNPs on the binding. Furthermore, 
+                    atSNP addresses the scalability issue with an efficient computation enabled by an importance sampling technique. 
+                    atSNP visualizes the best matches with both the reference and the SNP alleles and their change created by the SNP.  
+                    atSNP DB results are obtained by the <a href="https://github.com/keleslab/atSNP">R package atsnp</a>, that implements this procedure.
+                </p>
               </section> <!-- end of atSNP overview section -->
 
               <section> <!-- start of atSNP Procedure section  -->
@@ -472,7 +483,7 @@ The motif length is 5 and sequences of length 9 centered at the SNP position are
                      <td  class="sequence"  >AAGA<span class="red">T</span>AAGC</td></tr>
                </tbody></table>
                </p>
-               <p> Next, we compute log likelihoods of all subsequences of length 5 spanning the SNP position and find the best match, which is associated with the largest log likelihood. The second subsequences on the forward strand (A<span class="subsequence-box">AGA<span class="red">C</span>A</span>CG) has the largest log likelihood on the reference alleles. (Table 2). The second subsequence on the forward srand also has the largest log likelihood on the SNP allele (Table 3).</p>
+               <p> Next, we compute log likelihoods of all subsequences of length 5 spanning the SNP position and find the best match, which is associated with the largest log likelihood. The second subsequences on the forward strand (A<span class="subsequence-box">AGA<span class="red">C</span>A</span>CG) has the largest log likelihood with the reference alleles. (Table 2). The second subsequence on the forward srand also has the largest log likelihood with the SNP allele (Table 3).</p>
                  <p>
                 <figure>
                    <table class="example table-striped">
@@ -487,7 +498,7 @@ The motif length is 5 and sequences of length 9 centered at the SNP position are
                     <tr><td class="sequence" >AAG<span class="subsequence-box">A<span class="red">C</span>AAG</span>C</td> <td> -28.08</td> <td> -72.66</tr></td>
                     <tr><td class="sequence" >AAGA<span class="subsequence-box"><span class="red">C</span>AAGC</span></td> <td> -49.50</td> <td> -27.73</tr></td>
                    </tbody></table>
-                   <figcaption> Table 2 Log likelihoods of all subsequences on reference allele</figcaption> 
+                   <figcaption> Table 2 Log likelihoods of all subsequences with the reference allele</figcaption> 
                 </figure>
                 <figure>
                    <table class="example table-striped">
@@ -501,14 +512,14 @@ The motif length is 5 and sequences of length 9 centered at the SNP position are
                   <tr> <td class="sequence"> AAG<span class="subsequence-box">A<span class="red">T</span>AAG</span>C  </td> <td> -48.74 </td> <td> -72.66</td> </tr>
                   <tr> <td class="sequence"> AAGA<span class="subsequence-box"><span class="red">T</span>AAGC</span>  </td> <td> -49.87 </td> <td> -27.22</td> </tr>
                    </tbody></table>
-                   <figcaption>Figure 6 Log likelihoods of all subsequences on SNP allele</figcaption> 
+                   <figcaption>Figure 6 Log likelihoods of all subsequences with the SNP allele</figcaption> 
                 </figure>
                  </p><!-- end paragraph of figures -->
                  <li><b>Step 2: p-value for the affinity score                 </b> </li>
-                 <p>The p-value for the affinity score on the reference allele (p<sub>Ref</sub>) is the probability that a random sequence has an affinity score larger than the best match score on the reference allele. atSNP simulates random sequences using a first order Markov model. It estimates the p-value as the frequency of randomly getting larger affinity scores than the best match score on the reference allele. Similarly, the p-value for the affinity score on the SNP allele (p<sub>SNP</sub>) is estimated as the frequency of getting random scores larger than the best match score on the SNP allele.</p>
+                 <p>The p-value for the affinity score on the reference allele (p<sub>Ref</sub>) is the probability that a random sequence has an affinity score larger than the best match score with the reference allele. atSNP simulates random sequences using a first order Markov model. It estimates the p-value as the frequency of randomly getting larger affinity scores than the best match score with the reference allele. Similarly, the p-value for the affinity score on the SNP allele (p<sub>SNP</sub>) is estimated as the frequency of getting random scores larger than the best match score with the SNP allele.</p>
                    <p>
                    <h5> <span class="underline">Example (Continued)<span></h5>
-(Continued From Step 1) The log likelihood score for the reference allele is <span class="red">-25.30</span>, and the log likelihood score for the SNP allele is <span class="red">-2.28</span>. The p-value for the reference allele is the probability that a random sequence has affinity scores larger than or equal to <span class="red">-25.30</span>, which is our target region (Figure 7). For such a small p-value, naive Monte-Carlo generates a small number of scores in the target region (Figure 8), thus requires a large number of simulations. Alternatively, in atSNP, the importance sampling generates many more scores in the target region (Figure 9). The p-value for the reference allele is then estimated by the weighted frequency as p<sub>Ref</sub>=<span class="red">0.499</span>. The importance sampling algorithm significantly reduces the required number of simulations. In similar fashion to the reference allele, the p-value for the SNP allele,  p<sub>SNP</sub>, is estimated as <span class="red">0.009</span>. 
+(Continued From Step 1) The log likelihood score for the reference allele is <span class="red">-25.30</span>, and the log likelihood score for the SNP allele is <span class="red">-2.28</span>. The p-value for the reference allele is the probability that a random sequence has affinity scores larger than or equal to <span class="red">-25.30</span>, which is our target region (Figure 7). For such a small p-value, naive Monte-Carlo generates a small number of scores in the target region (Figure 8), thus requires a large number of simulations. Alternatively, in atSNP, the importance sampling generates many more scores in the target region (Figure 9). The p-value for the reference allele is then estimated by the weighted frequency as p<sub>Ref</sub>=<span class="red">0.499</span>. The importance sampling algorithm significantly reduces the required number of simulations. Similarly, the p-value for the SNP allele, p<sub>SNP</sub>, is estimated as <span class="red">0.009</span>. 
                    </p>
                    <p>
                 <figure style="float: left;">
@@ -594,12 +605,13 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
             </tr>
             <tr>
               <td> Reference and SNP Alleles                                  </td> 
-              <td> Formatted as Reference allele/SNP allele.  Nucleotides present at the SNP position on the reference and SNP genomes, respectively. e.g.: T/G.
+              <td> Formatted as Reference allele/SNP allele.  e.g.: T/G.
                                                                               </td>
             </tr>
             <tr>
               <td> Reference and SNP Strands                                  </td>
-              <td> The refernece and SNP strand information is shown on the composite logo plot. It indicates whether each strand as shown is in forward or reverse direction. 
+              <td> The reference and SNP strand information is shown on the composite logo plot. 
+                   It indicates whether the displayed sequences are in the forward or reverse direction. 
                                                                               </td>
             </tr>
             </tbody>
@@ -616,13 +628,13 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
             <tbody>
               <tr>
                 <td> Motif                                  </td> 
-                <td> Motif name, e.g. MA0002.2 For JASPAR motifs, a link to the motif's entry in JASPAR database by clicking on the motif.              
+                <td> Motif name, e.g., MA0002.2 For JASPAR motifs, a link to the motif's entry in JASPAR database by clicking on the motif.              
                                                             </td> 
               </tr>
               <tr>
                 <td style="width:18em;"> 
                      Transcription Factor                   </td> 
-                <td> Transcription factor name, e.g. RUNX1 
+                <td> Transcription factor name, e.g., RUNX1 
                      When available, a link is to the FACTORBOOK page for the transcription factor is provided by clicking on the transcription factor. 
                                                             </td> 
               </tr>
@@ -631,21 +643,23 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
             </p>
             <p>
             <table class="doc-table" id="scoresTable" >
-              <thead><tr><th colspan="2">atSNP Log Likelihoods</th></tr></thead>
+              <thead><tr><th colspan="2">atSNP Log Likelihoods (evaluated wrt PWM)</th></tr></thead>
               <tbody>
                 <tr>
-                  <td style="width:18em;"> Log Likelihood Rank        </td> 
-                  <td> The ratio of BLANK/BLANK                       </td> 
+                  <td style="width:18em;"> Log Rank Ratio             </td> 
+                  <td> Lof of ratio of pvalue-Reference to p-value SNP.
+                       This is the main statistic that the atSNP p-values are based on. 
+                  </td> 
                 </tr>
                 <tr>
                   <td style="width:18em;"> Log Likelihood Reference   </td> 
                   <td> The log likelihood score of the best match (highest scoring subsequence)
-                       on the reference allele                        </td> 
+                       with the reference allele                      </td> 
                 </tr>
                 <tr>
                   <td> Log Likelihood SNP                             </td> 
                   <td> The log likelihood score of the best match (highest scoring subsequence) 
-                       on the SNP allele                              </td> 
+                       with the SNP allele                            </td> 
                 </tr>
                 <tr>
                   <td> Log Likelihood Ratio                           </td> 
