@@ -647,7 +647,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
               <tbody>
                 <tr>
                   <td style="width:18em;"> Log Rank Ratio             </td> 
-                  <td> Lof of ratio of pvalue-Reference to p-value SNP.
+                  <td> Log of ratio of pvalue-Reference to p-value SNP.
                        This is the main statistic that the atSNP p-values are based on. 
                   </td> 
                 </tr>
@@ -667,16 +667,22 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
                        and Log Likelihood SNP                         </td> 
                 </tr>
                 <tr>
-                  <td style="width:18em;"> Log Enhance Odds           </td> 
-                  <td> Log likelihood ratio between the log likelihood of the best match of the reference genome, and reference allele 
-                       based on the best matching subsequence on the reference allele          
-                                                                      </td>
+                  <td style="width:18em;"> Log Enhance Odds           
+                  </td> 
+                  <td> 
+                       Once atSNP identifies the best matching subsequence to the PWM with the reference allele,
+                       it evaluates the likelihood of that subsequence with the reference allele and the SNP allele.
+                       This quantity is the log of the ratio of these two likelihoods.
+                  </td>
                 </tr>
                 <tr>
-                  <td> Log Reduce Odds                                </td> 
-                  <td> Log-likelihood ratio between reference allele
-                       and SNP allele based on the best matching 
-                       subsequence on the SNP allele                  </td>
+                  <td> Log Reduce Odds                                 
+                  </td> 
+                  <td>
+                       Once atSNP identifies the best matching subsequence to the PWM with the SNP allele, it evaluates the
+                       likelihood of that subsequence with the reference allele and the SNP allele. This quantity is the log 
+                       of the ratio of these two likelihoods.
+                  </td>
                 </tr>
                 </tbody>
             </table>
@@ -687,52 +693,62 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
             <thead><tr><th colspan="2">atSNP p-values</th></tr></thead>
             <tbody>
             <tr>
-              <td style="width:18em;"> p-value Rank 
-                   (p<sub>rank</sub>)                           </td> 
-              <td> A significant p-value, e.g. 0.0001, 
-                   statistically supports the impact of the SNP 
-                   on the transcription binding affinity change.
-                   This is the p-value which most atSNP users are 
-                   interested in.                               </td>
+              <td style="width:18em;"> p-value SNP Impact 
+                   (p<sub>impact</sub>)                         
+              </td> 
+              <td> A significant p-value, e.g. 0.0001, statistically 
+                   supports the potential gain or loss of function of
+                   the genomic region with the SNP in terms of transcription 
+                   factor binding.
+              </td>
             </tr>
             <tr>
-              <td> p-value Reference (p<sub>ref</sub>)          </td>
-              <td> p-values for scores on the reference allele 
+              <td> p-value Reference (p<sub>ref</sub>)          
+              </td>
+              <td> p-value for score with the reference allele 
                    (Log Likelihood Reference). A significant p-value
-                   indicates that the match between the reference
-                   allele and the motif is statistically 
-                   supported.                                   </td>
+                   indicates that the match to the PWM with the reference
+                   allele is statistically supported.                                   
+              </td>
             </tr>
             <tr>
-              <td> p-value SNP (p<sub>SNP</sub>)                </td>
-              <td> p-value for scores on the SNP allele 
-                 (Log Likelihood SNP). A significant p-value 
-                 indicates that the match between the SNP allele
-                 and the motif is statistically supported.      </td>
+              <td> p-value SNP (p<sub>SNP</sub>)                
+              </td>
+              <td> p-value for scores wth the SNP allele 
+                 (Log Likelihood SNP). A significant p-value indicates
+                 that the match to the PWM with the SNP allele is 
+                 statistically supported.      
+              </td>
             </tr>
             <tr>
-              <td> p-value Difference (p<sub>Diff</sub>)        </td>
-              <td> p-values for the difference in scores between
+              <td> <sup>*</sup>p-value Difference (p<sub>Diff</sub>)        
+              </td>
+              <td> p-value for the difference in scores with 
                    the reference and the SNP alleles (Log Likelihood
-                   Ratio). This is the result of the likelihood 
-                   ratio testing. Our validating experiments do 
-                   not recommend the p-value for the evaluation of
-                   impact of SNPs.                              </td> 
+                   Ratio). This is essentially the result from a likelihood
+                   ratio test. While we report this for completeness, the
+                   final atSNP results are based on p-value SNP impact
+                   which quantifies the significace of the 
+                   <a href="#scoresTable">Log Rank Ratio</a>.
+              </td> 
             </tr>
             <tr>
-              <td> p-value Condition Ref                        
+              <td> <sup>*</sup>p-value Condition Ref                        
                   (p<sub>cond_ref</sub>)                        </td>   
               <td> Conditional p-value for scores on the reference 
                    allele based on Log Enhance Odds             </td> 
             </tr>
             <tr>
-              <td> p-value Condition SNP                    
+              <td> <sup>*</sup>p-value Condition SNP                    
                    (p<sub>cond_SNP</sub>)                       </td> 
               <td> Conditional p-value for scores on the SNP allele
                    based on Log Reduce Odds                     </td>
             </tr>
             </tbody>
             </table>
+            <span><sup>*</sup> 
+                While these p-values are reported for completeness, they are not used for querying.
+            </span>
             </p>
             </section> <!-- end section full of tables -->
             <section> <!-- start of example section -->
@@ -795,13 +811,13 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
                   <tr><th colspan="3">atSNP Results </th></tr>
                 </thead>
                 <tbody>
-                  <tr><td>                </td><td>Log Likelihood   </td> <td>p-values</td>  </tr>
-                  <tr><td>Rank            </td><td>4.02             </td> <td>0.00484 </td>  </tr>
-                  <tr><td>Reference       </td><td>-25.3            </td> <td>0.499   </td>  </tr>
-                  <tr><td>SNP             </td><td>-2.27            </td> <td>0.00898 </td>  </tr>
-                  <tr><td>Ratio           </td><td>-23.0            </td> <td>0.0207  </td>  </tr>
-                  <tr><td>Enhance Odds    </td><td>23.0             </td> <td>0.499   </td>  </tr>
-                  <tr><td>Reduce Odds     </td><td>-23.0            </td> <td>0.00184 </td>  </tr>
+                  <tr><td>                   </td><td>Log Likelihood   </td> <td>p-value </td>  </tr>
+                  <tr><td>Rank Ratio (Impact)</td><td>4.02             </td> <td>0.00484 </td>  </tr>
+                  <tr><td>Reference          </td><td>-25.3            </td> <td>0.499   </td>  </tr>
+                  <tr><td>SNP                </td><td>-2.27            </td> <td>0.00898 </td>  </tr>
+                  <tr><td>Ratio              </td><td>-23.0            </td> <td>0.0207  </td>  </tr>
+                  <tr><td>Enhance Odds       </td><td>23.0             </td> <td>0.499   </td>  </tr>
+                  <tr><td>Reduce Odds        </td><td>-23.0            </td> <td>0.00184 </td>  </tr>
                 </tbody>
               </table>
             </p>
@@ -977,6 +993,8 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
                    Adapted from example found on S.O.*/ 
                  if ( ! ( tableToScrollTo === null) ){
                      console.log("tableToScrollTo");
+
+                     console.log( tableToScrollTo );
                      console.log($("#" + tableToScrollTo) );
                      console.log("tableToScrollTo.offset()");
                      console.log($("#" + tableToScrollTo).offset() );
@@ -1006,5 +1024,3 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
               }
        
       </script>
-</html>
-
