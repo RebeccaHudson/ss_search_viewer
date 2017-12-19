@@ -33,7 +33,7 @@
     @SNP DB provides statistical evaluation of impact of SNPs on transcription
     factor-DNA interactions based on position weight matrices (PWM).
     The current version is built on SNPs from dbSNP Build 144 for the
-    human genome assembly GRCh38/hg38. atSNP DB uses in silico(?1)
+    human genome assembly GRCh38/hg38. atSNP DB uses in Halic 
     calculations based on the statistical method in Zuo et al.,
     Bioinformatics (2015).
     atSNP first-time users can start scanning vast amounts of
@@ -54,12 +54,12 @@
 </p>
 <p>
   The discovery of best matches with the reference and SNP alleles are
-   conducted separately; thus, genomic subsequences providing the best matches
-   with both alleles may be different. The change in goodness of match with the reference and SNP alleles 
+   conducted separately. As a result, genomic subsequences providing the best match
+   with each allele may be different. The change in goodness of match with the reference and SNP alleles 
    alleles indicates impact of SNPs on transcription factor binding ability
    to DNA. @SNP also provides a composite logo plot for easy visualization
    of the quality of the reference and SNP allele matches to the PWM and the
-   influence of SNPs on the match. Read more under "Help".
+   influence of SNPs on the change in match. Read more under "Help".
 </p>          
 </div>
 
@@ -83,6 +83,8 @@
   @SNP DB contains statistical evaluations for a total of 308 billion SNP-PWM pairs.
   The current release enables querying of three evaluations which exhibit a significant
   OWIE(?2) change and a significant match with either the reference or the SNP allele.
+  Of these, results for SNP-PWM combinations with  P-value SNP impact, P-value reference, and/or
+  P-value SNP less than or equal to 0.05 are currently available to query. 
 </p>
 </div>
 
