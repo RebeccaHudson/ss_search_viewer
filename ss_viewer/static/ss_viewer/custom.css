@@ -1,10 +1,15 @@
 /* these are hand-coded styles meant to work with and/or override
   what Bootstrap provides already. */
 
+/* some of this is repeated in search-page-styles.css */
+a, p, span { font-size: 16px; }
+
+
 #tabs li a {
     border: 2px solid;
-    font-size: 14px;
+    /* font-size: 16px;*/
     background-color: #DCDCDC;
+
     font-weight: bold;
 }
 
