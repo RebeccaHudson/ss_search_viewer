@@ -53,7 +53,7 @@
 {% include "ss_viewer/navbar.html" with active='searches' %}
 
 <!-- explain what this is for right here: -->
-<div> <h4> Search for effects of SNPs on transcription factor binding</h4> 
+<div> <span> Search for effects of SNPs on transcription factor binding</span> 
       <p> Select a search type: </p>
 </div>
 
@@ -102,10 +102,11 @@
 </span>
 
 
- <div style="display: none;" id="download_button" >
+ <div style="display: none; margin-top: 1em;" id="download_button" >
      <input type="submit" name="action"
           value="Download Results"
           class="btn-xs btn-danger"
+          style="float: right;"
           onclick="clickDownloadResultsAJAX();" />
  </div>
 <!-- TODO: add this info to a popup that comes up when you launch a download 
