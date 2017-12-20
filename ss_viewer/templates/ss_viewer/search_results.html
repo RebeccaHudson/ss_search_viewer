@@ -1,8 +1,9 @@
 <!-- consider putting a container around this -->
-<!-- set display: none -->
-<div id="status-message-for-results"> {{ status_message }} </div>
+
+<!-- the following line may not be needed at all -->
+<div id="status-message-for-results" style="display: none;"> {{ status_message }} </div>
 <div id="current_search_params" style="display: none;"> {{ form_data }} </div>
-<div id="search_paging_info"> {{ search_paging_info }} </div>
+<div id="search_paging_info" style="display: none;"> {{ search_paging_info }} </div>
 
 <div id="results">
 {% for one_result in api_response %}
