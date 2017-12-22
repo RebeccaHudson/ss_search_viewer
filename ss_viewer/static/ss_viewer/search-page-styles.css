@@ -44,7 +44,7 @@ ul#tabs li { width: 19.5%; }
         border: .5px solid grey;
      }
 
-
+    /* 
     thead.fixed-header tr { 
        display: block;
        position: relative;
@@ -67,7 +67,7 @@ ul#tabs li { width: 19.5%; }
     table.fixed-header thead.fixed-header th + th { 
      border-left: 1px solid black; 
      border-bottom: 0px;
-      }
+      }*/
 
 
     /*table.fixed-header tbody.scroll-content {
@@ -90,11 +90,11 @@ ul#tabs li { width: 19.5%; }
     }
     */
 
-    table.fixed-header thead.fixed-header span {
+    /*table.fixed-header thead.fixed-header span {
       display: block;
       text-align: center;
       width: 100%;
-    }
+    }*/
 
 /* Result table styles for sepecific columns */
    svg { width: 290px; }
