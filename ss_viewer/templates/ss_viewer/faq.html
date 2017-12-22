@@ -12,6 +12,11 @@
     color: blue;
   }
   body { font-size: 16px; }
+
+  #ic_values td.range { text-align: center; }
+  #ic_values th { padding: .3em;
+                   text-align: center;   }
+  #ic_values td { padding: .2em; }
 </style>
 </head>
 
@@ -197,15 +202,15 @@
          </li>
          <li>
          <!-- style this table in a special way maybe? -->
-         <table border="1">
+         <table id="ic_values" border="1">
             <thead>
               <th>Information Content</th><th>Label</th>
             </thead>
             <tbody>
-              <tr><td>[0, 0.5]  </td><td>Low      </td></tr>
-              <tr><td>[0.5, 2]  </td><td>Moderate </td></tr>
-              <tr><td>[2.5, 3]  </td><td>High     </td></tr>
-              <tr><td>[FOO, BAR]</td><td>Very High</td></tr>
+              <tr><td class="range">[0, 0.5]  </td><td>Low      </td></tr>
+              <tr><td class="range">(0.5, 1]  </td><td>Moderate </td></tr>
+              <tr><td class="range">(1, 1.5]  </td><td>High     </td></tr>
+              <tr><td class="range">(1.5, 2]  </td><td>Very High</td></tr>
             </tbody>
          </table>
          </li>
