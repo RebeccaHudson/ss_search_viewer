@@ -32,11 +32,26 @@ ALL_TOOLTIPS = {
                            number of bases downstream of the gene's end position." 
 }
 
+#This dict should match the same one in the API config file.
+#(sorry for not automating if you think that would have been worth it)
+GAIN_AND_LOSS_DEFS = { 
+    "gain": { 
+        "pval_ref" : { 'operator': 'gt', 'cutoff' : 0.05 },
+        "pval_snp" : { 'operator': 'lte', 'cutoff' : 0.05 },
+    },  
+    "loss": {
+        "pval_ref" : { 'operator': 'lte', 'cutoff' : 0.05 },
+        "pval_snp" : { 'operator': 'gt' , 'cutoff' : 0.05 }
+    }   
+}
+
+
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-STATIC_URL = '/old/static/' #once this app is back at /, take out the /old/ and put
+STATIC_URL = '/old/static/' #TODO: once this app is back at /, take out the /old/ and put
                             #in 'static'
 
 # Quick-start development settings - unsuitable for production

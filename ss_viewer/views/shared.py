@@ -260,24 +260,51 @@ class APIResponseHandler:
             return True
         return False
 
+    #BEGIN code that needs Elastic to test.
+    @staticmethod
+    def check_cutoff(operator, cutoff, value_to_check):
+        if operator == 'lte':
+            return value_to_check <= cutoff 
+        elif operator == 'lt':
+            return value_to_check < cutoff 
+        elif operator == 'gte':
+            return value_to_check >= cutoff 
+        elif operator == 'gt':
+            return value_to_check > cutoff 
+        assert False #If exection reaches this point, 
+                     #a bad operator was passed.
+        #Add more checks if external users want to use this function.
+
+    #given a row of search results and 'loss' or 'gain' this returns if each row
+    #meets the critera for loss or gain of function as specified.
+    @staticmethod
+    def test_change_of_function(one_row, loss_or_gain):
+        cutoffs = settings.GAIN_AND_LOSS_DEFS[loss_or_gain]
+
+        cutoff  = cutoffs['pval_ref']['cutoff']
+        operator = cutoffs['pval_ref']['operator']
+        value = one_row['pval_ref']
+        ref_change = APIResponseHandler.check_cutoff(operator, cutoff, value)
+
+        cutoff  = cutoffs['pval_snp']['cutoff']
+        operator = cutoffs['pval_snp']['operator']
+        value = one_row['pval_snp']
+        snp_change = APIResponseHandler.check_one_cutoff(operator, cutoff, value)
+        return ref_change and snp_change 
 
     @staticmethod
     def add_color_coding_to_search_results(results):
-        threshold = 0.03
-        for one_row in results:
-            difference = one_row['pval_ref'] - one_row['pval_snp'] 
-            if difference >= threshold :
-                one_row['color_code'] = 'gain' 
-            elif abs(difference) >= threshold:
-                one_row['color_code'] = 'loss'
-            else: 
-                one_row['color_code'] = 'neutral'
-            #JASPAR motif link is not added; it's only shown on the detail page.
+        function_change = settings.GAIN_AND_LOSS_DEFS
+        for result in results:
+            if APIResponseHandler.test_change_of_function(result, 'gain'):
+                result['color_code'] = 'gain' 
+            elif APIResponseHandler.is_loss_of_function(result, 'loss'):
+                result['color_code'] = 'loss'
+            else:
+                result['color_code'] = 'neutral'
         return results
+    #END code that needs Elastic to test 
 
-
- 
- 
     @staticmethod
     #api_action should be 'search-by-tf' or 'search-by-gl'
     #This code gets repeated between every search.
