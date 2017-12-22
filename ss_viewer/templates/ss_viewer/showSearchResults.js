@@ -1,6 +1,6 @@
 /* Functions that handle showing search results
    not included as regular Javascript due to the django template tags.*/
-function unpopulatedSearchResultsTable(){
+/*function unpopulatedSearchResultsTable(){
         return(`<table id="search_results" class="table table-condensed fixed-header"> \
   <thead class="fixed-header">                                                         \   
   <tr class="header" id="hide">                                   \ 
@@ -87,7 +87,7 @@ function seutpOneRowOfSearchResults(api_response){
     row += "</tr>";
     return row;
 }
-
+*/
 //write another version of show_search_results that will take a rendered string and drop it in.
 function show_untabled_search_results(page_of_results){
     var content = page_of_results;
@@ -104,7 +104,7 @@ function show_untabled_search_results(page_of_results){
 
 }
 
-
+/*
 //put search results into the document.
 function show_search_results(json) {
     if ( json.api_response == null ) { return; }
@@ -123,3 +123,4 @@ function show_search_results(json) {
     setupPlotsForSearchResults(); 
     setMaxValueOnJumpControl(json.search_paging_info);
 }//end of show_search_results function.
+*/

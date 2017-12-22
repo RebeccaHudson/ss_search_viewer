@@ -26,7 +26,7 @@ function setupJumpToPageControl(){
 
 function hideControlsDuringSearch(){
      $("div#form_errors").empty();
-     $("#search_results").remove();   
+     /*$("#search_results").remove();   ok to remove this? */
      $("#results").empty(); //this might be what is making the paging data blank for post.
                             //consider specifically emptying the search results instead of this.
      $(".jump").hide();
