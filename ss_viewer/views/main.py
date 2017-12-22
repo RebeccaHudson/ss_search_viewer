@@ -44,11 +44,18 @@ def faq_page(request):
     #which_flavor = request.GET['flavor']
     return render(request, faq_page_template, context) 
 
-def home_page(request):
-    home_page_template = 'ss_viewer/home_page.html'
+#def home_page(request):
+#    home_page_template = 'ss_viewer/home_page.html'
+#    context = {}
+#    #Can be removed later.
+#    if request.GET and request.GET['flavor']:
+#        context['flavor'] = request.GET['flavor']
+#    return render(request, home_page_template, context)
+
+def about_page(request):
+    about_page_template = 'ss_viewer/about_page.html'
     context = {}
     #Can be removed later.
-    if request.GET and request.GET['flavor']:
-        context['flavor'] = request.GET['flavor']
-    return render(request, home_page_template, context)
-
+    #if request.GET and request.GET['flavor']:
+    #    context['flavor'] = request.GET['flavor']
+    return render(request, about_page_template, context)

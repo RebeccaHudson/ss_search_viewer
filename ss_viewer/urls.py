@@ -35,9 +35,13 @@ urlpatterns = [
        views.main.faq_page,
        name = 'faq-page'),
   
-  url(r'^home/$',
-       views.main.home_page,
-       name = 'home-page'), 
+  #url(r'^home/$',
+  #     views.main.home_page,
+  #     name = 'home-page'), 
+
+  url(r'^about/$',
+       views.main.about_page,
+       name = 'about-page'), 
  
   url(r'^multi-search/$', 
        views.shared.StandardFormset.show_multisearch_page,
