@@ -20,7 +20,7 @@
            src="{% static 'ss_viewer/atsnp-logo-transparent.png' %}" />
        <ul class="nav navbar-nav">
         <!-- the li that represents the page we're on should have class == 'active' -->
-        <li {% if active == 'searches' %}class="active"{%endif%} >
+        <li {% if active == 'search' %}class="active"{%endif%} >
            <a href="{% url 'ss_viewer:multi-search' %}">
            <span class="glyphicon glyphicon-search"></span>
             Search</a></li>
