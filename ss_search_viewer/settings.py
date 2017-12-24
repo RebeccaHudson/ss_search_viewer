@@ -29,7 +29,8 @@ ALL_TOOLTIPS = {
     'snpid_window_size' :   "Search for data in a range this number of bases upstream and downstream of the position of the SNPid.",   
     'gene_name'         : "Name of the gene to search for.",
     'gene_window_size'  : "Search for data in a range beginning this many bases upstream of the gene's start position and ending this \
-                           number of bases downstream of the gene's end position." 
+                           number of bases downstream of the gene's end position.",
+    'sort_order'        : "Adjust the sort order of the results."
 }
 
 #This dict should match the same one in the API config file.
