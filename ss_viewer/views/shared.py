@@ -289,7 +289,7 @@ class APIResponseHandler:
         cutoff  = cutoffs['pval_snp']['cutoff']
         operator = cutoffs['pval_snp']['operator']
         value = one_row['pval_snp']
-        snp_change = APIResponseHandler.check_one_cutoff(operator, cutoff, value)
+        snp_change = APIResponseHandler.check_cutoff(operator, cutoff, value)
         return ref_change and snp_change 
 
     @staticmethod
@@ -298,7 +298,7 @@ class APIResponseHandler:
         for result in results:
             if APIResponseHandler.test_change_of_function(result, 'gain'):
                 result['color_code'] = 'gain' 
-            elif APIResponseHandler.is_loss_of_function(result, 'loss'):
+            elif APIResponseHandler.test_change_of_function(result, 'loss'):
                 result['color_code'] = 'loss'
             else:
                 result['color_code'] = 'neutral'
