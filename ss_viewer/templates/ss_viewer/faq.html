@@ -255,7 +255,7 @@
     <b>Q17. I would like to evaluate some SNPs that are not in atSNP DB. Any suggestions?</b>
     <ul> 
       <li>
-         A17. We suggest using the <a href="https://github.com/keleslab/atSNP">atsnp R package</a>. The R package has both the JASPAR and the ENCODE motif libraries that you can evaluate your SNPs against.
+         A17. We suggest using the <a href="https://github.com/keleslab/atSNP">atSNP</a> R package. The R package has both the JASPAR and the ENCODE motif libraries that you can evaluate your SNPs against.
       </ul>   
     </li>
    </section>
@@ -267,7 +267,7 @@
    <b>Q18. I would like to evaluate my SNPs against PWMs that are not part of JASPAR or ENCODE. Any suggestions?</b>
      <ul> 
        <li>
-          A18. We suggest using the <a href="https://github.com/keleslab/atSNP">atsnp R package</a> which allows user defined PWMs. 
+          A18. We suggest using the <a href="https://github.com/keleslab/atSNP">atSNP</a> R package which allows user defined PWMs. 
        </li>
      </ul>
   </section>
@@ -280,19 +280,11 @@
    <b>Q19. I am working on data from <a href="https://www.jax.org/strain/009376">Diversity Outbred (DO) mouse</a>. Can I use atSNP DB?</b>
    <ul> 
      <li>
-        Q19. The current release of atSNP DB only has human data. We suggest using the atsnp R package for evaluating your DO SNPs. 
+        Q19. The current release of atSNP DB only has human data. We suggest using the <a href="https://github.com/keleslab/atSNP">atSNP</a> R package for evaluating your DO SNPs. 
      </li>
    </ul>
    </section>
 </p>
 
-<!-- start debug stuff -->
-{% if flavor %}
-   <link href="{% static 'ss_viewer/colors/' %}{{ flavor }}.css" rel="stylesheet">
-{% endif %}       
-<!-- end debug stuff -->
-
      </div> <!-- end of content div -->
   </div>    <!-- end of container div -->
-
-  </body>
