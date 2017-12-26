@@ -123,7 +123,7 @@ function create_paging_post(action_name, search_type){
 //shared between success handler for search and paging posts.
 function handleResults(values, json){
     $("#drop-in").empty();  //remove the metadata type stuff. It's no longer needed.
-    show_untabled_search_results(json); //the json here is no longer just json
+    show_search_results(json); //the json here is no longer just json
    
     var message = $("#status-message-for-results").text();
 
