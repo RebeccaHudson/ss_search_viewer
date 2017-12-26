@@ -212,7 +212,7 @@ body {
                    </figure>
 
         <figure>
-<div class="pwm" align="center" style="width:610px;">
+<div class="pwm" align="center" style="width:710px;">
 <table class="pwmlabels">
 <tr> <td>  A</td> </tr>              
 <tr> <td>  C</td> </tr>              
@@ -255,7 +255,7 @@ body {
  (TRANSFAC, JASPAR Homo Sapiens, and UniPROBE). In addition to the <i>de novo </i> motifs from hundreds of transcription factor binding experiments performed by <a href="encodeproject.org">ENCODE</a>. 
 These motifs were discovered using established tools such as MDscan , MEME, Trawler, and AlignACE . 
 All known and discovered motifs are grouped as in the table <a href="http://compbio.mit.edu/encode-motifs/">here</a>. 
-For known ENCODE motifs, the naming convention indicates the source which initially reported the motif. For <i>de novo</i> motifs, the names contain information about the experiments ther were used to discover the motif. This information includes the name of the lab, and the names of any motif discovery tools used. 
+For known ENCODE motifs, the naming convention indicates the source which initially reported the motif. For <i>de novo</i> motifs, the names contain information about the experiments ther were used to discover the motif. This information includes the name of the lab and the names of any motif discovery tools used. 
 </section>
 
            <section> <!-- begin exapmle section -->
@@ -275,7 +275,7 @@ For known ENCODE motifs, the naming convention indicates the source which initia
                             the columns of the matrix -->
 >GATA_known12    GATA2_2    GATA2_jaspar_MA0036.1
 </span> 
-<div class="pwm" align="center" style="width:340px;">
+<div class="pwm" align="center" style="width:440px;">
 <table class="pwmlabels">
 <tr> <td>  A</td> </tr>              
 <tr> <td>  C</td> </tr>              
@@ -317,7 +317,7 @@ T    [0.170    0.000    0.000    1.000    0.113]</pre>
                             the columns of the matrix -->
 >GATA_disc1 GATA1_K562b_encode-Snyder_seq_hsa_r1:MDscan#1#Intergenic
 </span> 
-<div class="pwm" align="center" style="width:650px;">
+<div class="pwm" align="center" style="width:750px;">
 <table class="pwmlabels">
   <tr><td>A</td></tr>              
   <tr><td>C</td></tr>              
@@ -400,7 +400,7 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
         <div id="part-2" class="accordion">
            
            <hgroup>
-                <h4>2.<a name="part-2">&nbsp;atSNP <i>in-silico</i> Statistical Method (Zuo et al., 2015, Bioinformatics)</a></h4></a>
+                <h4><a name="part-2">2.&nbsp;atSNP <i>in-silico</i> Statistical Method (Zuo et al., 2015, Bioinformatics)</a></h4>
            </hgroup>
         </div>
         <div class="panel">
@@ -415,7 +415,7 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
                     significance of the best match between the PWM and the subsequences overlapping the SNP position 
                     with both the reference and the SNP alleles. More imporantly, it further tests the impact of SNPs on the 
                     matches to the PWM. The testing results are summarized with a table and a graphical
-                    output named a composite logo plot. To learn more about the outputs, visit 
+                    output named composite logo plot. To learn more about the outputs, visit 
                     <a onclick="openAndScroll(true);" href="#part-3:part-3">"Interpreting search output”</a> and 
                     <a onclick="openAndScroll(true);" href="#part-4:part-4">“Reading composite logo plot”</a>.</p>
 
@@ -431,7 +431,7 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
                     Only atSNP and is-rSNP provide statistical quantification of the impact of SNPs on the binding. Furthermore, 
                     atSNP addresses the scalability issue with an efficient computation enabled by an importance sampling technique. 
                     atSNP visualizes the best matches with both the reference and the SNP alleles and their change created by the SNP.  
-                    atSNP DB results are obtained by the <a href="https://github.com/keleslab/atSNP">R package atsnp</a>, that implements this procedure.
+                    atSNP DB results are obtained by the R package <a href="https://github.com/keleslab/atSNP">atSNP</a>, that implements this procedure.
                 </p>
               </section> <!-- end of atSNP overview section -->
 
@@ -519,7 +519,7 @@ The motif length is 5 and sequences of length 9 centered at the SNP position are
                 </figure>
                  </p><!-- end paragraph of figures -->
                  <li><b>Step 2: p-value for the affinity score                 </b> </li>
-                 <p>The p-value for the affinity score on the reference allele (p<sub>Ref</sub>) is the probability that a random sequence has an affinity score larger than the best match score with the reference allele. atSNP simulates random sequences using a first order Markov model. It estimates the p-value as the frequency of randomly getting larger affinity scores than the best match score with the reference allele. Similarly, the p-value for the affinity score on the SNP allele (p<sub>SNP</sub>) is estimated as the frequency of getting random scores larger than the best match score with the SNP allele.</p>
+                 <p>The p-value for the affinity score on the reference allele (pvalue-ref) is the probability that a random sequence has an affinity score larger than the best match score with the reference allele. atSNP simulates random sequences using a first order Markov model. It estimates the p-value as the frequency of randomly getting larger affinity scores than the best match score with the reference allele. Similarly, the p-value for the affinity score on the SNP allele (pvalue-SNP) is estimated as the frequency of getting random scores larger than the best match score with the SNP allele.</p>
                    <p>
                    <h5> <span class="underline">Example (Continued)<span></h5>
 (Continued From Step 1) The log likelihood score for the reference allele is <span class="red">-25.30</span>, and the log likelihood score for the SNP allele is <span class="red">-2.28</span>. The p-value for the reference allele is the probability that a random sequence has affinity scores larger than or equal to <span class="red">-25.30</span>, which is our target region (Figure 7). For such a small p-value, naive Monte-Carlo generates a small number of scores in the target region (Figure 8), thus requires a large number of simulations. Alternatively, in atSNP, the importance sampling generates many more scores in the target region (Figure 9). The p-value for the reference allele is then estimated by the weighted frequency as p<sub>Ref</sub>=<span class="red">0.499</span>. The importance sampling algorithm significantly reduces the required number of simulations. Similarly, the p-value for the SNP allele, p<sub>SNP</sub>, is estimated as <span class="red">0.009</span>. 
@@ -697,7 +697,6 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
             <tbody>
             <tr>
               <td style="width:18em;"> p-value SNP Impact 
-                   (p<sub>impact</sub>)                         
               </td> 
               <td> A significant p-value, e.g. 0.0001, statistically 
                    supports the potential gain or loss of function of
@@ -706,7 +705,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
               </td>
             </tr>
             <tr>
-              <td> p-value Reference (p<sub>ref</sub>)          
+              <td> p-value Reference 
               </td>
               <td> p-value for score with the reference allele 
                    (Log Likelihood Reference). A significant p-value
@@ -715,7 +714,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
               </td>
             </tr>
             <tr>
-              <td> p-value SNP (p<sub>SNP</sub>)                
+              <td> p-value SNP                
               </td>
               <td> p-value for scores wth the SNP allele 
                  (Log Likelihood SNP). A significant p-value indicates
@@ -724,7 +723,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
               </td>
             </tr>
             <tr>
-              <td> <sup>*</sup>p-value Difference (p<sub>Diff</sub>)        
+              <td> <sup>*</sup>p-value Difference 
               </td>
               <td> p-value for the difference in scores with 
                    the reference and the SNP alleles (Log Likelihood
@@ -737,13 +736,13 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
             </tr>
             <tr>
               <td> <sup>*</sup>p-value Condition Ref                        
-                  (p<sub>cond_ref</sub>)                        </td>   
+                                          </td>   
               <td> Conditional p-value for scores on the reference 
                    allele based on Log Enhance Odds             </td> 
             </tr>
             <tr>
               <td> <sup>*</sup>p-value Condition SNP                    
-                   (p<sub>cond_SNP</sub>)                       </td> 
+                                          </td> 
               <td> Conditional p-value for scores on the SNP allele
                    based on Log Reduce Odds                     </td>
             </tr>
@@ -815,7 +814,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
                 </thead>
                 <tbody>
                   <tr><td>                   </td><td>Log Likelihood   </td> <td>p-value </td>  </tr>
-                  <tr><td>Rank Ratio (Impact)</td><td>4.02             </td> <td>0.00484 </td>  </tr>
+                  <tr><td>SNP Impact (Rank Ratio)</td><td>4.02             </td> <td>0.00484 </td>  </tr>
                   <tr><td>Reference          </td><td>-25.3            </td> <td>0.499   </td>  </tr>
                   <tr><td>SNP                </td><td>-2.27            </td> <td>0.00898 </td>  </tr>
                   <tr><td>Ratio              </td><td>-23.0            </td> <td>0.0207  </td>  </tr>
@@ -894,10 +893,10 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
            <div class="panel">
            <p>
            <h5><span><b>Swapping P-Value Cutoff Operators</b></span></h5> 
-           The operator for the SNP and reference P-value cutoffs can be swapped
+           The operator for the SNP and reference p-value cutoffs can be swapped
            between &lt; and &ge;.
            To reverse the operator for one of these cutoffs, click on the button 
-           with the operator on it beside the corresponding P-value.
+           with the operator on it beside the corresponding p-value.
            </p>
            <p>
            <h5><span><b>Adjusting the Sort Order</b></span></h5> 
