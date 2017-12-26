@@ -4,7 +4,7 @@
 a, span, p, option, button  { font-size: 16px; }
 
 /* make the search result tabs take up a bit less than 1/5th the width of the form per tab */
-ul#tabs li { width: 19.5%; }
+ul#tabs li { width: 20%; }
 
  
 
