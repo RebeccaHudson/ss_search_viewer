@@ -303,11 +303,11 @@ class APIResponseHandler:
         function_change = settings.GAIN_AND_LOSS_DEFS
         for result in results:
             if APIResponseHandler.test_change_of_function(result, 'gain'):
-                result['color_code'] = 'gain' 
+                result['function_change'] = 'gain' 
             elif APIResponseHandler.test_change_of_function(result, 'loss'):
-                result['color_code'] = 'loss'
+                result['function_change'] = 'loss'
             else:
-                result['color_code'] = 'neutral'
+                result['function_change'] = 'neutral'
         return results
     #END code that needs Elastic to test 
 
