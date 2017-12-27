@@ -48,7 +48,7 @@
    {% include "ss_viewer/sort_widget.html"  %} 
 </tr>
 <tr>
-    <td><label data-balloon="{{ tooltips.motif_degeneracy }}" data-balloon-pos="down" data-balloon-length="fit" for="id_ic_filter">Filter by motif degeneracy
+    <td><label data-balloon="{{ tooltips.motif_degeneracy }}" data-balloon-pos="up" data-balloon-length="fit" for="id_ic_filter">Filter by motif degeneracy
         <sup><a target="_blank" href="{% url 'ss_viewer:faq-page'%}#degen">?</a></sup>
     </label></td>
     <td> {{ shared_search_controls_form.ic_filter }}  </td>
