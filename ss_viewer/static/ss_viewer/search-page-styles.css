@@ -18,11 +18,27 @@ ul#tabs li { width: 20%; }
         font-weight: bolder;
         color: #d95f02;
      }
-  
+     button.loss {
+       border: none;
+       border-radius: 5px;
+       background-color: #d95f02;
+       font-weight: bolder;
+       color: white;
+     }
+
      span.gain {  
         font-weight: bolder;
         color: #1b9e77;
      }
+     button.gain {
+       border: none;
+       border-radius: 5px;
+       background-color: #1b9e77;
+       font-weight: bolder; 
+       color: white;
+     }
+
+
 
      tr td.cl_plot {
         background-color: white;
