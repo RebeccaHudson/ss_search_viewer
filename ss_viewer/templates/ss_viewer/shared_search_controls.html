@@ -6,10 +6,10 @@
       and/or <span class="loss">LOSS</span> of function, and to narrow down PWMs based on their degeneracy.
 </span>
 
-<div id="explain-pvalues" style="padding-top: 1em; padding-right: 1em;" >
-   <span id="gain_and_loss">{{ gain_and_loss }}</span>
-   <button id="set_gain">Search for GAIN of function</button>  
-   <button id="set_loss">Search for LOSS of function</button>  
+<div id="explain-pvalues" style="float:right; padding-top: 1em; padding-right: 1em; margin-right:8em; width:18em; margin-top:2em;" >
+   <span id="gain_and_loss" style="display:none;">{{ gain_and_loss }}</span>
+   <button class="gain" style="margin-bottom: 1em;" id="set_gain">Search for candidates for GAIN of function</button>  
+   <button class="loss" style="margin-top: 1em;" id="set_loss">Search for candidates for LOSS of function</button>  
    <!-- TODO: remove this graphic from static files <img style="float: right; width: 520px;" src="{% static 'ss_viewer/explain-pvalues-revised.png' %}"/> -->
 </div>
 
