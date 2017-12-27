@@ -113,7 +113,16 @@ class StandardFormset:
           if active_tab is not None:
               context.update({'active_tab': active_tab })
           context.update({"tooltips": settings.ALL_TOOLTIPS} )
+          context.update({"gain_and_loss" : 
+                               StandardFormset.setup_gain_and_loss_display_on_form() 
+                         })
           return context 
+
+
+     @staticmethod
+     def setup_gain_and_loss_display_on_form():
+         return json.dumps(settings.GAIN_AND_LOSS_DEFS)
+
 
      @staticmethod
      def show_multisearch_page(request):
@@ -121,8 +130,6 @@ class StandardFormset:
           context = StandardFormset.setup_formset_context()
           context.update({'status_message' : "Enter a search.",
                           'active_tab'     : 'none-yet'})
-          if request.GET and request.GET['flavor']:
-              context['flavor'] = request.GET['flavor']
           return render(request, searchpage_template, context)
 
      #Might be worth moving out of this class.
@@ -280,7 +287,6 @@ class APIResponseHandler:
     @staticmethod
     def test_change_of_function(one_row, loss_or_gain):
         cutoffs = settings.GAIN_AND_LOSS_DEFS[loss_or_gain]
-
         cutoff  = cutoffs['pval_ref']['cutoff']
         operator = cutoffs['pval_ref']['operator']
         value = one_row['pval_ref']

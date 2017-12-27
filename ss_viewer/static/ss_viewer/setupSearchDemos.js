@@ -19,10 +19,46 @@ function setupSearchDemos(){
             gene_name_search_demo();
             break;
         }
-        fill_in_pvalues();
+        fill_in_pvalues('0.05', '', '');
         check_all_degeneracy_levels();
     });
+  
+    /* add an onclick handler */
+    setup_gain_and_loss_demos();
 }
+
+
+function set_one_cutoff_operator_button(which_button, operator){
+    var target = $("button[name='"+ which_button + "']");
+    target.attr('value', operator);
+    if (operator == 'lte'){ target.text("\u2264"); }
+    else if ( operator == 'gt' ){ target.text("\u003E"); }
+}
+
+function setup_loss_or_gain(condition){
+      var snp_cutoff = condition['pval_snp']['cutoff'];
+      var snp_operator = condition['pval_snp']['operator'];
+      var ref_cutoff = condition['pval_ref']['cutoff'];
+      var ref_operator = condition['pval_ref']['operator'];
+      set_one_cutoff_operator_button('pvalue_snp', snp_operator);
+      set_one_cutoff_operator_button('pvalue_ref', ref_operator);
+      writeBothCutoffDirections();
+      fill_in_pvalues('0.05', snp_cutoff, ref_cutoff);
+}
+
+function setup_gain_and_loss_demos(){
+    console.log("setting up gain and loss demos");
+    gain_and_loss = JSON.parse($("#gain_and_loss").text());
+    $("#set_gain").click(function(e){
+      e.preventDefault();
+      setup_loss_or_gain(gain_and_loss['gain']);
+    });
+    $("#set_loss").click(function(e){
+      e.preventDefault();
+      setup_loss_or_gain(gain_and_loss['loss']);
+    });
+}
+
 
 function trans_factor_search_demo(){
    $('#id_trans_factor-trans_factor').val('ZNF263'); 
@@ -55,12 +91,17 @@ function snpid_window_search_demo(){
   $('#id_snpid_window-snpid').val('rs755632525');
 }
 
-function fill_in_pvalues(){
+function fill_in_pvalues(pval_rank, pval_snp, pval_ref){
     var prefix = "#id_";
-    var default_cutoff = 0.05;
-    $(prefix + 'pvalue_rank').val(default_cutoff);
-    $(prefix + 'pvalue_snp').val("");
-    $(prefix + 'pvalue_ref_cutoff').val("");
+    //var default_cutoff = 0.05;
+    console.log("pval_snp");
+    console.log(pval_snp);
+
+    console.log("pval_ref");
+    console.log(pval_ref);
+    $(prefix + 'pvalue_rank').val(pval_rank);
+    $(prefix + 'pvalue_snp').val(pval_snp);
+    $(prefix + 'pvalue_ref').val(pval_ref);
 }
 
 function check_all_degeneracy_levels(){

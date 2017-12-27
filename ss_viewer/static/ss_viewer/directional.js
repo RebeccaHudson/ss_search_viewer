@@ -12,12 +12,12 @@ function switchDirection(event){
     event.preventDefault(); /* avoid form submission */
     var target = $(event.target);
     var direction_value = null;
-    if (target.attr('value') == 'lt'){
-      direction_value = 'gte';
-      target.text('\u2265');
+    if (target.attr('value') == 'lte'){
+      direction_value = 'gt';
+      target.text('\u003E');
     } else { 
-      direction_value = 'lt';
-      target.text("\u003C");
+      direction_value = 'lte';
+      target.text("\u2264");
     }
       target.attr('value', direction_value);
       writeCutoffDirection(direction_value, target.attr('name'));

@@ -7,7 +7,10 @@
 </span>
 
 <div id="explain-pvalues" style="padding-top: 1em; padding-right: 1em;" >
-   <img style="float: right; width: 520px;" src="{% static 'ss_viewer/explain-pvalues-revised.png' %}"/>
+   <span id="gain_and_loss">{{ gain_and_loss }}</span>
+   <button id="set_gain">Search for GAIN of function</button>  
+   <button id="set_loss">Search for LOSS of function</button>  
+   <!-- TODO: remove this graphic from static files <img style="float: right; width: 520px;" src="{% static 'ss_viewer/explain-pvalues-revised.png' %}"/> -->
 </div>
 
 <table class="formControls">
