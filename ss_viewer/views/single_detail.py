@@ -5,14 +5,13 @@ from ss_viewer.views.shared import MotifTransformer
 from ss_viewer.views.shared import APIUrls 
 from ss_viewer.views.shared import APIResponseHandler 
 from ss_viewer.views.shared import ExternalResourceUrls 
-from django.core.exceptions import ValidationError
-from tempfile import NamedTemporaryFile 
-import csv
-import zipfile
+#from django.core.exceptions import ValidationError
+#from tempfile import NamedTemporaryFile 
+#import csv
+#import zipfile
 
 #This view is not class-based because it doesn't rely on shared code.
 #Detail pages look exactly the same between all search types.
-#TODO: make sure this view responds only to POST requests.
 
 def one_row_detail(request, id_str):
   detail_page_template = 'ss_viewer/detail.html'

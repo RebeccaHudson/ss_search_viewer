@@ -22,8 +22,6 @@ class TranscriptionFactorSearchView(GenericSearchView):
             tf_for_search =  form_data['trans_factor'] 
 
         motif_value = tft.lookup_motifs_by_tf(tf_for_search)
-        print "motif value for not download " + repr(motif_value)
-        #Downloads already have the query saved on the page?
         api_search_query = {'motif'      :  motif_value, 
                             'tf_library' :  form_data['tf_library'] }
         return api_search_query
