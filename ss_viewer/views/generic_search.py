@@ -222,10 +222,10 @@ class GenericSearchView(View):
                     self.shared_search_controls_dict[k]:
                 pval_dict[k] = self.shared_search_controls_dict[k]
             print "pval_dict as given : " + str(pval_dict)
-        #TODO: confirm that only and exactly 1 of the three p-values is needed. 
-        if not pval_dict:
-            msg = "No p-values have been specified, \
-                   specify at least one to search."
+
+        if 'pvalue_rank' not in  pval_dict:
+            msg = "No p-value SNP impact has been specified, \
+                   specify at least p-value SNP impact to search."
             self.shared_search_controls_errors.append(msg)
         return pval_dict
 
