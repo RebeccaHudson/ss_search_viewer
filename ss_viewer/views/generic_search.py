@@ -85,16 +85,10 @@ class GenericSearchView(View):
         shared_control_values.update(self.handle_ic_filter() )
 
         #any errors with these will be recorded in self.shared_search_control_errors
-  
         if self.search_form.is_valid():
           form_data = self.search_form.cleaned_data  #query-type specific.
           self.api_search_query = self.setup_api_search_query(form_data)
           self.api_search_query.update(shared_control_values)
-        #self.api_search_query.update(self.get_pvalues_from_form())
-        #self.api_search_query.update(self.get_pvalue_directions_from_form() ) 
-        #self.api_search_query.update(self.handle_sort_order() ) 
-        #ic_filter = self.handle_ic_filter()
-        #self.api_search_query.update(ic_filter)
 
 
     def prepare_search_parameters(self, request):
@@ -148,20 +142,14 @@ class GenericSearchView(View):
                                                  search_request_params)
  
         context.update(shared_context)
-        #TODO: try to make this parseable on the front-end      
         context['search_paging_info'] = json.dumps(context['search_paging_info'])
         context['form_data'] = json.dumps(context['form_data'])
         context['plot_source'] = json.dumps(context['plot_source'])
 
-        #This is where a rendering would take place.
-        #how do other views do this that don't just return json? 
-        #return HttpResponse('ss_viewer/search_results.html', 
         template_path = 'ss_viewer/search_results.html' 
         context['tooltips'] = settings.ALL_TOOLTIPS
-        print "keys in context:  " + str(context.keys())
+        #print "keys in context:  " + str(context.keys())
         return render(request, template_path, context)
-        #return HttpResponse(json.dumps(context), 
-        #                    content_type="application/json") 
  
     def handle_sort_order(self):
         sort_order = { }
@@ -174,7 +162,7 @@ class GenericSearchView(View):
         ic_to_include = [] #contains 1, 2, 3, or 4
         ic_values = self.shared_search_controls_dict['ic_filter']
         if len(ic_values) == 0:
-            print "*************** recognized empty ic_filter values"
+            #print "*************** recognized empty ic_filter values"
             msg = "No motif degeneracy levels are selected. Select at least one." 
             self.shared_search_controls_errors.append(msg)
         ic_dict = { 'ic_filter' : ic_values }
@@ -240,18 +228,14 @@ class GenericSearchView(View):
         print "form errors content right after assigning form errors " + \
            repr(context['form_errors'])      
   
-        #TODO: The shared control errors have to be formatted properly. 
         if len(self.shared_search_controls_errors) > 0: 
-            print "added some shared search controls errors.."
-            print "self.shared_search_controls_errors " + \
-               repr(self.shared_search_controls_errors)
+            #print "added some shared search controls errors.."
+            #print "self.shared_search_controls_errors " + \
+            #   repr(self.shared_search_controls_errors)
             context['form_errors'].extend(self.shared_search_controls_errors)
            
         print "form errors content right after assigning shared controls errors " + \
            repr(context['form_errors'])      
-        #context = { 'form_errors' :
-        #            [ str(item) for one_error in errs.values() for item in one_error]
-        #          }
         context =  StandardFormset.handle_invalid_form(context)
         return HttpResponse(json.dumps(context), 
                         content_type="application/json",

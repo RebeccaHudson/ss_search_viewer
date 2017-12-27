@@ -210,15 +210,7 @@ class APIResponseHandler:
         #Showing page N, a through b of N total pairs.
         #could be refactored so the following calculation is not repeated in the 'Paging' class.
         totalPageCount = (hitcount / settings.API_HOST_INFO['result_page_size']) + 1
-        #hitsMsg = ""
-        #if hitcount > settings.HARD_LIMITS['ELASTIC_MAX_RESULT_WINDOW']:
-        #    hitsMsg +=  \
-        #     "The first {:,}".format( \
-        #           settings.HARD_LIMITS['ELASTIC_MAX_RESULT_WINDOW']) +\
-        #     "  available from  "
         hitsMsg =  "Query returned {:,} (SNP,TF) pairs.".format(hitcount)
-        #hitsMsg +=  " Showing page: {:,}".format(page_of_results_to_display) +\
-        #            " out of  {:,}.".format(totalPageCount)
         return hitsMsg
                     
     @staticmethod 
@@ -415,17 +407,10 @@ class StreamingCSVDownloadHandler:
         mt = MotifTransformer()
         rows = []
         #Add headers to the downloaded data.
-        scroll_id = None   #should I move this?
+        #scroll_id = None   #should I move this?
         rows.append(StreamingCSVDownloadHandler.field_labels_for_csv()) 
         page_of_results = 0 
         keep_on_paging = True
-
-        #remove 'search_offset'
-        #search_offset = settings.API_HOST_INFO['download_result_page_size'] * page_of_results
-        #just run with the query as it is to begin with. 
-        #api_search_query.update(
-        #                   {'from_result':search_offset,
-        #                    'page_size':settings.API_HOST_INFO['download_result_page_size']})
 
         api_search_query.update({'for_download': True})
         print "for download: api search query : "+ repr(api_search_query)
@@ -554,14 +539,6 @@ class ExternalResourceUrls:
             link_end = '&rm=present&collection=CORE'
             return ''.join([link_start, motif, link_end])
         return None
-        #else:
-            #Detect and handle ENCODE motifs in the same way that the
-            #MotifTransformer class does. (They don't meet the JASPAR regex.)
-            #motif = ExternalResourceUrls.encode_motif_for_link(motif)
-            #link_start = \
-            #  'http://compbio.mit.edu/encode-motifs/logos/table/logos/mat/fwd/' 
-            #link_end = '.txt'
-        # if ENCODE motifs should be included: return ''.join([link_start, motif, link_end]) 
 
     @staticmethod
     #use motif transformer code as a pattern
