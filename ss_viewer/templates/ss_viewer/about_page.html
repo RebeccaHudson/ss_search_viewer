@@ -30,37 +30,38 @@
             height: auto;
             width: auto;"  />
 <p>
-    @SNP DB provides statistical evaluation of impact of SNPs on transcription
-    factor-DNA interactions based on position weight matrices (PWM).
+    atSNP Search provides statistical evaluation of impact of SNPs on transcription
+    factor-DNA interactions based on position weight matrices (PWMs).
     The current version is built on SNPs from dbSNP Build 144 for the
-    human genome assembly GRCh38/hg38. atSNP DB uses Halic 
+    human genome assembly GRCh38/hg38. atSNP Search uses <i>in slilico</i>
     calculations based on the statistical method in Zuo et al.,
     Bioinformatics (2015).
     atSNP first-time users can start scanning vast amounts of
-    SNP-PWM combinations for gain and loss of function with two key features:
+    SNP-PWM combinations for potential gain and loss of function with two key features:
 </p>          
 
-<ul style="list-style-type: circle;">
+<ul style="list-style-type: circle; font-size: 16px;">
 <li> p-values quantifying the impact of SNP on the PWM matches (p-value SNP impact)</li>
 <li> composite logo plots.</li>
 </ul>
 <p>
-   @SNP identifies and quantifies best DNA sequence matches to the transcription
+   atSNP identifies and quantifies best DNA sequence matches to the transcription
    factor PWMs with both the reference and the SNP alleles in a small
    window around the SNP location (up to +/- 30 base pairs and considering
    subsequences spanning the SNP position). It evaluates statistical
-   significance of scores with each allele and calculates statistical
+   significance of the match scores with each allele and calculates statistical
    significance of the score difference between the best matches with the reference and SNP alleles.
 </p>
 <p>
   The discovery of best matches with the reference and SNP alleles are
    conducted separately. As a result, genomic subsequences providing the best match
-   with each allele may be different. The change in goodness of match with the reference and SNP alleles 
-   alleles indicates impact of SNPs on transcription factor binding ability
-   to DNA. @SNP also provides a composite logo plot for easy visualization
-   of the quality of the reference and SNP allele matches to the PWM and the
-   influence of SNPs on the change in match. Read more under "Help".
-</p>          
+   with each allele may be different. The change in goodness of match with the 
+   reference and SNP alleles alleles indicates <i>in silico</i> impact of SNPs on 
+   transcription factor binding ability to DNA. atSNP Search also provides a composite 
+   logo plot for easy visualization of the quality of the reference and SNP allele 
+   matches to the PWM and the influence of SNPs on the change in match. Read more under 
+   <a href="{% url 'ss_viewer:help-page' %}">"Help"</a>.
+</p> 
 </div>
 
 <div style="box-shadow: 1px 1px 1px 1px #888888;
@@ -70,7 +71,7 @@
    <span style="font-weight:bold; font-size: 1.2em;" >News and Updates</span>
 </p>
 <p>
-   @SNP DB human version 1.0.0 has been released on July 20, 2016.
+   atSNP Search human version 1.0.0 has been released on January 1st, 2018.
 </p>
 <p>
   The current version of @SNP evaluated 133 million SNPs from the
@@ -78,13 +79,16 @@
   of genetic variation (dbSNP Build 144 for human genome GRCh38)
   with 2,270 PWMs (position weight matrices) from two major sources  
   of transcription factor position weight matrix libraries. These are the 
-  <a href="http://jaspar.genereg.net/">JASPAR</a> library, and the
-  <a href="http://compbio.mit.edu/encode-motifs/"> ENCODE</a> library.
-  @SNP DB contains statistical evaluations for a total of 308 billion SNP-PWM pairs.
-  The current release enables querying of three evaluations which exhibit a significant
-  OWIE(?2) change and a significant match with either the reference or the SNP allele.
-  Of these, results for SNP-PWM combinations with  P-value SNP impact, P-value reference, and/or
-  P-value SNP less than or equal to 0.05 are currently available to query. 
+  <a href="http://jaspar.genereg.net/">JASPAR</a> and 
+  <a href="http://compbio.mit.edu/encode-motifs/">ENCODE</a> libraries.
+  atSNP Search contains statistical evaluations for a total of 37 billion SNP-PWM pairs.
+  The current release enables querying of these evaluations which exhibit a significant
+  score change and a significant match with either the reference or the SNP allele.
+  Of these, results for SNP-PWM combinations with 
+  <a href="{% url 'ss_viewer:help-page' %}#part-3:pvalueTable"> p-value SNP impact </a>, 
+  <a href="{% url 'ss_viewer:help-page' %}#part-3:pvalueTable"> p-value Reference </a>, and/or
+  <a href="{% url 'ss_viewer:help-page' %}#part-3:pvalueTable"> p-value SNP </a> 
+  less than or equal to 0.05 are currently available to query. 
 </p>
 </div>
 
@@ -94,8 +98,8 @@
             margin-bottom: 1em;">
   <p><span style="font-weight:bold; font-size: 1.2em;">Contact</span></p>
   <p>
-     If you have any questions concerning atNSP, please post your question publicly 
-     in the <a href="https://groups.google.com/forum/#!forum/atsnp-users">User Group</a>.
+     If you have any questions concerning atSNP Search, please post your question publicly 
+     in the <a href="https://groups.google.com/forum/#!forum/atsnp-users">atSNP User Group</a>.
      For other questions or concerns you may send email to keles@stat.wisc.edu.
   </p>
 </div>
@@ -141,12 +145,6 @@
     </div>
 
 </div>
-
-<!-- start debug stuff -->
-{% if flavor %}
-   <link href="{% static 'ss_viewer/colors/' %}{{ flavor }}.css" rel="stylesheet">
-{% endif %}    
-<!-- end debug stuff -->
 
 
    </div>  <!-- end content div -->
