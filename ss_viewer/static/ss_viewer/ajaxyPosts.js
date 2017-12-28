@@ -67,7 +67,18 @@ function create_search_post(){
           $("#type_of_shown_results").text(search_type);
       },
       error: function(xhr, errmsg, err) {
-          showFormErrors(xhr);
+          console.log("xhr");
+          console.log(xhr);
+          console.log("errmsg");
+          console.log(errmsg);
+          show_or_hide_spinner(false);
+          if (xhr.status == 504) {
+             console.log("indicating a timeout");
+             showTimeout();
+          }else {
+             console.log("not a timeout error, but an error");
+             showFormErrors(xhr);
+          }
       },
       complete: function(){
           show_or_hide_spinner(false);
@@ -102,7 +113,8 @@ function create_paging_post(action_name, search_type){
  $.ajax({
       beforeSend: function(xhr, settings) {
            csrfSafeSend(xhr, settings);
-           show_or_hide_spinner(true);
+           var msg = "atSNP Search is working. <br />Please wait.";
+           show_or_hide_spinner(true, msg);
       },
       url: search_type + '/', 
       type: "POST", 
@@ -146,20 +158,19 @@ function handleResults(values, json){
         //that this is a non-error, but empty search results case.
         showStatusInCorrectPlace(true);
     }
-  
-    //stringify the ic filter information ONCE. 
-    /*if (typeof values['ic_filter'] == 'object'){ 
-        console.log("strinifying ic filter values.");
-        values['ic_filter'] = JSON.stringify(values['ic_filter']);
-        //must be un-stringified on the back end.
-    }*/
-    //can I get myself a copy of these?
-    console.log("no values saved for paging here, it's done by the template.");
-    //var values_to_save_for_paging = JSON.stringify(values);
-    //console.log("saving these values for paging:  ");
-    //console.log(values);
-    //$("div#current_search_params").text(values_to_save_for_paging);
 }
+
+
+function showTimeout(){
+    var errlist = '<ul>';
+    errlist += '<li> Search timed out. Further restrict your query or try agian later. </li>';
+    errlist += '</ul>';
+    $("div#form_errors").append(errlist);
+    $("div.status_message").text("");
+    showHidePrevNext(null); //hides the next and previous buttons.
+    showStatusInCorrectPlace(true);
+}
+
 
 
 function showFormErrors(xhr){

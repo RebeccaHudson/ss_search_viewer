@@ -336,9 +336,10 @@ class APIResponseHandler:
             status_message = 'API error; no data returned.'
             if len(api_response.text) > 0 and len(api_response.text) < 200:
                 status_message += " More info: "+api_response.text.replace('"', "")
-
         elif api_response.status_code == 400:
             status_message = "Problem with search: " + api_response.text.replace('"', "")
+        elif api_response.status_code == 504:
+            status_message = "API timed out. Request took too long."
         else:
             #sometimes there's not a json object here?  
             #print "api_response.text : " + api_response.text
