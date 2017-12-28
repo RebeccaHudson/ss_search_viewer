@@ -29,7 +29,7 @@
 
 <p>
 <section>
-<b>Q1. Is atSNP DB exclusively for human?</b>
+<b>Q1. Is atSNP Search exclusively for human?</b>
 <ul>
 <li>A1. Our current release only has data from the human genome. We plan to extend the database to mouse in the near future.</li>
 </ul>
@@ -42,16 +42,16 @@
 <section>
 <b>Q2. Which db SNP version was used for atSNP db?</b>
 <ul>
-<li>A2. atSNP DB is based on dbSNP build 144 for Human Build 38 (6Rch38). Summary on the dbSNP build 144 can be found <a href="http://www.ncbi.nlm.nih.gov/SNP/snp_summary.cgi?view+summary=view+summary&build_id=144">here</a>.</li>
+<li>A2. atSNP Search is based on dbSNP build 144 for Human Build 38 (6Rch38). Summary on the dbSNP build 144 can be found <a href="http://www.ncbi.nlm.nih.gov/SNP/snp_summary.cgi?view+summary=view+summary&build_id=144">here</a>.</li>
 </ul>
 </section>
 </p>
 
 <p>
 <section>
-<b>Q3. How does atSNP DB handle SNPs with indels, and others?</b>
+<b>Q3. How does atSNP Search handle SNPs with indels, and others?</b>
 <ul>
-<li>A3. dbSNP classifies genetic variation in eight types. Click <a href="http://www.ncbi.nlm.nih.gov/books/NBK44447"> here </a> for the types of variation. The current atSNP DB only considers the major single nucleotide variation class; the class constitutes 88.8% of all genetic variation, specifically 132,946,852 SNPs out of 149,735,377.</li>
+<li>A3. dbSNP classifies genetic variation in eight types. Click <a href="http://www.ncbi.nlm.nih.gov/books/NBK44447"> here </a> for the types of variation. The current atSNP Search only considers the major single nucleotide variation class; the class constitutes 88.8% of all genetic variation, specifically 132,946,852 SNPs out of 149,735,377.</li>
 </ul>
 </section>
 </p>
@@ -60,7 +60,7 @@
 <section>
 <b>Q4. How are multi-allelic SNPs evaluated?</b>
 <ul>
-<li>A4. atSNP DB considers all possible alleles one at a time and provides atSNP statistics and p-values.</li>
+<li>A4. atSNP Search considers all possible alleles one at a time and provides atSNP statistics and p-values.</li>
 </ul>
 </section>
 </p>
@@ -76,7 +76,7 @@
 
 <p>
 <section>
-<b>Q6. Can I have summary statistics of atSNP DB?</b>
+<b>Q6. Can I have summary statistics of atSNP Search?</b>
 <ul>
 <li>A6. We investigated 132,946,852 SNPs and considered 2,270 PWMs. We have evaluated total 307,602,574,340 SNP-PWM combinations.</li>
 </ul>
@@ -119,7 +119,7 @@
 
 <p>
 <section>
-<b>Q10. How do I cite atSNP DB?</b>
+<b>Q10. How do I cite atSNP Search?</b>
 <ul>
 <li>A10. 
       <ul>
@@ -128,7 +128,7 @@
       1. Zuo, Chandler, Shin, Sunyoung, and Keleş, Sündüz. atSNP: transcription factor binding affinity testing for regulatory SNP detection. Bioinformatics (2015): 31, 3353-3355.</li>
       <li>
      
-     2. Shin, Sunyoung, Hudson, Rebecca, Harrison, Christopher, Craven, Mark, and Keleş, Sündüz. atSNP DB: a web resource for quantifying impact of dbSNP SNPs on transcription factor binding. (2018). In preparation.
+     2. Shin, Sunyoung, Hudson, Rebecca, Harrison, Christopher, Craven, Mark, and Keleş, Sündüz. atSNP Search: a web resource for quantifying impact of dbSNP SNPs on transcription factor binding. (2018). In preparation.
      
       </li>
      </ul>
@@ -159,10 +159,10 @@
 
 <p>
   <section>
-    <b> Q13. How does atSNP DB define gain-of-function?</b>
+    <b> Q13. How does atSNP Search define gain-of-function?</b>
     <ul> 
     <li>
-    A13. atSNP DB generates candidates for gain of function by identifying (SNP, PWM) pairs with
+    A13. atSNP Search generates candidates for gain of function by identifying (SNP, PWM) pairs with
     <p style="margin-left: 2em;"> 
     P-value SNP Impact &lt;= 0.05 <br />
     P-value Reference &gt; 0.05   <br /> 
@@ -178,10 +178,10 @@
 
 <p>
    <section>
-     <b>Q14. How does atSNP DB define loss-of-function?</b>
+     <b>Q14. How does atSNP Search define loss-of-function?</b>
      <ul> 
         <li>
-        A14. atSNP DB generates candidates for loss-of-function by identifying (SNP, PWM) pairs  with
+        A14. atSNP Search generates candidates for loss-of-function by identifying (SNP, PWM) pairs  with
        <p style="margin-left: 2em;"> 
          P-value SNP Impact &lt;= 0.05<br />
          P-value Reference &lt;= 0.05 <br />
@@ -224,7 +224,7 @@
 
 <p>
    <section>
-      <b>Q16. What is a good use for atSNP DB sort order?</b>
+      <b>Q16. What is a good use for atSNP Search sort order?</b>
       <ul>
         <li> 
            A16. Options for sorting the queries are useful for getting top candidates of gain or loss of function.
@@ -252,7 +252,7 @@
 
 <p>
   <section>
-    <b>Q17. I would like to evaluate some SNPs that are not in atSNP DB. Any suggestions?</b>
+    <b>Q17. I would like to evaluate some SNPs that are not in atSNP Search. Any suggestions?</b>
     <ul> 
       <li>
          A17. We suggest using the <a href="https://github.com/keleslab/atSNP">atSNP</a> R package. The R package has both the JASPAR and the ENCODE motif libraries that you can evaluate your SNPs against.
@@ -277,10 +277,10 @@
 
 <p>
   <section>
-   <b>Q19. I am working on data from <a href="https://www.jax.org/strain/009376">Diversity Outbred (DO) mouse</a>. Can I use atSNP DB?</b>
+   <b>Q19. I am working on data from <a href="https://www.jax.org/strain/009376">Diversity Outbred (DO) mouse</a>. Can I use atSNP Search?</b>
    <ul> 
      <li>
-        Q19. The current release of atSNP DB only has human data. We suggest using the <a href="https://github.com/keleslab/atSNP">atSNP</a> R package for evaluating your DO SNPs. 
+        Q19. The current release of atSNP Search only has human data. We suggest using the <a href="https://github.com/keleslab/atSNP">atSNP</a> R package for evaluating your DO SNPs. 
      </li>
    </ul>
    </section>
