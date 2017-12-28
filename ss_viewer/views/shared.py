@@ -320,7 +320,7 @@ class APIResponseHandler:
         try:
             api_response = requests.post( APIUrls.setup_api_url(api_action),
                                       json=api_search_query, 
-                                      timeout=300,
+                                      timeout=400,
                                       headers={'content-type':'application/json'})
         except requests.exceptions.Timeout:
              print "Request timed out !! for the following query" + str(api_search_query) 
@@ -340,6 +340,8 @@ class APIResponseHandler:
         elif api_response.status_code == 400:
             status_message = "Problem with search: " + api_response.text.replace('"', "")
         else:
+            #sometimes there's not a json object here?  
+            #print "api_response.text : " + api_response.text
             response_json = json.loads(api_response.text)
             #print "response json " + str(response_json['data'][0].keys())
             mt = MotifTransformer()
