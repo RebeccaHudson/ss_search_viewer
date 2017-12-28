@@ -53,8 +53,8 @@ function create_search_post(){
   $.ajax({
       beforeSend: function(xhr, settings) {
         csrfSafeSend(xhr, settings)
-        show_or_hide_spinner(true);
-        /*show the LOADING  div */
+        msg = "atSNP Search is working. <br />Please wait.";
+        show_or_hide_spinner(true, msg);
       },
       url: search_type + '/', 
       type: "POST", 
@@ -200,7 +200,9 @@ function create_download_post(search_type) {
   //Don't hide the download explanation box while preparing the download.
   $("div.status_message").text("Working... ");
   showStatusInCorrectPlace(true);//show the upper one, hide the lower
-  show_or_hide_spinner(true);
+
+  var msg = "Downloads are limited to 5,000 rows. <br /> Please wait.";
+  show_or_hide_spinner(true, msg);
 
   xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
@@ -217,7 +219,10 @@ function create_download_post(search_type) {
       if (xhttp.readyState == XMLHttpRequest.DONE) {
             show_or_hide_spinner(false);
       }
+      console.log("the xhttp readyState will follow this:");
+      console.log(xhttp.readyState);
   };
+
   xhttp.open("POST",search_type + '/');
   xhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
   xhttp.setRequestHeader("X-CSRFToken", csrftoken);
@@ -225,17 +230,23 @@ function create_download_post(search_type) {
   // You should set responseType as blob for binary responses
   xhttp.responseType = 'blob';
   xhttp.withCredentials = true;
-  xhttp.send(JSON.stringify(values));
+  xhttp.ontimeout = function () { alert("Timed out!!!"); }
+  xhttp.send(JSON.stringify(values)); /* this is where timeouts are detected*/
 }
 
 //try to use everywhere the spinner appears. 
 //true for show, false for hide.
-function show_or_hide_spinner(showOrHide){
+function show_or_hide_spinner(showOrHide, msg=null){
   if (showOrHide === true){
     var target = $("body");
     var spinner = new Spinner().spin();
     target.append(spinner.el);
     console.log(spinner.el);
+
+    if (msg != null){
+        $("#loading_message p")[0].innerHTML = msg;
+    } 
+
     $("#loading").show(); 
   }
   else{ 
