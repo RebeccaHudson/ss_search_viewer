@@ -51,7 +51,7 @@
 <section>
 <b>Q3. How does atSNP Search handle SNPs with indels, and others?</b>
 <ul>
-<li>A3. dbSNP classifies genetic variation in eight types. Click <a href="http://www.ncbi.nlm.nih.gov/books/NBK44447"> here </a> for the types of variation. The current atSNP Search only considers the major single nucleotide variation class; the class constitutes 88.8% of all genetic variation, specifically 132,946,852 SNPs out of 149,735,377.</li>
+<li>A3. dbSNP classifies genetic variation in eight types. Click <a href="http://www.ncbi.nlm.nih.gov/books/NBK44447"> here </a> for the types of variation. The current atSNP Search only considers the major single nucleotide variation class. This class constitutes 88.8% of all genetic variation, specifically 132,946,852 SNPs out of 149,735,377.</li>
 </ul>
 </section>
 </p>
@@ -78,7 +78,10 @@
 <section>
 <b>Q6. Can I have summary statistics of atSNP Search?</b>
 <ul>
-<li>A6. We investigated 132,946,852 SNPs and considered 2,270 PWMs. We have evaluated total 307,602,574,340 SNP-PWM combinations.</li>
+<li>A6. We investigated 132,946,852 SNPs and considered 2,270 PWMs. We have evaluated total 307,602,574,340 SNP-PWM combinations.
+        Currently,  37,141,563,102 (SNP,PWM) combinations with p-value SNP impact, p-value reference, and/or p-value SNP less than or equal to 
+        0.05 are currently available to query. 
+</li>
 </ul>
 </section>
 </p>
@@ -235,8 +238,7 @@
               P-value Impact:  Ascending <br />
               P-value SNP: Descending<br />
            </p>
-           Similarly, 
-           For example, top gain-of-function candidates can be revealed by<br />
+           Similarly,top gain-of-function candidates can be revealed by<br />
            Sort by
            <p style="margin-left: 2em;"> 
               P-value SNP: Ascending<br />
@@ -281,6 +283,20 @@
    <ul> 
      <li>
         Q19. The current release of atSNP Search only has human data. We suggest using the <a href="https://github.com/keleslab/atSNP">atSNP</a> R package for evaluating your DO SNPs. 
+     </li>
+   </ul>
+   </section>
+</p>
+
+
+<p>
+  <section>
+   <b>Q20. How do the search results' values for P-value Reference and P-value SNP relate 
+      to each result's composite logo plot?</b>
+   <ul> 
+     <li>
+        Q20. See the following figure: 
+         <img src="{% static 'ss_viewer/comp_logo_illustration-faq.png' %}"/>
      </li>
    </ul>
    </section>
