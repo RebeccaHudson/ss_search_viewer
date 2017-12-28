@@ -53,7 +53,7 @@ function create_search_post(){
   $.ajax({
       beforeSend: function(xhr, settings) {
         csrfSafeSend(xhr, settings)
-        msg = "atSNP Search is working. <br />Please wait.";
+        msg = "atSNP Search is working. <br />Please wait...";
         show_or_hide_spinner(true, msg);
       },
       url: search_type + '/', 
@@ -113,7 +113,7 @@ function create_paging_post(action_name, search_type){
  $.ajax({
       beforeSend: function(xhr, settings) {
            csrfSafeSend(xhr, settings);
-           var msg = "atSNP Search is working. <br />Please wait.";
+           var msg = "atSNP Search is working. <br />Please wait...";
            show_or_hide_spinner(true, msg);
       },
       url: search_type + '/', 
@@ -212,7 +212,7 @@ function create_download_post(search_type) {
   $("div.status_message").text("Working... ");
   showStatusInCorrectPlace(true);//show the upper one, hide the lower
 
-  var msg = "Downloads are limited to 5,000 rows. <br /> Please wait.";
+  var msg = "Downloads are limited to 5,000 rows. <br /> Please wait...";
   show_or_hide_spinner(true, msg);
 
   xhttp = new XMLHttpRequest();
