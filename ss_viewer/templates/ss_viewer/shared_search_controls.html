@@ -6,67 +6,79 @@
       and/or <span class="loss">LOSS</span> of function, and to narrow down PWMs based on their degeneracy.
 </span>
 
-<div id="explain-pvalues" style="float:right; padding-top: 1em; padding-right: 1em; margin-right:8em; width:18em; margin-top:2em;" >
-   <span id="gain_and_loss" style="display:none;">{{ gain_and_loss }}</span>
+<span id="gain_and_loss" style="display:none;">{{ gain_and_loss }}</span>
 
-</div>
-
-<table class="formControls">
-<tbody>
+<table>
 <tr>
-  <td> 
-     <label data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_rank"> 
-     P-value SNP impact <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
-     </label>
-  </td>
-  <td> 
-     {{ shared_search_controls_form.pvalue_rank}}
-  </td>
-</tr>
-<tr> 
 <td>
-    <label> Identify candidates for </label>
-</td>
-<td>
-   <div class="btn-group-vertical" role="group">
-     <button class="gain"  id="set_gain">GAIN of function</button>  
-     <button class="loss"  id="set_loss">LOSS of function</button>  
-   </div>
-</td>
-</tr>
-
-<tr>
-  <td>
-    <label data-balloon="{{ tooltips.pvalue_ref }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_ref"> P-value Reference
-        <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
-    <label> 
-  </td>
-  <td>
-     {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} 
-     {{ shared_search_controls_form.pvalue_ref }}
-  </td>
-</tr>
-<tr>
+    <table class="formControls">
+    <tbody>
+    <tr>
+      <td> 
+         <label data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_rank"> 
+         P-value SNP impact <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+         </label>
+      </td>
+      <td> 
+         {{ shared_search_controls_form.pvalue_rank}}
+      </td>
+    </tr>
+    <tr> 
     <td>
-      <label data-balloon="{{ tooltips.pvalue_snp }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_snp"> P-value SNP 
-        <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
-      </label>
+        <label> Identify candidates for </label>
     </td>
-    <td> 
-      {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
-         {{ shared_search_controls_form.pvalue_snp }} 
+    <td>
+       <div class="btn-group-vertical" style="width: 12em;" role="group">
+         <button class="gain"  id="set_gain">GAIN of function</button>  
+         <button class="loss"  id="set_loss">LOSS of function</button>  
+       </div>
     </td>
+    </tr>
+    
+    <tr>
+      <td>
+        <label data-balloon="{{ tooltips.pvalue_ref }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_ref"> P-value Reference
+            <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+        <label> 
+      </td>
+      <td>
+         {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} 
+         {{ shared_search_controls_form.pvalue_ref }}
+      </td>
+    </tr>
+    <tr>
+        <td>
+          <label data-balloon="{{ tooltips.pvalue_snp }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_snp"> P-value SNP 
+            <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+          </label>
+        </td>
+        <td> 
+          {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
+             {{ shared_search_controls_form.pvalue_snp }} 
+        </td>
+    </tr>
+    </tbody>
+    </table>
+</td>
+<td>
+ <table class="formControls extras">
+    <tbody>
+    <tr>
+       {% include "ss_viewer/sort_widget.html"  %} 
+    </tr>
+    <tr>
+        <td><label data-balloon="{{ tooltips.motif_degeneracy }}" data-balloon-pos="down" data-balloon-length="fit" for="id_ic_filter">Filter by motif degeneracy<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-6:part-6">?</a></sup>
+        </label></td>
+        <td> {{ shared_search_controls_form.ic_filter }}  </td>
+    </tr>
+    </tbody>
+ </table>
+</td>
 </tr>
-<tr>
-   {% include "ss_viewer/sort_widget.html"  %} 
-</tr>
-<tr>
-    <td><label data-balloon="{{ tooltips.motif_degeneracy }}" data-balloon-pos="up" data-balloon-length="fit" for="id_ic_filter">Filter by motif degeneracy<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-6:part-6">?</a></sup>
-    </label></td>
-    <td> {{ shared_search_controls_form.ic_filter }}  </td>
-</tr>
-</tbody>
 </table>
+
+
+
 
    <!-- below is where we are putting the hidden fields -->
    {# Include the hidden fields #}
