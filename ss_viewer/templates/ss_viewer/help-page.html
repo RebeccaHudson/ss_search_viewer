@@ -165,11 +165,12 @@ body {
     text-align: right;
 }
 
-</style>
+#ic_values td.range { text-align: center; }
+#ic_values th { padding: .3em;
+                text-align: center;   }
+#ic_values td { padding: .2em .3em .2em .4em; }
 
-{% if flavor %} 
-<link href="{% static 'ss_viewer/colors/' %}{{ flavor }}.css" rel="stylesheet">
-{% endif %}
+</style>
 
 </head>
 
@@ -911,6 +912,32 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
            To advance or demote a sort field's priority, select it (by 
            clicking on it) and click the up or down arrow.
            </p>
+
+           <h5><span><b>Resticting by Motif Degeneracy</b></span></h5>
+           This control is based on computing information content (IC) of each individual position within a PWM,
+           then taking the median of the information content across all positions. 
+           These median IC values are then percentiled  (25%, 50%, and 75%) to classify each PWM into the following four classes. 
+             <!-- style this table in a special way maybe? -->
+             <table id="ic_values" border="1">
+                <thead>
+                  <th>Motif Degeneracy </th><th>Label</th>
+                </thead>
+                <tbody>
+                  <tr><td class="range">[0, 0.70)    </td><td>Very High  </td></tr>
+                  <tr><td class="range">[0.7, 1.1)   </td><td>High       </td></tr>
+                  <tr><td class="range">[1.1, 1.52)  </td><td>Moderate   </td></tr>
+                  <tr><td class="range">[1.52, 2]    </td><td>Low        </td></tr>
+                </tbody>
+             </table>
+             <p>
+                 Low information content indicates a very degenerate motif. 
+                 While this does not have implications in terms of actual functionality,
+                 when possible, following up less degenerate motifs is more preferable.
+             </p>
+
+
+
+
            <p><h5><span><b>Limitations on Numeric Queries</b></span></h5>
            Queries are numerically limited in the following ways:
 <ul>
