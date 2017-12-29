@@ -133,7 +133,8 @@ label[for~="tf_library"] {
 }
 
 input[type='number'] {
-  width: 70%;
+  /*width: 70%;*/
+  width: 13.5em;
 }
 
 input[type='text'] {
@@ -157,6 +158,12 @@ table.formControls.extras{
   width: 35em;
   margin-left: 0em;
 }
+
+table.formControls.leftside td.control-column {
+  width: 18em;
+}
+
+
 
 .formControls tr { 
   height: 45px;

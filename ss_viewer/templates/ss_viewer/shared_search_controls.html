@@ -11,7 +11,7 @@
 <table>
 <tr>
 <td>
-    <table class="formControls">
+    <table class="formControls leftside">
     <tbody>
     <tr>
       <td> 
@@ -19,16 +19,16 @@
          P-value SNP impact <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
          </label>
       </td>
-      <td> 
+      <td class="control-column"> 
          {{ shared_search_controls_form.pvalue_rank}}
       </td>
     </tr>
     <tr> 
-    <td>
+    <td >
         <label data-balloon="{{ tooltips.gain_and_loss }}" data-balloon-pos="up" data-balloon-length="large"> SNP impact type</label>
     </td>
-    <td>
-       <div class="btn-group-vertical" style="width: 11em;" role="group">
+    <td class="control-column">
+       <div class="btn-group-vertical" style="width: 12em;" role="group">
          <button class="gain"  id="set_gain">GAIN of function</button>  
          <button class="loss"  id="set_loss">LOSS of function</button>  
        </div>
@@ -36,7 +36,7 @@
     </tr>
     
     <tr>
-      <td>
+      <td class="control-column" >
         <label data-balloon="{{ tooltips.pvalue_ref }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_ref"> P-value Reference
             <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
         <label> 
