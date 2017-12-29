@@ -25,7 +25,7 @@ ALL_TOOLTIPS = {
     'genomic_location_chromosome' : "Chromosome to search for data between the start and end positions specified.",
     'trans_factor_library' : "Select either the ENCODE or JASPAR motif library.",
     'trans_factor_select'  : "Select the transcription factor here.",
-    'snpid_window_snpid' :  "Search for data with a window around the position of the snpid entered here.",
+    'snpid_window_snpid' :  "Search for data with a window around the position of the SNPid entered here.",
     'snpid_window_size' :   "Search for data in a range this number of bases upstream and downstream of the position of the SNPid.",   
     'gene_name'         : "Name of the gene to search for.",
     'gene_window_size'  : "Search for data in a range beginning this many bases upstream of the gene's start position and ending this \
