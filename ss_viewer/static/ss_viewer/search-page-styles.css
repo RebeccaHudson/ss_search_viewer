@@ -24,7 +24,9 @@ ul#tabs li a { text-align: center; }
         color: #d95f02;
      }
      button.loss {
+       width: 100%;
        border: none;
+       margin-top: 1.5px;
        border-radius: 5px;
        background-color: #d95f02;
        font-weight: bolder;
@@ -36,8 +38,10 @@ ul#tabs li a { text-align: center; }
         color: #1b9e77;
      }
      button.gain {
+       width: 100%;
        border: none;
        border-radius: 5px;
+       margin-bottom: 1.5px;
        background-color: #1b9e77;
        font-weight: bolder; 
        color: white;
