@@ -201,24 +201,29 @@
 <section id="degen">
     <b>Q15. How are motifs (PWMs) classified into low, moderate, high, and very high degeneracy groups?</b>
     <ul>
-         <li>A15. This is based on computing information content of each individual position and then averaging the information content across all positions.  Then, each PWM is classified as follows based on its average information content.
+         <li>A15. 
+This is based on computing information content (IC) of each individual position within the PWM and then taking the median of the information content across all positions. These median IC values are then percentiled  (25%, 50%, and 75%) to classify each PWM into the following four classes. 
          </li>
          <li>
          <!-- style this table in a special way maybe? -->
          <table id="ic_values" border="1">
             <thead>
-              <th>Information Content</th><th>Label</th>
+              <th>Motif Degeneracy </th><th>Label</th>
             </thead>
             <tbody>
-              <tr><td class="range">[0, 0.5]  </td><td>Low      </td></tr>
-              <tr><td class="range">(0.5, 1]  </td><td>Moderate </td></tr>
-              <tr><td class="range">(1, 1.5]  </td><td>High     </td></tr>
-              <tr><td class="range">(1.5, 2]  </td><td>Very High</td></tr>
+              <tr><td class="range">[0, 0.70)    </td><td>Very High  </td></tr>
+              <tr><td class="range">[0.7, 1.1)   </td><td>High       </td></tr>
+              <tr><td class="range">[1.1, 1.52)  </td><td>Moderate   </td></tr>
+              <tr><td class="range">[1.52, 2]    </td><td>Low        </td></tr>
             </tbody>
          </table>
          </li>
          <li> 
-         <p> Low information content indicates a very degenerate motif. While this does not have implications in terms of actual functionality, when possible, following up less degenerate motifs is more preferable.</p>
+           <p>
+               Low information content indicates a very degenerate motif. 
+               While this does not have implications in terms of actual functionality,
+               when possible, following up less degenerate motifs is more preferable.
+           </p>
          </li>
       </ul>
     </section>
