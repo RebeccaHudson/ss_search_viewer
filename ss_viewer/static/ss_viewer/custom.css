@@ -145,8 +145,13 @@ td.trans-factor > select.form-control {
 }
 
 table.formControls{
-  width: 35em;
+  width: 29em;
   margin-left: 1.5em;
+}
+
+table.formControls.extras{
+  width: 35em;
+  margin-left: 0em;
 }
 
 .formControls tr { 
