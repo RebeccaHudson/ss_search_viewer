@@ -182,7 +182,7 @@ ul#tabs li { width: 20%; }
 
   /*Make the primary search directive stand out.*/
   span.bigred {
-    color: #C41E3A;  /* this color is now 'cardinal' instead of RED.*/
+    color:#337ab7;  /* this color is now a 'matching' blue instead of cardinal.*/
     font-weight:bold;
   }
 
