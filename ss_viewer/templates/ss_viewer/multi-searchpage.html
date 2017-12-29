@@ -5,12 +5,8 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>atSNP Search</title>
   <link href="{% static 'ss_viewer/css/bootstrap.min.css' %}" rel="stylesheet">
-
   <link href="{% static 'ss_viewer/balloon.min.css' %}" rel="stylesheet">
   <link href="{% static 'ss_viewer/custom.css' %}" rel="stylesheet">
-  {% if flavor %} 
-  <link href="{% static 'ss_viewer/colors/' %}{{ flavor }}.css" rel="stylesheet">
-  {% endif %}
   <link href="{% static 'ss_viewer/plot-styles.css' %}" rel="stylesheet"> 
   <link href="{% static 'ss_viewer/search-page-styles.css' %}" rel="stylesheet"> 
 
@@ -42,9 +38,7 @@
    <script type="text/javascript" src="{% static 'ss_viewer/snpidFileInputControls.js' %}"></script>
    <script type="text/javascript" src="{% static 'ss_viewer/directional.js' %}"></script>
 
-
    <script type="text/javascript" src="{% static 'ss_viewer/showSearchResults.js' %}"></script>
-
    <script type="text/javascript" src="{% static 'ss_viewer/google_analytics.js' %}"></script> 
  
 </head>
@@ -55,7 +49,7 @@
 {% include "ss_viewer/navbar.html" with active='search' %}
 
 <!-- explain what this is for right here: -->
-<div> <span> Search for effects of SNPs on transcription factor binding</span> 
+<div class="what-is-this"> <span> Search for effects of SNPs on transcription factor binding</span> 
       <p> Select a search type: </p>
 </div>
 

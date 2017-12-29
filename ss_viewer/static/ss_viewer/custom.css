@@ -87,6 +87,10 @@ form label{
    /*float: left;*/
 }
 
+div.what-is-this { font-size: 18px;
+                   font-weight: bolder;
+                   color: gray; }
+
 div .hide-plot { display : none; }
 div .show-plot { display: inline;
                  float: right;
