@@ -287,7 +287,7 @@ This is based on computing information content (IC) of each individual position 
    <b>Q19. I am working on data from <a href="https://www.jax.org/strain/009376">Diversity Outbred (DO) mouse</a>. Can I use atSNP Search?</b>
    <ul> 
      <li>
-        Q19. The current release of atSNP Search only has human data. We suggest using the <a href="https://github.com/keleslab/atSNP">atSNP</a> R package for evaluating your DO SNPs. 
+        A19. The current release of atSNP Search only has human data. We suggest using the <a href="https://github.com/keleslab/atSNP">atSNP</a> R package for evaluating your DO SNPs. 
      </li>
    </ul>
    </section>
@@ -300,11 +300,33 @@ This is based on computing information content (IC) of each individual position 
       to each result's composite logo plot?</b>
    <ul> 
      <li>
-        Q20. See the following figure: 
+        A20. See the following figure: 
          <p>
          <img style="height: 400px;" src="{% static 'ss_viewer/comp_logo_illustration-faq.png' %}"/>
          </p>
      </li>
+   </ul>
+   </section>
+</p>
+
+
+<p>
+   <section>
+   <b>Q21. What p-value cutoffs  does atSNP Search use if I don’t specify gain or loss of function?</b>
+    <ul>
+       <li>
+        A21. atSNP Search by default returns records with
+           
+           <p>
+              (i) P-value SNP Impact &le; 0.05 and p-value Reference &le; 0.05 and p-value SNP &gt; 0.05, <br/>
+              candidates for loss of function. 
+           </p>
+
+           <p>
+             (ii) P-value SNP Impact &le; 0.05  and p-value Reference &gt; 0.05 and p-value SNP &le; 0.05, <br/>
+              candidates for gain of function.
+           </p>
+        </li>
    </ul>
    </section>
 </p>
