@@ -30,7 +30,8 @@ ALL_TOOLTIPS = {
     'gene_name'         : "Name of the gene to search for.",
     'gene_window_size'  : "Search for data in a range beginning this many bases upstream of the gene's start position and ending this \
                            number of bases downstream of the gene's end position.",
-    'sort_order'        : "Adjust the sort order of the results."
+    'sort_order'        : "Adjust the sort order of the results.",
+    'gain_and_loss'     :"Use pre-specified definitions of gain and loss or set specific cutoffs for the p-values. Leave blank for defaults."
 }
 
 #This dict should match the same one in the API config file.
