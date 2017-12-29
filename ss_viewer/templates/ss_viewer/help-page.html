@@ -23,6 +23,7 @@ span.subsequence-box {
   border: 1px solid black;
 }
 
+
 hgroup {
   font-weight: bold;
   color: blue;
@@ -65,7 +66,7 @@ figcaption{
 figure { 
     margin: 1em;
 }
-cite {
+cite, cite a {
     font-style: normal;
     font-size: 12px;
 }
@@ -96,6 +97,7 @@ ol.refs { padding: 0px; }
              font-family: monospace; }
 section { 
     margin-left: 2em;
+    font-size: 16px;
 }
 
 /* begin style content from : 
@@ -186,7 +188,7 @@ body {
             <hgroup><a name="part-1"><h4>1.&nbsp;Understanding motif libraries</h4></a></hgroup>
         </div>
         <div class="panel">
-        <p> Motif libraries provide nucleotide patterns that transcription factors recoginze well 
+        <p> Motif libraries provide nucleotide patterns that transcription factors recognize well 
         from a set of transcription factor binding sites. The binding profiles are represented 
         with position weight matrices (PWMs). PWMs are used for probabilistic description of the 
         patterns in genomic sequences. The PWM is visualized as a sequence logo, where letter 
@@ -255,7 +257,7 @@ body {
           <li> ENCODE Library </li>
           <section>
           The ENCODE library features systematic discovery and characterization of regulatory motifs in transcription factor binding experiments (Kheradpour et al., 2014). These PWSs are available <a href="http://compbio.mit.edu/encode-motifs/">here</a>. This collection contains known motifs from the literature 
- (TRANSFAC, JASPAR Homo Sapiens, and UniPROBE). In addition to the <i>de novo </i> motifs from hundreds of transcription factor binding experiments performed by <a href="encodeproject.org">ENCODE</a>. 
+ (TRANSFAC, JASPAR Homo Sapiens, and UniPROBE), in addition to the <i>de novo </i> motifs from hundreds of transcription factor binding experiments performed by <a href="encodeproject.org">ENCODE</a>. 
 These motifs were discovered using established tools such as MDscan , MEME, Trawler, and AlignACE . 
 All known and discovered motifs are grouped as in the table <a href="http://compbio.mit.edu/encode-motifs/">here</a>. 
 For known ENCODE motifs, the naming convention indicates the source which initially reported the motif. For <i>de novo</i> motifs, the names contain information about the experiments ther were used to discover the motif. This information includes the name of the lab and the names of any motif discovery tools used. 
@@ -359,7 +361,7 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
 </p>
             
           <section>
-          <h6><span class="underline">Reference</span></h6>
+          <h6><span class="underline">References</span></h6>
 <ul class="refs">
 <li><cite>Mathelier, A., Zhao, X., Zhang, A. W., Parcy, F., Worsley-Hunt, 
     R., Arenillas, D. J., Buchman, S., Chen, C.-y., Chou, A., Ienasescu,
@@ -434,7 +436,7 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
                     Only atSNP and is-rSNP provide statistical quantification of the impact of SNPs on the binding. Furthermore, 
                     atSNP addresses the scalability issue with an efficient computation enabled by an importance sampling technique. 
                     atSNP visualizes the best matches with both the reference and the SNP alleles and their change created by the SNP.  
-                    atSNP DB results are obtained by the R package <a href="https://github.com/keleslab/atSNP">atSNP</a>, that implements this procedure.
+                    atSNP Search results are obtained by the R package <a href="https://github.com/keleslab/atSNP">atSNP</a>, that implements this procedure.
                 </p>
               </section> <!-- end of atSNP overview section -->
 
@@ -475,11 +477,9 @@ T        [0.170        0.000        0.000        1.000        0.113].</pre>
 </div>
 </figure>
 
-
-
                </p>
                <p>
-The motif length is 5 and sequences of length 9 centered at the SNP position are extracted from both the reference genome and the SNP variation of the reference genome:
+The motif length is 5 and sequences of length 9 centered at the SNP position are extracted from both the reference allele and the SNP variation of the reference allele:
                </p>
                <p>
                <table class="borders"><tbody>
@@ -489,7 +489,7 @@ The motif length is 5 and sequences of length 9 centered at the SNP position are
                      <td  class="sequence"  >AAGA<span class="red">T</span>AAGC</td></tr>
                </tbody></table>
                </p>
-               <p> Next, we compute log likelihoods of all subsequences of length 5 spanning the SNP position and find the best match, which is associated with the largest log likelihood. The second subsequences on the forward strand (A<span class="subsequence-box">AGA<span class="red">C</span>A</span>CG) has the largest log likelihood with the reference alleles. (Table 2). The second subsequence on the forward srand also has the largest log likelihood with the SNP allele (Table 3).</p>
+               <p> Next, we compute log likelihoods of all subsequences of length 5 spanning the SNP position and find the best match, which is associated with the largest log likelihood. The second subsequence on the forward strand (A<span class="subsequence-box">AGA<span class="red">C</span>A</span>CG) has the largest log likelihood with the reference allele. (Table 2). The second subsequence on the forward strand also has the largest log likelihood with the SNP allele (Table 3).</p>
                  <p>
                 <figure>
                    <table class="example table-striped">
@@ -522,38 +522,38 @@ The motif length is 5 and sequences of length 9 centered at the SNP position are
                 </figure>
                  </p><!-- end paragraph of figures -->
                  <li><b>Step 2: p-value for the affinity score                 </b> </li>
-                 <p>The p-value for the affinity score on the reference allele (pvalue-ref) is the probability that a random sequence has an affinity score larger than the best match score with the reference allele. atSNP simulates random sequences using a first order Markov model. It estimates the p-value as the frequency of randomly getting larger affinity scores than the best match score with the reference allele. Similarly, the p-value for the affinity score on the SNP allele (pvalue-SNP) is estimated as the frequency of getting random scores larger than the best match score with the SNP allele.</p>
+                 <p>The p-value for the affinity score with the reference allele (p-value Reference) is the probability that a random sequence has an affinity score larger than or equal to the best match score with the reference allele. atSNP simulates random sequences using a first order Markov model. It estimates the p-value as the frequency of randomly getting as large or larger affinity scores than the best match score with the reference allele. Similarly, the p-value for the affinity score with the SNP allele (p-value SNP) is estimated as the frequency of getting random scores as large or larger than the best match score with the SNP allele.</p>
                    <p>
                    <h5> <span class="underline">Example (Continued)<span></h5>
-(Continued From Step 1) The log likelihood score for the reference allele is <span class="red">-25.30</span>, and the log likelihood score for the SNP allele is <span class="red">-2.28</span>. The p-value for the reference allele is the probability that a random sequence has affinity scores larger than or equal to <span class="red">-25.30</span>, which is our target region (Figure 7). For such a small p-value, naive Monte-Carlo generates a small number of scores in the target region (Figure 8), thus requires a large number of simulations. Alternatively, in atSNP, the importance sampling generates many more scores in the target region (Figure 9). The p-value for the reference allele is then estimated by the weighted frequency as p<sub>Ref</sub>=<span class="red">0.499</span>. The importance sampling algorithm significantly reduces the required number of simulations. Similarly, the p-value for the SNP allele, p<sub>SNP</sub>, is estimated as <span class="red">0.009</span>. 
+(Continued From Step 1) The log likelihood score for the reference allele is <span class="red">-25.30</span>, and the log likelihood score for the SNP allele is <span class="red">-2.28</span>. The p-value for the reference allele is the probability that a random sequence has an affinity score larger than or equal to <span class="red">-25.30</span>, which is our target region (Figure 7). For such a small p-value, naive Monte-Carlo generates a small number of scores in the target region (Figure 8), thus requires a large number of simulations. Alternatively, in atSNP, the importance sampling generates many more scores in the target region (Figure 9). The p-value for the reference allele is then estimated by the weighted frequency as p-value Reference = <span class="red">0.499</span>. The importance sampling algorithm significantly reduces the required number of simulations. Similarly, the p-value for the SNP allele, p-value SNP, is estimated as <span class="red">0.009</span>. 
                    </p>
                    <p>
                 <figure style="float: left;">
                    <img height="260" src="{% static 'ss_viewer/docs/image13.png' %}" id="figure-07"/>
-                   <figcaption>Figure 7 Distribution of Scores <br />
-                               from random motif sequences</figcaption> 
+                   <figcaption>Figure 7 Distribution of scores <br />
+                               from random motif sequences.</figcaption> 
                 </figure>
                 <figure style="float:left;">
                    <img height="260" src="{% static 'ss_viewer/docs/image11.png' %}" id="figure-08"/>
-                   <figcaption> Figure 8 Empirical Distribution<br />
+                   <figcaption> Figure 8 Empirical distribution<br />
                                 of simulated random scores with the naive <br />
-                                Monte Carlo method
+                                Monte Carlo method.
                   </figcaption> 
                 </figure>
                 <figure>
                    <img height="260" src="{% static 'ss_viewer/docs/image00.png' %}" id="figure-09"/>
-                   <figcaption> Figure 9 Empirical Distribution of simulated <br />
-                               random scores with importance sampling
+                   <figcaption> Figure 9 Empirical distribution of simulated <br />
+                                random scores with importance sampling.
                   </figcaption> 
                 </figure>
                    <p style="clear: both;">
                    </p>
                   </p> 
                  <li><b>Step 3: p-value for the affinity change between alleles</b> </li>
-                   <p> atSNP tests the significance of <i>log rank ratio</i>: log(p<sub>Ref</sub>)-log(p<sub>SNP</sub>). atSNP computes the p-value based on a Monte-Carlo simulation that uses both the reference and SNP alleles together. This is done using the importance sampling technique as described in <b>Step 2</b>.</p>
+                   <p> atSNP tests the significance of <i>log rank ratio</i>: log(p-value Reference)-log(p-value SNP). atSNP computes the p-value based on a Monte-Carlo simulation that uses both the reference and SNP alleles together. This is done using the importance sampling technique as described in <b>Step 2</b>.</p>
                    <p>
                    <h5> <span class="underline">Example (Continued)<span></h5> 
-The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02</span>. With the importance sampling, the p-value for the log rank ratio is estimated as p<sub>rank</sub>=<span class="red">0.005</span>.</p>
+The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02</span>. With the importance sampling, the p-value for the log rank ratio is estimated as p-value rank = <span class="red">0.005</span>. In atSNP Search, this p-value is referred to as p-value SNP Impact.</p>
 
               <section> <!-- begin Reference section -->
                 <p>
@@ -603,7 +603,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
             </tr>
             <tr>
               <td> Coordinate                                                 </td> 
-              <td> Formatted as chromosome:position. One of the Human genome 38 chromosomes, e.g. Chr1-Chr22, ChrX, ChrY, ChrM.
+              <td> Formatted as chromosome:position. One of the human genome (assembly GRch38/hg38) chromosomes, e.g. Chr1-Chr22, ChrX, ChrY, ChrM.
                    The position is the 1-based location of the SNP relative to the first base at the 5’ 
                    end of the forward strand of the reference 
                    sequence <sup>2</sup>. A link to data around the genomic coordinate in the UCSC genome browser is available by clicking on the coordinate.   
@@ -641,7 +641,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
                 <td style="width:18em;"> 
                      Transcription Factor                   </td> 
                 <td> Transcription factor name, e.g., RUNX1 
-                     When available, a link is to the FACTORBOOK page for the transcription factor is provided by clicking on the transcription factor. 
+                     When available, a link to the FACTORBOOK page for the transcription factor is provided by clicking on the transcription factor. 
                                                             </td> 
               </tr>
             </tbody>
@@ -653,7 +653,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
               <tbody>
                 <tr>
                   <td style="width:18em;"> Rank Ratio (SNP Impact)    </td> 
-                  <td> Log of ratio of pvalue-Reference to p-value SNP.
+                  <td> Log of ratio of p-value Reference to p-value SNP.
                        This is the main statistic that the atSNP p-values are based on. 
                   </td> 
                 </tr>
@@ -832,7 +832,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
              <figcaption> Figure 11 Composite sequence logo for this result </figcaption> 
           </figure>
           <p>
-The SNP “rs117959046” is a genetic mutation from C to T on the forward strand in Chromosome 1: 134339671. This creates a highly likely binding site for the transcription factor GATA2. This is supported by the p-value rank statistic, 0.00484. This pvalue indicates significance of the binding creation by the SNP. Further, the p-value for the best match between the GATA 2 motif and the SNP allele is 0.00898, whereas p-value for the best match between the motif and the reference allele is 0.499. This implies that binding of GATA 2 transcription factor on the SNP allele is statistically significant while the significance of binding of GATA 2 on the reference allele is not statistically supported. Overall, atSNP statistically supports that the SNP significantly enhances binding for GATA 2.
+The SNP “rs117959046” is a genetic mutation from C to T on the forward strand in Chromosome 1: 134339671. This creates a highly likely binding site for the transcription factor GATA2. This is supported by the p-value SNP Impact statistic, 0.00484. This p-value indicates significance of the binding creation by the SNP. Further, the p-value for the best match between the GATA 2 motif and the SNP allele is 0.00898, whereas p-value for the best match between the motif and the reference allele is 0.499. This implies that binding of GATA 2 transcription factor on the SNP allele is statistically significant while the significance of binding of GATA 2 on the reference allele is not statistically supported. Overall, atSNP statistically supports that the SNP significantly enhances binding for GATA 2.
           </p>
           </section> <!-- end of example section -->
          </div> <!-- end of accordion panel for section 3 -->
@@ -856,9 +856,9 @@ The SNP “rs117959046” is a genetic mutation from C to T on the forward stran
                 The SNP, rs117959046, is highly likely to create a binding site for the transcription factor GATA2 on the genome. 
                 The composite logo plot illustrates this with the comparison between the best matches of GATA2_2 PWM on the reference and SNP alleles. 
                 Among subsequences of length 5 overlapping the SNP position with the reference allele, “AGACA” on the forward strand has the largest log likelihood score.
-                The subsequence is referred to as the “best match with the reference genome”. This subsequence is depicted on the second row with the corresponding PWM 
+                The subsequence is referred to as the “best match with the reference allele”. This subsequence is depicted on the second row with the corresponding PWM 
                 on the first row. Similarly, among subsequences of length 5 overlapping the SNP position with the SNP allele, “AGATA” on the forward strand is referred
-                to as the “best match with the SNP genome”. It is depicted on the third row with the corresponding PWM on the fourth row.
+                to as the “best match with the SNP allele”. It is depicted on the third row with the corresponding PWM on the fourth row.
               </p>
              <figure>
                 <img height="350" src="{% static 'ss_viewer/docs/image09.jpg' %}" id="figure-11"/>
@@ -868,8 +868,8 @@ The SNP “rs117959046” is a genetic mutation from C to T on the forward stran
              </p>
 
              <p>
-The beginning of the best match on the SNP genome is 3 bases before the SNP position in the 5' to 3' direction on the reverse strand.
-Among subsequences of length 11 overlapping the SNP position on the SNP allele, this subsequence has the largest log likelihood score. This subsequence is referred to as “best match with the SNP genome” and depicted on the third row with the corresponding PWM on the fourth row.  Similarly, we can find “best match with the reference genome” and depict it on the second row with the corresponding PWM on the first row. The beginning of the best match on the reference genome is one base before the SNP position in the 5' to 3' direction on the forward strand.
+The beginning of the best match on the SNP allele is 3 bases before the SNP position in the 5' to 3' direction on the reverse strand.
+Among subsequences of length 11 overlapping the SNP position on the SNP allele, this subsequence has the largest log likelihood score. This subsequence is referred to as “best match with the SNP allele” and depicted on the third row with the corresponding PWM on the fourth row.  Similarly, we can find “best match with the reference allele” and depict it on the second row with the corresponding PWM on the first row. The beginning of the best match on the reference allele is one base before the SNP position in the 5' to 3' direction on the forward strand.
              </p>
             </section>           <!-- end examples section -->
            </div> <!-- end of accordion panel for part 4-->
@@ -878,13 +878,13 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
 
          <section> <!-- start of part 5 -->
            <div id="part-5" class="accordion"> 
-           <hgroup><a name="part-5"><h4>5.&nbsp;atSNP DB Infrastructure</h4></a></hgroup>
+           <hgroup><a name="part-5"><h4>5.&nbsp;atSNP Search Infrastructure</h4></a></hgroup>
            </div>
            <div class="panel">
              <figure>
                <img height="770" src="{% static 'ss_viewer/atsnp-site-design.png' %}" id="figure-12" />
              </figure>
-             <p> atSNP utilizes a scale-out systems architecture to store and retrieve approximately thirty seven billion records. As requirements for storage and performance with increase with user demand, we can add additional machines. Elasticsearch, a NoSQL database, utilizes a distributed scale-out system design for large workloads. It accomplishes this task by distributing requests for searches amongst the scaled computing resources. An API handles communication between the search page and the Elasticsearch data store.
+             <p> atSNP Search utilizes a scale-out systems architecture to store and retrieve approximately thirty seven billion records.  Elasticsearch, a NoSQL database, utilizes a distributed scale-out system design for large workloads. It accomplishes this task by distributing requests for searches amongst the scaled computing resources. An API handles communication between the search page and the Elasticsearch data store.
             </p>
            </div> <!-- end of accordion panel for part 5 -->
         </section> <!-- end of part 5 -->
@@ -968,7 +968,7 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
            <ol class="refs">
              <li><cite><a href="https://doi.org/10.1093/bioinformatics/btv328"> Zuo, Chandler, Shin, Sunyoung, and Keleş, Sündüz. atSNP: transcription factor binding affinity testing for regulatory SNP detection. Bioinformatics (2015): 31, 3353-3355</a>.
              </cite> </li>
-             <li><cite>Shin, Sunyoung, Hudson, Rebecca, Harrison, Christopher, Craven, Mark, and Keleş, Sündüz. atSNP DB: a web resource for quantifying impact of dbSNP SNPs on transcription factor binding. (2018). In preparation.
+             <li><cite>Shin, Sunyoung, Hudson, Rebecca, Harrison, Christopher, Craven, Mark, and Keleş, Sündüz. atSNP Search: a web resource for quantifying impact of dbSNP SNPs on transcription factor binding. (2018). In preparation.
              </cite> </li>
            </ol>
            </p>
