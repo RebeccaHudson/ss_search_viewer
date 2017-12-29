@@ -100,12 +100,12 @@ class SearchBySnpidForm(forms.Form):
         snpid_list = None
    
         if (snpid_file and snpid_textbox_contents):
-            raise forms.ValidationError(('Specify snpids in the textbox,'
+            raise forms.ValidationError(('Specify SNPids in the textbox,'
                                         ' OR provide a file, not both.'),
                                          code='too-many-inputs')
         
         if (not(snpid_file or snpid_textbox_contents)):
-            raise forms.ValidationError(('You must specify snpids in the textbox,'
+            raise forms.ValidationError(('You must specify SNPids in the textbox,'
                                         ' OR provide a file.'),
                                          code='missing-input')
         if not snpid_file:
