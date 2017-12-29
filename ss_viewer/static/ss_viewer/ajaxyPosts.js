@@ -187,11 +187,28 @@ function showFormErrors(xhr){
     showStatusInCorrectPlace(true);
 }
 
+function check_if_set_can_be_downloaded(){
+    var search_paging_info = jQuery.parseJSON($("#search_paging_info").text());
+    var hitcount = search_paging_info['total_hitcount']; 
+    if (hitcount > 5000){
+        $("div.modal.fade").modal('show');
+        return false;
+    }
+    return true;
+}
+
+
 
 //may be factored back into other create_post function; separate for now.
 //SOURCE:
 //http://stackoverflow.com/questions/28165424/download-file-via-jquery-ajax-post
 function create_download_post(search_type) {
+
+  if ( ! check_if_set_can_be_downloaded() ) {
+    console.log("blocking a download that is too large.");
+    return;
+  }  
+
   var val_text = $("div#current_search_params").text();
   values = jQuery.parseJSON(val_text);
   values['action'] = 'Download Results';
@@ -282,6 +299,7 @@ function showStatusInCorrectPlace(isUpper){
   Don't allow paging past max_result_window / page_size (666 for now) */
 function setMaxValueOnJumpControl(search_paging_info){
    var maxPg;
+   console.log("search paging info");
    if (search_paging_info.max_page_available <  
          search_paging_info.total_page_count){
         maxPg = search_paging_info.max_page_available;

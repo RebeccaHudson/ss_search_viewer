@@ -199,6 +199,7 @@ class Paging:
         search_paging_info['total_page_count'] = totalPageCount 
 
         search_paging_info['max_page_available'] = Paging.calculate_max_page_available()
+        search_paging_info['total_hitcount'] = hitcount
         #could be refactored so calculation above does not get repeated in 'setup_hits_message'
         return search_paging_info
 
