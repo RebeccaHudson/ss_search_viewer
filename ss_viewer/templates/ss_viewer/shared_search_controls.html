@@ -2,14 +2,13 @@
 <div class="tab-pane panel-body" id="shared_controls_panel">
 <!-- Do not switch based on which form is up. -->
 <form id="shared_controls">
-<span style="font-size:16px; font-weight:bold;" >Refine your search to identify <span class="gain">GAIN</span> 
+<span style="font-size:16px; font-weight:bold; margin-left: 1em;" >Refine your search to identify <span class="gain">GAIN</span> 
       and/or <span class="loss">LOSS</span> of function, and to narrow down PWMs based on their degeneracy.
 </span>
 
 <div id="explain-pvalues" style="float:right; padding-top: 1em; padding-right: 1em; margin-right:8em; width:18em; margin-top:2em;" >
    <span id="gain_and_loss" style="display:none;">{{ gain_and_loss }}</span>
-   <button class="gain" style="margin-bottom: 1em;" id="set_gain">Search for candidates for GAIN of function</button>  
-   <button class="loss" style="margin-top: 1em;" id="set_loss">Search for candidates for LOSS of function</button>  
+
 </div>
 
 <table class="formControls">
@@ -24,6 +23,18 @@
      {{ shared_search_controls_form.pvalue_rank}}
   </td>
 </tr>
+<tr> 
+<td>
+    <label> Identify candidates for </label>
+</td>
+<td>
+   <div class="btn-group-vertical" role="group">
+     <button class="gain"  id="set_gain">GAIN of function</button>  
+     <button class="loss"  id="set_loss">LOSS of function</button>  
+   </div>
+</td>
+</tr>
+
 <tr>
   <td>
     <label data-balloon="{{ tooltips.pvalue_ref }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_ref"> P-value Reference
@@ -50,8 +61,7 @@
    {% include "ss_viewer/sort_widget.html"  %} 
 </tr>
 <tr>
-    <td><label data-balloon="{{ tooltips.motif_degeneracy }}" data-balloon-pos="up" data-balloon-length="fit" for="id_ic_filter">Filter by motif degeneracy
-        <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-6:part-6">?</a></sup>
+    <td><label data-balloon="{{ tooltips.motif_degeneracy }}" data-balloon-pos="up" data-balloon-length="fit" for="id_ic_filter">Filter by motif degeneracy<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-6:part-6">?</a></sup>
     </label></td>
     <td> {{ shared_search_controls_form.ic_filter }}  </td>
 </tr>
