@@ -6,6 +6,11 @@ a, span, p, option, button  { font-size: 16px; }
 /* make the search result tabs take up a bit less than 1/5th the width of the form per tab */
 ul#tabs li { width: 20%; }
 
+
+.btn.btn-primary { 
+    font-size: 16px;
+    font-weight: bolder;
+}
  
 
 /* color coding for our evaluation of changes in transcription factor function */
