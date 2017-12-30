@@ -164,6 +164,11 @@ table.formControls{
   margin-left: 1.5em;
 }
 
+
+table.formControls.genomic-location { 
+  width: 40em;
+}
+
 table.formControls.extras{
   width: 35em;
   margin-left: 0em;
