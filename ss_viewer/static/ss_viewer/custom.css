@@ -163,6 +163,10 @@ table.formControls.leftside td.control-column {
   width: 18em;
 }
 
+td.half-of-shared-controls {
+  width: 45%;
+}
+
 
 
 .formControls tr { 

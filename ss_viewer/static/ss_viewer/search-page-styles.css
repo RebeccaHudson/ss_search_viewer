@@ -80,8 +80,11 @@ ul#tabs li a { text-align: center; }
           padding-bottom: 0px;
           padding-left: 10px;
           margin-top: 0px;
-          border:1px dashed lightgray;
+          /*border:1px dashed lightgray;*/
      }
+
+
+
 
 /* Styles for buttons to page forward and back through search results*/
     #ajaxyPagingButtons {
@@ -199,6 +202,11 @@ ul#tabs li a { text-align: center; }
     color:#337ab7;  /* this color is now a 'matching' blue instead of cardinal.*/
     font-weight:bold;
   }
+
+  #search-container { 
+    min-width: 1140px;
+  }
+
 
   /* lifted from o
    * https://stackoverflow.com/questions/18499449/show-ajax-spinner-hide-page-render-until-all-ajax-calls-complete
