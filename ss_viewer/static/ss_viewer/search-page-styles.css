@@ -3,15 +3,19 @@
 /* standardize the fonts */
 a, span, p, option, button  { font-size: 16px; }
 
+a { color: #2171b5; }
 /* make the search result tabs take up a bit less than 1/5th the width of the form per tab */
 ul#tabs li { width: 20%; }
-ul#tabs li a { text-align: center; }
 
+ul#tabs li[class!="active"] a { color: #2171b5; }
+ul#tabs li a { text-align: center; }
 .btn.btn-primary { 
     font-size: 16px;
     font-weight: bolder;
+    background-color: #2171b5;
 }
- 
+button.btn-link { color: #2171b5; }
+sup a { color: #2171b5 }  
 
 /* color coding for our evaluation of changes in transcription factor function */
      span.neutral { 
@@ -48,7 +52,7 @@ ul#tabs li a { text-align: center; }
      }
  
      /* make the LOSS and GAIN of function buttons the same
-     *  height as the form controls they're in flow with */ 
+     *   height as the form controls they're in flow with */ 
      button.loss, button.gain { 
          height: 34px;
      }
@@ -204,7 +208,7 @@ ul#tabs li a { text-align: center; }
 
   /*Make the primary search directive stand out.*/
   span.bigred {
-    color:#337ab7;  /* this color is now a 'matching' blue instead of cardinal.*/
+    color:#2171b5;  /* this color is now a 'matching' blue instead of cardinal.*/
     font-weight:bold;
   }
 
@@ -236,7 +240,7 @@ ul#tabs li a { text-align: center; }
      height: 7em;
      width: 35em;
      border-radius: 10px; 
-     background-color: gray;:
+     background-color: #737373;
   }
 
   #loading_message p {
@@ -252,7 +256,8 @@ ul#tabs li a { text-align: center; }
 div.single-search-result {
     font-size: 15px;
     color: black;
-    margin: 0em 1em 1em 0em;
+    margin: .5em 0em .5em 0em;
+    min-width: 1140px;
     padding: 5px; 
     border-radius: 10px;
     display: flex;
@@ -263,7 +268,7 @@ div.single-search-result {
 }
 
 div.single-search-result a {
-    color: blue;
+    color: #2171b5;
 }
 
 /* nudge the composite logo plot to the rightmost side of the result */

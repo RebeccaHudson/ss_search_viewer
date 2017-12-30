@@ -2,6 +2,7 @@ function setupSearchDemos(){
     $("#shared-controls-search-demo").click(function(e){
         e.preventDefault();
         var id_of_active_form = $("div.tab-pane.panel-body.active").attr('id');
+        var pval_rank_for_demo = '0.05';
         switch(id_of_active_form){
         case 'snpid_search_form':
             snpid_search_demo();
@@ -11,6 +12,7 @@ function setupSearchDemos(){
             break;
         case 'tf_search_form':
             trans_factor_search_demo();
+            pval_rank_for_demo = '0.000005';
             break;
         case 'snpid_window_form':  
             snpid_window_search_demo();
@@ -19,7 +21,7 @@ function setupSearchDemos(){
             gene_name_search_demo();
             break;
         }
-        fill_in_pvalues('0.05', '', '');
+        fill_in_pvalues(pval_rank_for_demo, '', '');
         check_all_degeneracy_levels();
     });
   
@@ -69,12 +71,13 @@ function trans_factor_search_demo(){
 }
 
 function gene_name_search_demo(){
-   $('#id_gene_name-gene_name').val('ELOVL1'); 
+   $('#id_gene_name-gene_name').val('TRDD1'); 
+   $("#id_gene_name-window_size").val(100);
 }
 
 function gl_region_search_demo(){
    $('#id_gl_region-gl_start_pos').val(10000); 
-   $('#id_gl_region-gl_end_pos').val(143163);
+   $('#id_gl_region-gl_end_pos').val(11000);
    $('#id_gl_region-selected_chromosome').val('ch5');
 }
 
@@ -89,6 +92,7 @@ function snpid_search_demo(){
 
 function snpid_window_search_demo(){
   $('#id_snpid_window-snpid').val('rs755632525');
+  $("#id_snpid_window-window_size").val(100);
 }
 
 function fill_in_pvalues(pval_rank, pval_snp, pval_ref){

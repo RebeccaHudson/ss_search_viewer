@@ -236,7 +236,7 @@ class SearchBySnpidWindowForm(forms.Form):
 
     window_size = forms.IntegerField(
                    widget = styled_widget,
-                   initial = 1000, 
+                   initial = 100, 
                    min_value = 0,
                    max_value =\
      settings.HARD_LIMITS['MAX_NUMBER_OF_BASES_IN_GENOMIC_LOCATION_REQUEST']/2 )
@@ -271,7 +271,7 @@ class SearchByGeneNameForm(forms.Form):
     window_size = forms.IntegerField(
        widget = styled_widget,
        required = True,
-       initial = 1000, 
+       initial = 100, 
        min_value = 0, 
        max_value = \
         settings.HARD_LIMITS['MAX_NUMBER_OF_BASES_IN_GENOMIC_LOCATION_REQUEST']

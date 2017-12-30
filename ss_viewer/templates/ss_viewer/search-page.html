@@ -121,7 +121,7 @@
 
 
 
- <div style="display: none; margin-top: 1em; margin-right: 1.5em;" id="download_button" >
+ <div style="display: none; margin-top: 1em;" id="download_button" >
      <input type="submit" name="action"
           value="Download Results"
           class="btn-xs btn-danger"
@@ -217,16 +217,6 @@
       writeBothCutoffDirections();
       setupJumpToPageControl();
     });//end of document.ready stuff.
-
-    //console.log("testing tooltipster plugin");
-    //  $('.tiptip').tooltipster();
-
-    /*console.log("specifically choosing to skip the .tooltip funciton to test CSS3 tooltips");
-    $(".formcontrol").tooltip({
-      position: "bottom left",
-      offset: [-2, 10],
-      opacity: 1.0
-    });*/
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
         var target = $(e.target).attr("href");
