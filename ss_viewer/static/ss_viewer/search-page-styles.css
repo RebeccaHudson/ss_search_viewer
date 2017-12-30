@@ -46,7 +46,12 @@ ul#tabs li a { text-align: center; }
        font-weight: bolder; 
        color: white;
      }
-
+ 
+     /* make the LOSS and GAIN of function buttons the same
+     *  height as the form controls they're in flow with */ 
+     button.loss, button.gain { 
+         height: 34px;
+     }
 
 
      tr td.cl_plot {

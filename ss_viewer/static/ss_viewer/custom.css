@@ -140,8 +140,8 @@ label[for~="tf_library"] {
 }
 
 input[type='number'] {
-  /*width: 70%;*/
-  width: 13.5em;
+  width: 80%;
+  /*width: 13.5em;*/
 }
 
 input[type='text'] {
@@ -175,7 +175,7 @@ table.formControls.extras{
 }
 
 table.formControls.leftside td.control-column {
-  width: 18em;
+  width: 14em;
 }
 
 td.half-of-shared-controls {
