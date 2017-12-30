@@ -10,15 +10,16 @@
 
 <table>
 <tr>
-<td>
+<td class="half-of-shared-controls">
     <table class="formControls leftside">
     <tbody>
     <tr>
       <td> 
          <label data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_rank"> 
-         P-value SNP impact <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+         P-value SNP impact<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
          </label>
       </td>
+      <td class="operator-buttons"></td>
       <td class="control-column"> 
          {{ shared_search_controls_form.pvalue_rank}}
       </td>
@@ -27,6 +28,7 @@
     <td >
         <label data-balloon="{{ tooltips.gain_and_loss }}" data-balloon-pos="up" data-balloon-length="large"> SNP impact type</label>
     </td>
+    <td class="operator-buttons"></td>
     <td class="control-column">
        <div class="btn-group-vertical" style="width: 12em;" role="group">
          <button class="gain"  id="set_gain">GAIN of function</button>  
@@ -41,8 +43,8 @@
             <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
         <label> 
       </td>
-      <td>
-         {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} 
+      <td class="operator-buttons"> {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} </td>
+       <td> 
          {{ shared_search_controls_form.pvalue_ref }}
       </td>
     </tr>
@@ -52,18 +54,19 @@
             <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
           </label>
         </td>
-        <td> 
-          {% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} 
+        <td class="operator-buttons">{% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} </td>
+        <td>
              {{ shared_search_controls_form.pvalue_snp }} 
         </td>
     </tr>
     </tbody>
     </table>
 </td>
-<td>
+<td class="half-of-shared-controls" >
  <table class="formControls extras">
     <tbody>
     <tr>
+ 
        {% include "ss_viewer/sort_widget.html"  %} 
     </tr>
     <tr>
