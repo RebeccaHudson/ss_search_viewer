@@ -126,7 +126,7 @@ class StandardFormset:
 
      @staticmethod
      def show_multisearch_page(request):
-          searchpage_template = 'ss_viewer/multi-searchpage.html'
+          searchpage_template = 'ss_viewer/search-page.html'
           context = StandardFormset.setup_formset_context()
           context.update({'status_message' : "Enter a search.",
                           'active_tab'     : 'none-yet'})

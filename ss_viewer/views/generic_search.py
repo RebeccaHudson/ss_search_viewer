@@ -15,7 +15,7 @@ from django.conf import settings
 import json
 
 class GenericSearchView(View):
-    template_name = 'ss_viewer/multi-searchpage.html'
+    template_name = 'ss_viewer/search-page.html'
     search_form = None 
     shared_search_controls_errors = None
     shared_search_controls_dict = None 
@@ -23,7 +23,7 @@ class GenericSearchView(View):
 
     #For search views, this should just point back to the main search page.
     def get(self, request, *args, **kwargs):
-        return redirect(reverse('ss_viewer:multi-search')) 
+        return redirect(reverse('ss_viewer:search')) 
 
     #Pass the request through without change if it's a download request.
     def check_for_download_request(self, request):
