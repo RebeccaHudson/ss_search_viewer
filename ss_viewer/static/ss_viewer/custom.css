@@ -115,7 +115,14 @@ ul { list-style-type: none; }
 
 ul#id_trans_factor-tf_library li  { display: inline; }
 
-ul#id_trans_factor-tf_library label { margin-left: 1em; }
+/*ul#id_trans_factor-tf_library label { margin-left: 1em; }*/
+
+table.formControls.trans-factor { width: 45em }
+
+table.formControls.trans-factor label[for^="id_trans_factor-tf_library"] { width: 10em; } 
+
+
+
 
 input[type="radio"] {  
   float: left;
@@ -146,8 +153,11 @@ select.form-control {
 }
 
 td.trans-factor > select.form-control { 
-  width: 90%;
+  width: 70%;
 }
+
+td.tf-drop-label { width: 20em; }
+
 
 table.formControls{
   width: 29em;

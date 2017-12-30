@@ -10,25 +10,25 @@
   </div>
   <form role="form" enctype="multipart/form-data" action="{% url 'ss_viewer:trans-factor-search' %}" method="post">
   {% csrf_token %}
-<table class="formControls">
+<table class="formControls trans-factor">
 <tbody>
 <tr> 
-  <td><label style="width: 9em;" for="id_trans_factor-tf_library_0" data-balloon="{{ tooltips.trans_factor_library }}" data-balloon-pos="up" > 
-       Select a transcription factor library
+  <td><label data-balloon="{{ tooltips.trans_factor_library }}" data-balloon-pos="up" > 
+       Select a Transcription Factor Library
       </label> 
   </td>
   <td>   {{ tf_search_form.tf_library  }} </td>
 </tr>
 <tr>
-  <td><label style="width:9em; " for="id_trans_factor-trans_factor" data-balloon="{{ tooltips.trans_factor_select }}" data-balloon-pos="up">
+  <td class="tf-drop-label" ><label  for="id_trans_factor-trans_factor" data-balloon="{{ tooltips.trans_factor_select }}" data-balloon-pos="up">
        Select JASPAR Transcription Factor 
       </label></td>
-  <td class='trans-factor'> {{ tf_search_form.trans_factor  }}</td>
+  <td  align="center" class='trans-factor'> {{ tf_search_form.trans_factor  }}</td>
 </tr>
 <tr> 
-  <td><label style="width:9em;" for="id_trans_factor-encode_trans_factor" data-balloon="{{ tooltips.trans_factor_select }}" data-balloon-pos="up">Select ENCODE Transcription Factor
+  <td class="tf-drop-label"><label  for="id_trans_factor-encode_trans_factor" data-balloon="{{ tooltips.trans_factor_select }}" data-balloon-pos="up">Select ENCODE Transcription Factor
       </label></td>
-  <td class='trans-factor'> {{ tf_search_form.encode_trans_factor  }}</td>
+  <td align="center" class='trans-factor'> {{ tf_search_form.encode_trans_factor  }}</td>
 </tr>
 </tbody>
 </table>
