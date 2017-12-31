@@ -211,7 +211,7 @@ class APIResponseHandler:
         #Showing page N, a through b of N total pairs.
         #could be refactored so the following calculation is not repeated in the 'Paging' class.
         totalPageCount = (hitcount / settings.API_HOST_INFO['result_page_size']) + 1
-        hitsMsg =  "Query returned {:,} (SNP,TF) pairs.".format(hitcount)
+        hitsMsg =  "Query returned {:,} (SNP, TF) pairs.".format(hitcount)
         return hitsMsg
                     
     @staticmethod 
