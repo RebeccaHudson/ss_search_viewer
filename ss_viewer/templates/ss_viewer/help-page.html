@@ -255,7 +255,7 @@ body {
 
           <li> ENCODE Library </li>
           <section>
-          The ENCODE library features systematic discovery and characterization of regulatory motifs in transcription factor binding experiments (Kheradpour et al., 2014). These PWSs are available <a href="http://compbio.mit.edu/encode-motifs/">here</a>. This collection contains known motifs from the literature 
+          The ENCODE library features systematic discovery and characterization of regulatory motifs in transcription factor binding experiments (Kheradpour et al., 2014). These PWMs are available <a href="http://compbio.mit.edu/encode-motifs/">here</a>. This collection contains known motifs from the literature 
  (TRANSFAC, JASPAR Homo Sapiens, and UniPROBE), in addition to the <i>de novo </i> motifs from hundreds of transcription factor binding experiments performed by <a href="encodeproject.org">ENCODE</a>. 
 These motifs were discovered using established tools such as MDscan , MEME, Trawler, and AlignACE . 
 All known and discovered motifs are grouped as in the table <a href="http://compbio.mit.edu/encode-motifs/">here</a>. 
@@ -264,7 +264,7 @@ For known ENCODE motifs, the naming convention indicates the source which initia
 
            <section> <!-- begin exapmle section -->
             <h5> <span class="underline">Example<span></h5>
-            <p>ENCODE library provides 22 known motifs and 6 discovered motifs for transcription factor GATA, which are available <a href="http://compbio.mit.edu/encode-motifs/tf.html?GATA">here</a>. Here, we present one known GATA motif (GATA_known12) and one discovered GATA motif (GATA_disc1). GATA_known12 is from JASPAR Homo Sapiens and GATA_disc1 is obtained from ENCODE Snyder Lab GATA1 ChiP-seq TF experiments with the MDscan tool.</p>
+            <p>The ENCODE library provides 22 known motifs and 6 discovered motifs for transcription factor GATA, which are available <a href="http://compbio.mit.edu/encode-motifs/tf.html?GATA">here</a>. Here, we present one known GATA motif (GATA_known12) and one discovered GATA motif (GATA_disc1). GATA_known12 is from JASPAR Homo Sapiens and GATA_disc1 is obtained from ENCODE Snyder Lab GATA1 ChiP-seq TF experiments with the MDscan tool.</p>
             <p>
             <figure>
              <!-- filenames for images do not match up to captioned figure numbers! -->
@@ -434,8 +434,8 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
                     atSNP provides the most comprehensive information on identifying impact of SNPs on transcription factor binding. 
                     Only atSNP and is-rSNP provide statistical quantification of the impact of SNPs on the binding. Furthermore, 
                     atSNP addresses the scalability issue with an efficient computation enabled by an importance sampling technique. 
-                    atSNP visualizes the best matches with both the reference and the SNP alleles and their change created by the SNP.  
-                    atSNP Search results are obtained by the R package <a href="https://github.com/keleslab/atSNP">atSNP</a>, that implements this procedure.
+                    atSNP visualizes the best matches with both the reference and the SNP alleles and the change in those matches created by the SNP.  
+                    atSNP Search results are obtained from the R package <a href="https://github.com/keleslab/atSNP">atSNP</a>, that implements this procedure.
                 </p>
               </section> <!-- end of atSNP overview section -->
 
@@ -443,10 +443,10 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
                <h4><b>PROCEDURE</b></h4>
                <ul>
                  <li><b>Step 1: affinity score                                 </b> </li>
-                   <p> Using a PWM as a set of parameters for a product multinomical model, atSNP computes log likelihoods for all subsequences overlapping the SNP location that have the same length as the motif. The best matches are those with the largest log likelihood on both the SNP and reference alleles. The scores of the best matches are used for statistical testing. </p>
+                   <p> Using a PWM as a set of parameters for a product multinomial model, atSNP computes log likelihoods for all subsequences overlapping the SNP location that have the same length as the motif. The best matches are those with the largest log likelihood on both the SNP and reference alleles. The scores of the best matches are used for statistical testing. </p>
                    <p>
                    <h5> <span class="underline">Example<span></h5>
-                   We evaluate impact of a SNP, rs117959046, on transcription factor GATA2 binding, with GATA_known12 motif:
+                   We evaluate impact of a SNP, rs117959046, on the binding of the transcription factor GATA2, with GATA_known12 motif:
                 <figure>
                    <img src="{% static 'ss_viewer/docs/image04.png' %}" height="200px"  id="figure-05"/>
                    <figcaption> Figure 5 Sequence logo of GATA_known12 motif </figcaption> 
@@ -524,7 +524,7 @@ The motif length is 5 and sequences of length 9 centered at the SNP position are
                  <p>The p-value for the affinity score with the reference allele (p-value Reference) is the probability that a random sequence has an affinity score larger than or equal to the best match score with the reference allele. atSNP simulates random sequences using a first order Markov model. It estimates the p-value as the frequency of randomly getting as large or larger affinity scores than the best match score with the reference allele. Similarly, the p-value for the affinity score with the SNP allele (p-value SNP) is estimated as the frequency of getting random scores as large or larger than the best match score with the SNP allele.</p>
                    <p>
                    <h5> <span class="underline">Example (Continued)<span></h5>
-(Continued From Step 1) The log likelihood score for the reference allele is <span class="red">-25.30</span>, and the log likelihood score for the SNP allele is <span class="red">-2.28</span>. The p-value for the reference allele is the probability that a random sequence has an affinity score larger than or equal to <span class="red">-25.30</span>, which is our target region (Figure 7). For such a small p-value, naive Monte-Carlo generates a small number of scores in the target region (Figure 8), thus requires a large number of simulations. Alternatively, in atSNP, the importance sampling generates many more scores in the target region (Figure 9). The p-value for the reference allele is then estimated by the weighted frequency as p-value Reference = <span class="red">0.499</span>. The importance sampling algorithm significantly reduces the required number of simulations. Similarly, the p-value for the SNP allele, p-value SNP, is estimated as <span class="red">0.009</span>. 
+(Continued From Step 1) The log likelihood score for the reference allele is <span class="red">-25.30</span>, and the log likelihood score for the SNP allele is <span class="red">-2.28</span>. The p-value for the reference allele is the probability that a random sequence has an affinity score larger than or equal to <span class="red">-25.30</span>, which is our target region (Figure 7). For such a small p-value, naive Monte-Carlo generates a small number of scores in the target region (Figure 8), and thus requires a large number of simulations. Alternatively, in atSNP, the importance sampling generates many more scores in the target region (Figure 9). The p-value for the reference allele is then estimated by the weighted frequency as p-value Reference = <span class="red">0.499</span>. The importance sampling algorithm significantly reduces the required number of simulations. Similarly, the p-value for the SNP allele, p-value SNP, is estimated as <span class="red">0.009</span>. 
                    </p>
                    <p>
                 <figure style="float: left;">
@@ -831,7 +831,7 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
              <figcaption> Figure 11 Composite sequence logo for this result </figcaption> 
           </figure>
           <p>
-The SNP “rs117959046” is a genetic mutation from C to T on the forward strand in Chromosome 1: 134339671. This creates a highly likely binding site for the transcription factor GATA2. This is supported by the p-value SNP Impact statistic, 0.00484. This p-value indicates significance of the binding creation by the SNP. Further, the p-value for the best match between the GATA 2 motif and the SNP allele is 0.00898, whereas p-value for the best match between the motif and the reference allele is 0.499. This implies that binding of GATA 2 transcription factor on the SNP allele is statistically significant while the significance of binding of GATA 2 on the reference allele is not statistically supported. Overall, atSNP statistically supports that the SNP significantly enhances binding for GATA 2.
+The SNP “rs117959046” is a genetic mutation from C to T on the forward strand in Chromosome 1: 134339671. This creates a highly likely binding site for the transcription factor GATA2. This is supported by the p-value SNP Impact statistic, 0.00484. This p-value indicates significance of the binding creation by the SNP. Further, the p-value for the best match between the GATA 2 motif and the SNP allele is 0.00898, whereas the p-value for the best match between the motif and the reference allele is 0.499. This implies that binding of GATA 2 transcription factor on the SNP allele is statistically significant while the significance of binding of GATA 2 on the reference allele is not statistically supported. Overall, atSNP statistically supports that the SNP significantly enhances binding for GATA 2.
           </p>
           </section> <!-- end of example section -->
          </div> <!-- end of accordion panel for section 3 -->
@@ -855,7 +855,7 @@ The SNP “rs117959046” is a genetic mutation from C to T on the forward stran
                 The SNP, rs117959046, is highly likely to create a binding site for the transcription factor GATA2 on the genome. 
                 The composite logo plot illustrates this with the comparison between the best matches of GATA2_2 PWM on the reference and SNP alleles. 
                 Among subsequences of length 5 overlapping the SNP position with the reference allele, “AGACA” on the forward strand has the largest log likelihood score.
-                The subsequence is referred to as the “best match with the reference allele”. This subsequence is depicted on the second row with the corresponding PWM 
+                This subsequence is referred to as the “best match with the reference allele”. This subsequence is depicted on the second row with the corresponding PWM 
                 on the first row. Similarly, among subsequences of length 5 overlapping the SNP position with the SNP allele, “AGATA” on the forward strand is referred
                 to as the “best match with the SNP allele”. It is depicted on the third row with the corresponding PWM on the fourth row.
               </p>
@@ -868,7 +868,7 @@ The SNP “rs117959046” is a genetic mutation from C to T on the forward stran
 
              <p>
 The beginning of the best match on the SNP allele is 3 bases before the SNP position in the 5' to 3' direction on the reverse strand.
-Among subsequences of length 11 overlapping the SNP position on the SNP allele, this subsequence has the largest log likelihood score. This subsequence is referred to as “best match with the SNP allele” and depicted on the third row with the corresponding PWM on the fourth row.  Similarly, we can find “best match with the reference allele” and depict it on the second row with the corresponding PWM on the first row. The beginning of the best match on the reference allele is one base before the SNP position in the 5' to 3' direction on the forward strand.
+Among subsequences of length 11 overlapping the SNP position on the SNP allele, this subsequence has the largest log likelihood score. This subsequence is referred to as the “best match with the SNP allele” and is depicted on the third row with the corresponding PWM on the fourth row.  Similarly, we can find the “best match with the reference allele” which is depicted on the second row with the corresponding PWM on the first row. The beginning of the best match on the reference allele is one base before the SNP position in the 5' to 3' direction on the forward strand.
              </p>
             </section>           <!-- end examples section -->
            </div> <!-- end of accordion panel for part 4-->

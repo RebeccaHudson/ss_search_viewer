@@ -34,7 +34,8 @@
     factor-DNA interactions based on position weight matrices (PWMs).
     The current version is built on SNPs from <a href="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_summary.cgi?build_id=144">dbSNP Build 144</a>
     for the human genome assembly GRCh38/hg38. atSNP Search uses <i>in silico</i>
-    calculations based on the statistical method in Zuo et al., Bioinformatics (2015).
+    calculations based on the statistical method in 
+    <a href="https://doi.org/10.1093/bioinformatics/btv328">Zuo et al., Bioinformatics (2015)</a>.
     atSNP first-time users can start scanning vast amounts of
     SNP-PWM combinations for potential gain and loss of function with two key features:
 </p>          
@@ -80,10 +81,11 @@
   of transcription factor position weight matrix libraries. These are the 
   <a href="http://jaspar.genereg.net/">JASPAR</a> and 
   <a href="http://compbio.mit.edu/encode-motifs/">ENCODE</a> libraries.
-  atSNP Search contains statistical evaluations for a total of 37 billion SNP-PWM pairs.
-  The current release enables querying of these evaluations which exhibit a significant
-  score change and a significant match with either the reference or the SNP allele.
-  Of these, results for SNP-PWM combinations with 
+
+  atSNP Search evaluated 307 billion SNP-PWM pairs.
+  The current release enables querying of these statistical evaluations which exhibit a significant
+  score change or a significant match with either the reference or the SNP allele.
+  As a result, 37 billion SMP-PWM pairs with 
   <a href="{% url 'ss_viewer:help-page' %}#part-3:pvalueTable"> p-value SNP impact </a>, 
   <a href="{% url 'ss_viewer:help-page' %}#part-3:pvalueTable"> p-value Reference </a>, and/or
   <a href="{% url 'ss_viewer:help-page' %}#part-3:pvalueTable"> p-value SNP </a> 

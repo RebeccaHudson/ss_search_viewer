@@ -54,7 +54,7 @@
 <section>
 <b>Q3. How does atSNP Search handle SNPs with indels, and others?</b>
 <ul>
-<li>A3. dbSNP classifies genetic variation in eight types. Click <a href="http://www.ncbi.nlm.nih.gov/books/NBK44447"> here </a> for the types of variation. The current atSNP Search only considers the major single nucleotide variation class. This class constitutes 88.8% of all genetic variation, specifically 132,946,852 SNPs out of 149,735,377.</li>
+<li>A3. dbSNP classifies genetic variation into eight types. Click <a href="http://www.ncbi.nlm.nih.gov/books/NBK44447"> here </a> for the types of variation. The current atSNP Search only considers the major single nucleotide variation class. This class constitutes 88.8% of all genetic variation, specifically 132,946,852 SNPs out of 149,735,377.</li>
 </ul>
 </section>
 </p>
@@ -72,7 +72,7 @@
 <section>
 <b>Q5. Which motif libraries were used for atSNP?</b>
 <ul>
-<li>A5. We used JASPAR vertebrate library and known and discovered motifs for the ENCODE TF ChIP-seq datasets, which are available <a href="http://jaspar2014.genereg.net/">here for JASPAR</a>, and <a href="http://compbio.mit.edu/encode-motifs/">here for ENCODE</a>, respectively. For users who want to learn more about the libraries, visit the websites or click <a href="{% url 'ss_viewer:help-page' %}#part-3:motifTable">here</a></li>
+<li>A5. We used the JASPAR vertebrate library and known and discovered motifs for the ENCODE TF ChIP-seq datasets, which are available <a href="http://jaspar2014.genereg.net/">here for JASPAR</a>, and <a href="http://compbio.mit.edu/encode-motifs/">here for ENCODE</a>, respectively. For users who want to learn more about the libraries, visit the websites or click <a href="{% url 'ss_viewer:help-page' %}#part-3:motifTable">here</a></li>
 </ul>
 </section>
 </p>
@@ -94,7 +94,8 @@
 <section>
 <b>Q7. Are downloads available?</b>
 <ul>
-<li>A7. The current release allows downloading the results up to the first 5,000 rows in CSV format.</li>
+<li>A7. The current release allows users to download results in CSV format from queries that return 5,000 results or less.
+</li>
 </ul>
 </section>
 </p>
@@ -115,7 +116,8 @@
 <b>Q9. Why can't I page past 10,000 search results?</b>
 <ul>
 <li>
-   A9. If more than 10,000 results are returned, only the first 10,000 will be avaiable to page through. 
+   A9. If more than 10,000 results are returned, due to limits on computing resources,
+       only the first 10,000 will be avaiable to page through. 
        To access results past the 10,000th, adjust the sort order and/or priority.
 </li>
 </ul>
@@ -130,8 +132,9 @@
 <li>A10. 
       <ul>
       <li>
-      
-      1. Zuo, Chandler, Shin, Sunyoung, and Keleş, Sündüz. atSNP: transcription factor binding affinity testing for regulatory SNP detection. Bioinformatics (2015): 31, 3353-3355.</li>
+         <a href="https://doi.org/10.1093/bioinformatics/btv328">
+         1. Zuo, Chandler, Shin, Sunyoung, and Keleş, Sündüz. atSNP: transcription factor binding affinity testing for regulatory SNP detection. Bioinformatics (2015): 31, 3353-3355.</a>
+      </li>
       <li>
      
      2. Shin, Sunyoung, Hudson, Rebecca, Harrison, Christopher, Craven, Mark, and Keleş, Sündüz. atSNP Search: a web resource for quantifying impact of dbSNP SNPs on transcription factor binding. (2018). In preparation.
@@ -248,7 +251,7 @@ This is based on computing information content (IC) of each individual position 
               P-value SNP: Descending<br />
            </p>
            Similarly,top gain-of-function candidates can be revealed by<br />
-           Sort by
+           Sort by:
            <p style="margin-left: 2em;"> 
               P-value SNP: Ascending<br />
               P-value SNP Impact:  Ascending<br />
@@ -278,7 +281,7 @@ This is based on computing information content (IC) of each individual position 
    <b>Q18. I would like to evaluate my SNPs against PWMs that are not part of JASPAR or ENCODE. Any suggestions?</b>
      <ul> 
        <li>
-          A18. We suggest using the <a href="https://github.com/keleslab/atSNP">atSNP</a> R package which allows user defined PWMs. 
+          A18. We suggest using the <a href="https://github.com/keleslab/atSNP">atSNP</a> R package, which allows user defined PWMs. 
        </li>
      </ul>
   </section>
@@ -319,7 +322,8 @@ This is based on computing information content (IC) of each individual position 
    <b>Q21. What p-value cutoffs  does atSNP Search use if I don’t specify gain or loss of function?</b>
     <ul>
        <li>
-        A21. atSNP Search by default returns records with
+        A21. atSNP Search by default returns records with p-values indicating that they are candidates 
+             for gain of function or loss of function.
            <br />  
            <p>
               <ul>
