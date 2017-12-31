@@ -217,19 +217,19 @@ function drawMarkerLine(targetForLine, pwmOffset, unshiftedMotifLength, xScale, 
                      .attr("x2", xEnd) 
                      .attr("y2", y)
                      .attr("stroke-width", 2)
-                     .attr("stroke", "blue")
+                     .attr("stroke", "#08519c")
                      .attr("marker-end", "url(#Triangle)");
 
          targetForLine.append('text') 
                        .attr("font-size", 12)  
-                       .attr('stroke', 'blue') 
+                       .attr('stroke', "#08519c")
                        .text(leftLabelText)
                        .attr('x', xLeft - 13) 
                        .attr('y', y + 11);
 
          targetForLine.append('text') 
                        .attr("font-size", 12)  
-                       .attr('stroke', 'blue') 
+                       .attr('stroke', "#08519c")
                        .text(rightLabelText)
                        .attr('x', xRight + 10) 
                        .attr('y', y + 11);

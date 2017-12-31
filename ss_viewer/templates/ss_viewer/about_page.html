@@ -33,7 +33,7 @@
     atSNP Search provides statistical evaluation of impact of SNPs on transcription
     factor-DNA interactions based on position weight matrices (PWMs).
     The current version is built on SNPs from <a href="https://www.ncbi.nlm.nih.gov/projects/SNP/snp_summary.cgi?build_id=144">dbSNP Build 144</a>
-    for the human genome assembly GRCh38/hg38. atSNP Search uses <i>in slilico</i>
+    for the human genome assembly GRCh38/hg38. atSNP Search uses <i>in silico</i>
     calculations based on the statistical method in Zuo et al., Bioinformatics (2015).
     atSNP first-time users can start scanning vast amounts of
     SNP-PWM combinations for potential gain and loss of function with two key features:
@@ -112,18 +112,23 @@
     <div style="box-shadow: 1px 1px 1px 1px #888888;
                 padding: 1em;
                 margin-bottom: 1em;">
-         <img style="height: 40px;"
-            src="{% static 'ss_viewer/CPCP-logo.png' %}" />
+         <a href="http://www.cpcp.wisc.edu/">
+            <img style="height: 40px;"
+               src="{% static 'ss_viewer/CPCP-logo.png' %}" />
+
          <span> Center for Predictive Computational Phenotyping</span>
+         </a>
     </div>
 
     <div style="box-shadow: 1px 1px 1px 1px #888888;
                 padding: 1em;
                 margin-bottom: 1em;">
          <!-- altering the margin-right to line up labels -->
-         <img style="height: 50px; margin-right:5px"
-            src="{% static 'ss_viewer/UW-logo.png' %}" />
+         <a href="https://www.wisc.edu/">
+           <img style="height: 50px; margin-right:5px"
+              src="{% static 'ss_viewer/UW-logo.png' %}" />
          <span> University of Wisconsin - Madison</span>
+         </a>
     </div>
 
     <div style="box-shadow: 1px 1px 1px 1px #888888;

@@ -101,7 +101,7 @@ function downloadSinglePlot(e){
                                    .attr("id","Triangle")
                                    .attr("markerWidth","5")
                                    .attr("markerHeight","3")
-                                   .attr("stroke", "blue")
+                                   .attr("stroke", "#08519c")
                                    .attr("orient", "auto")
                                    .attr("viewBox", "0 0 10 10")
                                    .attr('refX', '1')
