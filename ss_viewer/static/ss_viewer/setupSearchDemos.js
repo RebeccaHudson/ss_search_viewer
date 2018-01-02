@@ -64,8 +64,9 @@ function setup_gain_and_loss_demos(){
 
 function trans_factor_search_demo(){
    $('#id_trans_factor-trans_factor').val('ZNF263'); 
-   $('#id_trans_factor-encode_trans_factor').attr('disabled', 'disabled');
-   $("#id_trans_factor-trans_factor").removeAttr('disabled');
+   console.log("do not diable what can just be hidden.");
+   //$('#id_trans_factor-encode_trans_factor').attr('disabled', 'disabled');
+   //$("#id_trans_factor-trans_factor").removeAttr('disabled');
    $('#id_trans_factor-tf_library_0').prop('checked', true);
    $('#id_trans_factor-tf_library_1').removeAttr('checked'); 
 }
