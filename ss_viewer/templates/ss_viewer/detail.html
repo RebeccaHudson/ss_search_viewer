@@ -84,7 +84,7 @@
             <tbody>
               <tr> <td>rsID                    </td> 
                    <td>
-                    <a target="_blank" href='{{ dbsnp_link }}'>
+                    <a onclick="return !window.open(this.href);" target="_blank" href='{{ dbsnp_link }}'>
                           {{ api_response.snpid }}
                     </a> 
                     </td> 
@@ -94,7 +94,7 @@
                          Link to UCSC Genome Browser
                        </span></sub> -->
                    </td> 
-                   <td><a target="_blank" href="{{ ucsc_link }}">
+                   <td><a onclick="return !window.open(this.href);"  target="_blank" href="{{ ucsc_link }}">
                        {{ api_response.chr }}:{{ api_response.pos }}
                        </a>
                    </td>
@@ -118,13 +118,13 @@
              </thead>
             <tbody>
               <tr><td>Motif                           </td> 
-                  <td>{% if motif_link %}<a target="_blank" href="{{ motif_link }}">{% endif %}
+                  <td>{% if motif_link %}<a  onclick="return !window(this.href);"  target="_blank" href="{{ motif_link }}">{% endif %}
                      {{ api_response.motif }}
                     {% if motif_link %}</a>{% endif %}
                   </td>
               </tr>
               <tr><td>Transcription Factor            </td> 
-                  <td>{% if factorbook_link %}<a target="_blank" href="{{ factorbook_link }}">{% endif %}
+                  <td>{% if factorbook_link %}<a  onclick="return !window(this.href);" target="_blank" href="{{ factorbook_link }}">{% endif %}
                        {{ api_response.trans_factor }}
                       {% if factorbook_link %}</a>{% endif %}
                  </td>

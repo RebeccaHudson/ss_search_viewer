@@ -134,8 +134,8 @@ function downloadSinglePlot(e){
        a.href = canvas.toDataURL('image/png');
        document.body.appendChild(a);
        a.click();
-       console.log("removing plot link after download.");
-       $(a).remove();
+       //console.log("removing plot link after download.");
+       //$(a).remove();
   }
 
 }

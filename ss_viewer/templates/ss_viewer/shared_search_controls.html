@@ -16,7 +16,7 @@
     <tr>
       <td> 
          <label data-balloon="{{ tooltips.pvalue_rank }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_rank"> 
-         P-value SNP impact<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+         P-value SNP impact<sup><a onclick="return !window(this.href);" target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
          </label>
       </td>
       <td class="operator-buttons"></td>
@@ -40,7 +40,7 @@
     <tr>
       <td class="control-column" >
         <label data-balloon="{{ tooltips.pvalue_ref }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_ref"> P-value Reference
-            <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+            <sup><a onclick="return !window(this.href);"  target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
         <label> 
       </td>
       <td class="operator-buttons"> {% include "ss_viewer/directional.html" with btn_name='pvalue_ref' %} </td>
@@ -51,7 +51,7 @@
     <tr>
         <td>
           <label data-balloon="{{ tooltips.pvalue_snp }}" data-balloon-pos="right" data-balloon-length="large" for="id_pvalue_snp"> P-value SNP 
-            <sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
+            <sup><a onclick="return !window(this.href);"  target="_blank" href="{% url 'ss_viewer:help-page'%}#part-3:pvalueTable">?</a></sup>
           </label>
         </td>
         <td class="operator-buttons">{% include "ss_viewer/directional.html" with btn_name='pvalue_snp' %} </td>
@@ -70,7 +70,8 @@
        {% include "ss_viewer/sort_widget.html"  %} 
     </tr>
     <tr>
-        <td><label data-balloon="{{ tooltips.motif_degeneracy }}" data-balloon-pos="down" data-balloon-length="fit" for="id_ic_filter">Filter by motif degeneracy<sup><a target="_blank" href="{% url 'ss_viewer:help-page'%}#part-6:part-6">?</a></sup>
+        <td><label data-balloon="{{ tooltips.motif_degeneracy }}" data-balloon-pos="down" data-balloon-length="fit" for="id_ic_filter">Filter by motif degeneracy<sup>
+        <a onclick="return !window(this.href);"  target="_blank" href="{% url 'ss_viewer:help-page'%}#part-6:part-6">?</a></sup>
         </label></td>
         <td> {{ shared_search_controls_form.ic_filter }}  </td>
     </tr>

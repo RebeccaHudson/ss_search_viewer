@@ -31,7 +31,7 @@ function setup_shared_search_controls_dict(){
     var v = $(one_thing).val(); 
     var w = $(one_thing).attr('name');
     console.log("hand iterating: k = " + w + "  v= " + v);
-    if (w == 'ic_filter' ){ alternate_motif_ic.push(v);  }else{
+    if ( ((w == 'ic_filter')) && ( $(one_thing)[0].checked )) { alternate_motif_ic.push(v);  }else{
        alternate_shared_search_controls_dict[w] = v;    
     }
   }
