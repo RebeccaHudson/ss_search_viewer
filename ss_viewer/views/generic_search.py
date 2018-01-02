@@ -74,6 +74,9 @@ class GenericSearchView(View):
     #Not paging or download. 
     def setup_form_for_standard_request(self, request):
         self.search_form = self.form_class(request.POST, request.FILES)
+        print("FOOBARFOOBARFOOBARFOOBARFOOBARFOOBARFOOBARFOOBAR")
+        print("request.FILES: " + repr(request.FILES))
+
         self.setup_shared_search_controls_form(request)
 
     #Must include some handling for shared_search_controls.
@@ -106,6 +109,9 @@ class GenericSearchView(View):
     def post(self, request, *args, **kwargs):
         request = self.check_for_download_request(request) 
         #rearranges the request if it's a download.
+        #if request.FILES:
+        #    print "There are request.files"
+        #    print repr(request.FILES)
 
         self.shared_search_controls_errors = [] #This should be a list, right?
 
@@ -115,6 +121,7 @@ class GenericSearchView(View):
             self.setup_form_for_paging_or_download_request(request)
         else: 
             #case when it's a basic (not paging or download) search
+            print(repr(request.POST.dict()))
             self.setup_form_for_standard_request(request)
 
         #if self.search_form.is_valid():

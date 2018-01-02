@@ -88,7 +88,7 @@ function downloadSinglePlot(e){
    console.log(e.target);
 
    */
-
+    
    console.log("following, is $(e.target).attr('id'): ");
    console.log($(e.target).attr('id'));
    var target_id = $(e.target).attr('id').replace('download-plot', 'target');
@@ -134,6 +134,8 @@ function downloadSinglePlot(e){
        a.href = canvas.toDataURL('image/png');
        document.body.appendChild(a);
        a.click();
+       console.log("removing plot link after download.");
+       $(a).remove();
   }
 
 }

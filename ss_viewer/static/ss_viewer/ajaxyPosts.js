@@ -1,4 +1,9 @@
 function pull_search_type(form_data){
+  console.log(form_data); //form_data is now a form_element
+  var action = $(form_data).attr('action').split("/")[1];
+  return action;
+  /*
+  // if the above logic works, then just scrap what's below here.
   var onekey = form_data.keys()[0];
   for (var key of form_data.keys()) {
       if ( key.search('-') > 0 ){
@@ -7,38 +12,115 @@ function pull_search_type(form_data){
           return prefix.replace('_', '-') + '-search';
       } 
    } 
+   */
 }
 
 function setup_shared_search_controls_dict(){
- var shared_search_controls_form_data  = 
-            new FormData(document.querySelector('#shared_controls'));
+  var shared_controls_element = document.querySelector('#shared_controls');
+  var shared_controls_inputs = $(shared_controls_element).find('input, input:hidden');
 
-  shared_search_controls_dict = {};
-  motif_ic = [];
-  /*  add each of the shared_form_controls to the formdata.*/
-  for (var pair of shared_search_controls_form_data.entries()) {
-     if (pair[0] == 'ic_filter' ){ motif_ic.push(pair[1]);  }else{
-        shared_search_controls_dict[pair[0]] = pair[1];
-     } 
-     //console.log("shared data key: " +  pair[0] +  " shared data value: " +  pair[1]);
+  console.log("how many are there?  " + shared_controls_inputs.length);
+  //console.log("the shared search controls form element follows");
+  console.log(shared_controls_element); 
+  var alternate_shared_search_controls_dict = {};
+  var alternate_motif_ic = []; 
+  console.log("without form data iteration");  
+  for ( var one_thing of shared_controls_inputs){
+    console.log("one item logged follows");
+    console.log(one_thing);
+    var v = $(one_thing).val(); 
+    var w = $(one_thing).attr('name');
+    console.log("hand iterating: k = " + w + "  v= " + v);
+    if (w == 'ic_filter' ){ alternate_motif_ic.push(v);  }else{
+       alternate_shared_search_controls_dict[w] = v;    
+    }
   }
+  alternate_shared_search_controls_dict['ic_filter']  = alternate_motif_ic;
+  alternate_shared_search_controls_dict['sort_order'] = 
+             JSON.parse(alternate_shared_search_controls_dict['sort_order']);
+  console.log("does this match the already established one? " );
+  console.log(alternate_shared_search_controls_dict);
+  return alternate_shared_search_controls_dict;
 
-  shared_search_controls_dict['ic_filter']  = motif_ic;
+  //var shared_search_controls_form_data  = 
+  //          new FormData(document.querySelector('#shared_controls'));
+  //shared_search_controls_dict = {};
+  //motif_ic = [];
+  ///*  add each of the shared_form_controls to the formdata.*/
+  //for (var pair of shared_search_controls_form_data.entries()) {
+  //   console.log("from entries: pair[0]: " + pair[0]  + "    pair[1]:" + pair[1]);  
 
-  //Sort order is stored as a string representation of a dictionary.
-  shared_search_controls_dict['sort_order'] = 
-             JSON.parse(shared_search_controls_dict['sort_order']);
+  //   if (pair[0] == 'ic_filter' ){ motif_ic.push(pair[1]);  }else{
+  //      shared_search_controls_dict[pair[0]] = pair[1];
+  //   } 
+  //   //console.log("shared data key: " +  pair[0] +  " shared data value: " +  pair[1]);
+  //}
 
-  return shared_search_controls_dict;
+  //shared_search_controls_dict['ic_filter']  = motif_ic;
+
+  ////Sort order is stored as a string representation of a dictionary.
+  //shared_search_controls_dict['sort_order'] = 
+  //           JSON.parse(shared_search_controls_dict['sort_order']);
+
+  //console.log("here's the established, FormData version:")
+  //console.log(shared_search_controls_dict);
+  //return shared_search_controls_dict;
 }
 
 
 
+//replicate what you see in FormData, make a dict.
+function setup_alternate_to_form_data(){
+ var formElement = document.querySelector('div.active form');
+ var inputs = $(formElement).children().find("input, select");
+ var in_here = {};
+
+ //var select_elements = $(formElement).children.find("select"); 
+ //inputs.append(select_elements);  //does this add the select elements properly.
+
+ //Things I still need to handle: 
+ // 1. File inputs.
+ // 2. Inputs that are not in input elements, like the textarea for SNPids.
+ for (var one_input of inputs) {
+     console.log("here's one of the inputs"); 
+     console.log($(one_input));
+     var v = $(one_input);
+     console.log("heyheyheyheyheyheyheyheyheyhey");
+     console.log("name should follow");
+     var name_of_input = $(one_input).attr('name');
+     console.log(name_of_input);
+     var w = $(one_input).val();
+     var is_file_input = ($(one_input).attr('type') == 'file');
+     console.log(is_file_input);
+     if (is_file_input){
+         var file_to_add = one_input.files[0];        
+         console.log("found a file: " );
+         console.log(file_to_add);
+         in_here[name_of_input] = file_to_add;
+         continue;    
+     }
+     console.log("here:");
+     console.log(w);  // this is actually the value of the control.
+     in_here[name_of_input] =  w;
+     console.log("is this a file input?");
+     /*var v = one_input.value();*/
+ } 
+ console.log(in_here)
+ return in_here;
+}
+
+
+
+//TODO NOW: figure out a replacment for using the FormData class.
 function create_search_post(){
  var formElement = document.querySelector('div.active form');
+ console.log("calling function to replace formdata");
+ //var alt_form_data = setup_alternate_to_form_data();
+ //get a list of the elements in the form.
+ 
  form_data = new FormData(formElement); 
 
- var search_type = pull_search_type(form_data);
+ var search_type = pull_search_type(formElement);
  form_data.append('search_type', search_type);
  form_data.append('action',  'search');
 
@@ -58,7 +140,7 @@ function create_search_post(){
       },
       url: search_type + '/', 
       type: "POST", 
-      data: form_data,   
+      data: form_data,     //was just form_data
       processData: false,
       cache: false,
       contentType: false,
@@ -243,9 +325,13 @@ function create_download_post(search_type) {
           document.body.appendChild(a);
           a.click();
           $("div.status_message").text(result_text);
+          //console.log("removed the link immediately, there");
+          //a.remove();
       }
       if (xhttp.readyState == XMLHttpRequest.DONE) {
             show_or_hide_spinner(false);
+           // console.log("removed the link, there");
+           // a.remove();
       }
       console.log("the xhttp readyState will follow this:");
       console.log(xhttp.readyState);
