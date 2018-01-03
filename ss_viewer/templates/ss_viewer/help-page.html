@@ -51,6 +51,14 @@ table.borders td { border: 1px solid black;
                    padding: 5px; }
 
 
+section { 
+    margin-left: 2em;
+}
+
+p { font-size: 16px; }
+
+
+
 pre { 
    background-color: white;
    border: none;
@@ -65,10 +73,18 @@ figcaption{
 figure { 
     margin: 1em;
 }
+
 cite, cite a {
     font-style: normal;
-    font-size: 12px;
+    font-size: 12x;
 }
+
+
+
+cite.bigrefs { 
+    font-size: 16px; 
+}
+
 h6 {
     margin-bottom: 3px;
 }
@@ -76,10 +92,15 @@ h5 {
    margin-bottom: 2px;
 }
 section li {
+   /*font-size: 16px;*/
    margin-top: 1em;
+
+
+
 }
 .disc {
    list-style-type: disc;
+   font-size: 16px;
 } 
 span.red {  color : red; }
 td.red {    color: red; }
@@ -94,10 +115,7 @@ ol.refs { padding: 0px; }
 .refs li { margin-top: 2px; }
 .sequence {  font-size: 16px; 
              font-family: monospace; }
-section { 
-    margin-left: 2em;
-    font-size: 16px;
-}
+
 
 /* begin style content from : 
 https://www.w3schools.com/howto/tryit.asp?
@@ -173,6 +191,14 @@ body {
               }
 #ic_values td { padding: .2em .3em .2em .4em; }
 
+
+section ul.refs li cite, section ul.refs li cite a {
+    font-style: normal;
+    font-size: 12x;
+}
+
+
+
 </style>
 
 </head>
@@ -201,8 +227,9 @@ body {
                    position frequency matrices for 205 non-redundant profiles and their summaries. The
                    position frequency matrix is converted into the position weight matrix, which carries the 
                    same information.                     </p>
-                   <p>
+                   
                    <h5> <span class="underline">Example<span></h5>
+                    <p>
                     The JASPAR library contains a position frequency matrix for a transcription factor RUNX1
                     and its sequence logo as below. Its summary is presented 
                     <a href="http://jaspar2014.genereg.net/cgi-bin/jaspar_db.pl?ID=MA0002.2&rm=present&collection=CORE"> here</a>.
@@ -255,11 +282,13 @@ body {
 
           <li> ENCODE Library </li>
           <section>
+          <p>
           The ENCODE library features systematic discovery and characterization of regulatory motifs in transcription factor binding experiments (Kheradpour et al., 2014). These PWMs are available <a href="http://compbio.mit.edu/encode-motifs/">here</a>. This collection contains known motifs from the literature 
  (TRANSFAC, JASPAR Homo Sapiens, and UniPROBE), in addition to the <i>de novo </i> motifs from hundreds of transcription factor binding experiments performed by <a href="encodeproject.org">ENCODE</a>. 
 These motifs were discovered using established tools such as MDscan , MEME, Trawler, and AlignACE . 
 All known and discovered motifs are grouped as in the table <a href="http://compbio.mit.edu/encode-motifs/">here</a>. 
 For known ENCODE motifs, the naming convention indicates the source which initially reported the motif. For <i>de novo</i> motifs, the names contain information about the experiments that were used to discover the motif. This information includes the name of the lab and the names of any motif discovery tools used. 
+         </p>
 </section>
 
            <section> <!-- begin exapmle section -->
@@ -361,7 +390,7 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
             
           <section>
           <h6><span class="underline">References</span></h6>
-<ul class="refs">
+<ul class="refs" style="font-size: 12px;">
 <li><cite>Mathelier, A., Zhao, X., Zhang, A. W., Parcy, F., Worsley-Hunt, 
     R., Arenillas, D. J., Buchman, S., Chen, C.-y., Chou, A., Ienasescu,
     H., Lim, J., Shyr, C., Tan, G., Zhou, M., Lenhard, B., Sandelin, A. 
@@ -444,8 +473,9 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
                <ul>
                  <li><b>Step 1: affinity score                                 </b> </li>
                    <p> Using a PWM as a set of parameters for a product multinomial model, atSNP computes log likelihoods for all subsequences overlapping the SNP location that have the same length as the motif. The best matches are those with the largest log likelihood on both the SNP and reference alleles. The scores of the best matches are used for statistical testing. </p>
-                   <p>
+
                    <h5> <span class="underline">Example<span></h5>
+                   <p>
                    We evaluate impact of a SNP, rs117959046, on the binding of the transcription factor GATA2, with GATA_known12 motif:
                 <figure>
                    <img src="{% static 'ss_viewer/docs/image04.png' %}" height="200px"  id="figure-05"/>
@@ -522,8 +552,9 @@ The motif length is 5 and sequences of length 9 centered at the SNP position are
                  </p><!-- end paragraph of figures -->
                  <li><b>Step 2: p-value for the affinity score                 </b> </li>
                  <p>The p-value for the affinity score with the reference allele (p-value Reference) is the probability that a random sequence has an affinity score larger than or equal to the best match score with the reference allele. atSNP simulates random sequences using a first order Markov model. It estimates the p-value as the frequency of randomly getting as large or larger affinity scores than the best match score with the reference allele. Similarly, the p-value for the affinity score with the SNP allele (p-value SNP) is estimated as the frequency of getting random scores as large or larger than the best match score with the SNP allele.</p>
-                   <p>
+                   
                    <h5> <span class="underline">Example (Continued)<span></h5>
+                   <p>
 (Continued From Step 1) The log likelihood score for the reference allele is <span class="red">-25.30</span>, and the log likelihood score for the SNP allele is <span class="red">-2.28</span>. The p-value for the reference allele is the probability that a random sequence has an affinity score larger than or equal to <span class="red">-25.30</span>, which is our target region (Figure 7). For such a small p-value, naive Monte-Carlo generates a small number of scores in the target region (Figure 8), and thus requires a large number of simulations. Alternatively, in atSNP, the importance sampling generates many more scores in the target region (Figure 9). The p-value for the reference allele is then estimated by the weighted frequency as p-value Reference = <span class="red">0.499</span>. The importance sampling algorithm significantly reduces the required number of simulations. Similarly, the p-value for the SNP allele, p-value SNP, is estimated as <span class="red">0.009</span>. 
                    </p>
                    <p>
@@ -550,14 +581,15 @@ The motif length is 5 and sequences of length 9 centered at the SNP position are
                   </p> 
                  <li><b>Step 3: p-value for the affinity change between alleles</b> </li>
                    <p> atSNP tests the significance of <i>log rank ratio</i>: log(p-value Reference)-log(p-value SNP). atSNP computes the p-value based on a Monte-Carlo simulation that uses both the reference and SNP alleles together. This is done using the importance sampling technique as described in <b>Step 2</b>.</p>
-                   <p>
+
                    <h5> <span class="underline">Example (Continued)<span></h5> 
+                   <p>
 The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02</span>. With the importance sampling, the p-value for the log rank ratio is estimated as p-value rank = <span class="red">0.005</span>. In atSNP Search, this p-value is referred to as p-value SNP Impact.</p>
 
               <section> <!-- begin Reference section -->
                 <p>
-                <h6><span class="underline">Reference</span></h6>
-                 <ul class="refs">
+                <h6><span class="underline">References</span></h6>
+                 <ul class="refs" style="font-size: 12px;" >
                     <li><cite> Zuo, Chandler, Shin, Sunyoung, and Keleş, Sündüz. atSNP: transcription factor binding affinity testing for regulatory SNP detection. Bioinformatics (2015): 31, 3353-3355
                     </cite></li>
                     <li><cite> Andersen, Malin C., Engstrom, Par G., Lithwick, Stuart, Arenillas, David, Eriksson, Per, Lenhard, Boris, Wasserman, Wyeth W., and Odeberga, Jacob. In silico detection of sequence variations modifying transcriptional regulation. PLoS Computational Biology 4.1 (2008): e5.
@@ -893,15 +925,16 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
            <hgroup><a name="part-6"><h4>6.&nbsp;Using atSNP Query Modifiers</h4></a></hgroup>
            </div>
            <div class="panel">
-           <p>
+
            <h5><span><b>Swapping P-Value Cutoff Operators</b></span></h5> 
+           <p>
            The operator for the SNP and reference p-value cutoffs can be swapped
            between &le; and &gt;.
            To reverse the operator for one of these cutoffs, click on the button 
            with the operator on it beside the corresponding p-value.
            </p>
-           <p>
            <h5><span><b>Adjusting the Sort Order</b></span></h5> 
+           <p>
            The sort control indicates the priority of sort fields and the
            direction of each sort field. If a field has top sort priority, then
            that field will be the one that results are sorted by. Any results 
@@ -913,11 +946,12 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
            To advance or demote a sort field's priority, select it (by 
            clicking on it) and click the up or down arrow.
            </p>
-
            <h5><span><b>Filtering by Motif Degeneracy</b></span></h5>
+           <p>
            This control is based on computing information content (IC) of each individual position within a PWM,
            then taking the median of the information content across all positions. 
            These median IC values are then percentiled  (25%, 50%, and 75%) to classify each PWM into the following four classes. 
+           </p>
              <!-- style this table in a special way maybe? -->
              <table id="ic_values" border="1">
                 <thead>
@@ -940,9 +974,10 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
 
 
 
-           <p><h5><span><b>Limitations on Numeric Queries</b></span></h5>
+          <h5><span><b>Limitations on Numeric Queries</b></span></h5>
+          <p>
            Queries are numerically limited in the following ways:
-<ul>
+<ul class="disc">
 <li><h5><b>SNPid</b></h5> Up to 1,000 SNPids may be entered. 
    Plain text files or direct input are both acceptable.</li>
 <li><h5><b>SNPid Window</b></h5> The window size is limited to 125 million bases. </li>
@@ -965,9 +1000,9 @@ Among subsequences of length 11 overlapping the SNP position on the SNP allele, 
            <div class="panel">
            <p>
            <ol class="refs">
-             <li><cite><a href="https://doi.org/10.1093/bioinformatics/btv328"> Zuo, Chandler, Shin, Sunyoung, and Keleş, Sündüz. atSNP: transcription factor binding affinity testing for regulatory SNP detection. Bioinformatics (2015): 31, 3353-3355</a>.
+             <li><cite class="bigrefs"><a href="https://doi.org/10.1093/bioinformatics/btv328"> Zuo, Chandler, Shin, Sunyoung, and Keleş, Sündüz. atSNP: transcription factor binding affinity testing for regulatory SNP detection. Bioinformatics (2015): 31, 3353-3355</a>.
              </cite> </li>
-             <li><cite>Shin, Sunyoung, Hudson, Rebecca, Harrison, Christopher, Craven, Mark, and Keleş, Sündüz. atSNP Search: a web resource for quantifying impact of dbSNP SNPs on transcription factor binding. (2018). In preparation.
+             <li><cite class="bigrefs" >Shin, Sunyoung, Hudson, Rebecca, Harrison, Christopher, Craven, Mark, and Keleş, Sündüz. atSNP Search: a web resource for quantifying impact of dbSNP SNPs on transcription factor binding. (2018). In preparation.
              </cite> </li>
            </ol>
            </p>

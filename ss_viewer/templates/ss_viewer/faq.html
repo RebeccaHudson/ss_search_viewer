@@ -43,9 +43,9 @@
 
 <p>
 <section>
-<b>Q2. Which db SNP version was used for atSNP db?</b>
+<b>Q2. Which dbSNP version was used for atSNP Search?</b>
 <ul>
-<li>A2. atSNP Search is based on dbSNP build 144 for Human Build 38 (6Rch38). Summary on the dbSNP build 144 can be found <a href="http://www.ncbi.nlm.nih.gov/SNP/snp_summary.cgi?view+summary=view+summary&build_id=144">here</a>.</li>
+<li>A2. atSNP Search is based on dbSNP build 144 for Human Build 38  GRCh38/hg38. Summary on the dbSNP build 144 can be found <a href="http://www.ncbi.nlm.nih.gov/SNP/snp_summary.cgi?view+summary=view+summary&build_id=144">here</a>.</li>
 </ul>
 </section>
 </p>
@@ -72,7 +72,7 @@
 <section>
 <b>Q5. Which motif libraries were used for atSNP?</b>
 <ul>
-<li>A5. We used the JASPAR vertebrate library and known and discovered motifs for the ENCODE TF ChIP-seq datasets, which are available <a href="http://jaspar2014.genereg.net/">here for JASPAR</a>, and <a href="http://compbio.mit.edu/encode-motifs/">here for ENCODE</a>, respectively. For users who want to learn more about the libraries, visit the websites or click <a href="{% url 'ss_viewer:help-page' %}#part-3:motifTable">here</a></li>
+<li>A5. We used the JASPAR vertebrate library and known and discovered motifs for the ENCODE TF ChIP-seq datasets, which are available <a href="http://jaspar2014.genereg.net/">here for JASPAR</a>, and <a href="http://compbio.mit.edu/encode-motifs/">here for ENCODE</a>, respectively. For users who want to learn more about the libraries, visit the websites or click <a href="{% url 'ss_viewer:help-page' %}#part-3:motifTable">here</a>.</li>
 </ul>
 </section>
 </p>
@@ -82,7 +82,7 @@
 <b>Q6. Can I have summary statistics of atSNP Search?</b>
 <ul>
 <li>A6. We investigated 132,946,852 SNPs and considered 2,270 PWMs. We have evaluated total 307,602,574,340 SNP-PWM combinations.
-        Currently,  37,141,563,102 (SNP,PWM) combinations with p-value SNP impact, p-value reference, and/or p-value SNP less than or equal to 
+        Currently,  37,141,563,102 (SNP, PWM) combinations with p-value SNP impact, p-value reference, and/or p-value SNP less than or equal to 
         0.05 are currently available to query. 
 </li>
 </ul>
@@ -196,7 +196,7 @@
          P-value Reference &lt;= 0.05 <br />
          P-value SNP &gt; 0.05        <br />
        </p>
-         This essentially identifies (SNP, PWM) pairs which have a statistically significant match with the reference allele and the SNP allele lead to a  statistically insignificant match (i.e., destroying a binding site).
+         This essentially identifies (SNP, PWM) pairs which have a statistically significant match with the reference allele and the SNP allele leads to a  statistically insignificant match (i.e., destroying a binding site).
          Note  that these p-values are only suggestive and users should make them more stringent. 
        </li>
      </ul>
