@@ -473,7 +473,7 @@ T    [0.132    0.063    0.233    0.000    0.000    1.000    0.122    0.000    0.
                <h4><b>PROCEDURE</b></h4>
                <ul>
                  <li><b>Step 1: affinity score                                 </b> </li>
-                   <p> Using a PWM as a set of parameters for a product multinomial model, atSNP computes log likelihoods for all subsequences overlapping the SNP location that have the same length as the motif. The best matches are those with the largest log likelihood on both the SNP and reference alleles. The scores of the best matches are used for statistical testing. </p>
+                   <p> Using a PWM as a set of parameters for a product multinomial model, atSNP computes log likelihoods for all subsequences overlapping the SNP location that have the same length as the motif. The best matches are those with the largest log likelihood with both the SNP and reference alleles. The scores of the best matches are used for statistical testing. </p>
 
                    <h5> <span class="underline">Example<span></h5>
                    <p>
@@ -581,7 +581,7 @@ The motif length is 5 and sequences of length 9 centered at the SNP position are
                    </p>
                   </p> 
                  <li><b>Step 3: p-value for the affinity change between alleles</b> </li>
-                   <p> atSNP tests the significance of <i>log rank ratio</i>: log(p-value Reference)-log(p-value SNP). atSNP computes the p-value based on a Monte-Carlo simulation that uses both the reference and SNP alleles together. This is done using the importance sampling technique as described in <b>Step 2</b>.</p>
+                   <p> atSNP tests the significance of <i>log rank ratio</i>: log(p-value Reference)-log(p-value SNP). atSNP computes the p-value (p-value SNP Impact) based on a Monte-Carlo simulation that uses both the reference and SNP alleles together. This is done using the importance sampling technique as described in <b>Step 2</b>.</p>
 
                    <h5> <span class="underline">Example (Continued)<span></h5> 
                    <p>
@@ -692,17 +692,17 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
                 <tr>
                   <td style="width:18em;"> Reference                  </td> 
                   <td> The log likelihood score of the best match (highest scoring subsequence)
-                       with the reference allele                      </td> 
+                       with the reference allele.                      </td> 
                 </tr>
                 <tr>
                   <td>  SNP                                           </td> 
                   <td> The log likelihood score of the best match (highest scoring subsequence) 
-                       with the SNP allele                            </td> 
+                       with the SNP allele.                            </td> 
                 </tr>
                 <tr>
                   <td>   Ratio                                        </td> 
                   <td> The difference between Log Likelihood Reference
-                       and Log Likelihood SNP                         </td> 
+                       and Log Likelihood SNP.                        </td> 
                 </tr>
                 <tr>
                   <td style="width:18em;"> Enhance Odds           
@@ -770,16 +770,15 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
               </td> 
             </tr>
             <tr>
-              <td> <sup>*</sup>p-value Condition Ref                        
-                                          </td>   
+              <td> <sup>*</sup>p-value Condition Ref            </td>   
               <td> Conditional p-value for scores on the reference 
-                   allele based on Log Enhance Odds             </td> 
+                   allele based on Log Enhance Odds.            </td> 
             </tr>
             <tr>
               <td> <sup>*</sup>p-value Condition SNP                    
                                           </td> 
               <td> Conditional p-value for scores on the SNP allele
-                   based on Log Reduce Odds                     </td>
+                   based on Log Reduce Odds.                    </td>
             </tr>
             </tbody>
             </table>
@@ -865,7 +864,12 @@ The log rank ratio for the impact of SNP, rs117959046, is <span class="red">4.02
              <figcaption> Figure 11 Composite sequence logo for this result </figcaption> 
           </figure>
           <p>
-The SNP “rs117959046” is a genetic mutation from C to T on the forward strand in Chromosome 1: 134339671. This creates a highly likely binding site for the transcription factor GATA2. This is supported by the p-value SNP Impact statistic, 0.00484. This p-value indicates significance of the binding creation by the SNP. Further, the p-value for the best match between the GATA 2 motif and the SNP allele is 0.00898, whereas the p-value for the best match between the motif and the reference allele is 0.499. This implies that binding of GATA 2 transcription factor on the SNP allele is statistically significant while the significance of binding of GATA 2 on the reference allele is not statistically supported. Overall, atSNP statistically supports that the SNP significantly enhances binding for GATA 2.
+             The SNP “rs117959046” is a genetic mutation from C to T in the forward strand at location Chromosome 1: 134,339,671. 
+             This creates a highly likely binding site for the transcription factor GATA2 as supported by the p-value SNP Impact of 0.00484. 
+             Furthermore, the p-value for the best match between the GATA2 motif and the DNA sequence with the SNP allele is 0.00898, whereas 
+             the p-value for the best match between the motif and the DNA sequence with the reference allele is 0.499.  These p-values indicate 
+             that this genomic location, spanning the SNP position, does not harbor a GATA2 binding site with the reference allele, but the SNP 
+             creates a likely GATA2 binding site. Overall, atSNP statistically supports that the SNP leads to generation of an in silico predicted GATA2 binding site.
           </p>
           </section> <!-- end of example section -->
          </div> <!-- end of accordion panel for section 3 -->
@@ -886,23 +890,30 @@ The SNP “rs117959046” is a genetic mutation from C to T on the forward stran
                 <figcaption>Figure 12 GATA2 motif scan for rs117959046</figcaption> 
              </figure>
               <p> 
-                The SNP, rs117959046, is highly likely to create a binding site for the transcription factor GATA2 on the genome. 
-                The composite logo plot illustrates this with the comparison between the best matches of GATA2_2 PWM on the reference and SNP alleles. 
-                Among subsequences of length 5 overlapping the SNP position with the reference allele, “AGACA” on the forward strand has the largest log likelihood score.
-                This subsequence is referred to as the “best match with the reference allele”. This subsequence is depicted on the second row with the corresponding PWM 
-                on the first row. Similarly, among subsequences of length 5 overlapping the SNP position with the SNP allele, “AGATA” on the forward strand is referred
-                to as the “best match with the SNP allele”. It is depicted on the third row with the corresponding PWM on the fourth row.
+                 The SNP, rs117959046, is highly likely to create a binding site for the transcription factor GATA2 on the genome. 
+                 The composite logo plot illustrates this with the comparison between the best matches of GATA2_2 PWM to the DNA sequence 
+                 overlapping the SNP position with the reference and SNP alleles. Among subsequences of length 5 overlapping the SNP position with the reference allele,
+                 “AGACA” on the forward strand has the largest log likelihood score. This subsequence is referred to as the “best match with the reference allele”. 
+                 This subsequence is depicted on the second row with the corresponding PWM on the first row. 
+                 Similarly, among subsequences of length 5 overlapping the SNP position with the SNP allele, 
+                 “AGATA” on the forward strand is referred to as the “best match with the SNP allele”. 
+                 It is depicted on the third row with the corresponding PWM on the fourth row. 
               </p>
              <figure>
                 <img height="350" src="{% static 'ss_viewer/docs/image09.jpg' %}" id="figure-11"/>
                 <figcaption>Figure 13 RUNX1 motif scan for rs199894601</figcaption> 
              </figure>
-             <p>The SNP, rs199894601, is highly likely to create a binding site for the transcription factor RUNX1 on the genome. The best match position on the SNP allele is different from that on the reference allele. Specifically, the best matches occur on different strands and genomic coordinates (bp). The composite logo plot illustrates this with the comparison between the best matches of RUNX1 PWM from JASPAR on the reference and SNP alleles.
-             </p>
-
              <p>
-The beginning of the best match on the SNP allele is 3 bases before the SNP position in the 5' to 3' direction on the reverse strand.
-Among subsequences of length 11 overlapping the SNP position on the SNP allele, this subsequence has the largest log likelihood score. This subsequence is referred to as the “best match with the SNP allele” and is depicted on the third row with the corresponding PWM on the fourth row.  Similarly, we can find the “best match with the reference allele” which is depicted on the second row with the corresponding PWM on the first row. The beginning of the best match on the reference allele is one base before the SNP position in the 5' to 3' direction on the forward strand.
+                The SNP, rs199894601, is highly likely to create a binding site for the transcription factor RUNX1 on the genome. 
+                The best match position on the genome with the SNP allele is different from that with the reference allele. 
+                Specifically, the best matches occur on different strands and genomic coordinates (bp).  
+                The composite logo plot illustrates this with the comparison between the best matches of RUNX1 PWM from JASPAR to the DNA sequence 
+                overlapping the SNP location with the reference and SNP alleles.
+                The beginning of the best match with the SNP allele is 3 bases before the SNP position in the 5' to 3' direction on the reverse strand. 
+                Among subsequences of length 11 overlapping the SNP position with the SNP allele, this subsequence has the largest log likelihood score. 
+                This subsequence is referred to as the “best match with the SNP allele” and is depicted on the third row with the corresponding PWM on the fourth row. 
+                Similarly, the “best match with the reference allele” is depicted on the second row with the corresponding PWM on the first row. 
+                The beginning of the best match with the reference allele is one base before the SNP position in the 5' to 3' direction on the forward strand.   
              </p>
             </section>           <!-- end examples section -->
            </div> <!-- end of accordion panel for part 4-->
