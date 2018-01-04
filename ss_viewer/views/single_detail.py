@@ -5,10 +5,6 @@ from ss_viewer.views.shared import MotifTransformer
 from ss_viewer.views.shared import APIUrls 
 from ss_viewer.views.shared import APIResponseHandler 
 from ss_viewer.views.shared import ExternalResourceUrls 
-#from django.core.exceptions import ValidationError
-#from tempfile import NamedTemporaryFile 
-#import csv
-#import zipfile
 
 #This view is not class-based because it doesn't rely on shared code.
 #Detail pages look exactly the same between all search types.
@@ -26,7 +22,6 @@ def one_row_detail(request, id_str):
   response_json = json.loads(api_response.text)
 
   #setup the plot.
-  #print "response json: " + repr(response_json)
   #the plot data gets put onto the data that's passed in.
   APIResponseHandler.get_plots([response_json])
 
