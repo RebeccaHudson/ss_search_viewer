@@ -49,7 +49,7 @@ function setup_loss_or_gain(condition){
 }
 
 function setup_gain_and_loss_demos(){
-    console.log("setting up gain and loss demos");
+    //console.log("setting up gain and loss demos");
     gain_and_loss = JSON.parse($("#gain_and_loss").text());
     $("#set_gain").click(function(e){
       e.preventDefault();
@@ -64,9 +64,6 @@ function setup_gain_and_loss_demos(){
 
 function trans_factor_search_demo(){
    $('#id_trans_factor-trans_factor').val('ZNF263'); 
-   console.log("do not diable what can just be hidden.");
-   //$('#id_trans_factor-encode_trans_factor').attr('disabled', 'disabled');
-   //$("#id_trans_factor-trans_factor").removeAttr('disabled');
    $('#id_trans_factor-tf_library_0').prop('checked', true);
    $('#id_trans_factor-tf_library_1').removeAttr('checked'); 
 }
@@ -99,10 +96,10 @@ function snpid_window_search_demo(){
 function fill_in_pvalues(pval_rank, pval_snp, pval_ref){
     var prefix = "#id_";
     //var default_cutoff = 0.05;
-    console.log("pval_snp");
+    //console.log("pval_snp");
     console.log(pval_snp);
 
-    console.log("pval_ref");
+    //console.log("pval_ref");
     console.log(pval_ref);
     $(prefix + 'pvalue_rank').val(pval_rank);
     $(prefix + 'pvalue_snp').val(pval_snp);
