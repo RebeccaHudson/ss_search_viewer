@@ -7,21 +7,21 @@ function pull_search_type(form_data){
 function setup_shared_search_controls_dict(){
   var shared_controls_element = document.querySelector('#shared_controls');
   var shared_controls_inputs = $(shared_controls_element).find('input, input:hidden');
-  var alternate_shared_search_controls_dict = {};
-  var alternate_motif_ic = []; 
+  var shared_search_controls_dict = {};
+  var motif_ic = []; 
 
   for ( var one_thing of shared_controls_inputs){
     var v = $(one_thing).val(); 
     var w = $(one_thing).attr('name');
     //console.log("hand iterating: k = " + w + "  v= " + v);
-    if ( ((w == 'ic_filter')) && ( $(one_thing)[0].checked )) { alternate_motif_ic.push(v);  }else{
-       alternate_shared_search_controls_dict[w] = v;    
+    if ( ((w == 'ic_filter')) && ( $(one_thing)[0].checked )) { motif_ic.push(v);  }else{
+       shared_search_controls_dict[w] = v;    
     }
   }
-  alternate_shared_search_controls_dict['ic_filter']  = alternate_motif_ic;
-  alternate_shared_search_controls_dict['sort_order'] = 
-             JSON.parse(alternate_shared_search_controls_dict['sort_order']);
-  return alternate_shared_search_controls_dict;
+  shared_search_controls_dict['ic_filter']  = motif_ic;
+  shared_search_controls_dict['sort_order'] = 
+             JSON.parse(shared_search_controls_dict['sort_order']);
+  return shared_search_controls_dict;
 }
 
 function create_search_post(){
@@ -35,8 +35,8 @@ function create_search_post(){
  form_data.append('shared_controls', 
                   JSON.stringify(setup_shared_search_controls_dict()));
 
- console.log("here's the form data in create_search_post"); 
- console.log(form_data);
+ //console.log("here's the form data in create_search_post"); 
+ //console.log(form_data);
 
  hideControlsWhileLoading();
 
@@ -78,14 +78,8 @@ function create_search_post(){
 
 function create_paging_post(action_name, search_type){
  var val_text = $("div#current_search_params").text();
-
- //console.log("val text: " + val_text);
  var values = jQuery.parseJSON(val_text);
- 
- //console.log(values);
 
- //console.log(" action is there : " + action_name);
- //console.log(" search type is there: " + search_type);
  values['action'] = action_name
 
  hideControlsWhileLoading();
@@ -97,7 +91,6 @@ function create_paging_post(action_name, search_type){
  if ( ! ( typeof(values['ic_filter']) == "string") ) {
    values['ic_filter'] =  JSON.stringify(values['ic_filter']);
  }
- //console.log("about to create a paging post.");
 
  $.ajax({
       beforeSend: function(xhr, settings) {
@@ -123,20 +116,13 @@ function create_paging_post(action_name, search_type){
 
 //shared between success handler for search and paging posts.
 function handleResults(values, json){
-    $("#drop-in").empty();  //remove the metadata type stuff. It's no longer needed.
+    $("#drop-in").empty();     //remove the metadata type stuff. It's no longer needed.
     show_search_results(json); //the json here is no longer just json
    
     var message = $("#status-message-for-results").text();
 
     $("div.status_message").text(message);
     $("span.status_message").text(message);
-    //$("div.status_message").text(json.status_message);
-    //$("span.status_message").text(json.status_message);
-    //original, replaced with the new version show_search_results(json);
-
-
-    /* idea: just render the search results type as needed */    
-    //console.log(json);   //there's not a .form_data?
     
     if (json.search_paging_info != null){ 
         values.page_of_results_shown =
