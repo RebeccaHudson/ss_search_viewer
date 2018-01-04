@@ -55,7 +55,6 @@ class GenericSearchView(View):
         self.shared_search_controls_dict = request.POST.dict()['shared_controls']
         self.shared_search_controls_dict = json.loads(self.shared_search_controls_dict)
 
-
     #Used only for download and paging requests.
     def unpack_motif_ic_list(self, dict_as_given):
         motif_ic_str = dict_as_given['ic_filter']
@@ -74,9 +73,6 @@ class GenericSearchView(View):
     #Not paging or download. 
     def setup_form_for_standard_request(self, request):
         self.search_form = self.form_class(request.POST, request.FILES)
-        print("FOOBARFOOBARFOOBARFOOBARFOOBARFOOBARFOOBARFOOBAR")
-        print("request.FILES: " + repr(request.FILES))
-
         self.setup_shared_search_controls_form(request)
 
     #Must include some handling for shared_search_controls.
@@ -109,11 +105,8 @@ class GenericSearchView(View):
     def post(self, request, *args, **kwargs):
         request = self.check_for_download_request(request) 
         #rearranges the request if it's a download.
-        #if request.FILES:
-        #    print "There are request.files"
-        #    print repr(request.FILES)
 
-        self.shared_search_controls_errors = [] #This should be a list, right?
+        self.shared_search_controls_errors = [] 
 
         #get the 'Action' out of the post; setup the form accordingly.
         if request.POST['action'] in ['Prev', 'Next', 'Download Results'] or\
@@ -121,20 +114,15 @@ class GenericSearchView(View):
             self.setup_form_for_paging_or_download_request(request)
         else: 
             #case when it's a basic (not paging or download) search
-            print(repr(request.POST.dict()))
             self.setup_form_for_standard_request(request)
 
-        #if self.search_form.is_valid():
-            #Can't pull query data off of the form if the form is not valid.
-        self.pull_all_query_data_from_form() #errors for shared controls should be
+        #Can't pull query data off of the form if the form is not valid.
+        self.pull_all_query_data_from_form()     #errors for shared controls should be
                                                  #made available by/after this line.
         if not self.search_form.is_valid() or \
                not len(self.shared_search_controls_errors) == 0:
             return self.handle_invalid_form()
 
-        #assigns and handles api_search_query.
-        #was here, moving to before handle_invalid_form: self.pull_all_query_data_from_form()
-              
         if request.POST['action'] == 'Download Results':
             return self.handle_download(request)
   
@@ -155,7 +143,6 @@ class GenericSearchView(View):
 
         template_path = 'ss_viewer/search_results.html' 
         context['tooltips'] = settings.ALL_TOOLTIPS
-        #print "keys in context:  " + str(context.keys())
         return render(request, template_path, context)
  
     def handle_sort_order(self):
@@ -207,16 +194,14 @@ class GenericSearchView(View):
         return pvalue_directions
 
     def get_pvalues_from_form(self):
-        print "in get_pvalues_from_form " + repr(self.shared_search_controls_dict)
+        #print "in get_pvalues_from_form " + repr(self.shared_search_controls_dict)
         pval_dict = {}
         for one_pval in ['rank', 'ref', 'snp']:
             k = '_'.join(['pvalue', one_pval])
-            #don't require all 3 pvalues? 
-            #should p-value rank be required for a query?
             if k in self.shared_search_controls_dict and \
                     self.shared_search_controls_dict[k]:
                 pval_dict[k] = self.shared_search_controls_dict[k]
-            print "pval_dict as given : " + str(pval_dict)
+            #print "pval_dict as given : " + str(pval_dict)
 
         if 'pvalue_rank' not in  pval_dict:
             msg = "No p-value SNP impact has been specified, \
@@ -232,17 +217,14 @@ class GenericSearchView(View):
             context['form_errors'].extend(
              [ str(item) for one_error in errs.values() for item in one_error])
           
-        print "form errors content right after assigning form errors " + \
-           repr(context['form_errors'])      
+        #print "form errors content right after assigning form errors " + \
+        #   repr(context['form_errors'])      
   
         if len(self.shared_search_controls_errors) > 0: 
-            #print "added some shared search controls errors.."
-            #print "self.shared_search_controls_errors " + \
-            #   repr(self.shared_search_controls_errors)
             context['form_errors'].extend(self.shared_search_controls_errors)
            
-        print "form errors content right after assigning shared controls errors " + \
-           repr(context['form_errors'])      
+        #print "form errors content right after assigning shared controls errors " + \
+        #   repr(context['form_errors'])      
         context =  StandardFormset.handle_invalid_form(context)
         return HttpResponse(json.dumps(context), 
                         content_type="application/json",
