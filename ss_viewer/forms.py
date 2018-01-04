@@ -8,8 +8,6 @@ import re
 
 #Each form type has a p-value cutoff and a page number of results shown.
 #prefixes explained here: https://docs.djangoproject.com/en/1.11/ref/forms/api/#prefixes-for-forms
-#IN PROGRESS: instead of having all of the forms have these contorls on them, 
-# have all of the shared controls on one particular form.
 class SharedSearchControlsForm(forms.Form):
     default_cutoff = 0.05
     pvalue_tip = 'Show results with pvalues less than or equal to this '
@@ -35,10 +33,6 @@ class SharedSearchControlsForm(forms.Form):
                                            min_value=0, 
                                            required = False)
    
-    #TODO: try removing the follwoing 2 lines and see if anything bad happens. 
-    #use_these_choices = ( ("lt", "<"), ("gte", u"\u2265"))
-    #styled_widget = forms.Select(attrs={ "style" : "float:left; margin-top:5px;"  })
-
     pvalue_snp_direction = forms.CharField(widget = forms.HiddenInput(), required = False)
     pvalue_ref_direction = forms.CharField(widget = forms.HiddenInput(), required = False)
 
@@ -113,10 +107,9 @@ class SearchBySnpidForm(forms.Form):
                  SnpidSearchUtils.clean_and_validate_snpid_text_input(
                                                      snpid_textbox_contents)
         else:
-            #TODO: clean this up down here.
-            print "all methods available on snpid_file ; " + repr(dir(snpid_file))
-            print "snpid_file size " + str(snpid_file.size)
-            print "snpid_file content type " + snpid_file.content_type
+            #print "all methods available on snpid_file ; " + repr(dir(snpid_file))
+            #print "snpid_file size " + str(snpid_file.size)
+            #print "snpid_file content type " + snpid_file.content_type
             if not snpid_file.size <= 50000:
                 raise forms.ValidationError(('File is too large. \
                    Submit a text file with at most 1,000 SNPids.'))
